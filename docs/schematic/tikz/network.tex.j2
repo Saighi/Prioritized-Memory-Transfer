@@ -1,0 +1,38 @@
+% Auto-generated from docs/schematic/spec.py via render.py — edit the template, not the .tex.
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\definecolor{predcolor}{HTML}{4C8DFF}
+\definecolor{errcolor}{HTML}{E0772B}
+\definecolor{valuestroke}{HTML}{222222}
+\definecolor{errorstroke}{HTML}{888888}
+\begin{document}
+\begin{tikzpicture}[
+  >={Stealth[length=2.2mm]},
+  value/.style={circle, draw=valuestroke, line width=1pt, minimum size=13mm, inner sep=0pt, font=\small},
+  error/.style={rounded corners=3pt, draw=errorstroke, dashed, line width=0.8pt,
+                minimum width=13mm, minimum height=8.5mm, inner sep=2pt, font=\small},
+  pred/.style={->, predcolor, line width=0.9pt},
+  err/.style={->, errcolor, line width=0.9pt},
+  selfloop/.style={->, gray, line width=0.8pt, looseness=11},
+  glab/.style={font=\scriptsize, fill=white, inner sep=1pt},
+]
+% ---- nodes ----
+{% for n in nodes -%}
+\node[{{ n.kind }}] ({{ n.id }}) at ({{ "%.2f"|format(n.x*sx) }},{{ "%.2f"|format(-n.y*sy) }}) {${{ n.tex }}$};
+{% endfor %}
+% ---- recurrent self-loops ----
+{% for n in nodes if n.loop -%}
+\draw[selfloop] ({{ n.id }}) edge[loop {{ 'above' if n.pop=='T' else 'below' }}] node[glab]{${{ n.loop }}$} ({{ n.id }});
+{% endfor %}
+% ---- couplings (each pair separates naturally under a uniform bend) ----
+{% for e in edges -%}
+\draw[{{ e.flow }}] ({{ e.src }}) to[bend left={{ bend }}] node[glab,midway]{${{ e.tex }}$} ({{ e.dst }});
+{% endfor %}
+% ---- population captions + interface note ----
+\node[font=\footnotesize\bfseries, gray, anchor=west] at ({{ "%.2f"|format(-0.2*sx) }},{{ "%.2f"|format(0.0*sy+0.95) }}) {TEACHER\,T};
+\node[font=\footnotesize\bfseries, gray, anchor=west] at ({{ "%.2f"|format(-0.2*sx) }},{{ "%.2f"|format(-4.0*sy-0.95) }}) {STUDENT\,S};
+\node[font=\scriptsize, gray, anchor=east] at ({{ "%.2f"|format(6.9*sx) }},{{ "%.2f"|format(-2.0*sy) }}) {${{ note_tex }}$};
+\end{tikzpicture}
+\end{document}

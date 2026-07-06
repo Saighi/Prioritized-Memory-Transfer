@@ -1,0 +1,32 @@
+-- Substance: the specific two-population network (same content as spec.build_spec()).
+-- This is the part you would auto-generate from spec.py for full parametrization.
+
+Value xT, xS
+Error eT, eTS, eS
+
+-- teacher self-error pair
+Errors(xT, eT)
+Predicts(eT, xT)
+-- interface spine
+Predicts(xT, eTS)      -- top-down prediction  x_T
+Errors(eTS, xT)        -- drive (sleep: reversed precision)  pi_ST<0
+Errors(xS, eTS)        -- bottom-up evidence    x_S
+Predicts(eTS, xS)      -- perception            pi_TS
+-- student self-error pair
+Errors(xS, eS)
+Predicts(eS, xS)
+
+Recurrent(xT)
+Recurrent(xS)
+
+-- layout: teacher on top, interface in the middle, student at the bottom
+Above(xT, eTS)
+Above(eTS, xS)
+LeftOf(eT, xT)
+LeftOf(xS, eS)
+
+Label xT  $x_T$
+Label xS  $x_S$
+Label eT  $\varepsilon_T$
+Label eTS $\varepsilon_{TS}$
+Label eS  $\varepsilon_S$

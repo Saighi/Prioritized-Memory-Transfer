@@ -1,0 +1,24 @@
+# Auto-generated from docs/schematic/spec.py via render.py — edit the template, not the .d2.
+# D2 (https://d2lang.com) auto-lays-out the graph; we only declare nodes, edges, and styling.
+direction: down
+
+classes: {
+  value: {
+    shape: circle
+    style: {stroke: "{{ colors.value_stroke }}"; stroke-width: 2; fill: transparent; font-size: 26; bold: true}
+  }
+  error: {
+    shape: rectangle
+    style: {stroke: "{{ colors.error_stroke }}"; stroke-dash: 4; border-radius: 14; fill: transparent; font-size: 22}
+  }
+}
+
+{% for n in nodes -%}
+{{ n.id }}: "{{ n.txt }}" {class: {{ n.kind }}}
+{% endfor %}
+{% for n in nodes if n.loop -%}
+{{ n.id }} -> {{ n.id }}: "{{ n.loop }}" {style: {stroke: "{{ colors.error_stroke }}"; font-size: 16}}
+{% endfor %}
+{% for e in edges -%}
+{{ e.src }} -> {{ e.dst }}: "{{ e.txt }}" {style: {stroke: "{{ colors[e.flow] }}"; stroke-width: 2; font-size: 18; font-color: "{{ colors[e.flow] }}"}}
+{% endfor %}

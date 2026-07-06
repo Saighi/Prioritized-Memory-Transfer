@@ -1,0 +1,47 @@
+% Auto-generated from docs/schematic/spec.py via render.py — edit the template, not the .tex.
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\definecolor{predcolor}{HTML}{4C8DFF}
+\definecolor{errcolor}{HTML}{E0772B}
+\definecolor{valuestroke}{HTML}{222222}
+\definecolor{errorstroke}{HTML}{888888}
+\begin{document}
+\begin{tikzpicture}[
+  >={Stealth[length=2.2mm]},
+  value/.style={circle, draw=valuestroke, line width=1pt, minimum size=13mm, inner sep=0pt, font=\small},
+  error/.style={rounded corners=3pt, draw=errorstroke, dashed, line width=0.8pt,
+                minimum width=13mm, minimum height=8.5mm, inner sep=2pt, font=\small},
+  pred/.style={->, predcolor, line width=0.9pt},
+  err/.style={->, errcolor, line width=0.9pt},
+  selfloop/.style={->, gray, line width=0.8pt, looseness=11},
+  glab/.style={font=\scriptsize, fill=white, inner sep=1pt},
+]
+% ---- nodes ----
+\node[value] (x_T) at (6.80,-0.00) {$x_T$};
+\node[error] (e_T) at (2.38,-0.00) {$\varepsilon_T$};
+\node[error] (e_TS) at (6.80,-3.20) {$\varepsilon_{TS}$};
+\node[value] (x_S) at (6.80,-6.40) {$x_S$};
+\node[error] (e_S) at (11.22,-6.40) {$\varepsilon_S$};
+
+% ---- recurrent self-loops ----
+\draw[selfloop] (x_T) edge[loop above] node[glab]{$W_T$} (x_T);
+\draw[selfloop] (x_S) edge[loop below] node[glab]{$W_S$} (x_S);
+
+% ---- couplings (each pair separates naturally under a uniform bend) ----
+\draw[err] (x_T) to[bend left=14] node[glab,midway]{$M_T$} (e_T);
+\draw[pred] (e_T) to[bend left=14] node[glab,midway]{$\pi_T$} (x_T);
+\draw[pred] (x_T) to[bend left=14] node[glab,midway]{$x_T$} (e_TS);
+\draw[err] (e_TS) to[bend left=14] node[glab,midway]{$\pi_{ST}<0$} (x_T);
+\draw[err] (x_S) to[bend left=14] node[glab,midway]{$x_S$} (e_TS);
+\draw[pred] (e_TS) to[bend left=14] node[glab,midway]{$\pi_{TS}$} (x_S);
+\draw[err] (x_S) to[bend left=14] node[glab,midway]{$M_S$} (e_S);
+\draw[pred] (e_S) to[bend left=14] node[glab,midway]{$\pi_S$} (x_S);
+
+% ---- population captions + interface note ----
+\node[font=\footnotesize\bfseries, gray, anchor=west] at (-0.34,0.95) {TEACHER\,T};
+\node[font=\footnotesize\bfseries, gray, anchor=west] at (-0.34,-7.35) {STUDENT\,S};
+\node[font=\scriptsize, gray, anchor=east] at (11.73,-3.20) {$\varepsilon_{TS}=x_S-x_T$};
+\end{tikzpicture}
+\end{document}

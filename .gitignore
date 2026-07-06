@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# transient test/scratch artifacts
+tests/_*.png
+tests/_*.html
+tests/_*.log
+
+# OS / editor
+.vscode/
+.DS_Store
+
+# downloaded datasets (MNIST etc.)
+data/

@@ -1,0 +1,803 @@
+
+\documentclass[10pt,letterpaper]{article}
+\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+
+% amsmath and amssymb packages, useful for mathematical formulas and symbols
+\usepackage{amsmath,amssymb}
+\usepackage{todonotes}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+% Use adjustwidth environment to exceed column width (see example table in text)
+\usepackage{changepage}
+\usepackage{subcaption}
+% textcomp package and marvosym package for additional characters
+\usepackage{textcomp,marvosym}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+% Use nameref to cite supporting information files (see Supporting Information section for more info)
+\usepackage{nameref,hyperref}
+% line numbers
+\usepackage[right]{lineno}
+
+% ligatures disabled
+\usepackage[nopatch=eqnum]{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+
+% color can be used to apply background shading to table cells only
+\usepackage[table]{xcolor}
+
+% array package and thick rules for tables
+\usepackage{array}
+
+% create "+" rule type for thick vertical lines
+\newcolumntype{+}{!{\vrule width 2pt}}
+
+% create \thickcline for thick horizontal lines of variable length
+\newlength\savedwidth
+\newcommand\thickcline[1]{%
+  \noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
+  \cline{#1}%
+  \noalign{\vskip\arrayrulewidth}%
+  \noalign{\global\arrayrulewidth\savedwidth}%
+}
+
+% \thickhline command for thick horizontal lines that span the table
+\newcommand\thickhline{\noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
+\hline
+\noalign{\global\arrayrulewidth\savedwidth}}
+
+
+% Remove comment for double spacing
+%\usepackage{setspace} 
+%\doublespacing
+
+% Text layout
+\raggedright
+\setlength{\parindent}{0.5cm}
+\textwidth 5.25in 
+\textheight 8.75in
+
+% Bold the 'Figure #' in the caption and separate it from the title/caption with a period
+% Captions will be left justified
+\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off]{caption}
+\renewcommand{\figurename}{Fig}
+
+
+\bibliographystyle{bibstyle}
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+
+
+% Header and Footer with logo
+\usepackage{lastpage,fancyhdr,graphicx}
+\usepackage{epstopdf}
+%\pagestyle{myheadings}
+\pagestyle{fancy}
+\fancyhf{}
+
+
+\rfoot{\thepage/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
+\fancyheadoffset[L]{2.25in}
+\fancyfootoffset[L]{2.25in}
+\lfoot{\today}
+
+%% Include all macros below
+
+\newcommand{\lorem}{{\bf LOREM}}
+\newcommand{\ipsum}{{\bf IPSUM}}
+
+%% END MACROS SECTION
+
+
+\begin{document}
+
+\vspace*{0.2in}
+% Title must be 250 characters or less.
+\begin{flushleft}
+{\Large
+\textbf\newline{Autonomous Retrieval for Continuous Learning in Associative Memory Networks} % Please use "sentence case" for title and headings (capitalize only the first word in a title (or heading), the first word in a subtitle (or subheading), and any proper nouns).
+}
+\newline
+% Insert author names, affiliations and corresponding author email (do not include titles, positions, or degrees).
+\\
+Saighi Paul*\textsuperscript{1},
+Rozenberg Marcelo\textsuperscript{1,2},
+\\
+\bigskip
+%\textbf{1} CNRS, Laboratoire de Physique des Solides, Orsay, 91405, France 
+\textbf{1} Universit\'e Paris-Saclay, CNRS, Laboratoire de Physique des Solides, 91405, Orsay, France
+
+\textbf{2} Universit\'e Paris-Cité, CNRS, Integrative Neuroscience and Cognition Center, 75006, Paris, France
+% \\
+% \textbf{2} Affiliation Dept/Program/Center, Institution Name, City, State, Country
+% \\
+% \textbf{3} Affiliation Dept/Program/Center, Institution Name, City, State, Country
+\\
+\bigskip
+
+% Insert additional author notes using the symbols described below. Insert symbol callouts after author names as necessary.
+% 
+% Remove or comment out the author notes below if they aren't used.
+%
+% Primary Equal Contribution Note
+%\Yinyang These authors contributed equally to this work.
+
+% Additional Equal Contribution Note
+% Also use this double-dagger symbol for special authorship notes, such as senior authorship.
+%\ddag These authors also contributed equally to this work.
+
+% Current address notes
+%\textcurrency Current Address: Laboratoire de Physique des Solides, Orsay, 91405, France % change symbol to "\textcurrency a" if more than one current address note
+% \textcurrency b Insert second current address 
+% \textcurrency c Insert third current address
+
+% Deceased author note
+%\dag Deceased
+
+% Group/Consortium Author Note
+% \textpilcrow Membership list can be found in the Acknowledgments section.
+
+% Use the asterisk to denote corresponding authorship and provide email address in note below.
+* paul.saighi@universite-paris-saclay.fr
+
+\end{flushleft}
+% Please keep the abstract below 300 words
+\section*{Abstract}
+The brain's faculty to assimilate and retain information, continually updating its memory while limiting the loss of valuable past knowledge, remains largely a mystery. We address this challenge related to continuous learning in the context of associative memory networks, where the sequential storage of correlated patterns typically requires non-local learning rules or external memory systems. Our work demonstrates how incorporating biologically-inspired inhibitory plasticity enables networks to autonomously explore their attractor landscape.
+The algorithm presented here allows for the autonomous retrieval of stored patterns, enabling the progressive incorporation of correlated memories. This mechanism is reminiscent of memory consolidation during sleep-like states in the mammalian central nervous system. The resulting framework provides insights into how neural circuits might maintain memories through purely local interactions, and takes a step forward towards a more biologically plausible mechanism for memory rehearsal and continuous learning.
+
+% Please keep the Author Summary /between 150 and 200 words
+\section*{Author summary}
+Catastrophic forgetting - when acquiring new knowledge seriously degrades previously learned information - remains a fundamental challenge in machine learning, affecting systems from simple associative networks to complex language models. One widely studied approach to mitigate forgetting is memory rehearsal, in which prior stored information are periodically replayed, an idea supported by neurophysiological evidence of memory consolidation during sleep. In this work, we show that networks with adaptation can spontaneously recall stored memories without external guidance. This built-in retrieval mechanism allows for the incorporation of new memories while preserving older ones, opening a path toward a biologically inspired solution to the problem of catastrophic forgetting.
+
+\linenumbers
+\newpage
+% Use "Eq" instead of "Equation" for equation citations.
+\section*{Introduction}
+Continuous Learning (CL) refers to a system's ability to maintain performance across multiple tasks when operating in environments that evolve over time, requiring adaptation to changing data distributions. To do so, the learning mechanism should avoid uncontrolled forgetting of previously acquired knowledge when adapting to new information or contexts. In associative memory networks, this challenge arises when storing new activity patterns sequentially deteriorates existing memory representations, a phenomenon called catastrophic forgetting. 
+
+It is important to note that this work specifically addresses catastrophic forgetting in the context of sequential learning. This approach addresses a different challenge than the well-studied spin glass phase transitions that occur in Hopfield networks at high memory loads. 
+
+Memory rehearsal is a method that addresses the challenge of catastrophic forgetting by periodically retraining the model on previously stored patterns. This process reinforces older memory representations, preventing their degradation when new information is incorporated \cite{robins_catastrophic_1995,mccallum_catastrophic_1998}. In the mammalian nervous system, spontaneous memory replays occur during sleep \cite{robins_catastrophic_1995,louie_temporally_2001,peyrache_replay_2009,fauth_self-organized_2019,tononi_sleep_2014}, suggesting a biological mechanism analogous to rehearsal techniques in artificial networks \cite{robins_catastrophic_1995}. This parallel raises a fundamental question: what mechanisms enable these autonomous memory replays in biological systems?
+
+Previous research on bioinspired neural networks demonstrates that short-term synaptic depression can facilitate spontaneous rehearsal of neural assemblies \cite{fauth_self-organized_2019}. However, a significant constraint of this approach is its dependence on minimal overlap between neural assemblies. The neuronal populations in these studies share few neurons, resulting in effectively decorrelated memory representations. By contrast, classical associative memory networks like Hopfield Networks can effectively store uncorrelated memories that share many units. Some learning algorithms even allow the storage of highly correlated patterns that share a majority of their units \cite{diederich_learning_1987}. 
+From a biological perspective, understanding how networks implement the rehearsal of correlated populations is crucial as neural representations found in the cortex generally recruit extensively overlapping assemblies \cite{haxby_distributed_2001,kriegeskorte_representational_2008}. The maintenance of overlapping assemblies is widely considered essential for cortical computation, as it supports stimulus generalization and the emergence of invariant, high‑level concepts in which individual neurons participate in multiple but related representations \cite{haxby_distributed_2001,quiroga_invariant_2005,kriegeskorte_representational_2008}. This problematic is of similar importance in neuromorphic engineering contexts, as highly correlated representations are an emerging feature of artificial neural networks\cite{kothapalli_neural_2023}.
+
+How the rehearsal of correlated memories takes place autonomously on neural substrates remains a largely unaddressed question. In this work, we focus on this issue and explore its potential application for continuous learning (CL).
+For the sake of bio-plausibility and potential implementation in neuromorphic substrates, we shall demand that our system exhibits the following features: 
+1) It stores memory states that can be highly correlated; 
+2) During the pattern recovery, the network does not converge toward strange attractors which would constitute false memories;
+3) Plasticity rules are local, meaning that the modification of synaptic efficacy can be computed in terms of its pre- and post-synaptic neuron states; 
+4) It is autonomous, namely, it should retrieve all previously stored patterns from its own dynamics. The network does not have access to an external list of previously recorded memory states. 
+For the sake of requirements (1) and (3), we shall adopt a perceptron-like algorithm, inspired by the work of Diederich
+$\&$ Opper (1987) \cite{diederich_learning_1987}. 
+On the other hand, for requirement (2) we shall use continuous Hopfield Networks (CHNs) \cite{hopfield_neurons_1984}. Our work demonstrates that, kept under a certain memory load, CHNs converge exclusively to stored patterns during the retrieval. This approach avoids both, the spurious state proliferation common in Discrete Hopfield Networks (DHNs) and the shortcomings of temperature parameter fine-tuning inherent to Stochastic Hopfield Networks (SHNs) \cite{amit_storing_1985}. 
+
+The main contribution of the present work is to introduce an algorithm to address the requirement (4). A crucial feature of our approach is the use of self-inhibition to reduce the attraction toward previously visited attractor states, thus allowing for a sequential and thorough search and recovery of all previously stored correlated memory states.
+
+This recovery effectively allows the rehearsal of the stored pattern for CL purposes.
+The dynamic of plastic recurrent inhibition is inspired by computational neuroscience work based on actual neurophysiological data \cite{vogels_inhibitory_2011}.
+
+
+\section{Methods}
+\subsection{Continuous Hopfield Network (CHN)}
+
+In contrast with the conventional DHN model \cite{hopfield_neural_1982},
+where neural states are defined as binary variables, in a CHN they are continuous  \cite{hopfield_neurons_1984}.
+The dynamics of the network is defined by a set of
+differential equations with each neuron unit described as a leaky integration:
+\begin{equation}
+\label{eq:CHN}
+c\frac{du_i}{dt} = \sum_j W_{ij}v_j - \frac{u_i}{r}
+\end{equation}
+where $u_i$ is the membrane potential of neuron $i$, $c$ is the membrane capacitance, $r$ is the leak resistance of each neuron, $W_{ij}$ is the synaptic efficacy between neurons $j$ and $i$, and $v_i$ is the activity (or firing rate) of neuron $i$ that depends solely on the potential as
+\[
+v_i = \sigma(u_i)
+\]
+where $\sigma$ is a monotonically increasing function of $u$ with saturation to prevent runaway dynamics. 
+We adopt $\sigma(x) = \frac{1}{1 + exp(-x)}$. Therefore, as $\sigma(0) = 0.5$, each unit has a positive output at the resting state, allowing the network to have a baseline activity without external input. 
+We shall refer to either the vector $\mathbf{v}(t)$ or $\mathbf{u}(t)$ as "states", which should be clear from the context.
+
+The convergence of the flow to stable states
+for the case of symmetric synaptic weights $W_{ij}$ has been demonstrated \cite{hopfield_neurons_1984}. 
+Throughout this work, whenever we integrate these equations using Euler method, we do so until 
+the network reaches convergence, defined as $|\frac{du}{dt}|_{\infty} < \epsilon$, where $\epsilon = 10^{-6}$.
+
+\subsection{Pattern Storage and Reading}
+\label{sec:pattern_storage_reading}
+The states $\textbf{v}(t)$ of the CHN evolve on $[0,1]^N$ through continuous dynamics, with $N$ the number of neurons. Any state in this space may represent a stored pattern. 
+For simplicity, we restrict ourselves to store binary patterns for which active neurons have a high firing rate, $v_i \approx 1$, and inactive neurons have a low firing rate, $v_i \approx 0$. 
+
+Hence, a pattern $\mathbf{x}^\mu$ is defined as a binary vector such that \( \mathbf{x}^\mu = (x^\mu_1, x^\mu_2, \ldots, x^\mu_N) \) where \( x^\mu_i \in \{0, 1\} \) for each unit \( i \). A pattern is read from the state of the network at time $t$ using a threshold:
+
+\begin{equation}
+x^{\mu}_i = 
+\begin{cases} 
+1 & \text{if } v_i(t)>0.5 \\
+0 & \text{otherwise.}
+\end{cases}
+\label{eq:reading}
+\end{equation}
+
+Given a binary pattern $\mathbf{x}^{\mu}$, it is convenient to define target potentials $\tilde{\mathbf{u}}^{\mu}$ as:
+\begin{equation}
+    \tilde{u}_i^{\mu} = 
+    \begin{cases} 
+    +u_{\text{target}}^{\mu} & \text{if } x_i^{\mu} = 1 \\
+    -u_{\text{target}}^{\mu} & \text{if } x_i^{\mu} = 0 \\
+    \end{cases}
+    \label{eq:threshold}
+\end{equation}
+We adopt here $u_{\text{target}}=6$ to ensure proper pattern reading following the thresholding procedure.
+
+Inspired by previous work on DHN \cite{diederich_learning_1987}, we introduce, in Alg.~\ref{alg:perceptron_CHN}, a perceptron-inspired 
+learning algorithm for efficient storage of correlated patterns in CHNs. 
+The algorithm minimizes the error between the target states and the network's equilibrium states, ensuring that each memory becomes a stable state. 
+Gradient descent methods typically require small step sizes to prevent the optimization process from becoming unstable and to reduce oscillations around local minima. In our implementation, we select $\alpha = 0.0001$ as the learning rate to ensure stable convergence of weight updates.
+The derivation of the weight update rule can be found in the Appendix.~\ref{app:gradient}.
+%
+Although a rigorous proof of convergence for the algorithm is beyond the scope of this work, we expect that arguments demonstrating the convergence of the gradient descent algorithm (GDA) in the context of DHN could be adapted for this purpose \cite{diederich_learning_1987}. 
+Here, we rely on numerical evidence showing the network's ability to successfully
+query and revisit stored patterns. 
+
+\begin{algorithm}[h] 
+\caption{Gradient descent for the storage of correlated patterns (GDA)}
+\begin{algorithmic}[1]
+\State \textbf{Initialize} $W_{ij} = 0$ for all $i, j$
+\Repeat
+    \For{each pattern $\mu$}
+            \State Compute the target potential $\tilde{u}^{\mu}_j$ (Eq.~\ref{eq:threshold}) for each neuron $j$ with $j\neq i$
+        \For{each neuron $i$}
+        % $\tilde{u}_i^\mu = +u_{\text{target}}$ if $x^\mu_i = 1$, else $\tilde{u}_i^\mu= -u_{\text{target}}$
+            \State Compute the expected potential: $\hat{u}^{\mu}_i = r\sum_j W_{ij} \sigma(\tilde{u}^{\mu}_j)$
+            \State Update weights: $W_{ij} \leftarrow W_{ij} - \alpha (\hat{u}^{\mu}_i- \tilde{u}^{\mu}_i) r \sigma(\hat{u}^{\mu}_j)$
+        \EndFor
+    \EndFor 
+\Until{$\|\Delta W\|_{\infty} < \epsilon$}
+\end{algorithmic}
+\label{alg:perceptron_CHN}
+\end{algorithm}
+
+
+Following the network training with the GDA, each activity vector $\mathbf{\tilde{u}}^\mu$ becomes an attractor. The network can now be queried as the system reliably converges to the nearest stored state from a partial cue. The corresponding binary patterns $\mathbf{\tilde{x}}^\mu$ can then be accurately retrieved by thresholding at time $t_f$ (Eq.~\ref{eq:threshold}) when the system reaches convergence. The querying procedure is detailed in Alg.~\ref{alg:querying_continuous} (Appendix~\ref{app:querying}) and illustrated in Fig.~\ref{fig:querying}. 
+
+Similarly to the model proposed by Diederich and Opper (1987), the symmetry of the weight matrix $W$ is not enforced in the GDA scheme. In classical Hopfield networks, this constraint is typically imposed to prevent unwanted oscillatory dynamics \cite{hopfield_neural_1982}. A notable feature of the GDA is that it consistently stores patterns as attractor states despite the absence of enforced symmetry \cite{diederich_learning_1987}. We observed the same phenomenon in our simulations. This represents a strength of the algorithm, as enforcing symmetry without an explicit underlying mechanism would break the locality of the plasticity rules. In biological neural networks, the synapse from neuron A to neuron B does not necessarily have access to the state or sign of the reciprocal synapse from neuron B to A.
+%\todo[inline]{explaining that we don't need to enforce the symmetry}
+
+It is worth emphasizing that despite the continuous nature of our model, which theoretically allows for a richer state space, we deliberately restrict ourselves to binary patterns. The interest of using a CHN is the simplicity it allows when implementing our pattern recovery mechanism (Sec.~\ref{sec:autonomous_rehearsal}), limiting the appearance of false memories as spurious states, which are often
+encountered in DHNs \cite{amit_spin-glass_1985}. 
+A variant of the DHN with stochastic units, the SHN \cite{amit_spin-glass_1985}, would be a possible candidate to implement our algorithm, as they tend to visit only the stored patterns by properly controlling the annealing temperatures. 
+However, the stochastic properties of these networks would require a more complex setup.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{Fig_querying.png}
+       \caption{Querying of two binary-patterns representation of the handwritten digit "3" and "4" from the MNIST dataset. The network is of size $20\times16$ as each neuron codes for a pixel. From black to white, the color represents the rate $v_{i}(t)$ of each unit. At $t=0$ the network is initialized with the part of the units set to the target value as described in Appendix~\ref{app:querying}. The figure displays snapshots of the evolution of the rates in time for each unit of the network. The network is queried two times, for the first query Q1 the network gradually settles to the nearest stored state corresponding to the digit "3". For Q2, the network settles to the stored state corresponding to the digit "4". }
+       \label{fig:querying}
+\end{figure}
+\newpage
+\subsection{Continuous incorporation of correlated memories}
+\label{sec:CL}
+While the GDA effectively enables the storage of correlated memories, its implementation in Alg.~\ref{alg:perceptron_CHN} 
+reveals a significant limitation: it requires multiple iterations over the entire set of patterns to achieve convergence. Without the ability to reprocess all patterns, the network would suffer from catastrophic forgetting, where learning a new pattern in isolation rapidly erodes previously stored memories \cite{mccloskey_catastrophic_1989, robins_catastrophic_1995, kirkpatrick_overcoming_2017, shen_reducing_2023}.
+By repeatedly processing all patterns, the algorithm can find a weight matrix \textbf{W} that properly separates the patterns,
+despite their correlations \cite{diederich_learning_1987}.
+Adding a new pattern, therefore, requires access to all previously stored patterns from an external source. 
+
+This requirement for external access to the complete memory dataset stands in contrast to biological learning systems, which must incorporate new information while maintaining past memories without relying on an explicit external copy of the already stored data.
+To overcome this external dependency and move towards more biologically plausible
+learning, a solution is to develop a mechanism that allows the network to internally recover its stored memories. 
+
+The development of such an
+autonomous retrieval mechanism would allow us to exploit the GDA's ability for the continuous incorporation of correlated
+memories. The continuous learning algorithm is formally defined in Alg.~\ref{alg:continuous_learning}. The act of retraining the network on the whole set is called a rehearsal. Recovering the whole set from the network to allow rehearsal is called retrieval. 
+
+\begin{algorithm}[h]
+\caption{Continuous incorporation of correlated patterns through rehearsal of the whole memory set}
+\begin{algorithmic}[1]
+\State \textbf{Input:} CHN trained on $p$ patterns using the GDA
+\State \textbf{Given:} New patterns $\{\mathbf{x}^{p+1},x^{p+2},\dots\}$ to be stored
+\State Retrieve set $\{\mathbf{x}\}$ of stored patterns through autonomous retrieval (AR) introduced in Sec.~\ref{sec:autonomous_rehearsal}
+\State Update pattern set: $\{\mathbf{x}\} \leftarrow \{\mathbf{x}\} \cup \{\mathbf{x}^{p+1},x^{p+2},\dots\}$
+\State Apply GDA to store updated pattern set
+\end{algorithmic}
+\label{alg:continuous_learning}
+\end{algorithm}
+\newpage
+\subsection{Autonomous retrieval}
+\label{sec:autonomous_rehearsal}
+In this section, we present the autonomous retrieval (AR) mechanism allowing the recovery of stored correlated patterns in a network.
+
+Given a trained network initialized at the ''neutral'' state, $u_i=0$ for each unit $i$, the network dynamics described by Eq.~\ref{eq:CHN} converge deterministically to a given stored attractor, which is thus "retrieved". This attractor can be seen as the dominant attractor from the neutral state. The goal now is to allow for the exploration of other states to permit a complete recovery of the stored memories.
+%It has been tried to add noise to the network dynamic (Eq.~\ref{eq:CHN}) to allow the network to recover stored states, but attractors, or a group of attractors formed by Alg.~\ref{alg:continuous_learning} are dominant and will hinder the exploration of others.
+To do so, we introduce the adaptation terms $A_{i}$.
+
+\begin{equation}
+\label{eq:CHN_with_shallowing}
+c\frac{du_i}{dt} = \sum_j W_{ij}v_j - A_iv_i - \frac{u_i}{r}
+\end{equation}
+\begin{equation}
+    \label{eq:inh_pot}
+    A_i \leftarrow A_i+\beta v_i(t_{f})
+\end{equation}
+% \begin{equation}
+%     \label{eq:inh_pot}
+%     W_{ij} \leftarrow W_{ij}+\alpha(\hat{x}_i-x_i)x_j
+% \end{equation}
+with $v_i(t_f)$ the firing rate of neuron $i$ after convergence of the dynamics. $\beta$ represents the adaptation strength and is chosen to be small, typically below $0.1$.
+Adaptation terms could correspond to various components commonly observed in the mammalian central nervous system. On short time scales, spike frequency adaptation (SFA) of excitatory neurons functions as plastic self-inhibition \cite{ha_spike_2017,peron_spike_2009}. Repeated stimulation progressively reduces firing activity in the neuron, mirroring the dynamics produced by our adaptation $A_{i}$. Alternatively, $A_{i}$ can be interpreted as recurrent inhibition mediated by local inter-neurons, which frequently exhibit Hebbian plasticity \cite{kodangattil_spike_2013,damour_inhibitory_2015}.
+
+After a given memory is retrieved (i.e., when the network falls into an attractor), 
+the attraction toward that state is decreased through the adaptation term (Eq.~\ref{eq:inh_pot}). Consequently, once the pattern has been inhibited, the probability for the network to converge into it from the neutral state is reduced. By resetting the network to the neutral state after each convergence-inhibition cycle, we allow the sequential recovery of stored patterns.
+
+Fig.~\ref{fig:plane_fields} illustrates the sequential recovery of two stored patterns and the modification of the network dynamics induced by the procedure. The geometry of the vector field explains why a minimal inhibitory influence, resulting from a small $\beta$ value, is sufficient to alter the trajectory. The neutral state resides near the separatrix that divides the attractor basins corresponding to each patterns. Consequently, even a slight modification of the separatrix position, caused by inhibitory potentiation, can significantly redirect the network's trajectory.
+
+The increase in adaptation tends to distort the stable states associated with stored patterns. As this distortion is minimal for small $\beta$, it is mainly compensated for by the thresholding mechanism used to read the network output (Sec.~\ref{sec:pattern_storage_reading}). To further reduce the impact of this distortion, we divide the convergence dynamic into two phases, the "biased" phase and the "free" phase. 
+The biased phase guides the network to converge toward states that have not been retrieved. It corresponds to the simulation of the network with adaptation, Eq.~\ref{eq:CHN_with_shallowing}, until convergence.
+The optional free phase then allows the network to complete its convergence to an undistorted stored state. It corresponds to the simulation of the network without inhibitory synapses (Eq.~\ref{eq:CHN}) until convergence. 
+The whole procedure is detailed in Alg.~\ref{alg:autonomous_rehearsal}.
+
+It is important to note that correlated patterns and patterns with various sparsity levels induce similar vector fields. In all cases, we observe a separatrix crossing the neutral state and lying in the middle of the attraction basins. It appears to be an emergent property of the gradient descent algorithm, appropriately shaping the dynamical landscape to balance the attraction strength of memory states from the neutral state. The construction of correlated patterns is discussed in Sec.~\ref{sec:results}.  The construction of patterns with various sparsity levels is discussed in Sec.~\ref{sec:discussion}.
+
+Fig.~\ref{fig:mnist_autonomous_rehearsal} provides a visualization of AR for binary-patterns representation of handwritten digits from the MNIST dataset \cite{lecun_mnist_1998}. For the first iteration, the inhibitory drive is null as no pattern has been retrieved. The pattern corresponding to the binary picture of a 3 is recovered. The network state is reinitialized with the updated adaptation $(\mathbf{A})$. The network now inhibits the recovery of a 3, which induces convergence toward a second pattern, here a 4. Adaptation is updated again and now inhibits both the 3 and the 4 together. Inhibition of the 3 and the 4 combined allows the recovery of the 5 and so on. For the recovery of MNIST binary digits, as a large inhibitory coefficient $\beta$ has been chosen,  the free phase is mandatory to reduce the distortion of the stored pattern.
+
+The order in which patterns will be visited is an emerging feature of the learning algorithm that has not been studied in this work. With each iteration of the AR algorithm, inhibitory synapses undergo potentiation. This growth is constrained only by the number of iterations and the value of $\beta$. Theoretically, such an unbounded growth could cause the adaptation $A_i$ to disrupt the attractor dynamics induced by $\mathbf{W}$. However, in practice, this potential issue can be managed by adjusting the value of $\beta$ based on the number of iterations. Specifically, when more iterations are required, using a smaller $\beta$ is sufficient to maintain robust pattern retrieval without compromising attractor dynamics.
+
+In Fig.~\ref{fig:Typical_recovery_dynamic}, we illustrate the dynamics of the CHN during the retrieval of stored memory patterns in networks with various loads. The load corresponds to $M/N$, with $M$ the number of stored memories, and $N$ the size of the network. For low loads (see Fig.~\ref{fig:Typical_recovery_dynamic}(top)), the system converges sequentially to the attractors corresponding to the stored patterns. Once every memory has been recovered, if the simulation is not ended, the network falls back into the stored states without showing any false memories. The lower the value of $\beta$, the longer this dynamic can proceed without encountering spurious states. The free phase has no utility in this scenario, the attractors are well separated, and the disruption of the energy landscape by adaptation is minimal. For critical loads (see Fig.~\ref{fig:Typical_recovery_dynamic}(middle)), the retrieval process becomes more challenging. The attractors exhibit reduced separation, and the network struggles to converge to the stored states once inhibition is applied. In this scenario, the free phase demonstrates its utility. At the end of the biased phase, during the sixth iteration of the AR, the network remains in a mixed state characterized by ambiguous correlations with multiple stored patterns. The free phase enables the network to resolve this ambiguity and ultimately converge to a stored state. At high loads (see Fig.~\ref{fig:Typical_recovery_dynamic}(bottom)), the network successfully retrieves some stored states, but mostly falls into spurious attractors. Under these conditions, even the free phase cannot rescue the recovery dynamics.
+
+These autonomous recovery dynamics are reminiscent of memory replays observed in the central nervous system of mammals during quiescent states, such as sleep or rest.
+This process is believed to function as a consolidation mechanism that mitigates or modulates memory forgetting
+\cite{robins_catastrophic_1995,louie_temporally_2001,peyrache_replay_2009,fauth_self-organized_2019,tononi_sleep_2014}.
+
+The use of recurrent plastic inhibitory synapses has been tested and shows the same qualitative dynamics as that observed for networks with units that undergo adaptation. The results and the model are detailed in App.~\ref{app:inhib_matrix}.
+As implementing adaptation requires less computation and parameters, the following work focuses only on the adaptation model.
+
+\begin{algorithm}[h]
+\caption{Autonomous retrieval (AR)}
+\begin{algorithmic}[1]
+\State \textbf{Input:} Trained network weights $W_{ij}$, number of iterations $k$, plasticity rate $\beta$
+\State \textbf{Initialize:} $A_i=0$, $\{\mathbf{x}\}=\emptyset$
+\While{$j < k$}
+   \State \textbf{Set} neutral initial conditions: $\mathbf{u}(t=0)=\mathbf{0}$
+%   \State ADD Integrate Eq.~\ref{eq:CHN} to retrieve a stored memory state
+%   \State ADD Construct the inhibitory synaptic matrix W'
+   \State \textbf{Biased phase}: Integrate Eq.~\ref{eq:CHN_with_shallowing} until convergence to the state $\mathbf{u}(t_{b})=\mathbf{u}_b$
+   % The network will converge near a stored state while limiting the revisit of already recovered memories.
+   \State \textbf{Free phase}: from the state $\mathbf{u}(t_{b})$, integrate Eq.~\ref{eq:CHN} until convergence \Comment{optional}
+   % This corresponds to the removal of inhibitory synapses and allows the network to get closer to a stored state, as inhibitory synapses tend to degrade the recovery dynamic by shifting the convergence point (Fig.~\ref{fig:plane_fields}).
+   \State \textbf{Read} pattern $\mathbf{x}^{\mu}$ from final state $\mathbf{v}(t_{f})$ via thresholding (Eq.~\ref{eq:threshold})
+   % (Sec.~\ref{sec:pattern_storage_reading}).
+   \State \textbf{Update} retrieved pattern set: $\{\mathbf{x}\} \leftarrow \{\mathbf{x}\} \cup \{\mathbf{x}^{\mu}\}$
+   \State \textbf{Update} inhibitory weights: $A_i \leftarrow A_i+\beta v_i(t_{f})$
+   \State $j \leftarrow j+1$
+\EndWhile
+\State \textbf{Return:} $\{\mathbf{x}\}$
+\end{algorithmic}
+\label{alg:autonomous_rehearsal}
+\end{algorithm}
+
+\begin{figure*}[htb]
+    \centering
+    \includegraphics[width=\hsize]{Fig_pattern_vector_field_3plots_edited.png}
+\caption{
+    \textbf{Stream plots of the CHN in a 2D subspace spanned by two pattern states.}
+    We examine a network with two stored patterns, labeled "1" and "2", and their stable states $\mathbf{\tilde{u}}^{1}$ and $\mathbf{\tilde{u}}^{2}$; 
+    these define a two-dimensional subspace parametrized by $\mathbf{\tilde{u}}(\lambda_1, \lambda_2) \;=\; \lambda_1\,\mathbf{\tilde{u}}^{1}\;+\;\lambda_2\,\mathbf{\tilde{u}}^{2}$. 
+    At each point $\mathbf{\tilde{u}}(\lambda_1,\lambda_2)$ in this subspace, we compute the full $N$-dimensional 
+    time derivative via Eq.~\ref{eq:CHN_with_shallowing} and project it back onto the $\{\mathbf{\tilde{u}}^{1}, 
+    \mathbf{\tilde{u}}^{2}\}$-plane to obtain the plotted flow. 
+    $\mathbf{\tilde{u}}^{1}$ and $\mathbf{\tilde{u}}^{2}$ have minimal correlation as they are generated from random binary patterns $\textbf{x}^{1} \text{ and } \textbf{x}^{2} \in \{0,1\}^N$. 
+    \textbf{(left)}~Before training. \textbf{(middle)}~After storing the two patterns using the GDA, each pattern state (1 and 2) becomes a stable attractor; 
+    the neutral state $\mathbf{u}_{N}=\mathbf{0}$ (large red dot) is on an unstable manifold. The red line corresponds to the trajectory of the network projected on the subspace. The trajectory follows the unstable manifold before arbitrarily falling into one of the two stored patterns.
+    \textbf{(right)}~ Adaptation $\textbf{A}$ is updated to apply enhanced inhibition to pattern 1 which shrinks its basin of attraction. This induce a shift in the position of the separatrix (red dotted line), favoring the flow to pattern 2. 
+    An exaggerated large inhibitory coefficient $\beta=0.5$ is used to illustrate the modification of the vector field. Similar stream plots are obtained from networks storing patterns with various degrees of correlation using the GDA.}
+    % We can observe that the network doesn't converge precisely toward the location of the stored states anymore, but slightly aside. The ``free phase'' described in Alg.~\ref{alg:autonomous_rehearsal} allow the network to converge to the ``true'' stable state.}
+    \label{fig:plane_fields}
+\end{figure*}
+\newpage
+\begin{figure*}[h!]
+        \centering
+        \includegraphics[width=0.8\hsize]{Fig_mnist_autonomous_rehearsal_edited.png}
+        \caption{ Recovery of three binary-patterns representations of handwritten digits from the MNIST dataset, {``3'', ``4'', ``6'', ``5''}. The network is of size $20\times16$ as each neuron codes for a pixel.
+        Left panels (in red): Evolution of adaptation of each neuron $A_i$. 
+        Right panels (pink and gray): snapshots of the evolution of the rates $v_{i}(t)$ for each unit of the network. 
+        Each row corresponds to the start of a new memory retrieval in the CHN. The free phase correspond to the removal of the inhibitory drive biasing the activity of each neurons as described in Alg.~\ref{alg:autonomous_rehearsal}. The panels illustrate how the biased phase ``orients'' the evolution, and then the free phase provides the precise convergence to a stored pattern. An exaggerated large inhibitory coefficient 
+        $\beta=2$ is used to illustrate the stable states deformation at the end of the biased phase, highlighting 
+        the need of the free phase.}
+        \label{fig:mnist_autonomous_rehearsal}
+\end{figure*}
+\clearpage
+\newpage
+\begin{figure}[htb]
+    \centering
+    \begin{minipage}{0.65\textwidth}
+        \includegraphics[width=\linewidth]{Fig_typicall_recovery_scenario_1.png}
+    \end{minipage}
+    % \hfill
+    % \vspace{0.55cm}
+    \begin{minipage}{0.65\textwidth}
+        \includegraphics[width=\textwidth]{Fig_typicall_recovery_scenario_2.png}
+    \end{minipage}
+    \begin{minipage}{0.65\textwidth}
+    \includegraphics[width=\linewidth]{Fig_typicall_recovery_scenario_3.png}
+    \end{minipage}
+    % \hfill
+
+      \caption{Visualization of AR (Alg.~{\ref{alg:autonomous_rehearsal}}). The x-axis shows the number of time steps for simulations of the CHN, with all query iterations of AR concatenated. The y-axis shows the correlation between the state of the network and any stored state, with each color corresponding to a specific memory. Vertical red dashed lines separate successive memory retrieval sequences. At the beginning of a memory recall adaptation $\mathbf{A}$ is updated and the initial state is the neutral one. The yellow dashed lines indicate the end of the biased phase. Between yellow and red lines is the free phase, during which self-inhibition is removed, to converge precisely into a stored state. Considered patterns have minimal correlation as they are generated from random binary vectors.
+      \textbf{(Top)} Recovery dynamics in a low-load network: 5 patterns stored in a network of 60 units. Each memory is visited once before all are successfully recovered.     \textbf{(Middle)} Recovery dynamics in a critically loaded network: 5 patterns stored in a network of 30 units. Some memories are revisited multiple times before all are recovered.\textbf{(Bottom)} Recovery dynamics in a high-load network: 16 patterns stored in a network of 60 units. Recovery fails as spurious patterns are visited, reflected by low correlation values.
+}
+  \label{fig:Typical_recovery_dynamic}
+\end{figure}
+\clearpage
+\newpage
+
+\section{Results}
+\label{sec:results}
+
+In this section, we evaluate the ability of our algorithm to retrieve correlated patterns from a given network. 
+We will consider the retrieval of pattern sets with various amounts of correlation. Each set is assigned a random binary parent pattern, where each bit is independently set to 0 or 1 with equal probability.
+Each pattern of a given set is generated by randomly choosing a fraction $(1-\rho)$ of bits from the parent pattern and randomizing them. The randomization process sets each selected bit to 0 or 1 with equal probability, independently of its original value, as described in Alg.
+\ref{alg:correlated_patterns} (App.\ref{app:correlated_patterns}).
+
+Therefore, a higher $\rho$ induces more correlation, while a lower $\rho$ results in less correlation.
+Networks with various loads will be tested. 
+All retrieval dynamics are considered without free phases as it has been observed that, for the retrieval of random binary patterns and the use of small inhibitory potentiation values $\beta$, the free phase does not significantly improve retrieval performance.
+
+Fig.~\ref{fig:load_SR_average_various_correlations} illustrates, for various correlations, the loads for which AR allows systematic recovery of all stored patterns without external cues or memory lists. This property enables the continuous incorporation of new correlated memories, as described in Alg.~\ref{alg:continuous_learning}. The retrieval improves with network size - larger networks can reliably retrieve more stored patterns without encountering false memories. We can observe the rather surprising feature that a moderate amount of correlation ($\rho \approx 0.5$) tends to improve pattern retrieval compared to highly correlated and minimally correlated pattern sets. In fact, this finding contrasts with traditional associative memory models, where correlation typically degrades performance \cite{fontanari_storage_1990}.
+
+Our interpretation is that an intermediate amount of correlation helps the system to be driven in the ``good'' direction in early stages of the evolution, i.e. while still rather close to the neutral state, and the energy landscape is rather featureless. Once driven to a point of the state space proximal to all the stored patterns, the system can finish the convergence. As illustrated in Appendix~\ref{app:drive_pattern_correlation}, Fig.~\ref{fig:drive_pattern_correlation}, this push towards the good direction can be measured through the average correlation between the synaptic drive of each unit and the stored patterns.
+
+As emerges from our simulations, to limit the appearance of false memories, the values of $\beta$ must be relatively small compared to the target potential $u_{\text{target}}$. In our case, we found it convenient to keep $\beta$ smaller than $0.1$. By keeping the nudging of the convergence dynamic small, the emergence of false memories that might otherwise result from deformations in the energy landscape is reduced.
+Fig.~\ref{fig:load_SR_average_various_betas} indicates the existence of a trade-off: Smaller $\beta$ values require more iterations to retrieve all patterns but lower the chances of retrieving spurious patterns, while larger values accelerate pattern retrieval at the cost of increasing the probability of encountering a spurious state. Higher values of $\beta$ than those considered in this study lead to catastrophic degradation of recovery dynamics for which no stored patterns are recovered.
+Lower values of $\beta$ than presented here only lead to the need for more iterations to retrieve all patterns. For $\beta = 0$ the network converges toward one of the stored pattern states, and, so long we start near the same initial (neutral) state, it will always fall back into this attractor after each reset, we call this attractor the dominant attractor (or the dominant pattern) of the neutral state.
+
+We shall now describe some qualitative information on the efficiency of our algorithm. As expected, the number of iterations required to successfully store patterns using Alg.~\ref{alg:perceptron_CHN} increases with the memory load (Fig.~\ref{fig:computational_cost}). 
+Moreover, the higher the correlation between patterns, the higher the number of iterations needed for storage. Overall, our method requires significantly more iterations than previously documented for associative memory tasks in DHNs \cite{diederich_learning_1987}. 
+We can argue that this increase in computational cost may come from two factors. First, training a CHN through GDA (Alg.~\ref{alg:perceptron_CHN}) inherently requires more iterations than training DHNs. Second, we observed that a smaller convergence parameter $\epsilon$ in Alg.~\ref{alg:perceptron_CHN}, while computationally more demanding, yields superior retrieval performance. We hypothesize that this tighter convergence criterion induces stronger competition between pattern attractors at the neutral state. This competition results in enhanced network responsiveness to subtle modifications in dynamics induced by adaptation during retrieval. These observations led to the adoption of a very small $\epsilon =10^{-6}$, which demanded more iterations when performing the GDA.
+
+Finally, Fig.~\ref{fig:continuous_learning} gives a visual summary of the continuous incorporation of new correlated memories allowed by our AR mechanism (Alg.~\ref{alg:continuous_learning}). The whole learning scheme can be divided into two phases: an awake phase during which new patterns are collected, and a sleep phase during which previous patterns are retrieved using AR. The storage of patterns collected during both phases requires the use of the GDA. During this storage, the adaptation terms are turned off for the GDA to converge.
+
+\begin{figure}[h!]
+  \centering
+\includegraphics[width=1\textwidth]{Fig_load_SR_average_correlations_diag_inh.png}
+  % \includegraphics[width=0.5\textwidth]{Fig_load_SR_error_percentage.png}
+  % \includegraphics[width=0.5\textwidth]{Fig_load_SR_number_iter.png}
+% \includegraphics[width=0.5\textwidth]{Fig_load_SR_number_iter_normalized.png}
+
+  \caption{
+  Recovery capacity of AR for various correlations, modulated by $\rho$. Data are averaged over 20 simulations with different pattern sets. Correlated patterns are generated using Alg.~\ref{alg:correlated_patterns} (Appendix~\ref{app:correlated_patterns}). For networks of various sizes and numbers of stored patterns, we employ Alg.~\ref{alg:autonomous_rehearsal} until all patterns are recovered or until a spurious state is found.  \textbf{(Top row)} The percentage of `full retrieval,' i.e., simulation runs where no spurious state occurs before recovering all stored patterns. \textbf{(Bottom row)} Number of iterations required to recover all patterns. Recovery is best for $\rho = 0.5$, which denotes equal number of correlated and uncorrelated bits. For small $\rho$ values with few correlated bits, performance worsens. For highly correlated sets, only very low loads are recovered without false memories.}
+  \label{fig:load_SR_average_various_correlations}
+\end{figure}
+
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1\hsize]{Fig_load_SR_more_beta_diag_inh.png}
+    \caption{Similar to Fig.~\ref{fig:load_SR_average_various_correlations} but for various $\beta$ values. Correlated patterns are generated with a $\rho$ of $0.5$. Lower $\beta$ values require more iterations to recover the complete set of stored patterns. Higher $\beta$ values diminish the number of iteration needed but increase the probability of finding spurious state when the load is important.}
+    \label{fig:load_SR_average_various_betas}
+\end{figure*}
+
+
+\newpage
+\clearpage
+\begin{figure}[h!]
+  \centering
+\includegraphics[width=0.9\textwidth]{Fig_computational_cost.png}
+  % \includegraphics[width=0.5\textwidth]{Fig_load_SR_error_percentage.png}
+  % \includegraphics[width=0.5\textwidth]{Fig_load_SR_number_iter.png}
+% \includegraphics[width=0.5\textwidth]{Fig_load_SR_number_iter_normalized.png}
+
+  \caption{Convergence time of the GDA.  Color intensity shows the number of iterations required to store a given number of patterns using GDA (Alg.~\ref{alg:perceptron_CHN}). Data are averaged over 20 simulations for various pattern sets. $\rho$ is equal to $0.5$ for all simulations.}
+  \label{fig:computational_cost}
+\end{figure}
+
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Fig_continuous_learning.png}
+    \caption{\textbf{Continuous incorporation of correlated patterns.} Visualization of Alg.~\ref{alg:continuous_learning}. $\mathcal{N}$ denotes the network. The awake phase corresponds to the incorporation of new memories, while the sleep phase corresponds to AR.  \textbf{(1)} Memories added during the second awake phase. \textbf{(2)} Memories recovered during the second sleep phase. Memories retrieved during sleep, along with newly encountered ones, are stored in the network using the GDA. At the end of the simulation, querying the network enables the retrieval of the six incrementally stored memories $\{x_1, \dots, x_6\}$.}
+    
+    \label{fig:continuous_learning}
+\end{figure*}
+% \clearpage
+% \newpage
+\section{Discussion}
+\label{sec:discussion}
+Our work introduces a biologically inspired mechanism for the continuous incorporation of correlated patterns in associative networks. CL is made possible through the autonomous recovery of all stored patterns during a retrieval phase. By systematically retrieving memories, the network can incorporate new patterns while mitigating the forgetting of the ones already stored. Autonomous retrieval is made possible by adaptation, avoiding the need to recall patterns from an external list. Our results indicate that larger networks experience fewer spurious state visits, suggesting improved reliability with scale. However, understanding how these dynamics extend to networks of biologically relevant sizes would require further investigation. 
+
+% Previous work in computational neurosciences indicates that inhibitory circuits may play a critical role in the regulation of neural activity and plasticity \cite{vogels_inhibitory_2011, barron_unmasking_2016}. Here we demonstrate that inhibitory plasticity or SFA could be one of the key mechanisms that allow the sequential reactivation of memories observed during sleep and resting states \cite{wilson_reactivation_1994,
+% peyrache_replay_2009}. 
+% A property of associative networks highlighted by our approach is that subtle changes in self-inhibition can drive substantial shifts in network dynamics without disrupting the fundamental structure of stored attractors. Inhibition, therefore, allows context-dependent activity of the network as observed in experimental setups \cite{kuchibhotla_parallel_2017}. 
+% Biological neural circuits might, therefore, employ similar mechanisms to navigate complex, correlated, memory spaces.
+% Our results indicate that larger networks experience fewer spurious state visits, suggesting improved reliability with scale. However, understanding how these dynamics extend to networks of biologically relevant sizes would require further investigation. 
+
+Traditional associative memory models typically suffer from decreased capacity when storing correlated patterns \cite{amit_spin-glass_1985}. However, our findings revealed the rather unexpected feature that moderate correlation levels ($\rho=0.5$) actually improve pattern retrieval in the context of autonomous retrieval. We argue how this result may arise from the way that correlated structures influence the geometry of the attractor basins and the ensuing flow towards them. A more thorough theoretical analysis of this phenomenon could provide information on the factors that influence the robustness of recovery dynamics in both artificial and biological systems.
+
+A key consideration is whether the success of the recovery dynamic is tightly dependent on the statistics of the stored patterns. The way patterns are generated using Alg.~\ref{alg:correlated_patterns} results in half of the neurons being activated and half remaining inactive for each stored pattern on average.
+We can formalize it by defining '$a$' as the average number of activated units ($x_i=1$), $N$ as the network size, and $s = 1-\frac{a}{N}$ as the sparsity, which yields $s = 0.5$ for the results presented above.
+To assess whether this specific sparsity is essential for the retrieval mechanism, we evaluated the recovery process using patterns with different sparsity levels.
+The results are presented in Appendix~\ref{app:sparsity} and demonstrate that the retrieval mechanism remains robust to sparsity variations within the range $0.4<s<0.6$, but performance gradually degrades for values outside this range. Note that in this investigation, all patterns stored within each network share the same sparsity value. An interesting direction for future research would be to examine the network’s ability to retrieve a set of patterns exhibiting varying degrees of sparsity.
+
+presented here is robust to moderate amounts of noise, but it breaks down and induces spurious patterns when strong stochasticity is introduced. The impact of noise on the recovery dynamics has been tested by adding a stochastic term to the dynamics of each neuron:
+\begin{equation}
+\label{eq:CHN_with_shallowing_and_noise}
+c\frac{du_i}{dt} = \sum_j W_{ij}v_j - A_iv_i - \frac{u_i}{r} + D\eta_i(t),
+\end{equation}
+where $\eta_i(t) \sim \mathcal{U}(-1, 1)$ and $D < 1$ is the noise scaling factor. This added stochasticity does not alter the recovery dynamics for $D < 0.1$ but induces spurious patterns for higher values. Importantly, this stochasticity does not by itself induce the exploration of various memory states when $\beta = 0$. We have also tested slightly randomizing the neutral state, with $u_i(0) = D\eta_i$. This approach yields results identical to adding stochasticity to neural dynamics: convergence remains unchanged for $D<0.1$, while spurious patterns emerge at higher values. This suggests that, even though the neutral state lies near the separatrix, in high dimensions, the dominance of an attractor cannot be easily disrupted through stochasticity alone, at least for the continuous model and learning scheme considered here. While this statement may
+depend on the specific values of N and D, a quantitative exploration of this feature is beyond the scope of the present work.
+
+Previous work in computational neuroscience indicates that inhibitory circuits may play a critical role in the regulation of neural activity and plasticity \cite{vogels_inhibitory_2011, barron_unmasking_2016}. Here we demonstrate that inhibitory plasticity or SFA could be one of the key mechanisms that allows the sequential reactivation of memories observed during sleep and resting states \cite{wilson_reactivation_1994,peyrache_replay_2009}. A property of associative networks highlighted by our approach is that subtle changes in self-inhibition can drive substantial shifts in network dynamics without disrupting the fundamental structure of stored attractors. Inhibition, therefore, allows for context-dependent activity of the network as observed in experimental settings \cite{kuchibhotla_parallel_2017}.
+Biological neural circuits might, therefore, employ similar mechanisms to navigate complex, correlated memory spaces. In our model, adaptation, or self-inhibition, is only potentiated at the end of each memory replay. This behavior contrasts with the plasticity dynamics in the brain, which are considered to occur continuously. This schematic implementation is intended to demonstrate the functional role of inhibition in guiding memory exploration, rather than to reproduce the precise temporal dynamics of neuronal plasticity. Another discontinuity in the plasticity dynamics comes from the fact that, during the training of the network on a new memory corpus, self-inhibition has to be removed to avoid disturbance of the storage process. Implementing a model that more closely matches the continuous dynamics observed in the brain would therefore represent a natural extension of this work. 
+
+The ability of our network to transition from one memory state to another critically depends on the reset of the dynamics to the neutral state. In the brain, this reset mechanism may likely be induced by observed physiological processes. During sleep, for instance, cortical neurons exhibit bistable dynamics, alternating between depolarized UP states characterized by sustained firing and hyperpolarized DOWN states with neuronal silence \cite{jercog_up-down_2017,luczak_sequential_2007,steriade_novel_nodate}. These UP states, lasting hundreds of milliseconds to seconds, provide windows for memory replay, while DOWN states could naturally separate distinct memory activations. Another natural extension of our work would be to incorporate specific neural mechanisms responsible for such network resets, such as post-inhibitory rebound, to implement a more biologically plausible version of our model.
+
+ % A more biologically plausible version could incorporate a weak continuous inhibitory potentiation, evolving alongside the network memory retrieval dynamics, and gradually inducing an effect comparable to the discrete potentiation applied at reset. As long as this continuous potentiation remains sufficiently weak, we expect it to preserve the faithful reactivation of stored patterns while still steering the replay toward unvisited attractors after each reset.
+% However, during the training of the network on a new memory corpus, self-inhibition has to be removed to avoid disturbance of the storage process.
+
+% In the brain, inhibitory long-term plasticity is a good candidate for such a slow build-up, as it can last for several hours to days \cite{castillo_long-term_2011,wiera_long-term_2021}.
+
+% However, evidence suggests that these DOWN states do not always delineate individual memory replays, since multiple distinct memories can be reactivated within a single UP state \cite{feliciano-ramos_hippocampal_2023}. Another plausible mechanism involves fast-acting short-term synaptic depression, which could temporarily reduce the efficacy of synapses in active assemblies of neurons, thus facilitating the activation of competing memory patterns and inducing the visit of multiple attractors \cite{singh_model_2022,pietras_mesoscopic_2022}.
+
+% In summary, considering the biological plausibility of our model, it is reasonable to propose that rapid mechanisms such as synaptic short-term depression or transient inhibition of recently active units could underlie the transitions between memory states observed after each reset. On a slower time scale, longer-lasting processes, such as long-term inhibitory synaptic plasticity (corresponding to our self-inhibition or adaptation), could progressively bias the dynamics away from recently revisited attractors. This combination would enable the network to explore a broad repertoire of stored patterns while preventing repeated activation of dominant memories, thereby supporting an exhaustive exploration of the attractor landscape.
+
+\newpage
+\section{Conclusion}
+
+In this work, we demonstrate how adaptation can enable autonomous exploration of attractor landscapes in continuous Hopfield networks. Our key finding reveals that, under a critical load, inhibitory plasticity allows networks to systematically retrieve the entire set of stored memories, even for highly correlated sets. This property allowed us to propose and test an algorithmic scheme for continuous learning leveraging the ability of gradient descent to store correlated patterns. The capacity for self-directed pattern exploration, emerging from inhibitory modulation, offers insights for both biological memory consolidation and neuromorphic computing. 
+
+\section{Appendix}
+
+\subsection{Derivation of the gradient descent learning rule}
+\label{app:gradient}
+
+At steady state, when $\frac{du_i}{dt} = 0$, from Eq.~\ref{eq:CHN} we have:
+\[u_i = r \sum_j W_{ij} v_j\]
+where $v_j = \sigma(u_j)$. We can then define
+\[\hat{u}_i= r \sum_j W_{ij} \sigma(\tilde{u}_j)\]
+the expected potential of the unit $i$ when the rest of the units are at their target potential $\tilde{u}_j$. 
+
+We can then define the error function $E$ as the sum of squared differences between the expected potentials $\hat{u}_i$ and target potentials $\tilde{u}_i$:
+\[E = \frac{1}{2} \sum_i (\tilde{u}_i-\hat{u}_i)^2\]
+
+Taking the derivative with respect to the expected potential:
+\[\frac{\partial E}{\partial \hat{u}_i} = (\tilde{u}_i - \hat{u}_i)\]
+
+To compute how the error changes with respect to the weights $W_{ij}$, we use the chain rule:
+\[\frac{\partial E}{\partial W_{ij}} = \frac{\partial E}{\partial \hat{u}_i} \frac{\partial \hat{u}_i}{\partial W_{ij}}\]
+
+The partial derivative with respect to $W_{ij}$ is:
+\[\frac{\partial \hat{u}_i}{\partial W_{ij}} = rv_j\]
+
+This is an approximation that captures the immediate direct effect of $W_{ij}$ on $\hat{u}_i$, assuming that $v_j$ remains constant and ignoring feedback effects in the recurrent network. This approximation is valid when the optimization steps are small relative to the nonlinearities in the sigmoid function.
+
+Therefore, the error gradient with respect to $W_{ij}$ becomes:
+\[\frac{\partial E}{\partial W_{ij}} = (\tilde{u}_i - \hat{u}_i)rv_j\]
+
+Finally, we update the weights using gradient descent:
+\[\Delta W_{ij} = \alpha \frac{\partial E}{\partial W_{ij}} = \alpha r(\tilde{u}_i - \hat{u}_i)v_j\]
+
+where $\alpha$ is the learning rate, typically set to 0.001 to ensure convergence.
+
+\subsection{Querying procedure}
+\label{app:querying}
+
+The network's ability to retrieve stored patterns can be tested through partial cues. Given a subset of informed units from a pattern $\mu$, we initialize their potentials according to the partial pattern while leaving other units at rest : 
+\[
+u^{\mu}_i(t=0) = 
+\begin{cases} 
++6 & \text{if unit $i$ is informed and } x^{\mu}_i = 1 \\
+-6 & \text{if unit $i$ is informed and } x^{\mu}_i = 0 \\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+The network then evolves according to Eq.~\ref{eq:CHN} until it reaches a stable state ($\|\frac{d\textbf{u}}{dt}\|_{\infty} < \epsilon$).
+The thresholding procedure then allows for the reading of a stored binary pattern $\mathbf{x}^{\mu}$:
+\[
+x^{\mu}_i = 
+\begin{cases} 
+1 & \text{if } v_i(t_f)>0.5 \\
+0 & \text{otherwise.}
+\end{cases}
+\]
+with $v_i(t_{f})$ the rate of neuron $i$ after convergence of the dynamic. Alg.~\ref{alg:querying_continuous} summarize the procedure.
+
+When operating below capacity, the dynamics typically converges to the stored pattern most similar to the initial cue. The final state is interpreted as a binary pattern using the thresholding procedure (Eq.\ref{eq:threshold}). As with traditional DHNs, retrieval success depends both on the network load and on the number of units informed in the initial cue. Although a theoretical analysis of the storage capacity under Alg.~\ref{alg:perceptron_CHN} would be of interest, our focus here is on the autonomous retrieval mechanism, which operates in a regime well below this limit for which pattern retrieval is highly reliable.
+
+\begin{algorithm}[h]
+\caption{Querying with convergence of the network using Euler method}
+\begin{algorithmic}[1]
+\State Given a pattern $\mu$ and a subset of informed units
+\State \textbf{set}
+        \(
+        u_i^{\mu}(t=0) = 
+        \begin{cases}  
+        +u_{\text{target}}  & \text{if $x_i^\mu = 1$} \\
+        -u_{\text{target}} & \text{if $x_i^\mu = 0$} \\
+        0 & \text{ if $x_i^\mu$ not informed}
+        \end{cases}\)
+        
+\Repeat
+    \For{each unit i}
+    \State $u_i(t += 1)= u_i(t)+ \delta(\sum_j W_{ij}v_j - \frac{u_i(t)}{r})$
+    \EndFor
+\Until{$\|\dot{\textbf{u}}\|_{\infty} < \epsilon$}
+\State \textbf{define} $t_f = t$ \Comment{Final time at convergence}
+\State \textbf{read} :
+\(
+x^{\mu}_i = 
+\begin{cases} 
+1 & \text{if } v_i(t_f)>0.5 \\
+0 & \text{otherwise.}
+\end{cases}
+\)
+\end{algorithmic} \label{alg:querying_continuous}
+\end{algorithm}
+
+\subsection{Construction of correlated patterns}
+\label{app:correlated_patterns}
+
+\begin{algorithm}[H]
+\caption{Generation of $p$ correlated random patterns}
+\begin{algorithmic}[1]
+\State Generate a random binary pattern $\textbf{x}^{parent} \in \{0,1\}^N$
+\State Set $k = \lfloor (1-\rho)N \rfloor$, where $\rho$ is the ratio of bits not randomized
+\For{$i = 1$ to $p$}
+    \State $\textbf{x}^i \gets \mathbf{x}^{\text{parent}}$
+    \State Randomly select $k$ distinct indices $\{j_1,\ldots, j_k\}$ from $\{1,\ldots, N\}$
+    \For{$m = 1$ to $k$}
+        \State $x^i_{j_m} \gets$ random choice from $\{0,1\}$ with equal probability
+    \EndFor
+\EndFor
+\end{algorithmic}
+\label{alg:correlated_patterns}
+\end{algorithm}
+
+\subsection{Model with inhibitory matrix}
+\label{app:inhib_matrix}
+
+To allow the sequential exploration of stored patterns a second approach have been tested.
+A set of plastic inhibitory synapses $W'_{ij}$ has been added to the network dynamics :
+
+\begin{equation}
+\label{eq:CHN_with_shallowing_synapses}
+c\frac{du_i}{dt} = \sum_j W_{ij}v_j - \sum_j W'_{ij}v_j - \frac{u_i}{r}
+\end{equation}
+\begin{equation}
+    \label{eq:inh_pot_synapses}
+    W'_{ij} \leftarrow W'_{ij}+\beta v_i(t_{f})v_j(t_{f})
+\end{equation}
+
+with $v_i(t_{f})$ the rate of neuron $i$ after convergence of the dynamics. Self-inhibition $W'_{i,i}$ is set to 0 and undergoes no plasticity. A model combining self-inhibition and plastic inhibitory synapses has been tested and yields the same qualitative results.
+$\beta$ represents the potentiation strength of the inhibitory synapses and is selected as a small value, typically below $0.05$. The plasticity rule in Eq.\ref{eq:inh_pot_synapses} is Hebbian. 
+
+We can observe that, similarly to adaptation, plastic synapses allow the retrieval of correlated memories Fig.~\ref{fig:load_SR_average_various_correlations_W} and \ref{fig:load_SR_average_various_betas_W}.
+The potentiation strength $\beta$ has to be weaker than that for adaptation, as a neuron is contacted by many inhibitory synapses. The retrieval dynamics are similar to the ones observed with adaptation in every aspect.
+
+
+\begin{figure}[h!]
+  \centering
+\includegraphics[width=1\textwidth]{Fig_load_SR_average_correlations.png}
+
+  \caption{
+  Similar to Fig.~\ref{fig:load_SR_average_various_correlations}, recovery capacity of AR for various correlations 
+  but for a model using an inhibitory matrix $\mathbf{W}'$.}
+  \label{fig:load_SR_average_various_correlations_W}
+\end{figure}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=0.6\hsize]{Fig_load_SR_average_betas.png}
+      \caption{
+  Similar to Fig.~\ref{fig:load_SR_average_various_betas}, recovery capacity of AR for various values of $\beta$ but for a model using an inhibitory matrix $\mathbf{W}'$.}
+    \label{fig:load_SR_average_various_betas_W}
+\end{figure*}
+
+\newpage
+\clearpage
+\subsection{Drive-pattern correlation and spurious states}
+\label{app:drive_pattern_correlation}
+
+\begin{figure}[!h]
+    \centering
+
+
+    \includegraphics[width=0.5\hsize]{Fig_drive_correlation.png}
+    \label{fig:Fig_drive_correlation}
+
+  \caption{For networks trained with sets of varying correlation $\rho$, we compute the synaptic drive of each unit $I^{syn}_j = \sum_i W_{ij}$. This synaptic drive is the main component influencing the dynamic of the network at the neutral state, when the leak is null. Then, we compute the average correlation between each stored pattern and the synaptic drive: $\overline{r} = \frac{1}{p}\sum_{\mu=1}^{p}r^{\mu}$ with $r^{\mu} = \text{Corr}(\mathbf{x}^\mu,\mathbf{I}^{syn})$. We can see that, the higher the $\rho$, the stronger the average correlation between the drive $\mathbf{I}^{syn}$ and stored patterns. At the neutral state, from which the network is initialized, stronger correlations induce a stronger push of the network state toward stored patterns. This could explain why our algorithm performs better with moderately correlated patterns.}
+  \label{fig:drive_pattern_correlation}
+\end{figure}
+\clearpage
+
+\subsection{Impact of sparsity on the recovery dynamics}
+
+\begin{algorithm}[H]
+\caption{Generation of $p$ correlated sparse binary patterns}
+\begin{algorithmic}[1]
+\State \textbf{Input:} sparsity $s$, correlation parameter $\rho$
+\State Generate a binary parent pattern $\textbf{x}^{\text{parent}} \in \{0,1\}^N$ with $p(x_i=0)=s$
+\State Set $k = \lfloor (1-\rho)N \rfloor$
+\For{$i = 1$ to $p$}
+    \State $\textbf{x}^i \gets \mathbf{x}^{\text{parent}}$
+    \State Randomly select $k$ distinct indices $\{j_1,\ldots, j_k\}$ from $\{1,\ldots, N\}$
+    \For{$m = 1$ to $k$}
+        \State $x^i_{j_m} \gets$ 0 with probability $s$, otherwise 1
+    \EndFor
+\EndFor
+\end{algorithmic}
+\label{alg:sparse_correlated_patterns}
+\end{algorithm}
+
+\label{app:sparsity}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{Fig_sparsity.png}
+    \caption{Similar to Fig.~\ref{fig:load_SR_average_various_correlations}, this figure shows the recovery capacity of AR for various sparsity levels of the stored patterns. The data presented correspond to the results of AR for one simulation for each network size/number of stored patterns combination. \textbf{(Top row)} White pixels correspond to successful recovery of the full pattern set, while black pixels indicate the appearance of spurious patterns before full recovery is achieved. The appearance of spurious patterns for $s<0.7$ with only one stored pattern is unexpected and necessitates further investigation.}
+
+    \label{fig:enter-label}
+\end{figure}
+\clearpage
+
+\subsection{Parameters for simulations}
+\label{S3_Table}
+\begin{table}[h]
+\centering
+\caption{CHN parameters}
+\begin{tabular}{|c|c|c|}
+\hline
+Name&Value&Description\\
+\hline
+$\epsilon_{sim}$ &$10^{-6}$& Convergence constant\\
+\hline
+$r$ & 1 & Leak time constant\\
+\hline
+$c$& 1 & Integration time constant\\
+\hline
+$\delta$ &$0.001$& Euler step size\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[!h]
+\centering
+\caption{Gradient descent}
+\begin{tabular}{|c|c|c|}
+ \hline
+ Name&Value&Description\\
+ \hline
+ $\alpha$ &0.0001& Learning rate\\
+ \hline
+  $\epsilon_{learn}$ &$10^{-6}$& Convergence constant\\
+ \hline 
+ $u^{target}$&6&Target potential winning units\\
+ \hline
+\end{tabular}
+\end{table}
+
+
+\section{Acknowledgments}
+
+This project has received financial support from the
+French DIM AI4IDF and the ANR “MemAI” project ANR-23-
+CE30-0040. This work was supported by Paris Region.
+
+\clearpage
+\newpage
+
+
+\nolinenumbers
+
+\bibliography{references}
+\bibliographystyle{nfam2025_workshop}
+
+
+\end{document}
+

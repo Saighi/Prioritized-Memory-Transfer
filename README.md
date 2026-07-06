@@ -1,0 +1,149 @@
+# Prioritized Memory Transfer — simulation
+
+PyTorch implementation of the predictive-coding memory-transfer models. **One engine, several models**:
+
+1. the **two-population** model (teacher T → student S) specified in
+   [`two_population_memory_transfer_model.md`](two_population_memory_transfer_model.md) and analysed
+   in [`analysis_stress_test.md`](analysis_stress_test.md);
+2. the **additive three-network** model (frozen teachers T₁, T₂ → plastic synthesis S) specified in
+   [`three_network_additive_memory_synthesis.md`](three_network_additive_memory_synthesis.md);
+3. the **interleaved merge** (rehearse one teacher at a time instead of summing them);
+4. a **continual-learning loop** (buffer → synthesis → storage) built on the interleaved merge.
+
+All are instances of one composable **"network of networks" engine** (`pmt.macro`): predictive-coding
+`Population` nodes wired by additive-error `AdditiveInterface` hyper-edges into a `MacroNetwork`
+(edges can be switched `active`/off, which is how the interleaving alternates teachers).
+
+**Two-population.** A **teacher** T (a flat, linear covPCN associative memory, higher in the hierarchy)
+and an empty **student** S below it are coupled. During **sleep / replay** — a **reversed (negative)
+precision** `π_ST < 0` on the teacher's interface — noise stirs T; S's prediction error along memories
+it lacks drives T into those memories; S learns them; the drive there vanishes; the system
+self-terminates. Because T is linear, what transfers is the memory **subspace** (the staircase has
+~effective-rank steps, = `P` for orthonormal patterns) — see §9 of the analysis.
+
+**Additive synthesis.** Two frozen teachers are summed into one prediction `y = α₁x₁ + α₂x₂`; a single
+common error `ε_Σ = x_S − y` drives one plastic synthesis network to learn the **subspace sum**
+`𝒰_Σ = 𝒰₁ + 𝒰₂`. The same novelty operator that prioritizes unlearned directions also **rebalances
+between teachers**: as one source becomes predictable its drive vanishes and the other takes over.
+Overlap is learned once (`r_Σ = r₁ + r₂ − dim(𝒰₁∩𝒰₂)`), and the common-error architecture
+self-terminates cleanly (a *separate*-error wiring does not).
+
+**Interleaved merge.** The additive *sum* needs each teacher to have ≥2 memories that can roam; a
+single-memory teacher is pinned and the sum collapses onto the blend `(α₁m₁+α₂m₂)` (the cross-term
+`α₁α₂E[x₁x₂ᵀ]` corrupts the covariance). Interleaving learns from **one teacher per replay bout**,
+alternating — never forming the sum, so the covariance is `Σ = p₁Σ₁ + p₂Σ₂` (no cross-term) and the
+combined subspace is built even for single-memory, **correlated** teachers. The back-and-forth cancels
+crosstalk: rehearse T₁ → nulls `m₁`, bumps `m₂`; rehearse T₂ → nulls `m₂`, bumps `m₁`; the bumps decay to
+zero (interleaved rehearsal — the standard cure for catastrophic forgetting).
+
+**Continual learning.** A stream of (correlated) memories is consolidated one at a time by three networks:
+a fast **Buffer** (one-shot covPCN, overwritten each memory — the only network that ever learns from an
+actual memory), a transient **Synthesis** workspace, and a slow **Storage**. Each cycle: write the new
+memory into the Buffer, consolidate `Buffer + Storage → Synthesis` by **interleaved rehearsal** (alternate
+rehearsing Buffer and Storage, so the single-memory Buffer merges cleanly and Storage's rehearsal cancels
+crosstalk with correlated old memories), then download `Synthesis → Storage`. Storage accumulates the whole
+stream (up to capacity `d−1`) while a buffer-only control catastrophically forgets everything but the latest.
+
+## Setup
+
+Uses the existing **`pytorch`** conda env (Python 3.10, torch 2.5, CUDA optional). One-time
+install for the interactive figures:
+
+```bash
+conda run -n pytorch pip install plotly nbformat
+```
+
+## Run
+
+Open [`notebooks/two_network/01_single_run.py`](notebooks/two_network/01_single_run.py) (or the
+interleaved [`notebooks/additive_synthesis/interleaved/01_interleaved_single_run.py`](notebooks/additive_synthesis/interleaved/01_interleaved_single_run.py))
+in VS Code, pick the **`pytorch`** interpreter as the kernel, and run the `# %%` cells top to bottom.
+You get the spectral guards, the faithfulness self-checks, a full transfer run, a 6-panel static
+dashboard, `W_S`-convergence snapshots, and interactive plotly figures.
+
+Headless (no figures shown), e.g. to verify a notebook runs:
+
+```bash
+PYTHONPATH=. PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python notebooks/two_network/01_single_run.py
+PYTHONPATH=. PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python notebooks/additive_synthesis/interleaved/01_interleaved_single_run.py
+```
+
+Self-checks:
+
+```bash
+PYTHONPATH=. conda run -n pytorch --no-capture-output python tests/smoke_test.py       # two-pop invariants, gradients, circulation, transfer
+PYTHONPATH=. conda run -n pytorch --no-capture-output python tests/macro_test.py       # engine==2-pop equivalence + additive transfer/termination
+PYTHONPATH=. conda run -n pytorch --no-capture-output python tests/interleaved_test.py # interleaved beats the additive sum on correlated single memories
+PYTHONPATH=. conda run -n pytorch --no-capture-output python tests/continual_test.py   # interleaved continual retains a correlated stream
+PYTHONPATH=. conda run -n pytorch --no-capture-output python tests/viz_test.py         # all single-run figures build
+PYTHONPATH=. conda run -n pytorch --no-capture-output python tests/run_findings.py     # run all 4 experiment notebooks headless
+```
+(Use `--no-capture-output`; plain `conda run` mangles tqdm progress bars and reports a spurious error.)
+
+## Layout
+
+```
+pmt/
+  macro.py         the engine: Population + AdditiveInterface + MacroNetwork (fwd/bwd/outer);
+                   assembles rates, adiabatic solve, one unified step() — the LEGO layer
+  config.py        ModelConfig / AdditiveSynthesisConfig / ContinualConfig / SimConfig
+  memory.py        pattern generators, zero-diagonal W_T (covPCN / projector), two-teacher geometries
+  model.py         build_system (two-pop) -> MacroNetwork; TwoPopModel facade over it
+  additive.py      build_additive_synthesis (three-net, summed) -> MacroNetwork; simulate_additive
+  interleaved.py   build_interleaved_synthesis + interleave_merge (one teacher per bout) -> MacroNetwork
+  continual.py     ContinualLearner: write→interleaved-consolidate→download loop over a memory stream
+  dynamics.py      simulate() — resets, drives macro.step, records (dispatches by info["kind"])
+  history.py       History + AdditiveHistory + InterleavedHistory + ContinualHistory
+  recall.py        AssociativeMemory: one network, clamped-query pattern completion (standalone)
+  diagnostics.py   spectral gap, manifold basis, restricted novelty spectrum, VFE/circulation
+                   checks, and the additive observables (U_Σ, transfer deficit, source novelty, ...)
+  viz_static.py / viz_interactive.py / viz_eigenspace.py   two-population figures
+  viz_additive.py / viz_interleaved.py / viz_continual.py   additive / crosstalk-sawtooth / retention
+  experiments.py   sweep helpers for the two-population experiment notebooks
+notebooks/
+  two_network/            the two-population model (01_single_run … 08_memory_subspace_addition)
+  additive_synthesis/
+    online/               the additive (summed) three-network model — 01_synthesis_single_run,
+                          02_synthesis_edge_cases
+    interleaved/          the interleaved merge — 01_interleaved_single_run (crosstalk sawtooth vs the
+                          failing sum), 02_interleaved_edge_cases (correlation sweep, multi-memory)
+  continual_learning/     the buffer → synthesis → storage loop (interleaved consolidation)
+    01_continual_single_stream.py   core demo (Storage keeps a correlated stream; buffer-only forgets)
+    02_continual_edge_cases.py      storage-rehearsal ablation, capacity, correlated-vs-random
+tests/
+  smoke_test.py, macro_test.py, interleaved_test.py, continual_test.py, viz_test.py,
+  probe_findings.py, run_findings.py
+```
+
+## Faithfulness (enforced by construction / asserted in checks)
+
+- **Tied weights**: one matrix per population (`W_T`, `W_S`); top-down uses `M = I − W`,
+  bottom-up uses `Mᵀ` (the same matrix transposed). The T↔S interface is identity both ways.
+- **No autapses, ever**: `diag(W_T) = diag(W_S) = 0` at construction and after every update.
+- **VFE**: the student's perception = `−∇_{x_S}F_S`, learning = `−∇_{W_S}F_S` (autograd-verified).
+- **Saddle**: `circulation ≈ 0` only when `π_ST = −π_TS` (`ModelConfig(exact_saddle=True)`).
+- **Memories in `ker M_T`**: `max_p ‖M_T m_p‖ ≈ 0` for `P ≤ d−1`.
+- **Reversed precision (sleep/wake)**: the teacher's interface precision `π_ST` is *signed*.
+  Transfer is simulated with a **reversed (negative) precision** `π_ST < 0` (the teacher
+  maximizes the interface error — drive-to-disagree); `π_ST > 0` is ordinary inference/recall
+  with no transfer drive. The sign of `π_ST` *is* the phase — there is no separate gate.
+
+## Experiments (`notebooks/02..07`)
+
+Each notebook turns an analytic claim from `analysis_stress_test.md` into a simulation-vs-theory
+figure and prints a verdict. All are **confirmed numerically**:
+
+- **Saddle** — circulation matches `|π_ST+π_TS|·√d` to machine precision; it vanishes only at
+  `π_ST=−π_TS` (the teacher's reversed precision is the exact negative of the student's), so the
+  single-potential saddle exists only there.
+- **Stability** — both the off-manifold growth eigenvalue and the dynamical terminal
+  manifold-occupancy turn over exactly at `|π_ST|* = π_T·σ²_min·(π_TS+π_S)/π_S`; below it T consolidates
+  and stays quiescent on-manifold, above it T chases noise.
+- **Timescale** — a known pattern is explained away (`‖ε_TS‖→0`) across the whole fast-S
+  regime while a novel one stays at `n(1)`; the discrimination only collapses as `τ_S→τ_T`, so
+  selection is spectral, not a speed race.
+- **Subspace** — orthonormal `P=6` patterns give 6 staircase steps; correlated rank-3 patterns
+  give 3 (= effective rank `< P`). The linear model transfers a *subspace*; discrete one-per-pattern
+  (episodic) replay would need an added nonlinearity / soft-WTA.
+- **Stop-gradient** — the Tang-style dendritic variant (drop the backward `Wᵀε` term) still
+  transfers every direction; the price is a ~2× looser residual floor and a non-symmetric `N_S`.
