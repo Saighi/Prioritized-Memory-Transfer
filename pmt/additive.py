@@ -20,7 +20,7 @@ import torch
 
 from .config import AdditiveSynthesisConfig, SimConfig
 from .history import AdditiveHistory
-from .macro import AdditiveInterface, MacroNetwork, Population
+from .macro import AdditiveInterface, MacroNetwork, Population, resolve_signed_precision, seed_state
 from .memory import build_W_T, make_teacher_subspaces
 
 
@@ -49,12 +49,8 @@ def build_additive_synthesis(cfg: AdditiveSynthesisConfig):
     # with C = [alpha1 I, alpha2 I] so ||C||^2 = alpha1^2 + alpha2^2 and beta = |rho|.
     Cnorm2 = cfg.alpha1 ** 2 + cfg.alpha2 ** 2
     guard = min(cfg.pi_T1 * sigma1_min, cfg.pi_T2 * sigma2_min) / Cnorm2
-    if cfg.exact_saddle:
-        rho = -float(cfg.pi_I)                       # zero-sum saddle (spec section 7)
-    elif isinstance(cfg.rho, str) and cfg.rho == "auto":
-        rho = -cfg.rho_safety * guard                # reversed precision, inside the guard
-    else:
-        rho = float(cfg.rho)                         # signed: <0 sleep/replay, >0 wake
+    rho = resolve_signed_precision(cfg.rho, guard=guard, safety=cfg.rho_safety,
+                                   exact_saddle=cfg.exact_saddle, pi_pos=cfg.pi_I)
 
     r_leash1 = cfg.r1 if cfg.norm_constraint else None
     r_leash2 = cfg.r2 if cfg.norm_constraint else None
@@ -100,11 +96,7 @@ def _reset_additive(macro: MacroNetwork, cfg: AdditiveSynthesisConfig, info: Dic
     memory subspace (spec section 20 initial conditions), then renormalized to its leash."""
     macro.populations["S"].x = torch.zeros(cfg.d, dtype=cfg.dtype, device=cfg.device)
     for name, U, r in (("T1", info["U1"], cfg.r1), ("T2", info["U2"], cfg.r2)):
-        p = macro.populations[name]
-        x = torch.randn(cfg.d, generator=gen, dtype=cfg.dtype, device=cfg.device)
-        if cfg.init_on_manifold:
-            x = U @ (U.transpose(-2, -1) @ x)        # project onto the teacher's own subspace
-        p.x = x * (r / x.norm().clamp_min(1e-12))
+        seed_state(macro.populations[name], U if cfg.init_on_manifold else None, gen, r=r)
 
 
 def simulate_additive(macro: MacroNetwork, sim: SimConfig, info: Dict) -> AdditiveHistory:

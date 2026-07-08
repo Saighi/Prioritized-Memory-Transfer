@@ -19,15 +19,10 @@
 #    once the manifold is learned, the teacher is driven off into noise → occupancy collapses.
 
 # %% setup
-import sys, pathlib
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-_root = pathlib.Path.cwd()
-while not (_root / "pmt").exists() and _root != _root.parent:
-    _root = _root.parent
-sys.path.insert(0, str(_root))
 
 from pmt import ModelConfig, build_system
 from pmt import experiments as ex

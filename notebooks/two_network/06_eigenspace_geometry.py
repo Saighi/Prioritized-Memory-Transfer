@@ -21,10 +21,6 @@ import os, sys, pathlib
 import numpy as np
 import torch
 
-_root = pathlib.Path.cwd()
-while not (_root / "pmt").exists() and _root != _root.parent:
-    _root = _root.parent
-sys.path.insert(0, str(_root))
 
 from pmt import ModelConfig, SimConfig, build_system, simulate
 from pmt import viz_eigenspace as ve

@@ -18,17 +18,12 @@
 
 # %% imports & path setup
 import os
-import sys
 import pathlib
 
 import numpy as np
 import torch
 
 # make `import pmt` and `import viz_embedding` work whatever the cwd / nesting depth
-_root = pathlib.Path.cwd()
-while not (_root / "pmt").exists() and _root != _root.parent:
-    _root = _root.parent
-sys.path.insert(0, str(_root))
 
 from pmt import ModelConfig, SimConfig, build_system, simulate
 from pmt import diagnostics as dg

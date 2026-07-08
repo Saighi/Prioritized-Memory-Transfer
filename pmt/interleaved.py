@@ -25,7 +25,7 @@ import torch
 
 from .config import AdditiveSynthesisConfig, SimConfig
 from .history import InterleavedHistory
-from .macro import AdditiveInterface, MacroNetwork, Population
+from .macro import AdditiveInterface, MacroNetwork, Population, resolve_signed_precision, seed_state
 from .memory import build_W_T, make_teacher_subspaces
 
 
@@ -47,11 +47,10 @@ def build_interleaved_synthesis(cfg: AdditiveSynthesisConfig):
     sigma2_min = spectral_gap(M_T2.transpose(-2, -1) @ M_T2)
 
     def _rho(pi_teacher, sigma_min):
-        if cfg.exact_saddle:
-            return -float(cfg.pi_I)
-        if isinstance(cfg.rho, str) and cfg.rho == "auto":
-            return -cfg.rho_safety * pi_teacher * sigma_min      # single source: ||C||^2 = 1
-        return float(cfg.rho)
+        # single source: ||C||^2 = 1, so the guard is just pi_teacher * sigma_min
+        return resolve_signed_precision(cfg.rho, guard=pi_teacher * sigma_min,
+                                        safety=cfg.rho_safety,
+                                        exact_saddle=cfg.exact_saddle, pi_pos=cfg.pi_I)
 
     T1 = Population("T1", W1, cfg.pi_T1, cfg.tau_T1, plastic=False, sigma_xi=cfg.sigma_xi1, r=cfg.r1)
     T2 = Population("T2", W2, cfg.pi_T2, cfg.tau_T2, plastic=False, sigma_xi=cfg.sigma_xi2, r=cfg.r2)
@@ -104,13 +103,7 @@ def interleave_merge(
             itf_of[s] = itf
 
     def seed(name: str) -> None:
-        p = macro.populations[name]
-        U = bases.get(name)
-        x = torch.randn(d, generator=gen, dtype=macro.dtype, device=macro.device)
-        if U is not None and U.shape[1] > 0:
-            x = U @ (U.transpose(-2, -1) @ x)
-        r = p.r if p.r is not None else 1.0
-        p.x = x * (r / x.norm().clamp_min(1e-12))
+        seed_state(macro.populations[name], bases.get(name), gen)
 
     macro.populations[target].x = torch.zeros(d, dtype=macro.dtype, device=macro.device)
     for bout in range(n_bouts):

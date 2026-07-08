@@ -32,13 +32,13 @@ class ModelConfig:
     d: int = 48                      # neurons per population (state dimension)
     P: int = 6                       # number of stored memories in T (needs P <= d-1)
 
-    # --- precisions / gains (guards: pi_TS > pi_S; |pi_ST| < spectral gap) ---
+    # --- precisions / gains (guards: pi_TS > pi_S; |pi_ST| < pi_T * sigma2_min, Lemma 2) ---
     pi_T: float = 1.0                # teacher self-precision (how much T trusts its own recurrent model)
     pi_S: float = 0.5                # student self-precision (how much S trusts its own model)
     pi_TS: float = 1.0               # student's interface precision (how much S trusts T's activity)
     pi_ST: Union[float, str] = "auto"   # teacher's SIGNED interface precision. <0 sleep/replay (reversed),
-                                        # >0 wake. "auto" -> reversed default -pi_ST_safety*sigma2_min.
-    pi_ST_safety: float = 0.5        # fraction of the spectral gap used for |pi_ST| when pi_ST == "auto"
+                                        # >0 wake. "auto" -> reversed default -pi_ST_safety*pi_T*sigma2_min.
+    pi_ST_safety: float = 0.5        # fraction of the conservative guard (pi_T*sigma2_min) when "auto"
     exact_saddle: bool = False       # if True, override pi_ST = -pi_TS (the exact-saddle / zero-sum regime)
 
     # --- time constants & learning rate (tau_S << tau_T << 1/eta) ---

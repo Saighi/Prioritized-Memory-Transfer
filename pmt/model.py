@@ -36,7 +36,15 @@ from typing import Optional, Sequence
 import torch
 
 from .config import ModelConfig
-from .macro import AdditiveInterface, MacroNetwork, Population, bwd, fwd, outer  # noqa: F401 (re-export)
+from .macro import (  # noqa: F401 (re-export)
+    AdditiveInterface,
+    MacroNetwork,
+    Population,
+    bwd,
+    fwd,
+    outer,
+    resolve_signed_precision,
+)
 from .memory import build_W_T, make_patterns, zero_diag
 
 
@@ -211,24 +219,26 @@ def build_system(cfg: ModelConfig):
     S_T = M_T.transpose(-2, -1) @ M_T
     sigma2_min = spectral_gap(S_T)
 
-    if cfg.exact_saddle:
-        pi_ST = -float(cfg.pi_TS)                # exact-saddle / zero-sum: pi_ST = -pi_TS
-    elif isinstance(cfg.pi_ST, str) and cfg.pi_ST == "auto":
-        pi_ST = -cfg.pi_ST_safety * sigma2_min   # reversed (negative) precision: the replay default
-    else:
-        pi_ST = float(cfg.pi_ST)                 # signed: <0 sleep/replay, >0 wake
+    # conservative guard (Lemma 2): |pi_ST| < pi_T sigma2_min. The "auto" default sits at
+    # pi_ST_safety of it (before this fix the pi_T factor was dropped, which was only
+    # correct at the default pi_T = 1).
+    guard_safe = cfg.pi_T * sigma2_min
+    pi_ST = resolve_signed_precision(
+        cfg.pi_ST, guard=guard_safe, safety=cfg.pi_ST_safety,
+        exact_saddle=cfg.exact_saddle, pi_pos=cfg.pi_TS,
+    )
 
     model = TwoPopModel(W_T, cfg, pi_ST=pi_ST, patterns=M)
     U_T = manifold_basis(M_T)
 
-    guard_scalar = cfg.pi_T * sigma2_min * (cfg.pi_TS + cfg.pi_S) / cfg.pi_S   # bound on |pi_ST|
+    guard_scalar = cfg.pi_T * sigma2_min * (cfg.pi_TS + cfg.pi_S) / cfg.pi_S   # aligned-case bound
     info = {
         "kind": "two_pop",
         "patterns": M,
         "W_T": W_T,
         "S_T": S_T,
         "sigma2_min": sigma2_min,
-        "guard_safe": cfg.pi_T * sigma2_min,     # |pi_ST| < pi_T sigma2_min : always-safe default
+        "guard_safe": guard_safe,                # |pi_ST| < pi_T sigma2_min : conservative (Lemma 2)
         "guard_scalar": guard_scalar,            # |pi_ST| < pi_T sigma2_min (pi_TS+pi_S)/pi_S : aligned case
         "pi_ST": pi_ST,                          # signed (negative in the replay regime)
         "exact_saddle": bool(cfg.exact_saddle),
@@ -236,6 +246,7 @@ def build_system(cfg: ModelConfig):
         "manifold_dim": U_T.shape[1],
         "memory_residual": (M_T @ M).norm(dim=0).max().item(),
         "precision_ok": cfg.pi_TS > cfg.pi_S,
-        "pi_ST_ok": abs(pi_ST) < guard_scalar,
+        "pi_ST_ok": abs(pi_ST) < guard_safe,          # conservative guard, matches the paper's Lemma 2
+        "pi_ST_ok_aligned": abs(pi_ST) < guard_scalar,  # looser aligned-case bound
     }
     return model, info

@@ -30,18 +30,12 @@
 
 # %% imports & path setup
 import os
-import sys
 import math
-import pathlib
 from collections import defaultdict
 
 import torch
 
 # make `import pmt` work whether cwd is the repo root or notebooks/
-_root = pathlib.Path.cwd()
-while not (_root / "pmt").exists() and _root != _root.parent:
-    _root = _root.parent
-sys.path.insert(0, str(_root))
 
 import matplotlib
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"   # set PMT_NO_SHOW=1 to run headless

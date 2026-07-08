@@ -1,10 +1,9 @@
 """Diagnostics: spectral quantities, the primary novelty-spectrum observable, alignments,
-energies, and two autograd-based correctness checks (VFE gradients, saddle circulation).
+and three correctness checks tying the code to the paper's results (VFE gradients — Prop 1,
+the surprise identity — Corollary 1, saddle circulation — Prop 3).
 All pure functions over a model / tensors.
 """
 from __future__ import annotations
-
-from typing import Dict
 
 import torch
 
@@ -53,10 +52,6 @@ def manifold_occupancy(x_T: torch.Tensor, U_T: torch.Tensor) -> float:
     return float((U_T.transpose(-2, -1) @ x_T).norm() / x_T.norm().clamp_min(1e-12))
 
 
-def energies(model: TwoPopModel) -> Dict[str, float]:
-    return {"F_T": float(model.F_T()), "F_S": float(model.F_S()), "Phi": float(model.Phi())}
-
-
 # -------------------------------------------------------------------- correctness checks
 def check_gradients(model: TwoPopModel, seed: int = 0):
     """Confirm that the student's perception = -grad_{x_S} F_S and the Hebbian rule =
@@ -78,6 +73,29 @@ def check_gradients(model: TwoPopModel, seed: int = 0):
     err_xS = float((g_xS + perception_rhs).norm())     # grad should equal -perception_rhs
     err_WS = float((g_WS + learn_rhs).norm())          # grad should equal -learn_rhs
     return err_xS, err_WS
+
+
+def surprise_identity_error(model: TwoPopModel, n_trials: int = 5, seed: int = 0) -> float:
+    """Corollary 1 (the surprise identity): at the fast-student equilibrium the student's free
+    energy equals the novelty score of the teacher's state,
+
+        F_S(x_S*, x_T) = (pi_TS/2) x_T^T N_S x_T .
+
+    Settles the student (`solve_xS_steady`), evaluates F_S directly, and compares with the
+    quadratic form. Returns the max absolute mismatch over `n_trials` random teacher states
+    (~1e-15 in float64, for any W_S)."""
+    gen = torch.Generator(device=model.device).manual_seed(seed)
+    N = model.novelty_operator()
+    err = 0.0
+    for _ in range(n_trials):
+        xT = torch.randn(model.d, generator=gen, dtype=model.dtype, device=model.device)
+        xS = model.solve_xS_steady(xT)
+        eps_TS = xS - xT
+        eps_S = fwd(model.M_S, xS)
+        F = 0.5 * model.pi_TS * (eps_TS ** 2).sum() + 0.5 * model.pi_S * (eps_S ** 2).sum()
+        quad = 0.5 * model.pi_TS * (xT @ (N @ xT))
+        err = max(err, float((F - quad).abs()))
+    return err
 
 
 # ----------------------------------------------------- additive three-network diagnostics

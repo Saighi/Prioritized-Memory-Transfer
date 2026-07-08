@@ -1,0 +1,274 @@
+%============================================================================
+%  SKELETON DRAFT — Memory transfer and continual learning in
+%  predictive-coding associative networks
+%
+%  This is a STRUCTURE-ONLY skeleton: section/subsection titles and one-line
+%  notes on what goes where. No content is developed. Preamble/skeleton follows
+%  the PLOS-style template (Saighi & Rozenberg) and the section ordering of
+%  Tang et al. 2023 (Results-first, declarative headings, theorems stated inline
+%  in a Model/analysis block, full proofs in Materials and methods).
+%
+%  Full derivations live in ../maths/detailed_proofs.md .
+%  Build:  pdflatex manuscript && pdflatex manuscript
+%============================================================================
+\documentclass[10pt,letterpaper]{article}
+\usepackage[top=1in,bottom=1in,left=1.1in,right=1.1in]{geometry}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{cite}
+\usepackage[right]{lineno}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+
+% ---- theorem environments (the paper's formal results) ----
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+% ---- captions: bold "Fig" label, PLOS-like ----
+\captionsetup{labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off}
+\renewcommand{\figurename}{Fig}
+
+% ---- header / footer ----
+\pagestyle{fancy}
+\fancyhf{}
+\rfoot{\thepage}
+\lfoot{Draft skeleton \today}
+\renewcommand{\headrulewidth}{0pt}
+
+% ---- a lightweight figure-placeholder box (no image files needed yet) ----
+\newcommand{\figplaceholder}[1]{%
+  \begin{center}\setlength{\fboxsep}{14pt}%
+  \fbox{\parbox{0.86\textwidth}{\centering\itshape [figure placeholder]\\ #1}}%
+  \end{center}}
+
+\setlength{\parindent}{0.5cm}
+
+\begin{document}
+
+%============================================================================
+%  TITLE BLOCK
+%============================================================================
+\begin{flushleft}
+{\Large\textbf{Memory transfer and continual learning in predictive-coding associative networks}}
+\newline\\
+Saighi Paul\textsuperscript{1,*},\;
+Rozenberg Marcelo\textsuperscript{1,2}
+\\
+\bigskip
+\textbf{1} Universit\'e Paris-Saclay, CNRS, Laboratoire de Physique des Solides, 91405, Orsay, France\\
+\textbf{2} Universit\'e Paris-Cit\'e, CNRS, Integrative Neuroscience and Cognition Center, 75006, Paris, France
+\\
+\bigskip
+* paul.saighi@universite-paris-saclay.fr
+\end{flushleft}
+
+%============================================================================
+%  ABSTRACT / AUTHOR SUMMARY  (placeholders only)
+%============================================================================
+\section*{Abstract}
+% <= 300 words. Hook: catastrophic forgetting + biological sleep replay.
+% Twist: priority = the student's own prediction error, from predictive coding,
+% not an external scheduler. Transfer is the primitive; continual learning the payoff.
+\textit{[abstract to be written]}
+
+\section*{Author summary}
+% 150--200 words, lay framing of prioritized replay and continual learning.
+\textit{[author summary to be written]}
+
+\linenumbers
+
+%============================================================================
+%  1. INTRODUCTION
+%============================================================================
+\section{Introduction}
+% - Continual learning \& catastrophic forgetting in associative memory.
+% - Memory rehearsal / replay during sleep; the open question: how is replay
+%   PRIORITIZED and AUTONOMOUS?
+% - Our answer: novelty-gated transfer in a linear covPCN, where memories are
+%   surprise-gated (transient attractors), not deep point attractors.
+% - Contributions (the ladder): transfer (primitive) -> union by interleaving
+%   -> continual learning.
+% - Positioning: Tang et al. 2023 (substrate); Friston active inference (VFE/EFE);
+%   Schaul prioritized replay; McClelland CLS; our previous autonomous-retrieval paper.
+
+%============================================================================
+%  2. MODEL AND ANALYSIS   (Tang-style: model + theorems inline; proofs in Methods)
+%============================================================================
+\section{Model and analysis}
+
+\subsection{A two-population predictive-coding memory}
+% Teacher T (frozen, higher) above student S (plastic, lower); three error
+% populations; interface error eps_TS = x_S - x_T; reversed precision pi_ST as
+% the signed sleep/wake knob; free energies F_S, F_T. pi_TS > pi_S stated as an
+% OPERATING REGIME, not a theorem assumption.
+
+\subsection{Student inference and learning descend a free energy}
+% Proposition 1 (stated here; proof in Materials and methods).
+\begin{proposition}\label{prop:descent}
+\textit{[Student state relaxation is exact gradient descent on $F_S$; the
+zero-diagonal weight update is projected gradient descent on $F_S$.]}
+\end{proposition}
+% The zero-diagonal constraint is not ours to justify: descent under projection
+% onto a linear subspace is the classical gradient-projection method
+% \cite{levitinpolyak1966}, and the zero-diagonal recurrent weights (no autapses)
+% are inherited from the covPCN substrate \cite{tang2023}. Equivalently, the
+% diagonal is not a parameter, so learning is plain unconstrained descent on the
+% off-diagonal weights; full algebra in Materials and methods.
+
+\subsection{The novelty operator}
+% Lemma 1: fast-student elimination -> N_S; annihilates learned directions.
+% Complement identity: x_S* = (I - N_S) x_T (student settles on what it can predict).
+\begin{lemma}\label{lem:novelty}
+\textit{[Fast-student steady state gives $x_S^*=(I-N_S)x_T$, hence
+$\varepsilon_{TS}=-N_S x_T$, with $N_S=\pi_S S_S(\pi_{TS}I+\pi_S S_S)^{-1}$; $N_S$ is
+symmetric PSD and $N_S u=0$ on learned directions.]}
+\end{lemma}
+
+\subsection{The surprise identity: the settled student's free energy is the novelty score}
+% Corollary 1. Bridges the two levels: novelty (weight-level operator N_S, eigenvalues
+% n_k) is the spectrum of surprise (state-level scalar F_S). Envelope argument or
+% direct computation (interface n^2 + self n(1-n) = n per direction).
+\begin{corollary}\label{cor:surprise}
+\textit{[At the fast-student equilibrium,
+$F_S^{\mathrm{eq}}(x_T)\equiv\min_{x_S}F_S(x_S,x_T)=\tfrac{\pi_{TS}}{2}\,x_T^\top N_S\,x_T$,
+hence $\nabla_{x_T}F_S^{\mathrm{eq}}=\pi_{TS}N_S x_T$: the student's surprise about the
+teacher's state is the novelty-weighted energy of that state.]}
+\end{corollary}
+
+\subsection{The student steers the teacher up the student's surprise}
+% Theorem 1. Fast student state (Lemma 1) + frozen weights, deterministic. No manifold.
+% No "teacher's surprise": the teacher's own surprise is F_T (self-pull); the push
+% climbs the STUDENT's surprise F_S^eq (Corollary 1).
+\begin{theorem}\label{thm:prioritized}
+\textit{[CORE: isolating the student's contribution (the push $u=|\pi_{ST}|N_S x_T$),
+the teacher's dynamics is exact gradient ascent on the student's settled variational
+free energy: $\tau_T\dot x_T|_{\mathrm{push}}=(|\pi_{ST}|/\pi_{TS})\nabla_{x_T}
+F_S^{\mathrm{eq}}(x_T)$ (Corollary~\ref{cor:surprise}) --- at every point, hence
+locally steepest ascent of the student's surprise. Consequences: (a) prioritization ---
+axis by axis, $\dot c_k=(|\pi_{ST}|/\tau_T)n_k c_k$: learned ($n_k=0$) frozen, novel
+amplified in proportion to novelty; (b) self-limiting --- the push on a direction dies
+as the student learns it ($|\pi_{ST}|n_k\le(|\pi_{ST}|\pi_S/\pi_{TS})\|M_S u_k\|^2$);
+(c) the full flow is $-\nabla F_T+(|\pi_{ST}|/\pi_{TS})\nabla F_S^{\mathrm{eq}}$: the
+teacher descends its own surprise while ascending the student's. Local ascent (not the
+global summit); the push rescales but does not seed an empty direction (noise seeds it).]}
+\end{theorem}
+
+\subsection{Staying on the memory manifold}
+% Lemma 2: off-manifold normal stability; sets the precision-weighting regime.
+\begin{lemma}\label{lem:normal}
+\textit{[Under the conservative guard $|\pi_{ST}|<\pi_T\sigma_{\min}^2$ the
+off-manifold block is strictly contracting; caveat: not exact manifold
+invariance (cross-block leakage measured numerically).]}
+\end{lemma}
+
+\subsection{An exact free-energy saddle}
+% Proposition 3: exact saddle iff pi_ST = -pi_TS; active-inference-REMINISCENT.
+% Falls out of Theorem 1: the push is (|pi_ST|/pi_TS) grad F_S^eq, so a single
+% potential generates the teacher flow iff |pi_ST| = pi_TS (mobility matching).
+\begin{proposition}\label{prop:saddle}
+\textit{[The physical functional $\Phi=F_T-F_S$ generates the sleep dynamics (on
+the teacher sphere, with the model's mobilities and projected $W_S$ ascent) iff
+$\pi_{ST}=-\pi_{TS}$ --- by Theorem~\ref{thm:prioritized}, exactly when the teacher's
+ascent rate on the student's surprise matches the precision $\pi_{TS}$ that defines it.
+The teacher descends $\Phi$; the student, descending $F_S$
+(Proposition~\ref{prop:descent}), ascends $\Phi$: a minimax on one potential. Shape
+reminiscent of the active-inference agent--environment saddle, not identical.]}
+\end{proposition}
+
+\subsection{Scope: subspace, not named episodes}
+\begin{remark}\label{rem:scope}
+\textit{[Linearity $\Rightarrow$ transfer of a subspace / effective rank, not
+named patterns; episodic one-per-step replay needs an added nonlinearity.]}
+\end{remark}
+
+%============================================================================
+%  3. RESULTS   (simulations; declarative headings a la Tang)
+%============================================================================
+\section{Results}
+
+\subsection{Prioritized transfer of unlearned directions}
+% The primary result: restricted novelty spectrum falling; x_T alignment heatmap.
+\figplaceholder{Fig~1. Novelty-spectrum ``staircase'' and $x_T$--manifold
+alignment: the student acquires unlearned directions; ``reliable completion
+across tested regimes'' (not global-convergence). Steps are a
+timescale/plotting artifact.}
+
+\subsection{The wake/sleep saddle picture}
+% Bowl (predictable direction) vs hill (novel direction); learning flips hill->bowl.
+\figplaceholder{Fig~2. Saddle cross-sections: a bowl along a predictable
+direction vs.\ a hill along a novel one; the exact $\Phi=F_T-F_S$ picture at
+$\pi_{ST}=-\pi_{TS}$.}
+
+\subsection{Merging memories by interleaving}
+% EMPIRICAL (no theorem): crosstalk sawtooth; interleaving merges teachers.
+\figplaceholder{Fig~3. Interleaved rehearsal merges two teachers: the crosstalk
+sawtooth decays to zero (union of memory subspaces), demonstrated in simulation.}
+
+\subsection{Continual learning without catastrophic forgetting}
+% EMPIRICAL: retention matrix grows vs buffer-only control collapsing to latest.
+\figplaceholder{Fig~4. Continual learning: retention across a streamed sequence
+vs.\ a buffer-only control that catastrophically forgets.}
+
+%============================================================================
+%  4. DISCUSSION
+%============================================================================
+\section{Discussion}
+% - Free-energy interpretation: VFE mapping exact/derived; EFE mapping structural
+%   (state honestly).
+% - The saddle as ACTIVE-INFERENCE-REMINISCENT (shape, not identity).
+% - Biological reading: hippocampus -> neocortex, sleep replay, wake/sleep = sign
+%   of an interface precision.
+% - Limitations: linear => subspace, not named episodes; nonlinear / soft-WTA
+%   extension for episodic replay; completion is empirical, not proven.
+% - Relation to Tang et al. and to our previous autonomous-retrieval paper.
+
+%============================================================================
+%  5. CONCLUSION
+%============================================================================
+\section{Conclusion}
+% Short: transfer is the ownable primitive; it composes to union and continual
+% learning; the linearity + PC framework make the mechanism exactly analyzable.
+
+%============================================================================
+%  MATERIALS AND METHODS   (full proofs + simulation details)
+%============================================================================
+\section*{Materials and methods}
+% Full, fully-justified proofs of Proposition~\ref{prop:descent},
+% Lemma~\ref{lem:novelty}, Theorem~\ref{thm:prioritized}, Lemma~\ref{lem:normal},
+% Proposition~\ref{prop:saddle}. (Drafted in ../maths/detailed_proofs.md.)
+% Adiabatic (fast-student) elimination; guard derivation; simulation conditions;
+% parameters; numerical diagnostics (novelty_operator, circulation, spectral_gap,
+% manifold_leakage). Future work: restricted-novelty (A_S) manifold analysis.
+
+%============================================================================
+%  SUPPORTING INFORMATION
+%============================================================================
+\section*{Supporting information}
+% - No-noise slow-mixing version (annex).
+% - Ablations; stop-grad / dendritic variant.
+% - Correlation / sparsity / timescale sweeps.
+% - Effective-rank / degeneracy discussion.
+
+%============================================================================
+%  REFERENCES  (placeholder inline list; final version -> bibstyle + .bib)
+%============================================================================
+\begin{thebibliography}{9}
+\bibitem{tang2023} Tang et al. Recurrent predictive coding models for associative memory employing covariance learning. \textit{PLOS Comput.\ Biol.} 19(4):e1010719 (2023). \textit{[substrate; zero-diagonal covPCN weights]}
+\bibitem{levitinpolyak1966} Levitin \& Polyak. Constrained minimization methods. \textit{USSR Comput.\ Math.\ Math.\ Phys.} 6(5):1--50 (1966). \textit{[gradient-projection descent]}
+\bibitem{friston2017} Friston et al. Active inference: a process theory. \textit{Neural Comput.} (2017). \textit{[VFE/EFE]}
+\bibitem{millidge2021} Millidge, Tschantz \& Buckley. Whence the Expected Free Energy? (2021). \textit{[EFE caveat]}
+\bibitem{schaul2015} Schaul et al. Prioritized Experience Replay. (2015). \textit{[priority = error]}
+\bibitem{mcclelland1995} McClelland, McNaughton \& O'Reilly. Complementary learning systems. \textit{Psych.\ Rev.} (1995).
+\bibitem{saighiprev} Saighi \& Rozenberg. Autonomous retrieval for continuous learning in associative memory networks. \textit{[previous paper]}
+\end{thebibliography}
+
+\end{document}

@@ -29,7 +29,7 @@ import torch
 from .config import ContinualConfig, SimConfig
 from .history import ContinualHistory, InterleavedHistory
 from .interleaved import interleave_merge
-from .macro import AdditiveInterface, MacroNetwork, Population
+from .macro import AdditiveInterface, MacroNetwork, Population, resolve_signed_precision
 from .memory import build_W_T
 
 
@@ -100,11 +100,9 @@ class ContinualLearner:
         the approximately-learned memory directions (tol=0.1) that would otherwise collapse it."""
         from .diagnostics import spectral_gap
         cfg = self.cfg
-        if not (isinstance(cfg.rho, str) and cfg.rho == "auto"):
-            return float(cfg.rho)
         Cnorm2 = sum(a * a for a in alphas)
         guard = min(cfg.pi_teacher * spectral_gap(p.S_op(), tol=0.1) for p in sources) / Cnorm2
-        return -cfg.rho_safety * guard
+        return resolve_signed_precision(cfg.rho, guard=guard, safety=cfg.rho_safety)
 
     def _source_pop(self, name: str, W: torch.Tensor) -> Population:
         cfg = self.cfg

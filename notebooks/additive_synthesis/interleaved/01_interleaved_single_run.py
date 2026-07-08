@@ -16,15 +16,9 @@
 
 # %% imports & path setup
 import os
-import sys
-import pathlib
 
 import torch
 
-_root = pathlib.Path.cwd()
-while not (_root / "pmt").exists() and _root != _root.parent:
-    _root = _root.parent
-sys.path.insert(0, str(_root))
 
 from pmt import (AdditiveSynthesisConfig, SimConfig, build_interleaved_synthesis,
                  simulate_interleaved, build_additive_synthesis, simulate_additive)

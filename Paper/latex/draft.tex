@@ -1,0 +1,921 @@
+%============================================================================
+%  FIRST DRAFT — Prioritized memory transfer: a predictive-coding primitive
+%  for continual learning.  (Saighi & Rozenberg)
+%
+%  Format follows the PLOS-style example layout (../example layout/manuscript.tex);
+%  narrative ordering follows Tang et al. 2023 (results-forward, theorems stated
+%  inline in a Model/analysis block, full proofs in Materials and methods).
+%  Full derivations: ../maths/detailed_proofs.md ; house identities: ../maths/cheatsheet.md.
+%
+%  Build:  pdflatex draft && bibtex draft && pdflatex draft && pdflatex draft
+%============================================================================
+\documentclass[10pt,letterpaper]{article}
+\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{changepage}
+\usepackage{subcaption}
+\usepackage{textcomp,marvosym}
+\usepackage{cite}
+\usepackage{nameref,hyperref}
+\usepackage[right]{lineno}
+\usepackage[nopatch=eqnum]{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+\usepackage[table]{xcolor}
+\usepackage{array}
+
+% ---- theorem environments (the paper's formal results) ----
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+% ---- text layout (PLOS-like) ----
+\raggedright
+\setlength{\parindent}{0.5cm}
+\textwidth 5.25in
+\textheight 8.75in
+
+\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off]{caption}
+\renewcommand{\figurename}{Fig}
+
+\bibliographystyle{bibstyle}
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+% ---- header / footer ----
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
+\lfoot{Draft \today}
+
+% ---- lightweight figure placeholder (no image files needed yet) ----
+\newcommand{\figplaceholder}[1]{%
+  \begin{center}\setlength{\fboxsep}{14pt}%
+  \fbox{\parbox{0.82\textwidth}{\centering\itshape [figure placeholder]\\[2pt] #1}}%
+  \end{center}}
+
+% ---- notation macros (consistent with cheatsheet.md, house identities H1--H12) ----
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\xT}{x_T}
+\newcommand{\xS}{x_S}
+\newcommand{\WT}{W_T}
+\newcommand{\WS}{W_S}
+\newcommand{\MT}{M_T}
+\newcommand{\MS}{M_S}
+\newcommand{\ST}{S_T}
+\renewcommand{\SS}{S_S}
+\newcommand{\NS}{N_S}
+\newcommand{\FS}{F_S}
+\newcommand{\FSeq}{F_S^{\mathrm{eq}}}
+\newcommand{\FT}{F_T}
+\newcommand{\epsT}{\eps_T}
+\newcommand{\epsS}{\eps_S}
+\newcommand{\epsTS}{\eps_{TS}}
+\newcommand{\piT}{\pi_T}
+\newcommand{\piS}{\pi_S}
+\newcommand{\piTS}{\pi_{TS}}
+\newcommand{\piST}{\pi_{ST}}
+\newcommand{\tauT}{\tau_T}
+\newcommand{\tauS}{\tau_S}
+\newcommand{\UT}{U_T}
+\newcommand{\tr}{^{\!\top}}
+
+\begin{document}
+
+\vspace*{0.2in}
+\begin{flushleft}
+{\Large
+\textbf\newline{Prioritized memory transfer: a predictive-coding primitive for continual learning}
+}
+\newline
+\\
+Saighi Paul*\textsuperscript{1},
+Rozenberg Marcelo\textsuperscript{1,2}
+\\
+\bigskip
+\textbf{1} Universit\'e Paris-Saclay, CNRS, Laboratoire de Physique des Solides, 91405, Orsay, France
+\\
+\textbf{2} Universit\'e Paris-Cit\'e, CNRS, Integrative Neuroscience and Cognition Center, 75006, Paris, France
+\\
+\bigskip
+* paul.saighi@universite-paris-saclay.fr
+\end{flushleft}
+
+%============================================================================
+\section*{Abstract}
+%============================================================================
+Biological memory is consolidated during sleep, when the brain replays stored experience with no
+external teacher and, remarkably, appears to favour what has not yet been consolidated. Reproducing
+this in artificial networks is the crux of continual learning: how can a network rehearse its own
+memories, and how can that rehearsal be \emph{prioritized} toward what a downstream network still
+lacks, without an external scheduler holding the list of what to replay? We show that predictive
+coding answers both questions at once. Two linear associative memories are coupled in a hierarchy: a
+frozen \emph{teacher} above an empty, plastic \emph{student}. Flipping the sign of a single
+interface precision turns ordinary recall into replay. Under this ``reversed precision'' the student's
+own prediction error drives the teacher into exactly the memories the student cannot yet predict; the
+student learns them; the drive there vanishes; the process stops itself. We prove that the drive is
+the gradient of the student's own surprise, so priority is not imposed but derived --- the student's
+error \emph{is} the priority signal --- and that at a precise matching condition the coupled dynamics
+form an exact free-energy saddle. Because the substrate is linear, transfer acquires a memory
+\emph{subspace} rather than named patterns. Transfer is a primitive that composes: interleaving two
+teachers merges their subspaces and cancels the crosstalk between correlated memories, and a
+buffer\,$\to$\,consolidate\,$\to$\,storage loop built on it retains a streamed sequence of correlated
+memories where a buffer-only control catastrophically forgets. The result is a compact, analytically
+transparent, biologically suggestive account of prioritized replay and its use for continual learning.
+
+%============================================================================
+\section*{Author summary}
+%============================================================================
+When we sleep, the brain spontaneously replays recent experience, and this replay helps move memories
+into long-term storage without erasing what is already there. Artificial neural networks are notoriously
+bad at this: teaching them something new tends to overwrite the old, a failure called catastrophic
+forgetting. Rehearsing old memories fixes it, but only if the network can somehow retrieve those
+memories by itself and, ideally, spend its effort on the memories that still need consolidating. We
+describe a simple two-network model in which this happens automatically. A frozen ``teacher'' network
+holds memories; an empty ``student'' network learns them. By reversing the sign of a single connection
+parameter, the pair switches from ordinary recall into a replay mode in which the teacher is pushed
+toward whatever the student has not yet learned --- and the push is generated entirely by the student's
+own prediction error, so no outside controller is needed to decide what to replay. We prove that this
+push always climbs the student's ``surprise'' and switches itself off once a memory is learned. Stacking
+this transfer step into a small loop lets a network absorb a stream of new, overlapping memories while
+keeping the earlier ones, offering a biologically plausible route around catastrophic forgetting.
+
+\linenumbers
+\newpage
+
+%============================================================================
+\section{Introduction}
+%============================================================================
+A system learns continually when it can absorb new information over time without discarding what it
+already knows. Artificial neural networks fail at this in a characteristic way: training on a new task
+or pattern in isolation rapidly erodes the representations built for earlier ones, the phenomenon of
+\emph{catastrophic forgetting} \cite{mccloskey1989catastrophic,robins1995catastrophic,kirkpatrick2017ewc}.
+In associative memories the failure is concrete --- storing a new activity pattern sequentially degrades
+the previously stored ones.
+
+The oldest and most robust remedy is \emph{rehearsal}: periodically retrain the network on its earlier
+memories so their representations are reinforced while new ones are added
+\cite{robins1995catastrophic}. Rehearsal has a striking biological counterpart. During sleep and quiet
+waking the hippocampus spontaneously reactivates recent experience, and this replay is causally
+implicated in memory consolidation \cite{wilson1994reactivation,diekelmann2010memory}. The
+complementary-learning-systems account casts a fast hippocampal store and a slow neocortical store in
+exactly the teacher/apprentice roles that rehearsal requires: the fast system replays to train the slow
+one \cite{mcclelland1995cls,kumaran2016what}. Two questions, however, are usually left open. First,
+rehearsal presupposes that the network can \emph{retrieve} its own memories to replay them, rather than
+reading them from an external list. Second, replay is not uniform --- consolidation should concentrate
+on what the slow system has not yet acquired. \emph{How is autonomous replay generated, and how is it
+prioritized, without an external scheduler?}
+
+In earlier work we addressed the first question within a single continuous Hopfield network: plastic
+self-inhibition lets the network shallow out already-visited attractors and so recover its full set of
+stored patterns from its own dynamics, which is enough to drive a continual-learning loop
+\cite{saighi2025autonomous}. Here we address the second, and we do so by moving from one network to two
+coupled by \emph{predictive coding}. Predictive coding models a cortical hierarchy as levels that each
+try to predict the level below and pass up only the residual error, learning by descending a
+variational free energy through purely local computations
+\cite{raoballard1999,whittington2017,millidge2022review}; Tang, Barron and Bogacz recently showed that a
+recurrent predictive-coding network with covariance learning is a faithful, biologically grounded
+associative memory \cite{tang2023covpcn}, and that substrate is the one we build on. Coupling two such
+memories exposes a quantity a single network does not have: the prediction error of one network about
+the other. That error is precisely a measure of what one network cannot yet predict, and we use it as
+the priority signal --- an idea that mirrors prioritized experience replay in reinforcement learning,
+where transitions are replayed in proportion to their error \cite{schaul2016prioritized}, but which here
+falls out of the network's own free energy rather than being engineered. The free-energy reading also
+connects the mechanism to active inference, in which agents act to minimize (variational) free energy
+\cite{friston2010free,friston2017process}; we will draw that connection precisely where it is exact and
+flag it as merely structural where it is not \cite{millidge2021whence}.
+
+Our contribution is one mechanism presented as a ladder of three rungs, each built on the one below.
+
+\begin{enumerate}
+\item \textbf{Transfer.} One teacher $T$ drives one student $S$. A single signed interface precision
+selects the phase: positive is wake/recall, negative is sleep/replay. In replay the student's
+prediction error steers the teacher into the memories the student lacks; the student learns them; the
+drive self-extinguishes. We prove the drive is gradient ascent on the student's own surprise, and that
+the coupled flow is an exact free-energy saddle at a precise precision-matching condition.
+\item \textbf{Union of subspaces.} Because transfer is a reusable primitive, coupling a student to two
+teachers in alternation merges their memory subspaces. Interleaving one teacher per replay bout cancels
+the crosstalk that correlation would otherwise create between the two sets of memories.
+\item \textbf{Continual learning.} A small buffer\,$\to$\,consolidate\,$\to$\,storage loop, with the
+consolidation step performed by interleaved transfer, retains a stream of correlated memories where a
+buffer-only control forgets all but the most recent.
+\end{enumerate}
+
+Throughout, the substrate is a \emph{linear} covariance predictive-coding memory. Linearity is a
+deliberate simplification: it makes the whole mechanism analytically transparent, at the cost that what
+transfers is a memory \emph{subspace} (an effective rank) rather than a set of named episodes. We state
+this scope plainly and return to it in the Discussion.
+
+%============================================================================
+\section{Model and analysis}
+%============================================================================
+We first fix the model and then state its formal properties. Following Tang et al.\ \cite{tang2023covpcn}
+and the predictive-coding convention, results are stated here and proved in full in Materials and methods.
+
+\subsection{A two-population predictive-coding memory}
+\label{sec:model}
+Both networks live in the same space $\R^{d}$, one coordinate per neuron. Each is a linear
+predictive-coding associative memory: a population with recurrent weights $W$ (zero diagonal, so no
+neuron predicts itself) tries to reconstruct its own state, producing the \emph{mismatch}
+\begin{equation}
+\label{eq:mismatch}
+M = I - W, \qquad \eps = M x, \qquad S = M\tr M,
+\end{equation}
+where $\eps$ is the reconstruction error and $S$, its Gram matrix, is the symmetric positive
+semi-definite \emph{self-error operator}. A pattern $m$ is stored when it is a fixed point of the
+reconstruction, $M m = 0$; the stored memories therefore span the kernel of $M$, a flat linear
+manifold (house identity H1--H2 of the accompanying notes).
+
+We couple a \textbf{teacher} $T$ and a \textbf{student} $S$ (Fig~\ref{fig:schematic}). The teacher sits
+higher in the hierarchy: it is a fully trained memory, its weights $\WT$ frozen, and it is confined to
+its own memory manifold. The student sits below: it starts empty ($\WS=0$) and is plastic. Three errors
+drive the pair --- the teacher's self-error $\epsT=\MT\xT$, the student's self-error $\epsS=\MS\xS$, and
+the \emph{interface error}
+\begin{equation}
+\label{eq:interface}
+\epsTS = \xS - \xT,
+\end{equation}
+the disagreement between the two states, which the identity interface reports at the student's level.
+Each error is weighted by a precision (an inverse variance): $\piT,\piS>0$ are the self precisions,
+$\piTS>0$ is the precision with which the student trusts its input from the teacher, and $\piST$ is the
+teacher's interface precision --- the one quantity we allow to be \emph{signed}. The state and weight
+dynamics are
+\begin{align}
+\tauT\,\dot\xT &= -\,\piT \MT\tr\epsT \;+\; \piST\,\epsTS \;+\; \xi, \label{eq:teacher}\\
+\tauS\,\dot\xS &= -\,\piTS\,\epsTS \;-\; \piS \MS\tr\epsS, \label{eq:student}\\
+\dot\WS &= \eta\,\piS\,\epsS\,\xS\tr, \qquad \mathrm{diag}(\WS)\equiv 0, \label{eq:learn}
+\end{align}
+with $\xi$ a small isotropic noise on the teacher and the timescales ordered
+$\tauS \ll \tauT \ll 1/\eta$: the student perceives fast, the teacher drifts slowly, the weights change
+slowest of all. The teacher is additionally held to a fixed norm, so it can reorient but not run away.
+
+\begin{figure}[h!]
+\centering
+\figplaceholder{\textbf{Two coupled predictive-coding memories.} Frozen teacher $T$ (above) over an
+empty, plastic student $S$ (below); each has recurrent weights $W$ and a self-error population
+($\epsT$, $\epsS$), and the identity interface reports the disagreement $\epsTS=\xS-\xT$. The teacher's
+interface precision $\piST$ is signed: $\piST>0$ (wake/recall) pulls both toward agreement --- no
+transfer; $\piST<0$ (sleep/replay) reverses the teacher's drive, pushing it toward whatever the student
+cannot predict. One sign is the whole phase.}
+\caption{\textbf{Model architecture and the wake/sleep sign flip.} See Section~\ref{sec:model}.}
+\label{fig:schematic}
+\end{figure}
+
+\paragraph{Reversed precision: one knob for wake and sleep.} Everything hinges on the sign of $\piST$
+in Eq.~\eqref{eq:teacher}. When $\piST>0$ the teacher, like the student, is pulled to \emph{reduce} the
+interface error: both networks seek agreement, the student completes the teacher's pattern, and nothing
+is transferred. This is ordinary recall --- \emph{wake}. When $\piST<0$ the same term becomes a
+\emph{reversed precision}: the teacher is pushed to \emph{increase} the disagreement, a drive to seek
+out states the student cannot match. This is \emph{sleep}, or replay. No separate gate switches the
+phase; the sign of a single precision \emph{is} the phase. This is the paper's pivot, and the rest of
+the analysis simply works out its consequences.
+
+\paragraph{Surprise and free energy.} Each network carries a free energy, the precision-weighted sum of
+its squared errors,
+\begin{equation}
+\label{eq:freeenergy}
+\FS = \tfrac{\piTS}{2}\,\|\epsTS\|^{2} + \tfrac{\piS}{2}\,\|\epsS\|^{2},
+\qquad
+\FT = \tfrac{\piT}{2}\,\|\epsT\|^{2},
+\end{equation}
+the network's \emph{surprise} at its current state. We keep two words strictly apart throughout, and the
+reader will save themselves confusion by doing the same:
+
+\begin{remark}[Novelty versus surprise]
+\label{rem:terminology}
+\emph{Novelty} is a property of the student's \emph{weights}: which directions it cannot yet predict.
+It is carried by an operator, $\NS$ below, and its eigenvalues $n_k$. \emph{Surprise} is a property of a
+\emph{state}: how badly the current configuration is predicted, measured by the scalar free energies
+$\FS,\FT$. Novelty is the spectrum; surprise is the score. There is no ``teacher's surprise'' other than
+$\FT$.
+\end{remark}
+
+Two inequalities delimit the regime we operate in, and we state them as such rather than as hypotheses
+of the theorems: the input guard $\piTS>\piS$ (the student trusts its teacher input over its own
+recurrent prior, which prevents it from confabulating), and a stability guard on the \emph{magnitude} of
+the reversed precision, made precise in Lemma~\ref{lem:normal}.
+
+\subsection{Inference and learning descend a free energy}
+The first property justifies calling $\FS$ a free energy at all: the student's dynamics are gradient
+descent on it.
+
+\begin{proposition}[Free-energy descent]
+\label{prop:descent}
+The student's state relaxation \eqref{eq:student} is exact gradient descent on $\FS$,
+$\tauS\dot\xS=-\nabla_{\xS}\FS$, and its zero-diagonal weight update \eqref{eq:learn} is projected
+gradient descent on $\FS$; along both flows $\FS$ is non-increasing.
+\end{proposition}
+
+The state gradient is $\nabla_{\xS}\FS=\piTS\epsTS+\piS\MS\tr\epsS$, which is exactly minus the
+right-hand side of Eq.~\eqref{eq:student}; the weight gradient is
+$\nabla_{\WS}\FS=-\piS\epsS\xS\tr$, and removing its diagonal is an orthogonal projection, so descent
+survives it (H9; proof in Materials and methods, verified numerically to machine precision).
+
+\subsection{The novelty operator}
+Because the student is fast (\,$\tauS\ll\tauT$\,), on the teacher's timescale it always sits at its own
+equilibrium. Solving $\nabla_{\xS}\FS=0$ for the settled student gives the operator that governs
+everything downstream.
+
+\begin{lemma}[Novelty operator]
+\label{lem:novelty}
+At the fast-student equilibrium the student's state is
+$\xS^{*}=(I-\NS)\,\xT$ and the interface error is $\epsTS=-\NS\xT$, with
+\begin{equation}
+\label{eq:novelty}
+\NS \;=\; \piS \SS\,(\piTS I + \piS \SS)^{-1}.
+\end{equation}
+$\NS$ is symmetric positive semi-definite, shares the eigenbasis of $\SS$, and annihilates every
+learned direction: if $\MS u=0$ then $\NS u=0$.
+\end{lemma}
+
+The reading is clean. The student copies back the part of the teacher's state it can predict,
+$\xS^{*}=(I-\NS)\xT$, and leaves the part it cannot, so the residual disagreement $\epsTS=-\NS\xT$ is
+\emph{exactly the novel part of the teacher's state} (H5--H6). In the shared eigenbasis
+$\NS u_k=n_k u_k$ with novelty eigenvalues
+\begin{equation}
+\label{eq:spectrum}
+n(\mu)=\frac{\piS\,\mu}{\piTS+\piS\,\mu}\in[0,1),
+\end{equation}
+where $\mu\ge 0$ is the corresponding eigenvalue of $\SS$: a fully learned direction ($\mu=0$) has
+$n=0$, and novelty grows monotonically with how badly the student mispredicts the direction. $\NS$ is a
+\emph{novelty meter} built from the student's weights alone.
+
+\subsection{The surprise identity}
+Novelty (a weight-level spectrum) and surprise (a state-level scalar) are not two mechanisms but two
+readings of one quantity. This is the bridge, and it is exact.
+
+\begin{corollary}[Surprise identity]
+\label{cor:surprise}
+At the fast-student equilibrium the student's surprise about the teacher's state is the teacher's state
+scored by the novelty meter:
+\begin{equation}
+\label{eq:surpriseid}
+\FSeq(\xT)\;\equiv\;\min_{\xS}\FS(\xS,\xT)\;=\;\tfrac{\piTS}{2}\,\xT\tr\NS\,\xT,
+\qquad\text{hence}\qquad
+\nabla_{\xT}\FSeq=\piTS\,\NS\,\xT.
+\end{equation}
+\end{corollary}
+
+The proof is a two-line computation --- per eigendirection the interface term contributes $n^{2}$ and
+the self term $n(1-n)$, which sum to $n$ (H8) --- or a one-line application of the envelope theorem,
+since $\xS^{*}$ minimizes $\FS$. Either way, the settled student's free energy is literally
+$\sum_k n_k c_k^{2}$ with $c_k=u_k\tr\xT$: novelty priced out on where the teacher's state actually
+sits. The gradient we will need in Theorem~\ref{thm:prioritized} follows immediately.
+
+\subsection{The student steers the teacher up the student's surprise}
+We can now read the teacher's sleep dynamics. Substituting the settled interface error
+$\epsTS=-\NS\xT$ into Eq.~\eqref{eq:teacher} and writing $\piST=-|\piST|$ for the reversed precision,
+\begin{equation}
+\label{eq:teacher_reduced}
+\tauT\,\dot\xT \;=\; \underbrace{-\,\piT \ST\,\xT}_{\text{holds its own memory}}
+\;+\; \underbrace{|\piST|\,\NS\,\xT}_{\text{the student's push } u},
+\end{equation}
+the teacher's own self-pull plus a push $u=|\piST|\NS\xT$ produced entirely by the student. This push
+is the heart of the paper.
+
+\begin{theorem}[Prioritized transfer]
+\label{thm:prioritized}
+The student's push $u=|\piST|\,\NS\,\xT$ has three equivalent readings.
+\emph{(i) Per direction:} in the student's eigenbasis each component of the teacher's state grows at a
+rate set by that direction's novelty, $\dot c_k=(|\piST|/\tauT)\,n_k\,c_k$; a learned direction
+($n_k=0$) is frozen, a novel one is amplified, and the more novel, the faster.
+\emph{(ii) Steepest ascent:} the push points along the gradient of the student's surprise,
+$u=(|\piST|/\piTS)\,\nabla\FSeq$, hence it is the direction of fastest increase of $\FSeq$.
+\emph{(iii) Self-limiting:} as the student learns a direction ($\|\MS u_k\|\!\to\!0$, by
+Proposition~\ref{prop:descent}) its novelty $n_k\!\to\!0$, so the push there fades to zero.
+Consequently the full teacher flow is
+$\tauT\dot\xT=-\nabla\FT+(|\piST|/\piTS)\,\nabla\FSeq$: the teacher descends its own surprise while
+ascending the student's.
+\end{theorem}
+
+In words: the teacher's state is passed through the student's novelty meter, and the meter amplifies
+whatever the student finds novel and ignores whatever it has learned. Reading (ii) says this is not an
+arbitrary drift but the steepest local climb of the student's own surprise --- priority is
+\emph{derived}, not imposed. Reading (iii) says the climb flattens the very landscape it climbs: every
+direction the teacher is dragged into gets learned, its hill sinking to a plain, so the process stops
+itself when the student has acquired everything the teacher holds. Two honest caveats travel with the
+theorem: the ascent is local (steepest from where the teacher currently is, not a beeline to the globally
+most novel direction), and a direction the teacher does not currently occupy ($c_k=0$) receives no push
+--- it is the noise $\xi$ that seeds those, and the reversed-precision drive that then amplifies them.
+
+\subsection{Staying on the memory manifold}
+The push must not tip over into chasing noise off the manifold. The teacher's self-pull prevents this,
+provided the reversed precision is not too strong.
+
+\begin{lemma}[Off-manifold stability]
+\label{lem:normal}
+Under the conservative guard $|\piST| < \piT\,\sigma_{\min}^{2}$, where $\sigma_{\min}^{2}$ is the
+smallest nonzero eigenvalue of $\ST$, the block of the dynamics normal to the teacher's memory manifold
+is strictly contracting, so the teacher consolidates on-manifold and stays quiescent. Above the guard
+it is driven off-manifold into noise. (The guard is not exact manifold invariance; residual cross-block
+leakage is small and measured numerically.)
+\end{lemma}
+
+This is what sets the precision-weighting regime: the reversed precision must be strong enough to move
+the teacher along novel memory directions, yet weak enough that the self-pull wins normal to the
+manifold.
+
+\subsection{An exact free-energy saddle}
+Both forces in Theorem~\ref{thm:prioritized} are gradients, so it is natural to ask when the coupled
+$(\xT,\xS)$ flow is generated by a \emph{single} potential. It is, at one precise condition.
+
+\begin{proposition}[Free-energy saddle]
+\label{prop:saddle}
+The sleep dynamics are generated by the single functional $\Phi=\FT-\FS$ --- the teacher descending
+$\Phi$, the student ascending it --- if and only if
+\begin{equation}
+\label{eq:saddle}
+\piST=-\piTS.
+\end{equation}
+Equivalently (Theorem~\ref{thm:prioritized}(ii)), the teacher ascends the student's surprise at exactly
+the rate $\piTS$ that defines it: the ascent's coefficient $|\piST|/\piTS$ equals one. At this point the
+pair plays a zero-sum game on one potential --- the student descending $\FS$
+(Proposition~\ref{prop:descent}), the teacher climbing it --- a minimax whose shape is reminiscent of
+the agent--environment saddle of active inference, though we do not claim identity of the two
+\cite{friston2017process,millidge2021whence}.
+\end{proposition}
+
+\begin{remark}[Scope: subspace, not named episodes]
+\label{rem:scope}
+The substrate is linear, so a teacher's memories span a flat subspace and what transfers is that
+subspace --- an effective rank, not a labelled list of patterns. Episodic, one-pattern-per-step replay
+would require an added nonlinearity (e.g.\ a soft winner-take-all); we return to this in the Discussion.
+\end{remark}
+
+%============================================================================
+\section{Results}
+%============================================================================
+We now show the mechanism at work and then that it composes. The first two subsections establish the
+single-teacher primitive (rung~1) and its free-energy reading; the last two climb the ladder to the
+union of subspaces (rung~2) and continual learning (rung~3). All simulations use the linear covariance
+predictive-coding substrate of Section~\ref{sec:model}; parameters and diagnostics are in Materials and
+methods.
+
+\subsection{Prioritized transfer of unlearned directions}
+\label{sec:res_transfer}
+We start with the picture. Fig~\ref{fig:flow} takes a single teacher holding two memories and looks at
+the teacher's state in the plane spanned by one direction the student has \emph{already} learned and one
+it has \emph{not}. The reversed-precision flow tells the whole story at a glance: along the learned axis
+the teacher is pinned --- the push there is null and the self-pull holds it in place --- while along the
+novel axis it is driven outward, and a sample trajectory (red) rides the novel direction until the
+student catches up. This is Theorem~\ref{thm:prioritized}(i) made visible: motion only along what the
+student does not yet know. The figure is the two-network analogue of the attractor stream plots used for
+single associative memories \cite{tang2023covpcn} and in our own earlier network
+\cite{saighi2025autonomous}, and reading it the same way is intended.
+
+\figplaceholder{Fig~\ref{fig:flow} source: a short script on the two-population model ---
+project $\tauT\dot\xT$ from Eq.~\eqref{eq:teacher_reduced} onto the (learned, novel) plane; overlay one
+transfer trajectory. Analogous to the CHN vector-field figure.}
+
+\begin{figure}[h!]
+\centering
+\figplaceholder{\textbf{The reversed-precision flow pushes the teacher only along unlearned
+directions.} Teacher state in a 2D slice: horizontal axis a memory direction the student has learned,
+vertical axis one it has not. Arrows show $\tauT\dot\xT$ in replay ($\piST<0$). Along the learned axis
+the flow is inward/pinned (push $=0$, self-pull holds); along the novel axis it is outward (push
+$=|\piST|\,n\,c$). Red: one transfer trajectory, riding the novel axis until learning flattens it.}
+\caption{\textbf{Prioritized replay is visible as a flow field.} See body text,
+Section~\ref{sec:res_transfer}.}
+\label{fig:flow}
+\end{figure}
+
+The quantitative claim is that transfer acquires the teacher's whole memory subspace, prioritizing the
+directions the student lacks, and then stops. Fig~\ref{fig:staircase} shows it. The novelty spectrum ---
+the eigenvalues of $\NS$ restricted to the teacher's memory manifold, $\UT\tr\NS\UT$ --- starts high on
+every stored direction and falls to zero one direction at a time as the student learns them, producing a
+descending ``staircase'' (left). The accompanying alignment heatmap (right) shows the teacher's state
+progressively filling the memory manifold as the drive on each direction extinguishes. Crucially, the
+number of steps is the memory set's \emph{effective rank}, not its pattern count: $P=6$ orthonormal
+patterns give six steps, but $P$ correlated patterns of rank three give only three, because learning one
+direction explains its correlated neighbours at once. This is the linear model transferring a
+\emph{subspace} (Remark~\ref{rem:scope}). We report reliable completion of the manifold across the
+regimes we tested; the exact step count and its ordering are a spectral, not a temporal, effect, and the
+apparent sharpness of the steps is partly a plotting artefact of the timescale.
+
+\begin{figure}[h!]
+\centering
+\figplaceholder{\textbf{Left:} restricted novelty spectrum $\mathrm{eig}(\UT\tr\NS\UT)$ vs.\ replay time:
+a descending staircase, one step per learned direction; overlaid, orthonormal ($P{=}6\to 6$ steps) vs.\
+correlated rank-3 ($\to 3$ steps). \textbf{Right:} heatmap of $\xT$--manifold alignment over time, filling
+as the drive extinguishes. Source: \texttt{notebooks/two\_network/01\_single\_run.py},
+\texttt{05\_findingH\_subspace.py}.}
+\caption{\textbf{Transfer acquires the memory subspace and self-terminates; steps count effective rank.}
+See Section~\ref{sec:res_transfer}.}
+\label{fig:staircase}
+\end{figure}
+
+\subsection{The wake/sleep saddle picture}
+\label{sec:res_saddle}
+Why does the replay prioritize, and why does it stop? Section's theory answers both, and
+Fig~\ref{fig:saddle} shows the answer directly. It plots cross-sections of the free-energy landscape the
+teacher moves on. Along a direction the student can already predict, the landscape is a \emph{bowl}: the
+teacher sits at the bottom, held on the manifold. Along a direction the student cannot predict, it is a
+\emph{hill}: the reversed precision turns that axis into an unstable ascent, and the teacher slides up it
+--- into the novel memory. As the student learns the direction, the hill relaxes back into a bowl, and
+the drive is gone. Learning literally reshapes the landscape from hill to bowl, one direction at a time.
+
+At the matching condition $\piST=-\piTS$ (Proposition~\ref{prop:saddle}) these cross-sections are two
+faces of one potential $\Phi=\FT-\FS$: a genuine saddle, minimized by the teacher over learned
+directions and maximized over novel ones. We verify the condition quantitatively by measuring the
+circulation of the coupled flow, the obstruction to its being a single gradient; it vanishes precisely
+at $\piST=-\piTS$ and grows linearly on either side, matching $|\piST+\piTS|\sqrt{d}$ to machine
+precision.
+
+Two further checks confirm the mechanism is the one we claim, and we relegate their figures to Supporting
+information. First, stability: sweeping the strength $|\piST|$ shows the teacher consolidating
+on-manifold below the guard of Lemma~\ref{lem:normal} and abruptly chasing noise above it, with the
+turnover at the predicted value. Second, selection is spectral, not a race in time: across the entire
+fast-student regime a known direction is explained away while a novel one is not, and the discrimination
+collapses only as $\tauS\to\tauT$, i.e.\ only when the student is no longer fast --- so it is what the
+student's weights can null, not raw speed, that decides.
+
+\begin{figure}[h!]
+\centering
+\figplaceholder{Cross-sections of $\Phi=\FT-\FS$ at $\piST=-\piTS$: a bowl along a predictable direction
+(teacher pinned) vs.\ a hill along a novel direction (teacher driven up it); a middle panel shows a hill
+relaxing to a bowl as the direction is learned. Source:
+\texttt{notebooks/two\_network/02\_findingD\_saddle.py}, \texttt{06\_eigenspace\_geometry.py}.}
+\caption{\textbf{Replay is ascent on a hill that learning turns into a bowl.} At $\piST=-\piTS$ the two
+faces belong to one saddle potential $\Phi=\FT-\FS$. See Section~\ref{sec:res_saddle}.}
+\label{fig:saddle}
+\end{figure}
+
+\subsection{Merging memories by interleaving}
+\label{sec:res_union}
+Transfer is a primitive, and primitives compose. If a student is coupled to two teachers, each holding
+its own memories, can it acquire the \emph{union} of their subspaces? It can, provided the two teachers
+are replayed one at a time rather than together. We rehearse teacher $T_1$ for a bout, then $T_2$ for a
+bout, and alternate; each bout is a transfer step of the kind analysed above, with only one interface
+active. Over bouts the student accumulates $\mathcal{U}_1+\mathcal{U}_2$.
+
+The subtlety, and the reason for interleaving, is \emph{crosstalk} between correlated memories.
+Fig~\ref{fig:sawtooth} shows it as a sawtooth. Rehearsing $T_1$ drives the residual on $T_1$'s memory to
+zero but, because the two memory sets overlap, nudges the residual on $T_2$'s memory up; rehearsing $T_2$
+then nulls its own and nudges $T_1$'s back up. Left there, this is exactly the interference that makes
+sequential learning forget. But the bumps shrink each round --- each rehearsal re-excites and re-cancels
+the correlated perturbation the other one caused --- and the sawtooth decays to zero: both subspaces are
+held at once. This is interleaved rehearsal, the classical cure for catastrophic forgetting, arising here
+as the natural way to compose two transfer steps.
+
+\begin{figure}[h!]
+\centering
+\figplaceholder{Union deficit and per-teacher residuals vs.\ rehearsal bout: a decaying sawtooth ---
+rehearsing $T_1$ nulls its memory and bumps $T_2$'s, and vice versa, the bumps decaying to zero as both
+subspaces are jointly held. Source:
+\texttt{notebooks/additive\_synthesis/interleaved/01\_interleaved\_single\_run.py},
+\texttt{02\_interleaved\_edge\_cases.py}.}
+\caption{\textbf{Interleaved transfer merges two memory subspaces and cancels crosstalk.} The sawtooth
+decays to zero: $\mathcal{U}_1+\mathcal{U}_2$ is retained. See Section~\ref{sec:res_union}.}
+\label{fig:sawtooth}
+\end{figure}
+
+\subsection{Continual learning without catastrophic forgetting}
+\label{sec:res_continual}
+The top rung assembles transfer into a loop that absorbs a \emph{stream} of memories
+(Algorithm~\ref{alg:continual}). Three networks divide the labour: a fast \textbf{buffer} that takes in
+one new memory at a time (and is the only network that ever learns from external data), a transient
+\textbf{synthesis} workspace, and a slow \textbf{storage} that accumulates the consolidated result. Each
+cycle writes the new memory into the buffer, \emph{consolidates} buffer-and-storage into synthesis by
+interleaved transfer (Section~\ref{sec:res_union}), then \emph{downloads} synthesis into storage. The
+interleaving is what lets storage's existing memories be rehearsed alongside the new one, so old
+correlated memories are re-excited and preserved rather than overwritten.
+
+\begin{algorithm}[h]
+\caption{Continual learning by prioritized transfer}
+\begin{algorithmic}[1]
+\State \textbf{Input:} stream of memories $m_1,m_2,\dots$; empty storage $\WS^{\mathrm{sto}}$
+\For{each arriving memory $m_k$}
+  \State \textbf{Write:} store $m_k$ in the fast buffer (one-shot), overwriting the previous
+  \State \textbf{Consolidate:} interleaved transfer of \{buffer, storage\} $\to$ synthesis
+         (alternate rehearsing buffer and storage; Section~\ref{sec:res_union})
+  \State \textbf{Download:} transfer synthesis $\to$ storage
+\EndFor
+\State \textbf{Return:} storage holding $\mathrm{span}\{m_1,\dots,m_k\}$ up to capacity $d-1$
+\end{algorithmic}
+\label{alg:continual}
+\end{algorithm}
+
+Fig~\ref{fig:retention} shows the payoff. As memories stream in, we track a retention matrix: for each
+stored memory (row), how well it is still recovered after each cycle (column). Under the loop, the matrix
+fills and stays filled --- every memory acquired so far remains retrievable, and the stored subspace
+grows one memory per cycle up to capacity. A buffer-only control, which simply writes each new memory
+without the consolidate/download loop, retains only the most recent: its retention matrix is a single
+bright diagonal against a forgotten background --- catastrophic forgetting in its purest form. The
+difference is the loop, and the loop is nothing but transfer, applied twice per cycle.
+
+\begin{figure}[h!]
+\centering
+\figplaceholder{\textbf{Left:} retention matrix under Algorithm~\ref{alg:continual} (memory $\times$
+cycle) --- fills and stays filled; stored subspace grows one memory per cycle. \textbf{Right:} buffer-only
+control --- only the latest memory retained (bright diagonal, forgotten elsewhere). Source:
+\texttt{notebooks/continual\_learning/01\_continual\_single\_stream.py}.}
+\caption{\textbf{The transfer loop retains a correlated stream where a buffer-only control forgets.}
+See Section~\ref{sec:res_continual}.}
+\label{fig:retention}
+\end{figure}
+
+%============================================================================
+\section{Discussion}
+%============================================================================
+We have shown that a single signed precision turns a pair of predictive-coding memories from a recall
+circuit into a replay circuit, and that in replay the downstream network's own prediction error steers
+the upstream network into exactly the memories still missing downstream. The priority is not scheduled;
+it is the gradient of the student's surprise (Theorem~\ref{thm:prioritized}), and at a precise
+precision-matching condition the coupled dynamics are an exact free-energy saddle
+(Proposition~\ref{prop:saddle}). Transfer is a primitive that composes into a union of subspaces and,
+from there, into a continual-learning loop.
+
+\paragraph{What is exact and what is only suggestive.} The variational free-energy reading is exact where
+we use it: the student's inference and learning are gradient descent on $\FS$
+(Proposition~\ref{prop:descent}), and the settled student's free energy is the novelty score the teacher
+climbs (Corollary~\ref{cor:surprise}). We are deliberately more cautious with two larger claims. First,
+that the loop minimizes a free energy \emph{integrated over the whole data stream} is a conjecture, not a
+result --- we prove per-step descent, not a global objective. Second, the resemblance of the
+$\piST=-\piTS$ saddle to the agent--environment minimax of active inference is structural, a matter of
+shape; we do not claim the reversed precision implements an expected-free-energy computation
+\cite{millidge2021whence}. Flagging these keeps the free-energy story honest.
+
+\paragraph{Biological reading.} The architecture maps naturally onto complementary learning systems: a
+fast teacher that already holds an experience (hippocampus) trains a slow, initially empty student
+(neocortex) offline, and does so preferentially for what the neocortex has not yet consolidated
+\cite{mcclelland1995cls,kumaran2016what,wilson1994reactivation,diekelmann2010memory}. The wake/sleep
+distinction reduces to the sign of one interface precision, and prioritization requires no homunculus
+choosing what to replay --- the error does the choosing, as in prioritized experience replay
+\cite{schaul2016prioritized} but here derived from the network's own free energy. This complements our
+earlier single-network account, where autonomous replay was produced instead by plastic self-inhibition
+shallowing visited attractors \cite{saighi2025autonomous}: there one network recovered its own memories;
+here two networks transfer them, and the priority signal is made explicit.
+
+\paragraph{Limitations and outlook.} The price of analytic transparency is linearity, and with it the
+scope of Remark~\ref{rem:scope}: transfer moves a memory \emph{subspace}, an effective rank, not a set of
+named episodes. Episodic, one-pattern-per-bout replay --- the regime in which the biological analogy is
+sharpest --- would need a nonlinearity such as a soft winner-take-all to select a single pattern per
+replay, and building that on the same reversed-precision skeleton is the natural next step. Manifold
+completion of the fully coupled dynamics is established empirically across the regimes we tested rather
+than proven, and a stochastic-approximation treatment of the noise-seeded exploration remains open. None
+of these affects the core claims, which are the exact ones above.
+
+%============================================================================
+\section{Conclusion}
+%============================================================================
+Prioritized memory transfer is a small, ownable primitive: reverse one interface precision, and a
+downstream network's prediction error drives an upstream network to replay exactly what the downstream
+network still lacks, stopping itself when the gap is closed. Because the mechanism is a gradient on the
+downstream network's own surprise, priority comes for free; because the substrate is a linear
+predictive-coding memory, the whole thing is exactly analyzable; and because transfer is a primitive, it
+composes --- into a union of memory subspaces, and into a continual-learning loop that resists
+catastrophic forgetting. The account is compact enough to prove and biologically suggestive enough to
+motivate the nonlinear, episodic extensions it points to.
+
+%============================================================================
+\section*{Materials and methods}
+%============================================================================
+\paragraph{Substrate and faithfulness.} Each population is a linear covariance predictive-coding network
+with one tied weight matrix $W$ (zero diagonal, enforced at construction and after every update):
+top-down prediction uses $M=I-W$, bottom-up error projection uses $M\tr$, and the teacher--student
+interface is identity in both directions. Memories are stored in the teacher as $\MT m_p=0$
+($\max_p\|\MT m_p\|<10^{-4}$ for $P\le d-1$). The student's perception equals $-\nabla_{\xS}\FS$ and its
+learning $-\nabla_{\WS}\FS$ (autograd-verified to $<10^{-8}$).
+
+\paragraph{Proofs.} Proposition~\ref{prop:descent} (state and projected-weight gradient descent),
+Lemma~\ref{lem:novelty} (fast-student elimination and $\NS$), Corollary~\ref{cor:surprise} (the surprise
+identity, via per-direction summation $n^2+n(1-n)=n$ and, independently, the envelope theorem), and
+Theorem~\ref{thm:prioritized} (the three readings of the push) are proved in full, every matrix step
+justified, in Appendix~\ref{app:proofs}. Lemma~\ref{lem:normal} (the guard $|\piST|<\piT\sigma_{\min}^2$)
+and Proposition~\ref{prop:saddle} (the saddle at $\piST=-\piTS$) are established with the numerical
+diagnostics below.
+
+\paragraph{Numerical diagnostics.} We verify: the surprise identity
+$\FS(\xS^*,\xT)=\tfrac{\piTS}{2}\xT\tr\NS\xT$ (error $\sim10^{-15}$); the saddle circulation
+$|\piST+\piTS|\sqrt{d}$, vanishing only at $\piST=-\piTS$; the off-manifold growth eigenvalue and terminal
+manifold occupancy, both turning over at the guard; the restricted novelty spectrum
+$\mathrm{eig}(\UT\tr\NS\UT)$ (the staircase); and, for the union and continual loops, per-bout residuals
+and the retention matrix. Adiabatic (fast-student) elimination is used throughout for the reduced teacher
+dynamics of Eq.~\eqref{eq:teacher_reduced}. Simulations use the timescale ordering
+$\tauS\ll\tauT\ll 1/\eta$, isotropic teacher noise $\xi$, and a fixed teacher norm; full parameter tables
+accompany each experiment notebook.
+
+%============================================================================
+\section*{Supporting information}
+%============================================================================
+\textbf{S1. Stability and timescale sweeps.} On-manifold consolidation vs.\ noise-chasing across
+$|\piST|$ (the guard turnover); spectral, not temporal, selection across $\tauS/\tauT$.
+\textbf{S2. Effective-rank detail.} Staircase step count vs.\ pattern correlation.
+\textbf{S3. Dendritic (stop-gradient) variant.} The mechanism under Tang et al.'s bio-plausible
+stop-gradient relaxation \cite{tang2023covpcn}: transfer still completes, at the cost of a
+$\sim\!2\times$ looser residual floor and a non-symmetric novelty operator.
+\textbf{S4. Noise-free slow-mixing variant.} Transfer driven by integrator imprecision rather than
+injected noise.
+
+%============================================================================
+\appendix
+\section{Proofs}
+\label{app:proofs}
+%============================================================================
+We give the full proofs of the four analytic results stated in the body. Every matrix step is
+justified explicitly. We use the house identities $M=I-W$, $S=M\tr M$, $\epsT=\MT\xT$, $\epsS=\MS\xS$,
+$\epsTS=\xS-\xT$ (Eqs.~\ref{eq:mismatch}--\ref{eq:interface}), and the free energies
+$\FS=\tfrac{\piTS}{2}\|\epsTS\|^2+\tfrac{\piS}{2}\|\epsS\|^2$, $\FT=\tfrac{\piT}{2}\|\epsT\|^2$
+(Eq.~\ref{eq:freeenergy}). Two algebra facts recur: \textbf{(R1)} $(AB)\tr=B\tr A\tr$; and
+\textbf{(R2)} for $g=\tfrac12\|u\|^2$, a perturbation $u\to u+\delta$ gives $g\to g+u\tr\delta+O(\|\delta\|^2)$,
+so $\nabla g=u$.
+
+\paragraph{Timescales.} Two distinct ``student fixed'' assumptions are used, on the nested separation
+$\tauS\ll\tauT\ll1/\eta$. Lemma~\ref{lem:novelty} uses the student \emph{state} being \emph{fast}: $\xS$
+is already settled at every teacher configuration ($\dot\xS=0$). Theorem~\ref{thm:prioritized} uses the
+student \emph{weights} being \emph{slow}: over the teacher's exploration $\WS$, and hence $\SS$ and
+$\NS$, are frozen matrices. The two are not the same assumption.
+
+\subsection{Proposition~\ref{prop:descent}: inference and learning descend \texorpdfstring{$\FS$}{FS}}
+\label{app:prop1}
+
+\paragraph{Part A --- inference.} We first derive the one differentiation rule. For fixed $A$ and
+$g(x)=\tfrac12\|Ax\|^2=\tfrac12(Ax)\tr(Ax)$, perturb $x\to x+\delta$ and expand exactly:
+\[
+g(x+\delta)=\tfrac12(Ax)\tr(Ax)+(Ax)\tr(A\delta)+\tfrac12(A\delta)\tr(A\delta).
+\]
+The linear term is $(Ax)\tr A\delta=x\tr A\tr A\,\delta$ by (R1); its coefficient transposed gives
+\begin{equation}
+\label{eq:gradnorm}
+\nabla_x\,\tfrac12\|Ax\|^2=A\tr A\,x.
+\end{equation}
+(The $\tfrac12$ cancels the factor $2$ from the two equal cross terms.) Apply
+Eq.~\eqref{eq:gradnorm} to each term of $\FS$, holding $\xT$ fixed. The interface term
+$\tfrac{\piTS}{2}\|\xS-\xT\|^2$ is the form with $A=I$ and a constant shift (which drops), giving
+$\piTS\,\epsTS$. The self term $\tfrac{\piS}{2}\|\MS\xS\|^2$ is the form with $A=\MS$, giving
+$\piS\MS\tr\epsS$. Summing,
+\[
+\nabla_{\xS}\FS=\piTS\,\epsTS+\piS\,\MS\tr\epsS,
+\]
+and the student's state equation \eqref{eq:student} is exactly $\tauS\dot\xS=-\nabla_{\xS}\FS$: inference
+is exact gradient descent on $\FS$.
+
+\paragraph{Part B --- learning.} Only the self term $\tfrac{\piS}{2}\|\xS-\WS\xS\|^2$ depends on $\WS$.
+Writing it as $\tfrac{\piS}{2}\sum_i\varepsilon_{S,i}^2$ with
+$\varepsilon_{S,i}=x_{S,i}-\sum_k(\WS)_{ik}x_{S,k}$, and using
+$\partial(\WS)_{ik}/\partial(\WS)_{ab}=\delta_{ia}\delta_{kb}$,
+\[
+\frac{\partial\varepsilon_{S,i}}{\partial(\WS)_{ab}}=-\delta_{ia}\,x_{S,b}
+\quad\Longrightarrow\quad
+\frac{\partial\FS}{\partial(\WS)_{ab}}=\piS\sum_i\varepsilon_{S,i}(-\delta_{ia}x_{S,b})=-\piS\,\varepsilon_{S,a}\,x_{S,b},
+\]
+the $\delta_{ia}$ collapsing the sum. Assembling the entries into a matrix gives the outer product
+$\nabla_{\WS}\FS=-\piS\,\epsS\,\xS\tr$. The zero-diagonal constraint restricts admissible updates to the
+subspace $Z$ of zero-diagonal matrices; the orthogonal projection onto $Z$ is $P_0(X)=X-\mathrm{diag}(X)$,
+which is idempotent ($P_0^2=P_0$) and self-adjoint ($\langle P_0X,Y\rangle=\langle X,P_0Y\rangle$) for the
+Frobenius inner product $\langle X,Y\rangle=\mathrm{tr}(X\tr Y)$. The learning rule follows the projected
+gradient $\dot\WS=-\eta\,P_0(\nabla_{\WS}\FS)$, so with $G=\nabla_{\WS}\FS$,
+\[
+\dot\FS=\langle G,\dot\WS\rangle=-\eta\,\langle G,P_0G\rangle=-\eta\,\langle P_0G,P_0G\rangle=-\eta\,\|P_0G\|_F^2\le0,
+\]
+inserting $P_0G=P_0(P_0G)$ then moving one $P_0$ across. Learning is projected gradient descent on $\FS$.
+\hfill$\blacksquare$
+
+\subsection{Lemma~\ref{lem:novelty}: the novelty operator}
+\label{app:lem1}
+
+\paragraph{Step 1--2 --- solve the fast-student steady state.} ``Fast student'' means
+$\nabla_{\xS}\FS=0$, i.e.\ $\piTS(\xS-\xT)+\piS\SS\xS=0$. Collecting $\xS$ on the left with
+$B:=\piTS I+\piS\SS$,
+\[
+B\,\xS=\piTS\,\xT
+\quad\Longrightarrow\quad
+\xS^{*}=\piTS\,B^{-1}\xT.
+\]
+
+\paragraph{Step 3 --- $B$ is invertible.} If $\SS v=\mu v$ then $Bv=(\piTS+\piS\mu)v$, so $B$ shares the
+eigenbasis of $\SS$ with eigenvalues $\piTS+\piS\mu\ge\piTS>0$ (using $\mu\ge0$ from Step~5). None is
+zero, so $B^{-1}$ exists and $B^{-1}v=(\piTS+\piS\mu)^{-1}v$.
+
+\paragraph{Step 4 --- the leftover interface error.} Writing $\xT=B^{-1}B\xT$ to share a left factor,
+\[
+\epsTS=\xS^{*}-\xT=B^{-1}\big[\piTS I-(\piTS I+\piS\SS)\big]\xT=B^{-1}(-\piS\SS)\xT=-\piS\,B^{-1}\SS\,\xT.
+\]
+
+\paragraph{Step 5 --- $\SS$ is symmetric PSD, and learned $\Rightarrow$ zero.} For any $v$,
+$v\tr\SS v=v\tr\MS\tr\MS v=\|\MS v\|^2\ge0$, so $\SS$ is PSD ($\mu\ge0$) and symmetric ($(\MS\tr\MS)\tr=\MS\tr\MS$).
+A learned direction $u$ has $\MS u=0$, hence $\SS u=\MS\tr\MS u=0$.
+
+\paragraph{Step 6--7 --- $\SS$ commutes with $B^{-1}$; the operator $\NS$.} Since $\SS
+B=\piTS\SS+\piS\SS^2=B\SS$, sandwiching by $B^{-1}$ gives $B^{-1}\SS=\SS B^{-1}$. Sliding $\SS$ left in
+Step~4,
+\[
+\epsTS=-\piS\,\SS\,B^{-1}\xT=-\NS\,\xT,\qquad
+\NS=\piS\,\SS\,(\piTS I+\piS\SS)^{-1}.
+\]
+$\NS$ is symmetric (product of the commuting symmetric $\SS$ and $B^{-1}$: $(\SS B^{-1})\tr=B^{-1}\SS=\SS
+B^{-1}$) and PSD (eigenvalues $n(\mu)=\piS\mu/(\piTS+\piS\mu)\ge0$).
+
+\paragraph{Step 8 --- $\NS$ annihilates learned directions.} For learned $u$, Step~5 gives $\SS u=0$, so
+$\NS u=\piS B^{-1}\SS u=0$ and $\epsTS=-\NS u=0$: a teacher along a learned direction produces no drive.
+\hfill$\blacksquare$
+
+\paragraph{Complement identity.} From $B B^{-1}=I$, i.e.\ $\piTS B^{-1}+\piS\SS B^{-1}=I$, and the
+definition of $\NS$, we get $\piTS B^{-1}=I-\NS$, hence
+\[
+\xS^{*}=(I-\NS)\,\xT,\qquad \epsTS=(I-\NS)\xT-\xT=-\NS\xT.
+\]
+The student copies the predicted part ($I$) and leaves the novel part ($-\NS$): per direction it keeps
+the fraction $1-n_k$ and leaves $n_k$ behind as error.
+
+\subsection{Corollary~\ref{cor:surprise}: the surprise identity}
+\label{app:cor1}
+
+Let the student settle ($\xS=\xS^{*}$) with the teacher at $\xT$, and read off
+$\FSeq(\xT):=\FS(\xS^{*}(\xT),\xT)$; since $\FS$ is a strictly convex quadratic in $\xS$ (Hessian $B\succ0$),
+this equals $\min_{\xS}\FS$.
+
+\paragraph{Direct computation.} Plug in $\xS^{*}=(I-\NS)\xT$ and $\epsTS=-\NS\xT$. The interface term,
+using $\NS$ symmetric,
+\[
+\tfrac{\piTS}{2}\|\epsTS\|^2=\tfrac{\piTS}{2}\,\xT\tr\NS^2\,\xT.
+\]
+The self term, using $\|\epsS\|^2=(\xS^{*})\tr\SS\,\xS^{*}$ and the key move
+$\piS\SS(I-\NS)=\piTS(\piS\SS B^{-1})=\piTS\NS$ (complement identity),
+\[
+\tfrac{\piS}{2}\|\epsS\|^2=\tfrac{\piS}{2}\,\xT\tr(I-\NS)\SS(I-\NS)\xT=\tfrac{\piTS}{2}\,\xT\tr(\NS-\NS^2)\xT.
+\]
+Adding, the $\NS^2$ terms cancel:
+\[
+\FSeq(\xT)=\tfrac{\piTS}{2}\,\xT\tr\big[\NS^2+\NS-\NS^2\big]\xT=\tfrac{\piTS}{2}\,\xT\tr\NS\,\xT.
+\]
+Per direction $\xT=\sum_k c_k u_k$: interface costs $n_k^2$, self costs $n_k(1-n_k)$, summing to $n_k$;
+so $\FSeq=\tfrac{\piTS}{2}\sum_k n_k c_k^2$ --- novelty priced on where the state sits.
+\hfill$\blacksquare$
+
+\paragraph{Gradient (envelope route).} For $g(\theta)=\min_x f(x,\theta)=f(x^{*}(\theta),\theta)$ the chain
+rule gives $g'(\theta)=\underbrace{(\partial f/\partial x)|_{x^{*}}}_{=0}\,dx^{*}/d\theta+(\partial
+f/\partial\theta)|_{x^{*}}$, the first factor vanishing by the definition of the minimizer. Here
+$\theta=\xT$ and only the interface term carries $\xT$ explicitly, with $\xT$-gradient $\piTS(\xT-\xS)$;
+freezing $\xS=\xS^{*}$,
+\[
+\nabla_{\xT}\FSeq=\piTS(\xT-\xS^{*})=-\piTS\,\epsTS=\piTS\,\NS\,\xT,
+\]
+matching the direct computation.
+
+\subsection{Theorem~\ref{thm:prioritized}: prioritized transfer}
+\label{app:thm1}
+
+\paragraph{Step 1 --- read off the push.} The teacher in sleep obeys
+$\tauT\dot\xT=-\piT\MT\tr\epsT+\piST\epsTS+\xi$. Substituting $\MT\tr\epsT=\ST\xT$, the fast-student
+$\epsTS=-\NS\xT$ (Lemma~\ref{lem:novelty}), dropping $\xi$, and writing $\piST=-|\piST|$,
+\[
+\tauT\dot\xT=\underbrace{-\piT\ST\xT}_{\text{self-pull}}+\underbrace{|\piST|\NS\xT}_{u},
+\qquad u=|\piST|\,\NS\,\xT.
+\]
+
+\paragraph{Step 2 --- per-direction amplification.} $\NS$ is symmetric, so $\NS u_k=n_k u_k$ on an
+orthonormal eigenbasis, $n_k\in[0,1)$, $n_k=0$ iff learned. With $c_k=u_k\tr\xT$ and under the push
+alone ($\dot\xT=u/\tauT$),
+\[
+\dot c_k=u_k\tr\dot\xT=\frac{|\piST|}{\tauT}\,u_k\tr\NS\xT=\frac{|\piST|}{\tauT}\,n_k\,c_k,
+\]
+using $u_k\tr\NS=n_k u_k\tr$. Learned directions ($n_k=0$) are frozen; novel ones grow, faster the more
+novel.
+
+\paragraph{Step 3 --- steepest ascent of the student's surprise.} By Corollary~\ref{cor:surprise},
+$\FSeq(\xT)=\tfrac{\piTS}{2}\xT\tr\NS\xT=\tfrac{\piTS}{2}\sum_k n_k c_k^2$, whose gradient (by perturbation,
+as in Eq.~\ref{eq:gradnorm}, $\NS$ symmetric) is $\nabla_{\xT}\FSeq=\piTS\NS\xT$. Hence
+\[
+u=|\piST|\,\NS\,\xT=\frac{|\piST|}{\piTS}\,\nabla_{\xT}\FSeq,
+\]
+a positive multiple of the surprise gradient. By Cauchy--Schwarz $\nabla\FSeq\cdot e\le\|\nabla\FSeq\|$
+with equality iff $e\parallel\nabla\FSeq$: of all directions, the push raises the student's surprise
+fastest (a local steepest ascent).
+
+\paragraph{Step 4 --- climbing and self-limiting.} Along the push,
+\[
+\frac{d\FSeq}{dt}=\nabla\FSeq\cdot\dot\xT=\frac{\piTS|\piST|}{\tauT}\,\|\NS\xT\|^2\ge0,
+\]
+zero only when $\NS\xT=0$. And $n(\mu)\le(\piS/\piTS)\mu$ gives
+$|\piST|n_k\le(|\piST|\piS/\piTS)\|\MS u_k\|^2$, so as the student learns a direction
+($\|\MS u_k\|\to0$, Proposition~\ref{prop:descent}) the push there vanishes: the steering self-terminates
+direction by direction.
+
+\paragraph{Step 5 --- the saddle condition (preview of Proposition~\ref{prop:saddle}).} The self-pull is
+$-\nabla_{\xT}\FT$ with $\nabla_{\xT}\FT=\piT\ST\xT$, and the push is $(|\piST|/\piTS)\nabla_{\xT}\FSeq$, so
+\[
+\tauT\dot\xT=-\nabla_{\xT}\FT+\frac{|\piST|}{\piTS}\,\nabla_{\xT}\FSeq,
+\]
+which is $-\nabla\Phi$ for the single potential $\Phi=\FT-\FSeq$ exactly when the ascent coefficient is
+one: $|\piST|=\piTS$, i.e.\ $\piST=-\piTS$. The ascent is local, and the push rescales but does not seed
+an unoccupied direction ($c_k=0\Rightarrow\dot c_k=0$); noise supplies that seed in the full model.
+\hfill$\blacksquare$
+
+%============================================================================
+\bibliography{references}
+%============================================================================
+
+\end{document}

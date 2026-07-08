@@ -1,6 +1,8 @@
 # %% [markdown]
 # # One linear associative memory — storing pictures, recall by clamping units
 #
+# **Background demo, not a paper figure** — pedagogical companion to the transfer ladder.
+#
 # Run cell-by-cell in VS Code (select the **`pytorch`** conda interpreter as the kernel).
 #
 # This notebook steps *out* of the two-network transfer story and looks at a **single**
@@ -40,18 +42,12 @@
 
 # %% imports & path setup
 import os
-import sys
-import pathlib
 
 import numpy as np
 import torch
 import torch.nn.functional as Fn
 
 # make `import pmt` work whether cwd is the repo root or notebooks/associative_recall/
-_root = pathlib.Path.cwd()
-while not (_root / "pmt").exists() and _root != _root.parent:
-    _root = _root.parent
-sys.path.insert(0, str(_root))
 
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"        # set PMT_NO_SHOW=1 to run headless
 

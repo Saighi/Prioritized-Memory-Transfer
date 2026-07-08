@@ -36,6 +36,47 @@ import torch
 from .memory import zero_diag
 
 
+# --------------------------------------------------------------------- shared knobs
+def resolve_signed_precision(
+    raw,
+    *,
+    guard: float,
+    safety: float,
+    exact_saddle: bool = False,
+    pi_pos: Optional[float] = None,
+) -> float:
+    """Resolve the signed source-side precision (`rho`; called `pi_ST` in the two-population
+    model and the paper) from a config value. Precedence:
+
+      - `exact_saddle`  -> the zero-sum value `-pi_pos` (the target-side precision negated;
+                           the exact-saddle regime `pi_ST = -pi_TS`);
+      - `"auto"`        -> the reversed default `-safety * guard`, safely inside the caller's
+                           stability guard;
+      - explicit float  -> as given (signed: <0 sleep/replay, >0 wake).
+    """
+    if exact_saddle:
+        return -float(pi_pos)
+    if isinstance(raw, str) and raw == "auto":
+        return -float(safety) * float(guard)
+    return float(raw)
+
+
+def seed_state(
+    p: "Population",
+    U: Optional[torch.Tensor],
+    gen: Optional[torch.Generator],
+    r: Optional[float] = None,
+) -> None:
+    """Seed population `p` with a random state: draw standard normal, optionally project onto
+    `span(U)` (orthonormal columns; pass `None` to skip), renormalize to `r` (default: the
+    population's leash `p.r`, or 1.0 if unleashed)."""
+    x = torch.randn(p.d, generator=gen, dtype=p.dtype, device=p.device)
+    if U is not None and U.shape[1] > 0:
+        x = U @ (U.transpose(-2, -1) @ x)
+    rr = r if r is not None else (p.r if p.r is not None else 1.0)
+    p.x = x * (rr / x.norm().clamp_min(1e-12))
+
+
 # ----------------------------------------------------------------- tied tensor operators
 def fwd(W: torch.Tensor, x: torch.Tensor) -> torch.Tensor:
     """Top-down / forward: returns W x."""

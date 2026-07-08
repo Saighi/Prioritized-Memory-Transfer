@@ -83,7 +83,8 @@ Short, like the AR paper.
 - Ablation grid A–I (additive §21).
 - Stop-grad dendritic variant (`docs/stopgrad_dendritic.png`, nb two_network/07).
 - Correlation / sparsity / timescale (τ_S/τ_T window) sweeps.
-- **No-noise slow-mixing version** (annex — required by `Notes_for_paper.md`).
+- **No-noise slow-mixing version** (annex — the transfer that relies on integrator imprecision
+  rather than injected noise; tracked in TODO.md).
 - (Optional) SMACOF/VFE landscape draping — intuition figure, talk/supp only.
 
 ---
@@ -91,7 +92,8 @@ Short, like the AR paper.
 ## Math placement
 
 The ownable formal hierarchy (logical chain: predictive coding → novelty filter → spectral
-prioritization → extinction → union). Derivations tracked in [curriculum.md](curriculum.md).
+prioritization → extinction → saddle). Derivations tracked in [maths/curriculum.md](maths/curriculum.md);
+the fully-justified proofs of Prop 1 / Lemma 1 / Corollary 1 / Theorem 1 live in [maths/detailed_proofs.md](maths/detailed_proofs.md).
 Stated inline in the "Model and analysis" block (Tang-style), full proofs in Materials and methods.
 
 ### Core — the formal results (in body)
@@ -99,34 +101,62 @@ Stated inline in the "Model and analysis" block (Tang-style), full proofs in Mat
   `F_S = (π_TS/2)‖ε_TS‖² + (π_S/2)‖ε_S‖²`, `F_T`; novelty operator `N_S = π_S S_S(π_TS I + π_S S_S)⁻¹`;
   `π_TS > π_S` stated as an operating regime, NOT a theorem assumption.
 - **Proposition 1** — student inference & learning descend `F_S` (exact + projected gradient descent).
-- **Lemma 1** — fast-student elimination produces the novelty operator `N_S`.
-- **Theorem 1** — spectral prioritization: manifold-restricted sleep flow is Rayleigh ascent on
-  `A_S = U_Tᵀ N_S U_T`; approaches the dominant novelty eigenspace; learned directions neutral.
-  (Conditional on frozen/reduced setting — does NOT claim completion.)
-- **Corollary 1** — replay gain extinguishes as `O(‖M_S v‖²)`; at full transfer `A_S = 0`
-  (deterministic drift vanishes on a *set* of sphere equilibria).
-- **Lemma 2** — conservative off-manifold normal stability (`|π_ST| < π_T σ²_min`); explicit caveat
-  that this is not manifold invariance.
-- **Proposition 2** — interleaving guarantees the teacher-subspace union `range(C_mix)=Σ range(C_k)`.
-- **Proposition 3** — exact `Φ = F_T − F_S` saddle iff `π_ST = −π_TS`; active-inference-*reminiscent*.
+- **Lemma 1** — fast-student elimination produces the novelty operator `N_S`
+  (complement identity: `x_S* = (I − N_S)x_T` — the student settles on what it can predict).
+- **Corollary 1 — the surprise identity.** The settled student's free energy is the novelty score:
+  `F_S^eq(x_T) = min_{x_S} F_S = (π_TS/2) x_Tᵀ N_S x_T`, so `∇F_S^eq = π_TS N_S x_T` (envelope
+  argument or direct computation; per direction interface `n²` + self `n(1−n)` = `n`). Terminology
+  fixed here: *novelty* = weight-level operator/spectrum (`N_S`, `n_k`), *surprise* = state-level
+  scalar (`F_S`, `F_T`); no separate "teacher's surprise" is ever defined.
+- **Theorem 1 — the student steers the teacher up the *student's* surprise.** From Lemma 1 + the
+  teacher's equation, the student's push is `u = |π_ST| N_S x_T` (no manifold, no projection). (a) In
+  the student's eigenbasis it amplifies each component of the teacher's state by that direction's
+  novelty `n_k`: learned (`n_k=0`) frozen, novel grown — `ċ_k = (|π_ST|/τ_T) n_k c_k`. (b) Equivalently
+  it is the **steepest-ascent direction of the student's surprise** `F_S^eq` (Corollary 1):
+  `u = (|π_ST|/π_TS)∇F_S^eq`, Cauchy–Schwarz. (c) Self-limiting:
+  `|π_ST|n_k ≤ (|π_ST|π_S/π_TS)‖M_S u_k‖²`, so the push on a direction dies as the student learns it.
+  (d) Saddle preview: full flow `= −∇F_T + (|π_ST|/π_TS)∇F_S^eq`, a single-potential flow iff
+  `|π_ST| = π_TS`. **Fast student state + frozen weights**, deterministic. Honest caveats: *local*
+  ascent (not the global summit); the push rescales but does not *seed* an empty direction (noise
+  seeds it). Two-line proof, fully ownable.
+- **Lemma 2** — conservative off-manifold normal stability (`|π_ST| < π_T σ²_min`): the teacher's
+  self-pull keeps it near its own memory manifold, and this **sets the precision-weighting regime**.
+  Shown numerically (guard value computed); caveat that it is not exact invariance (leakage).
+- **Proposition 3** — exact `Φ = F_T − F_S` saddle iff `π_ST = −π_TS`; active-inference-*reminiscent*
+  (the shape of an agent–environment minimax, not a free-energy-minimization claim). Now falls out
+  naturally: Theorem 1 showed the push is `(|π_ST|/π_TS)∇F_S^eq` — a *gradient of the student's
+  surprise* — so the condition is just mobility matching (`|π_ST| = π_TS`); teacher descends `F_T`
+  while ascending `F_S`, student descends `F_S` (Prop 1) — a genuine minimax on one potential.
 - **Scope remark** — linear ⇒ transfers a subspace/effective rank, not named episodes.
 
 ### Empirical (figures, NOT theorems)
 - Completion figure (`U_Tᵀ N_S(t) U_T → 0`): "reliable completion across tested regimes", with the
   open point and the "steps are timescale/plotting artifacts" caveat stated.
+- **Interleaving union + continual learning** — now entirely empirical (no theorem): the crosstalk
+  sawtooth (merging teachers) and the retention-vs-buffer-only-forgetting heatmap. The primitive
+  *composes*, demonstrated in simulation.
 - Noise-driven symmetry breaking / cancellation escape: mechanism + figure, no proof.
-- Continual retention vs. buffer-only forgetting.
 
 ### Supplementary (rigor + honesty)
-- Full algebra for Prop 1, Lemmas 1–2, Theorem 1, Cor 1, Props 2–3; adiabatic elimination; guard
-  derivation; capacity/rank counting; effective-rank / degeneracy discussion.
+- Full algebra for Prop 1, Lemma 1, Corollary 1 (surprise identity), Theorem 1, Lemma 2, Prop 3;
+  adiabatic elimination; guard derivation.
 - Honest limitations note: completion of the coupled dynamics and finite-noise/step robustness are
   empirical; a full stochastic-approximation treatment is future work. No residual-bound theorems.
 
-### Dropped entirely
+### Future work (flagged, not proven here)
+- The **restricted-novelty / manifold analysis** (operator `A_S = U_Tᵀ N_S U_T`): once the teacher's own
+  memory geometry is folded in, *which* surprising directions dominate and in what order. Theorem 1 only
+  characterizes the instantaneous student push up the surprise; the manifold refinement is deferred.
+- The **old self-extinction corollary** (`vᵀN_Sv ≤ (π_S/π_TS)‖M_Sv‖²`) is now a one-line remark inside
+  Theorem 1 (Step 4), not a standalone result. (The name **Corollary 1** now denotes the *surprise
+  identity* `F_S^eq = (π_TS/2)x_TᵀN_Sx_T`, a core result in the body.)
+
+### Dropped entirely (as *theorems*)
 Reference-weight-distance spine; Barbalat/LaSalle idealized convergence; stochastic-approximation
 robustness (imported "Theorem 2"); persistent-excitation / no-partial-trap; Bingham / mixing-time /
 Freidlin–Wentzell. **Online additive network/method** — not even as a counterexample.
+**Proposition 2 (interleaving union theorem)** — cut; interleaving/union kept only as an *empirical*
+figure (see above), no theorem.
 
 ---
 

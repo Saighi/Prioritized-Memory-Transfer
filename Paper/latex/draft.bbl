@@ -1,0 +1,106 @@
+\begin{thebibliography}{10}
+
+\bibitem{mccloskey1989catastrophic}
+McCloskey M, Cohen NJ.
+\newblock Catastrophic interference in connectionist networks: the sequential
+  learning problem.
+\newblock In: Psychology of Learning and Motivation. vol.~24. Academic Press;
+  1989. p. 109--165.
+
+\bibitem{robins1995catastrophic}
+Robins A.
+\newblock Catastrophic forgetting, rehearsal and pseudorehearsal.
+\newblock Connection Science. 1995;7(2):123--146.
+\newblock doi:{10.1080/09540099550039318}.
+
+\bibitem{kirkpatrick2017ewc}
+Kirkpatrick J, Pascanu R, Rabinowitz N, Veness J, Desjardins G, Rusu AA, et~al.
+\newblock Overcoming catastrophic forgetting in neural networks.
+\newblock Proceedings of the National Academy of Sciences.
+  2017;114(13):3521--3526.
+\newblock doi:{10.1073/pnas.1611835114}.
+
+\bibitem{wilson1994reactivation}
+Wilson MA, McNaughton BL.
+\newblock Reactivation of hippocampal ensemble memories during sleep.
+\newblock Science. 1994;265(5172):676--679.
+\newblock doi:{10.1126/science.8036517}.
+
+\bibitem{diekelmann2010memory}
+Diekelmann S, Born J.
+\newblock The memory function of sleep.
+\newblock Nature Reviews Neuroscience. 2010;11(2):114--126.
+\newblock doi:{10.1038/nrn2762}.
+
+\bibitem{mcclelland1995cls}
+McClelland JL, McNaughton BL, O'Reilly RC.
+\newblock Why there are complementary learning systems in the hippocampus and
+  neocortex: insights from the successes and failures of connectionist models
+  of learning and memory.
+\newblock Psychological Review. 1995;102(3):419--457.
+\newblock doi:{10.1037/0033-295X.102.3.419}.
+
+\bibitem{kumaran2016what}
+Kumaran D, Hassabis D, McClelland JL.
+\newblock What learning systems do intelligent agents need? Complementary
+  learning systems theory updated.
+\newblock Trends in Cognitive Sciences. 2016;20(7):512--534.
+\newblock doi:{10.1016/j.tics.2016.05.004}.
+
+\bibitem{saighi2025autonomous}
+Saighi P, Rozenberg M.
+\newblock Autonomous retrieval for continuous learning in associative memory
+  networks.
+\newblock Manuscript in preparation. 2025;.
+
+\bibitem{raoballard1999}
+Rao RPN, Ballard DH.
+\newblock Predictive coding in the visual cortex: a functional interpretation
+  of some extra-classical receptive-field effects.
+\newblock Nature Neuroscience. 1999;2(1):79--87.
+\newblock doi:{10.1038/4580}.
+
+\bibitem{whittington2017}
+Whittington JCR, Bogacz R.
+\newblock An approximation of the error backpropagation algorithm in a
+  predictive coding network with local Hebbian synaptic plasticity.
+\newblock Neural Computation. 2017;29(5):1229--1262.
+\newblock doi:{10.1162/NECO\_a\_00949}.
+
+\bibitem{millidge2022review}
+Millidge B, Seth A, Buckley CL.
+\newblock Predictive coding: a theoretical and experimental review.
+\newblock arXiv preprint arXiv:210712979. 2022;.
+
+\bibitem{tang2023covpcn}
+Tang M, Barron H, Bogacz R.
+\newblock Recurrent predictive coding models for associative memory employing
+  covariance learning.
+\newblock PLOS Computational Biology. 2023;19(4):e1010719.
+\newblock doi:{10.1371/journal.pcbi.1010719}.
+
+\bibitem{schaul2016prioritized}
+Schaul T, Quan J, Antonoglou I, Silver D.
+\newblock Prioritized experience replay.
+\newblock In: International Conference on Learning Representations (ICLR);
+  2016.
+
+\bibitem{friston2010free}
+Friston K.
+\newblock The free-energy principle: a unified brain theory?
+\newblock Nature Reviews Neuroscience. 2010;11(2):127--138.
+\newblock doi:{10.1038/nrn2787}.
+
+\bibitem{friston2017process}
+Friston K, FitzGerald T, Rigoli F, Schwartenbeck P, Pezzulo G.
+\newblock Active inference: a process theory.
+\newblock Neural Computation. 2017;29(1):1--49.
+\newblock doi:{10.1162/NECO\_a\_00912}.
+
+\bibitem{millidge2021whence}
+Millidge B, Tschantz A, Buckley CL.
+\newblock Whence the expected free energy?
+\newblock Neural Computation. 2021;33(2):447--482.
+\newblock doi:{10.1162/neco\_a\_01354}.
+
+\end{thebibliography}

@@ -16,16 +16,10 @@
 
 # %% imports & path setup
 import os
-import sys
-import pathlib
 
 import torch
 
 # make `import pmt` work whether cwd is the repo root or a notebooks/ subfolder
-_root = pathlib.Path.cwd()
-while not (_root / "pmt").exists() and _root != _root.parent:
-    _root = _root.parent
-sys.path.insert(0, str(_root))
 
 from pmt import AdditiveSynthesisConfig, SimConfig, build_additive_synthesis, simulate
 from pmt import diagnostics as dg

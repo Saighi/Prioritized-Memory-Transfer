@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pmt"
+version = "0.1.0"
+description = "Prioritized Memory Transfer between predictive-coding associative memories"
+requires-python = ">=3.9"
+dependencies = [
+    "torch",
+    "numpy",
+    "matplotlib",
+    "plotly",
+]
+
+[project.optional-dependencies]
+progress = ["tqdm"]
+
+[tool.setuptools]
+packages = ["pmt", "viz_embedding"]

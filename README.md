@@ -47,11 +47,14 @@ stream (up to capacity `d−1`) while a buffer-only control catastrophically for
 ## Setup
 
 Uses the existing **`pytorch`** conda env (Python 3.10, torch 2.5, CUDA optional). One-time
-install for the interactive figures:
+editable install of the package (plus plotly/nbformat for the interactive figures):
 
 ```bash
+conda run -n pytorch pip install -e . --no-deps
 conda run -n pytorch pip install plotly nbformat
 ```
+
+After this, `import pmt` works from anywhere in the env — the notebooks have no path hacks.
 
 ## Run
 
@@ -64,19 +67,19 @@ dashboard, `W_S`-convergence snapshots, and interactive plotly figures.
 Headless (no figures shown), e.g. to verify a notebook runs:
 
 ```bash
-PYTHONPATH=. PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python notebooks/two_network/01_single_run.py
-PYTHONPATH=. PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python notebooks/additive_synthesis/interleaved/01_interleaved_single_run.py
+PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python notebooks/two_network/01_single_run.py
+PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python notebooks/additive_synthesis/interleaved/01_interleaved_single_run.py
 ```
 
-Self-checks:
+Self-checks (also collectable with `pytest tests/`):
 
 ```bash
-PYTHONPATH=. conda run -n pytorch --no-capture-output python tests/smoke_test.py       # two-pop invariants, gradients, circulation, transfer
-PYTHONPATH=. conda run -n pytorch --no-capture-output python tests/macro_test.py       # engine==2-pop equivalence + additive transfer/termination
-PYTHONPATH=. conda run -n pytorch --no-capture-output python tests/interleaved_test.py # interleaved beats the additive sum on correlated single memories
-PYTHONPATH=. conda run -n pytorch --no-capture-output python tests/continual_test.py   # interleaved continual retains a correlated stream
-PYTHONPATH=. conda run -n pytorch --no-capture-output python tests/viz_test.py         # all single-run figures build
-PYTHONPATH=. conda run -n pytorch --no-capture-output python tests/run_findings.py     # run all 4 experiment notebooks headless
+conda run -n pytorch --no-capture-output python tests/smoke_test.py       # two-pop invariants, gradients (Prop 1), surprise identity (Cor 1), circulation (Prop 3), transfer
+conda run -n pytorch --no-capture-output python tests/macro_test.py       # engine==2-pop equivalence + additive transfer/termination
+conda run -n pytorch --no-capture-output python tests/interleaved_test.py # interleaved beats the additive sum on correlated single memories
+conda run -n pytorch --no-capture-output python tests/continual_test.py   # interleaved continual retains a correlated stream
+conda run -n pytorch --no-capture-output python tests/viz_test.py         # all single-run figures build
+conda run -n pytorch --no-capture-output python scripts/run_findings.py   # run all 4 experiment notebooks headless (from the repo root)
 ```
 (Use `--no-capture-output`; plain `conda run` mangles tqdm progress bars and reports a spurious error.)
 
@@ -101,7 +104,7 @@ pmt/
   viz_additive.py / viz_interleaved.py / viz_continual.py   additive / crosstalk-sawtooth / retention
   experiments.py   sweep helpers for the two-population experiment notebooks
 notebooks/
-  two_network/            the two-population model (01_single_run … 08_memory_subspace_addition)
+  two_network/            the two-population model (01_single_run … 07_stopgrad_dendritic)
   additive_synthesis/
     online/               the additive (summed) three-network model — 01_synthesis_single_run,
                           02_synthesis_edge_cases
@@ -111,8 +114,12 @@ notebooks/
     01_continual_single_stream.py   core demo (Storage keeps a correlated stream; buffer-only forgets)
     02_continual_edge_cases.py      storage-rehearsal ablation, capacity, correlated-vs-random
 tests/
-  smoke_test.py, macro_test.py, interleaved_test.py, continual_test.py, viz_test.py,
-  probe_findings.py, run_findings.py
+  smoke_test.py, macro_test.py, recall_test.py, interleaved_test.py, continual_test.py, viz_test.py
+scripts/
+  probe_findings.py (parameter sweeps, prints verdicts), run_findings.py (runs the experiment
+  notebooks headless) — exploration scripts, not tests
+archive/
+  retired notebooks kept for reference (not part of the paper)
 ```
 
 ## Faithfulness (enforced by construction / asserted in checks)
