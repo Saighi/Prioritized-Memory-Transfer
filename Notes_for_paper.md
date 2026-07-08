@@ -1,1 +1,0 @@
-- The version of the network without noise showing very slow mixing and reliance on non precision of the integration should be in annex paper.
