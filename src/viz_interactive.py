@@ -15,6 +15,7 @@ import torch
 
 from .history import History
 from .model import TwoPopModel
+from .viz_style import PLOTLY_LAYOUT
 
 
 def staircase(hist: History):
@@ -25,9 +26,10 @@ def staircase(hist: History):
     for j in range(spec.shape[1]):
         fig.add_trace(go.Scatter(x=t, y=spec[:, j], mode="lines", name=f"dir {j}"))
     fig.update_layout(
-        title="Restricted novelty spectrum eig(Uᵀ N_S U) — the staircase",
-        xaxis_title="time", yaxis_title="novelty eigenvalue",
-        template="plotly_white", height=420,
+        **PLOTLY_LAYOUT,
+        title_text="Novelty staircase",
+        xaxis_title="time", yaxis_title="eig(Uᵀ N_S U)",
+        height=420,
     )
     return fig
 
@@ -39,12 +41,13 @@ def raster(hist: History):
     z = np.abs(H["align"]).T   # (P, T)
     fig = go.Figure(go.Heatmap(
         x=t, y=list(range(z.shape[0])), z=z, colorscale="Magma", zmin=0, zmax=1,
-        colorbar=dict(title="|cos|"),
+        colorbar=dict(title="|cos(x_T, m_p)|"),
     ))
     fig.update_layout(
-        title="Replay raster  |cos(x_T, m_p)|",
-        xaxis_title="time", yaxis_title="pattern p",
-        template="plotly_white", height=420,
+        **PLOTLY_LAYOUT,
+        title_text="Replay raster",
+        xaxis_title="time", yaxis_title="memory index p",
+        height=420,
     )
     return fig
 
@@ -93,8 +96,9 @@ def trajectory_3d(hist: History, model: TwoPopModel, info: Optional[Dict] = None
 
     fig = go.Figure(data=[base, head], frames=frames)
     fig.update_layout(
-        title=f"x_T trajectory projected onto memory directions ({', '.join(labels)})",
-        template="plotly_white", height=620,
+        **PLOTLY_LAYOUT,
+        title_text="x_T trajectory in memory coordinates",
+        height=620,
         scene=dict(xaxis_title=labels[0], yaxis_title=labels[1], zaxis_title=labels[2]),
         updatemenus=[dict(
             type="buttons", showactive=False, x=0.05, y=0.05,

@@ -25,6 +25,7 @@ import numpy as np
 import torch
 
 from .diagnostics import novelty_operator
+from .viz_style import PLOTLY_LAYOUT
 from .history import History
 from .model import TwoPopModel
 
@@ -173,8 +174,8 @@ def novelty_sphere_animated(hist, model, info, n_frames=None):
             traces=[0, 2, 3], name=f"{i}"))      # trace 1 (circle) is static
 
     fig = go.Figure(data=data0, frames=go_frames)
-    fig.update_layout(title="Novelty on the state sphere  uᵀN_S u",
-                      template="plotly_white", height=620, scene=_SCENE_UNIT,
+    fig.update_layout(**PLOTLY_LAYOUT, title_text="Novelty on the state sphere",
+                      height=620, scene=_SCENE_UNIT,
                       **_anim_controls(frames))
     return fig
 
@@ -199,8 +200,7 @@ def novelty_sphere_triptych(hist, model, info, n_frames=None):
         fig.add_trace(go.Scatter3d(x=[h[0]], y=[h[1]], z=[h[2]], mode="markers",
                                    marker=dict(size=4, color="red"), showlegend=False), row=1, col=c)
     fig.update_scenes(**_SCENE_UNIT)
-    fig.update_layout(title="Novelty on the state sphere  uᵀN_S u  (cools on the memory circle)",
-                      template="plotly_white", height=430)
+    fig.update_layout(**PLOTLY_LAYOUT, title_text="Novelty on the state sphere", height=430)
     return fig
 
 
@@ -244,8 +244,8 @@ def stretch_ellipsoid_animated(hist, model, info, n_frames=None):
             traces=[0, 1, 2, 3], name=f"{i}"))
 
     fig = go.Figure(data=data0, frames=go_frames)
-    fig.update_layout(title="S_S stretch ellipsoid  (image of the unit sphere, normalized)",
-                      template="plotly_white", height=620, scene=_SCENE_UNIT,
+    fig.update_layout(**PLOTLY_LAYOUT, title_text="Stretch ellipsoid of S_S",
+                      height=620, scene=_SCENE_UNIT,
                       **_anim_controls(frames))
     return fig
 
@@ -262,8 +262,7 @@ def stretch_ellipsoid_triptych(hist, model, info, n_frames=None):
         for tr in _ellipsoid_axes(fr, lam, legend=(c == 1)):
             fig.add_trace(tr, row=1, col=c)
     fig.update_scenes(**_SCENE_UNIT)
-    fig.update_layout(title="S_S stretch ellipsoid  (sphere flattens as memory eigenvalues → 0)",
-                      template="plotly_white", height=430)
+    fig.update_layout(**PLOTLY_LAYOUT, title_text="Stretch ellipsoid of S_S", height=430)
     return fig
 
 
@@ -302,8 +301,8 @@ def energy_valley_animated(hist, model, info, n_frames=None):
     fig = go.Figure(data=[_valley_surface(A, Bm, Zs[0], zmax, True)],
                     frames=[go.Frame(data=[_valley_surface(A, Bm, Zs[i], zmax, True)],
                                      traces=[0], name=f"{i}") for i in range(len(frames))])
-    fig.update_layout(title="Energy valley  ½ xᵀ S_S x  (flattens along the memory direction)",
-                      template="plotly_white", height=620, scene=_SCENE_VALLEY(zmax),
+    fig.update_layout(**PLOTLY_LAYOUT, title_text="Energy valley  ½xᵀS_S x",
+                      height=620, scene=_SCENE_VALLEY(zmax),
                       **_anim_controls(frames))
     return fig
 
@@ -320,6 +319,5 @@ def energy_valley_triptych(hist, model, info, n_frames=None):
     for c, fr in enumerate(picks, start=1):
         fig.add_trace(_valley_surface(A, Bm, _valley_Z(fr["S_S"], P), zmax, c == 3), row=1, col=c)
     fig.update_scenes(**_SCENE_VALLEY(zmax))
-    fig.update_layout(title="Energy valley  ½ xᵀ S_S x  (a flat groove opens along the memory direction)",
-                      template="plotly_white", height=430)
+    fig.update_layout(**PLOTLY_LAYOUT, title_text="Energy valley  ½xᵀS_S x", height=430)
     return fig
