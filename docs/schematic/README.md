@@ -60,7 +60,7 @@ Your topology is **fixed** (always T, S, three error populations), so auto-layou
 want to choose. The two explicit-placement backends won:
 
 - **schemdraw** for day-to-day: pure Python, renders inline in your `#%%` notebooks, no
-  external toolchain. Promote `schemdraw_fig.build()` to `pmt/viz_schematic.py` and it
+  external toolchain. Promote `schemdraw_fig.build()` to `src/viz_schematic.py` and it
   sits alongside `viz_static` / `viz_interactive`.
 - **TikZ** for the actual paper figure: it's how PC papers (Bogacz, Friston, Tang) draw
   these, and `tikz/network.svg`/`.pdf` is already publication-ready.

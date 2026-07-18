@@ -1,18 +1,18 @@
 # Prioritized Memory Transfer — simulation
 
-PyTorch implementation of the predictive-coding memory-transfer models. **One engine, several models**:
+PyTorch implementation of the predictive-coding memory-transfer models. **One engine, three models**
+— networks always communicate **two at a time**:
 
 1. the **two-population** model (teacher T → student S) specified in
    [`two_population_memory_transfer_model.md`](two_population_memory_transfer_model.md) and analysed
    in [`analysis_stress_test.md`](analysis_stress_test.md);
-2. the **additive three-network** model (frozen teachers T₁, T₂ → plastic synthesis S) specified in
-   [`three_network_additive_memory_synthesis.md`](three_network_additive_memory_synthesis.md);
-3. the **interleaved merge** (rehearse one teacher at a time instead of summing them);
-4. a **continual-learning loop** (buffer → synthesis → storage) built on the interleaved merge.
+2. **interleaved subspace addition** (two frozen teachers merged into one plastic network by
+   rehearsing one teacher per replay bout);
+3. a **continual-learning loop** (buffer → synthesis → storage) built on the interleaved merge.
 
-All are instances of one composable **"network of networks" engine** (`pmt.macro`): predictive-coding
-`Population` nodes wired by additive-error `AdditiveInterface` hyper-edges into a `MacroNetwork`
-(edges can be switched `active`/off, which is how the interleaving alternates teachers).
+All are instances of one composable **"network of networks" engine** (`src.macro`): predictive-coding
+`Population` nodes wired by `CouplingInterface` edges into a `MacroNetwork` (edges can be switched
+`active`/off, which is how the interleaving alternates teachers).
 
 **Two-population.** A **teacher** T (a flat, linear covPCN associative memory, higher in the hierarchy)
 and an empty **student** S below it are coupled. During **sleep / replay** — a **reversed (negative)
@@ -21,20 +21,12 @@ it lacks drives T into those memories; S learns them; the drive there vanishes; 
 self-terminates. Because T is linear, what transfers is the memory **subspace** (the staircase has
 ~effective-rank steps, = `P` for orthonormal patterns) — see §9 of the analysis.
 
-**Additive synthesis.** Two frozen teachers are summed into one prediction `y = α₁x₁ + α₂x₂`; a single
-common error `ε_Σ = x_S − y` drives one plastic synthesis network to learn the **subspace sum**
-`𝒰_Σ = 𝒰₁ + 𝒰₂`. The same novelty operator that prioritizes unlearned directions also **rebalances
-between teachers**: as one source becomes predictable its drive vanishes and the other takes over.
-Overlap is learned once (`r_Σ = r₁ + r₂ − dim(𝒰₁∩𝒰₂)`), and the common-error architecture
-self-terminates cleanly (a *separate*-error wiring does not).
-
-**Interleaved merge.** The additive *sum* needs each teacher to have ≥2 memories that can roam; a
-single-memory teacher is pinned and the sum collapses onto the blend `(α₁m₁+α₂m₂)` (the cross-term
-`α₁α₂E[x₁x₂ᵀ]` corrupts the covariance). Interleaving learns from **one teacher per replay bout**,
-alternating — never forming the sum, so the covariance is `Σ = p₁Σ₁ + p₂Σ₂` (no cross-term) and the
-combined subspace is built even for single-memory, **correlated** teachers. The back-and-forth cancels
-crosstalk: rehearse T₁ → nulls `m₁`, bumps `m₂`; rehearse T₂ → nulls `m₂`, bumps `m₁`; the bumps decay to
-zero (interleaved rehearsal — the standard cure for catastrophic forgetting).
+**Interleaved subspace addition.** Two frozen teachers, one plastic synthesis network; the synthesis
+learns from **one teacher per replay bout**, alternating. The covariance it learns is
+`Σ = p₁Σ₁ + p₂Σ₂` (no teacher cross-term), so the combined subspace `𝒰_Σ = 𝒰₁ + 𝒰₂` is built even
+for single-memory, **correlated** teachers. The back-and-forth cancels crosstalk: rehearse T₁ →
+nulls `m₁`, bumps `m₂`; rehearse T₂ → nulls `m₂`, bumps `m₁`; the bumps decay to zero (interleaved
+rehearsal — the standard cure for catastrophic forgetting).
 
 **Continual learning.** A stream of (correlated) memories is consolidated one at a time by three networks:
 a fast **Buffer** (one-shot covPCN, overwritten each memory — the only network that ever learns from an
@@ -50,16 +42,18 @@ Uses the existing **`pytorch`** conda env (Python 3.10, torch 2.5, CUDA optional
 editable install of the package (plus plotly/nbformat for the interactive figures):
 
 ```bash
-conda run -n pytorch pip install -e . --no-deps
+conda run -n pytorch pip install -e . --config-settings editable_mode=compat --no-deps
 conda run -n pytorch pip install plotly nbformat
 ```
 
-After this, `import pmt` works from anywhere in the env — the notebooks have no path hacks.
+After this, `import src` works from anywhere in the env — the notebooks have no path hacks.
+(`editable_mode=compat` puts the repo root on `sys.path`, which keeps the real package ahead of
+the unrelated `src/` folder that ships inside the conda env root.)
 
 ## Run
 
 Open [`notebooks/two_network/01_single_run.py`](notebooks/two_network/01_single_run.py) (or the
-interleaved [`notebooks/additive_synthesis/interleaved/01_interleaved_single_run.py`](notebooks/additive_synthesis/interleaved/01_interleaved_single_run.py))
+interleaved [`notebooks/subspace_addition/01_interleaved_single_run.py`](notebooks/subspace_addition/01_interleaved_single_run.py))
 in VS Code, pick the **`pytorch`** interpreter as the kernel, and run the `# %%` cells top to bottom.
 You get the spectral guards, the faithfulness self-checks, a full transfer run, a 6-panel static
 dashboard, `W_S`-convergence snapshots, and interactive plotly figures.
@@ -68,15 +62,15 @@ Headless (no figures shown), e.g. to verify a notebook runs:
 
 ```bash
 PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python notebooks/two_network/01_single_run.py
-PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python notebooks/additive_synthesis/interleaved/01_interleaved_single_run.py
+PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python notebooks/subspace_addition/01_interleaved_single_run.py
 ```
 
 Self-checks (also collectable with `pytest tests/`):
 
 ```bash
 conda run -n pytorch --no-capture-output python tests/smoke_test.py       # two-pop invariants, gradients (Prop 1), surprise identity (Cor 1), circulation (Prop 3), transfer
-conda run -n pytorch --no-capture-output python tests/macro_test.py       # engine==2-pop equivalence + additive transfer/termination
-conda run -n pytorch --no-capture-output python tests/interleaved_test.py # interleaved beats the additive sum on correlated single memories
+conda run -n pytorch --no-capture-output python tests/macro_test.py       # engine==2-pop equivalence
+conda run -n pytorch --no-capture-output python tests/interleaved_test.py # interleaving builds the union of correlated single memories
 conda run -n pytorch --no-capture-output python tests/continual_test.py   # interleaved continual retains a correlated stream
 conda run -n pytorch --no-capture-output python tests/viz_test.py         # all single-run figures build
 conda run -n pytorch --no-capture-output python scripts/run_findings.py   # run all 4 experiment notebooks headless (from the repo root)
@@ -86,40 +80,37 @@ conda run -n pytorch --no-capture-output python scripts/run_findings.py   # run 
 ## Layout
 
 ```
-pmt/
-  macro.py         the engine: Population + AdditiveInterface + MacroNetwork (fwd/bwd/outer);
+src/
+  macro.py         the engine: Population + CouplingInterface + MacroNetwork (fwd/bwd/outer);
                    assembles rates, adiabatic solve, one unified step() — the LEGO layer
-  config.py        ModelConfig / AdditiveSynthesisConfig / ContinualConfig / SimConfig
+  config.py        ModelConfig / InterleavedConfig / ContinualConfig / SimConfig
   memory.py        pattern generators, zero-diagonal W_T (covPCN / projector), two-teacher geometries
-  model.py         build_system (two-pop) -> MacroNetwork; TwoPopModel facade over it
-  additive.py      build_additive_synthesis (three-net, summed) -> MacroNetwork; simulate_additive
+  model.py         build_system (two-pop) -> MacroNetwork; TwoPopModel facade; simulate()
   interleaved.py   build_interleaved_synthesis + interleave_merge (one teacher per bout) -> MacroNetwork
   continual.py     ContinualLearner: write→interleaved-consolidate→download loop over a memory stream
-  dynamics.py      simulate() — resets, drives macro.step, records (dispatches by info["kind"])
-  history.py       History + AdditiveHistory + InterleavedHistory + ContinualHistory
+  history.py       History + InterleavedHistory + ContinualHistory
   recall.py        AssociativeMemory: one network, clamped-query pattern completion (standalone)
-  diagnostics.py   spectral gap, manifold basis, restricted novelty spectrum, VFE/circulation
-                   checks, and the additive observables (U_Σ, transfer deficit, source novelty, ...)
+  diagnostics.py   spectral gap, manifold/orthonormal bases, novelty operator & restricted spectrum,
+                   transfer deficit, VFE/circulation checks
   viz_static.py / viz_interactive.py / viz_eigenspace.py   two-population figures
-  viz_additive.py / viz_interleaved.py / viz_continual.py   additive / crosstalk-sawtooth / retention
+  viz_interleaved.py / viz_continual.py                    crosstalk-sawtooth / retention figures
   experiments.py   sweep helpers for the two-population experiment notebooks
 notebooks/
   two_network/            the two-population model (01_single_run … 07_stopgrad_dendritic)
-  additive_synthesis/
-    online/               the additive (summed) three-network model — 01_synthesis_single_run,
-                          02_synthesis_edge_cases
-    interleaved/          the interleaved merge — 01_interleaved_single_run (crosstalk sawtooth vs the
-                          failing sum), 02_interleaved_edge_cases (correlation sweep, multi-memory)
+  subspace_addition/      the interleaved merge — 01_interleaved_single_run (crosstalk sawtooth),
+                          02_interleaved_edge_cases (correlation sweep, multi-memory)
   continual_learning/     the buffer → synthesis → storage loop (interleaved consolidation)
     01_continual_single_stream.py   core demo (Storage keeps a correlated stream; buffer-only forgets)
     02_continual_edge_cases.py      storage-rehearsal ablation, capacity, correlated-vs-random
+  associative_recall/     one-network clamped recall on MNIST (01_clamped_recall)
 tests/
   smoke_test.py, macro_test.py, recall_test.py, interleaved_test.py, continual_test.py, viz_test.py
 scripts/
   probe_findings.py (parameter sweeps, prints verdicts), run_findings.py (runs the experiment
   notebooks headless) — exploration scripts, not tests
 archive/
-  retired notebooks kept for reference (not part of the paper)
+  retired material: the additive three-network (summed) model spec and notebooks, and the
+  SMACOF embedding visualization (viz_embedding/) — kept for reference, not part of the paper
 ```
 
 ## Faithfulness (enforced by construction / asserted in checks)
