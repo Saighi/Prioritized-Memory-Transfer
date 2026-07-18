@@ -42,12 +42,13 @@
 
 # %% imports & path setup
 import os
+from pathlib import Path
 
 import numpy as np
 import torch
 import torch.nn.functional as Fn
 
-# make `import src` work whether cwd is the repo root or notebooks/associative_recall/
+_root = Path(__file__).resolve().parents[2]        # repo root (for the MNIST data dir)
 
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"        # set PMT_NO_SHOW=1 to run headless
 

@@ -20,7 +20,7 @@ torch.manual_seed(0)
 
 def run(n_steps=90000, bout_steps=3000, **cfg_kw):
     cfg = InterleavedConfig(**{**dict(d=32, pi_S=0.5, pi_I=1.0, rho="auto", rho_safety=0.9,
-                                            eta=0.05, sigma_xi1=0.1, sigma_xi2=0.1, seed=0), **cfg_kw})
+                                      eta=0.05, sigma_xi1=0.1, sigma_xi2=0.1, seed=0), **cfg_kw})
     macro, info = build_interleaved_synthesis(cfg)
     H = simulate_interleaved(macro, SimConfig(n_steps=n_steps, dt=0.5, mode="adiabatic",
                                               bout_steps=bout_steps, progress=False), info).to_numpy()
@@ -51,8 +51,8 @@ print("→ more correlation = larger, slower-to-cancel crosstalk, but interleavi
 
 # %% [markdown]
 # ## Multi-memory teachers
-# When each teacher has ≥2 memories the additive *sum* also works — but so does interleaving. It is
-# the general mechanism; the single-memory case is just where it is *necessary*.
+# Interleaving is the general mechanism: it merges teachers of any rank, and the single-memory
+# case is just the hardest one (no teacher can roam its own subspace).
 
 # %%
 Hm, infom = run(geometry="shared", rank1=2, rank2=2, overlap=1, n_steps=140000, bout_steps=3500)
@@ -66,4 +66,4 @@ assert Hm["union_deficit"][-1] < 0.3, "interleaving should merge multi-memory te
 # Interleaving builds the combined subspace across the whole correlation range — flat for orthogonal
 # memories, a pronounced decaying sawtooth for correlated ones (the back-and-forth cancelling
 # crosstalk), slower but still convergent as memories approach parallel — and works for single- and
-# multi-memory teachers alike. Unlike the additive sum, it needs no teacher to roam.
+# multi-memory teachers alike, with no need for any teacher to roam.

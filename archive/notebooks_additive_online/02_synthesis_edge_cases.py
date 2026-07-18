@@ -1,3 +1,7 @@
+# ARCHIVED: this notebook exercises the additive-synthesis API (pmt.additive) removed in
+# commit c4e894d (2026-07-18); it last ran against commit fbafa8c. Kept for reference only.
+# See archive/three_network_additive_memory_synthesis.md for the retired model spec.
+
 # %% [markdown]
 # # Additive memory synthesis — edge cases & ablations
 #

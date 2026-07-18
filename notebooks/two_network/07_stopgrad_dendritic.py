@@ -32,10 +32,11 @@
 import os
 import math
 from collections import defaultdict
+from pathlib import Path
 
 import torch
 
-# make `import src` work whether cwd is the repo root or notebooks/
+_root = Path(__file__).resolve().parents[2]   # repo root (for the headless figure save)
 
 import matplotlib
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"   # set PMT_NO_SHOW=1 to run headless
