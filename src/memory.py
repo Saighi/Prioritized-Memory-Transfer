@@ -49,7 +49,7 @@ def make_teacher_subspaces(cfg) -> tuple:
     """Two teacher pattern matrices `(M1, M2)` with unit-norm columns and *controlled geometry*.
 
     Used by the interleaved model (`src.interleaved`) to place the two frozen memory
-    subspaces `U1 = span(M1)`, `U2 = span(M2)` in a prescribed relationship (spec section 20):
+    subspaces `U1 = span(M1)`, `U2 = span(M2)` in a prescribed relationship:
 
       - "orthogonal": `U1 ⟂ U2` (disjoint blocks of a shared random orthonormal frame);
       - "shared":     a common block of `cfg.overlap` directions belongs to both, so

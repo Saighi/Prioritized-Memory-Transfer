@@ -1,30 +1,17 @@
-"""src.macro — a small "network of networks" engine (the LEGO layer).
+"""The composable "network of networks" engine: `Population` nodes + `CouplingInterface`
+edges assembled into a `MacroNetwork`. Every shipped model is an instance of it — the
+two-population transfer (`src.model`) and the interleaved merge (`src.interleaved`, reused
+by `src.continual`). The equations are those of `two_population_memory_transfer_model.md`,
+factored so the *wiring* is data rather than code.
 
-Compose predictive-coding **populations** (nodes) and **coupling interfaces** (edges)
-into a `MacroNetwork`. Every shipped model is an instance of this one engine:
-
-  - two-population transfer     = 2 populations (T, S) + 1 interface  (`src.model`);
-  - interleaved subspace merge  = 3 populations (T1, T2, S) + 2 toggled interfaces
-                                  (`src.interleaved`, reused by `src.continual`).
-
-Nothing here is new mathematics — it is exactly the equations of
-`two_population_memory_transfer_model.md`, factored so the *wiring* is data rather than
-code. Future architectures (chains, trees, several students, general coordinate maps
-`C_k`) drop in without touching the integrator.
-
-Conventions (inherited from `src.model`):
-  - Tied weights: each population owns ONE recurrent matrix `W`; the top-down path uses
-    `M = I - W`, the bottom-up path uses `M^T` (the same matrix transposed).
-  - Row-vector application so an optional leading batch dim broadcasts cleanly:
-        fwd(W, x) = x @ W.T   == W x     (top-down / prediction)
-        bwd(W, x) = x @ W     == W^T x   (bottom-up / error feedback)
+Conventions:
+  - Tied weights: one recurrent matrix `W` per population; top-down uses `M = I - W`,
+    bottom-up uses `M^T`. Row-vector application: fwd(W,x) = x@W.T = Wx, bwd(W,x) = x@W = W^Tx.
   - Zero diagonal on every `W` at all times (no autapses); the `I` in `M = I - W` is the
     structural self/leak term, not a synapse.
-
-Reversed precision (the sleep/wake knob) lives on the interface as the *signed* teacher-side
-precision `rho`: `rho < 0` is sleep/replay (teachers driven to disagree — the transfer drive),
-`rho > 0` is wake/recall (teachers chase the prediction). The target side always uses an
-ordinary positive precision `pi_I` (the student always descends its free energy).
+  - Reversed precision (the sleep/wake knob) is the interface's *signed* source-side
+    precision `rho`: < 0 sleep/replay (drive-to-disagree, the transfer regime), > 0
+    wake/recall. The target side always uses an ordinary positive precision `pi_I`.
 """
 from __future__ import annotations
 
@@ -306,10 +293,9 @@ class MacroNetwork:
         Environment (source-only) populations take an Euler step with Euler-Maruyama noise, then
         renormalize. Plastic populations then learn, and re-zero their diagonal.
 
-        `noise` optionally supplies a pre-drawn *unit* (standard-normal) vector per population name,
-        used instead of an internal draw and then scaled by `sigma_xi/tau*sqrt(dt)`. This lets a
-        caller impose correlated exploration noise across teachers (spec ablation C); when omitted
-        each noisy population draws its own independent vector from `gen`.
+        `noise` optionally supplies a pre-drawn *unit* (standard-normal) vector per population
+        name, scaled by `sigma_xi/tau*sqrt(dt)`; when omitted each noisy population draws its
+        own independent vector from `gen`.
         """
         targets = self.targets()
         sources = self.sources()

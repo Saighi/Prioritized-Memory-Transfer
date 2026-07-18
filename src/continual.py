@@ -1,24 +1,16 @@
 """Continual learning by consolidation (buffer -> synthesis -> storage), on the `src.macro` engine.
 
-A complementary-learning-systems loop over THREE persistent networks (each a `Population` holding
-an evolving zero-diagonal weight matrix):
+A complementary-learning-systems loop over three persistent networks: a fast one-slot Buffer `B`
+(the ONLY network that ever learns from an actual memory, via one-shot covPCN; overwritten each
+cycle), a slow long-term Storage `Z` (starts empty), and a transient Synthesis workspace `S`.
 
-  - Buffer  `B` : fast one-slot store. Each new memory is written by one-shot covPCN (`build_W_T`),
-                  overwriting the previous one (interference erases it). This is the ONLY network
-                  that ever learns from an actual memory; everything downstream learns by replay.
-  - Storage `Z` : slow long-term store; starts empty (`W_Z = 0`).
-  - Synthesis `S`: transient consolidation workspace.
+Per new memory `m_k`: (1) write `m_k` into `B`; (2) CONSOLIDATE `B + Z -> S` by interleaved
+rehearsal — `S` (warm-started from `Z`) is coupled to ONE network per replay bout, alternating,
+so no cross-term and the back-and-forth cancels crosstalk (see `src.interleaved`);
+(3) DOWNLOAD `S -> Z` by single-teacher transfer.
 
-Per new memory `m_k`:
-  1. write `m_k` into `B` (one-shot covPCN);
-  2. CONSOLIDATE  `B + Z -> S`  by **interleaved rehearsal**: `S` (warm-started from `Z`) is coupled
-     to ONE network per replay bout, alternating Buffer and Storage. Never summing the two removes
-     the cross-term that pins single-memory sources, and the back-and-forth is the co-excitation that
-     cancels crosstalk between correlated memories (see `src.interleaved`);
-  3. DOWNLOAD     `S -> Z`      (single-teacher transfer): Storage absorbs the union.
-
-Over the stream Storage retains the whole subspace sum of all memories (up to capacity `d-1`), while
-a buffer-only control catastrophically forgets everything but the latest.
+Over the stream Storage retains the whole subspace sum of all memories (up to capacity `d-1`),
+while a buffer-only control catastrophically forgets everything but the latest.
 """
 from __future__ import annotations
 

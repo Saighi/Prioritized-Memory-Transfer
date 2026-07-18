@@ -1,22 +1,11 @@
-"""Configuration dataclasses for the prioritized-memory-transfer model.
+"""Configuration dataclasses: `ModelConfig` (two-pop network), `InterleavedConfig` (two-teacher
+merge), `ContinualConfig` (buffer/synthesis/storage loop), `SimConfig` (running a simulation).
+Raw user knobs only — derived quantities (spectral gap, resolved signed precisions) are
+computed by the builders.
 
-Two configs:
-  - ModelConfig: everything that defines the network (sizes, precisions, gains, how
-    patterns and W_T are built). Raw user knobs only; derived quantities such as the
-    spectral gap and the resolved pi_ST are computed in `model.build_system`.
-  - SimConfig: everything about *running* the simulation (steps, dt, integration mode,
-    recording, optional pretraining).
-
-Reversed precision (the load-bearing object). The teacher's interface precision `pi_ST` is a
-*signed* quantity. `pi_ST > 0` is an ordinary precision (wake / recall: the teacher minimizes
-the interface error, chasing the student). `pi_ST < 0` is a **reversed (negative) precision**
-(sleep / replay: the teacher *maximizes* the interface error — the drive-to-disagree that
-transfers memory). A negative precision is not a standard inverse-covariance (those are ≥ 0);
-it is introduced deliberately as the single knob that *selects* wake vs sleep. There is no separate
-±1 gate: the phase *is* the sign of `pi_ST`.
-
-Nothing here imports torch-heavy machinery beyond the dtype handle, so configs are cheap
-to construct and easy to serialize/print.
+The load-bearing knob is the *signed* source-side precision (`pi_ST` / `rho`): > 0 wake
+(ordinary precision, no transfer), < 0 sleep/replay (reversed precision, the drive-to-disagree
+that transfers memory). There is no separate gate: the phase *is* the sign.
 """
 from __future__ import annotations
 

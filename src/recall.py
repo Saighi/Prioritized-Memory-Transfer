@@ -1,32 +1,15 @@
-"""src.recall — one linear associative memory, queried by clamping units.
+"""One linear associative memory, queried by clamping units (the standalone single-network
+counterpart to the transfer models; see `docs/understanding_pc_associative_memory.md`).
 
-The standalone, single-network counterpart to the transfer models. ONE predictive-coding
-population stores a set of pictures as memories in its flat memory manifold and completes a
-partial cue by minimizing its free energy.
+Weights are built from the stored pictures with the zero-diagonal covPCN / projector
+construction (`src.memory.build_W_T`), so every picture lies in `ker(M_op)` and the free
+energy `F(x) = 0.5 pi ||M_op x||^2` is a quadratic bowl whose zero-floor is the memory
+manifold. Recall clamps the *known* units to a partial cue and lets the free units descend F
+by projected gradient flow (`tau xdot = -pi S x`, clamped units held fixed) until the state
+settles on the stored memory consistent with the cue.
 
-The physics (exactly the single-population special case of `src.macro`, no interfaces):
-
-  - Weights `W` are built from the stored pictures `M = [m_1 ... m_P]` (columns) with the same
-    zero-diagonal covariance-PCN / projector construction the rest of the package uses
-    (`src.memory.build_W_T`). The mismatch operator is `M_op = I - W` and the self-surprise
-    operator is `S = M_op^T M_op`.
-  - Every stored picture lies in the memory manifold `ker(M_op)` (its self prediction error is
-    ~0), so the network's free energy
-
-        F(x) = 0.5 * pi * || M_op x ||^2
-
-    is a smooth quadratic bowl whose zero-floor is the memory manifold.
-  - Recall clamps the *known* units to a partial cue and lets the *free* units descend F by
-    projected gradient flow
-
-        tau * xdot = -pi * S x ,   x_known held fixed,
-
-    so the state slides downhill onto the manifold, completing the picture. F decreases
-    monotonically to ~0 and the trajectory settles at the stored memory consistent with the cue.
-
-`AssociativeMemory` wraps the construction, the energy, the closed-form completion, and the
-recorded gradient-flow query. `make_mask` builds the occlusion patterns (which units are known).
-Kept separate from the transfer engine so the didactic recall notebook has a small, tested API.
+`AssociativeMemory` wraps the construction, energy, closed-form completion, and the recorded
+gradient-flow query; `make_mask` builds the occlusion patterns.
 """
 from __future__ import annotations
 

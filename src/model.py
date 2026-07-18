@@ -1,33 +1,19 @@
-"""The two-population predictive-coding model (teacher T above student S in the hierarchy).
+"""The two-population predictive-coding model (teacher T above student S) and its run loop.
 
-This is now a thin instance of the composable engine in `src.macro`: `build_system` wires two
-`Population`s and one `CouplingInterface`, and `TwoPopModel` is a backward-compatible **facade**
-over that `MacroNetwork` — every attribute (`W_T`, `W_S`, `x_T`, `x_S`, ...) and method
-(`eps_TS`, `F_S`, `novelty_operator`, `rate_*`, ...) reads or writes the underlying nodes/edge,
-so the equations and the public API are unchanged.
+A thin instance of the engine in `src.macro`: `build_system` wires two `Population`s and one
+`CouplingInterface` (`y = x_T`, `eps_TS = x_S - x_T`, target precision `pi_TS`, signed source
+precision `pi_ST`); `TwoPopModel` is a facade over that `MacroNetwork` exposing the historical
+surface (`W_T/W_S/x_T/x_S`, `eps_*`, `F_*`, `novelty_operator`, `rate_*`). `simulate` runs it
+and records a `History`. Full derivations: `two_population_memory_transfer_model.md`.
 
-Tied-weight convention (architecture invariant):
-  Each population stores ONE recurrent weight matrix (`W_T` frozen, `W_S` plastic). The
-  top-down (prediction) path uses `M = I - W`; the bottom-up (error-projection) path uses
-  `M^T` — the SAME matrix transposed, never an independent tensor. The T<->S interface is
-  hard-wired identity both ways, so the single shared signal is the interface error
-  `eps_TS = x_S - x_T` (it sits at the lower / student level: T supplies the top-down
-  prediction, S carries the residual). In engine terms it is the coupling interface
-  `y = 1 * x_T`, `eps = x_S - y`, with target-side precision `pi_TS` and signed source-side
-  precision `pi_ST`.
+Invariants: both `W` matrices keep a ZERO DIAGONAL at all times (no autapses; the `I` in
+`M = I - W` is the structural self/leak term, not a synapse).
 
-Both `W_T` and `W_S` keep a ZERO DIAGONAL at all times (no autapses). The `I` inside
-`M = I - W` is the structural self/leak term, not a synapse, so `diag(M) = 1` is correct.
-
-Reversed precision (the sleep/wake mechanism). The student always *descends* its free energy
-(perception). The teacher's interface term is `+pi_ST * eps_TS`, where `pi_ST` is the teacher's
-*signed* interface precision — there is no separate gate:
-  - wake / recall  (`pi_ST > 0`): an ordinary precision; the teacher *minimizes* the interface
-    error (chases the student). Both descend — no transfer.
-  - sleep / replay (`pi_ST < 0`): a **reversed (negative) precision**; the teacher *maximizes*
-    the interface error (drive-to-disagree), toward states the student cannot yet predict — the
-    transfer drive.
-Transfer is simulated in sleep, so `pi_ST` defaults to a negative value.
+Reversed precision (the sleep/wake mechanism): the student always *descends* its free energy;
+the teacher's interface term is `+pi_ST * eps_TS` with `pi_ST` *signed* —
+  - wake / recall  (`pi_ST > 0`): the teacher minimizes the interface error; no transfer.
+  - sleep / replay (`pi_ST < 0`): reversed precision, the teacher *maximizes* the interface
+    error (drive-to-disagree) — the transfer drive. Default is negative.
 """
 from __future__ import annotations
 
