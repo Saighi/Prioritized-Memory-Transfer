@@ -21,7 +21,7 @@ import torch
 
 from . import diagnostics as dg
 from .config import ModelConfig, SimConfig
-from .dynamics import simulate
+from .model import simulate
 from .model import bwd, build_system, fwd
 
 

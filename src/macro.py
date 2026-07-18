@@ -230,7 +230,7 @@ class MacroNetwork:
     part in, and steps the whole system with one integrator (`step`). A population that is the
     target of some interface is a *perception* node (it can be eliminated adiabatically); a
     population that only feeds interfaces is an *environment* node (it gets exploration noise and
-    the amplitude leash). This mirrors `src.dynamics` exactly for the two-population case.
+    the amplitude leash). This mirrors `src.model.simulate` exactly for the two-population case.
     """
 
     def __init__(self, populations: List[Population], interfaces: List[CouplingInterface]) -> None:

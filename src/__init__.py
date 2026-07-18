@@ -24,12 +24,11 @@ so the core has no plotting dependency.
 """
 from .config import ContinualConfig, InterleavedConfig, ModelConfig, SimConfig
 from .macro import CouplingInterface, MacroNetwork, Population
-from .model import TwoPopModel, build_system, fwd, bwd, outer
+from .model import TwoPopModel, build_system, simulate, fwd, bwd, outer
 from .interleaved import build_interleaved_synthesis, simulate_interleaved, interleave_merge
 from .continual import ContinualLearner
 from .memory import make_patterns, make_teacher_subspaces, build_W_T, zero_diag, memory_residual
 from .recall import AssociativeMemory, RecallTrace, make_mask
-from .dynamics import simulate
 from .history import ContinualHistory, History, InterleavedHistory
 from . import diagnostics
 

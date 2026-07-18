@@ -24,12 +24,13 @@ from typing import Dict, List, Optional
 import numpy as np
 import torch
 
+from .diagnostics import novelty_operator
 from .history import History
 from .model import TwoPopModel
 
 
 # --------------------------------------------------------------- pure operator helpers
-# (mirror model.S_S() / model.novelty_operator(); take a snapshot W_S, never touch the model)
+# (operate on a snapshot W_S, never touch the live model)
 def s_s_of(W_S: torch.Tensor) -> torch.Tensor:
     """S_S = M_Sᵀ M_S with M_S = I - W_S."""
     I = torch.eye(W_S.shape[-1], dtype=W_S.dtype, device=W_S.device)
@@ -39,9 +40,7 @@ def s_s_of(W_S: torch.Tensor) -> torch.Tensor:
 
 def n_s_of(W_S: torch.Tensor, pi_TS: float, pi_S: float) -> torch.Tensor:
     """N_S = pi_S S_S (pi_TS I + pi_S S_S)^-1 (the novelty operator)."""
-    S = s_s_of(W_S)
-    I = torch.eye(W_S.shape[-1], dtype=W_S.dtype, device=W_S.device)
-    return pi_S * S @ torch.linalg.inv(pi_TS * I + pi_S * S)
+    return novelty_operator(s_s_of(W_S), pi_TS, pi_S)
 
 
 # --------------------------------------------------------------- per-frame data extractor

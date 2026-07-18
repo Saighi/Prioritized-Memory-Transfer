@@ -27,6 +27,7 @@ from typing import List, Optional
 import torch
 
 from .config import ContinualConfig, SimConfig
+from .diagnostics import orthonormal_basis, spectral_gap, transfer_deficit
 from .history import ContinualHistory, InterleavedHistory
 from .interleaved import interleave_merge
 from .macro import CouplingInterface, MacroNetwork, Population, resolve_signed_precision
@@ -85,20 +86,10 @@ class ContinualLearner:
     def _M(self, W: torch.Tensor) -> torch.Tensor:
         return self.I - W
 
-    def _ortho(self, cols: torch.Tensor) -> torch.Tensor:
-        """Orthonormal basis of the span of the given memory columns (SVD; handles rank-deficient
-        / correlated sets). Empty input -> empty basis."""
-        if cols.shape[1] == 0:
-            return cols
-        U, S, _ = torch.linalg.svd(cols, full_matrices=False)
-        r = int((S > 1e-6 * S.max()).sum())
-        return U[:, :r]
-
     def _resolve_rho(self, sources: List[Population], alphas: List[float]) -> float:
         """Reversed source-side precision inside the structure guard. The guard's sigma^2_min is the
         smallest *off-manifold* surprise eigenvalue, so we ignore the small-but-nonzero eigenvalues of
         the approximately-learned memory directions (tol=0.1) that would otherwise collapse it."""
-        from .diagnostics import spectral_gap
         cfg = self.cfg
         Cnorm2 = sum(a * a for a in alphas)
         guard = min(cfg.pi_teacher * spectral_gap(p.S_op(), tol=0.1) for p in sources) / Cnorm2
@@ -146,19 +137,19 @@ class ContinualLearner:
         pops: List[Population] = [B, S]
         interfaces = [self._single_interface("S", B)]
         order = ["B"]
-        bases = {"B": self._ortho(self.memories[:, k : k + 1])}
+        bases = {"B": orthonormal_basis(self.memories[:, k : k + 1])}
         if storage_nonempty and cfg.storage_support:
             Z = self._source_pop("Z", self.W_Z)
             pops = [B, Z, S]
             interfaces = [self._single_interface("S", B), self._single_interface("S", Z)]
             order = ["B", "Z"]
-            bases["Z"] = self._ortho(self.memories[:, :k])
+            bases["Z"] = orthonormal_basis(self.memories[:, :k])
         macro = MacroNetwork(pops, interfaces)
 
         # crosstalk trace: residual on the NEW (buffer) memory vs the OLD (storage) memories
         U_new = bases["B"]
         U_old = bases.get("Z", self.memories[:, :0])
-        U_all = self._ortho(self.memories[:, : k + 1])
+        U_all = orthonormal_basis(self.memories[:, : k + 1])
         trace = InterleavedHistory(labels=("buffer", "storage"))
 
         def record(bout: int, active: int) -> None:
@@ -174,13 +165,12 @@ class ContinualLearner:
         teacher = self._source_pop("Sy", self.W_S)
         Z = self._plastic_pop("Z", self.W_Z)
         macro = MacroNetwork([teacher, Z], [self._single_interface("Z", teacher)])
-        bases = {"Sy": self._ortho(self.memories[:, : k + 1])}
+        bases = {"Sy": orthonormal_basis(self.memories[:, : k + 1])}
         self.W_Z = interleave_merge(macro, ["Sy"], bases, "Z", self._sim(), self.gen,
                                     cfg.download_bouts).clone()
 
     # ----- the loop -----
     def add_memory(self, k: int) -> None:
-        from .diagnostics import transfer_deficit
         self.store_in_buffer(self.memories[:, k])
         self.consolidate(k)
         self.download(k)

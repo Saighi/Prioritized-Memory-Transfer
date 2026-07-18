@@ -28,6 +28,24 @@ def manifold_basis(M_T: torch.Tensor, tol: float = 1e-6) -> torch.Tensor:
     return evecs[:, evals < tol]
 
 
+def orthonormal_basis(A: torch.Tensor, tol: float = 1e-6) -> torch.Tensor:
+    """Orthonormal basis of span(A) via SVD (rank-tolerant: handles correlated / rank-deficient
+    column sets). Empty input -> empty basis."""
+    if A.shape[1] == 0:
+        return A
+    U, S, _ = torch.linalg.svd(A, full_matrices=False)
+    r = int((S > tol * S.max()).sum())
+    return U[:, :r]
+
+
+def novelty_operator(S_op: torch.Tensor, pi_in: float, pi_self: float) -> torch.Tensor:
+    """N = pi_self S (pi_in I + pi_self S)^-1 — the novelty operator of a plastic network with
+    self-surprise S = M^T M, interface precision `pi_in` and self-precision `pi_self`. At the
+    fast steady state the interface error is eps* = -N x_source."""
+    I = torch.eye(S_op.shape[-1], dtype=S_op.dtype, device=S_op.device)
+    return pi_self * S_op @ torch.linalg.inv(pi_in * I + pi_self * S_op)
+
+
 # --------------------------------------------------------------- primary novelty observable
 def restricted_novelty_spectrum(model: TwoPopModel, U_T: torch.Tensor) -> torch.Tensor:
     """Eigenvalues (descending) of U_T^T N_S U_T — which directions of the teacher's manifold
@@ -103,11 +121,8 @@ def subspace_sum_basis(U1: torch.Tensor, U2: torch.Tensor, tol: float = 1e-6):
     """Orthonormal basis `U_Sigma` of the subspace sum `U1 + U2 = span(U1 ∪ U2)` plus the
     intersection dimension and `r_Sigma = dim(U1 + U2)`. `U1`, `U2` are assumed to have
     orthonormal columns (e.g. from `manifold_basis`)."""
-    C = torch.cat([U1, U2], dim=1)
-    Uc, S, _ = torch.linalg.svd(C, full_matrices=False)
-    keep = S > tol * S.max() if S.numel() else S
-    r_sigma = int(keep.sum())
-    U_sigma = Uc[:, :r_sigma]
+    U_sigma = orthonormal_basis(torch.cat([U1, U2], dim=1), tol)
+    r_sigma = U_sigma.shape[1]
     overlap = U1.shape[1] + U2.shape[1] - r_sigma
     return U_sigma, overlap, r_sigma
 

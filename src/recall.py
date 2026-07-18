@@ -136,13 +136,10 @@ class AssociativeMemory:
         self.M_op = self.I - self.W                    # mismatch operator
         self.S = self.M_op.transpose(-2, -1) @ self.M_op   # self-surprise operator
 
-        # orthonormal basis of the stored-picture span (the interpretable "memory subspace")
-        U, s, _ = torch.linalg.svd(patterns, full_matrices=False)
-        self.pattern_span = U[:, s > tol * s.max()]    # (d, r), r = rank of the stored set
-
-        # orthonormal basis of the actual zero-floor manifold ker(M_op)
-        evals, evecs = torch.linalg.eigh(self.S)
-        self.manifold = evecs[:, evals < tol]          # (d, m)
+        # orthonormal bases: the stored-picture span and the actual zero-floor manifold ker(M_op)
+        from .diagnostics import manifold_basis, orthonormal_basis
+        self.pattern_span = orthonormal_basis(patterns, tol)   # (d, r), r = rank of the stored set
+        self.manifold = manifold_basis(self.M_op, tol)         # (d, m)
 
     # ---------------------------------------------------------------- energies / geometry
     def free_energy(self, x: torch.Tensor) -> torch.Tensor:

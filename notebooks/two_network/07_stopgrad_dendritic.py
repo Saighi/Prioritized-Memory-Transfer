@@ -134,7 +134,7 @@ def offmanifold_health(M_T, U_T, tol=1e-6):
 
 # %% [markdown]
 # ## A confined tracking loop
-# Mirrors `src.dynamics.simulate` (same Euler-Maruyama integration, same invariants:
+# Mirrors `src.model.simulate` (same Euler-Maruyama integration, same invariants:
 # renormalize ‖x_T‖=r₀, zero diagonal of W_S), but records the asymmetry-aware novelty
 # spectrum and the M_S health trace. Works for both models via polymorphism.
 

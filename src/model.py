@@ -31,11 +31,11 @@ Transfer is simulated in sleep, so `pi_ST` defaults to a negative value.
 """
 from __future__ import annotations
 
-from typing import Optional, Sequence
+from typing import TYPE_CHECKING, Dict, Optional, Sequence
 
 import torch
 
-from .config import ModelConfig
+from .config import ModelConfig, SimConfig
 from .macro import (  # noqa: F401 (re-export)
     CouplingInterface,
     MacroNetwork,
@@ -46,6 +46,9 @@ from .macro import (  # noqa: F401 (re-export)
     resolve_signed_precision,
 )
 from .memory import build_W_T, make_patterns, zero_diag
+
+if TYPE_CHECKING:
+    from .history import History
 
 
 class TwoPopModel:
@@ -167,9 +170,8 @@ class TwoPopModel:
 
     def novelty_operator(self) -> torch.Tensor:
         """N_S = pi_S S_S (pi_TS I + pi_S S_S)^-1 ; eps_TS* = -N_S x_T at S's steady state."""
-        S = self.S_S()
-        Amat = self.pi_TS * self.I + self.pi_S * S
-        return self.pi_S * S @ torch.linalg.inv(Amat)
+        from .diagnostics import novelty_operator   # lazy import (avoid cycle)
+        return novelty_operator(self.S_S(), self.pi_TS, self.pi_S)
 
     def solve_xS_steady(self, x_T: torch.Tensor) -> torch.Tensor:
         """x_S* = pi_TS (pi_TS I + pi_S S_S)^-1 x_T (adiabatic elimination of fast S)."""
@@ -250,3 +252,54 @@ def build_system(cfg: ModelConfig):
         "pi_ST_ok_aligned": abs(pi_ST) < guard_scalar,  # looser aligned-case bound
     }
     return model, info
+
+
+def simulate(model: TwoPopModel, sim: SimConfig, info: Optional[Dict] = None) -> "History":
+    """Run a two-population transfer simulation and record observables into a `History`.
+
+    Two integration modes (both handled by the engine's `MacroNetwork.step`):
+      - "full":      explicit Euler on the fast student (watch it relax); teacher noise uses
+                     Euler-Maruyama sqrt(dt) scaling.
+      - "adiabatic": the student jumps to its exact steady state each step (infinite timescale
+                     separation); faster and matches the novelty-operator theory cleanly.
+    The regime is the sign of `pi_ST`: < 0 = sleep/replay = transfer.
+    """
+    from .history import History   # lazy import (History references TwoPopModel)
+
+    cfg = model.cfg
+    gen = torch.Generator(device=model.device).manual_seed(cfg.seed + 12345)
+
+    model.reset_state(gen)
+    if sim.pretrain_subset is not None:
+        model.pretrain(sim.pretrain_subset)
+
+    U_T = info["U_T"] if info is not None else None
+    if U_T is None:
+        from .diagnostics import manifold_basis
+        U_T = manifold_basis(model.M_T)
+    M = model.patterns
+    macro = model.macro
+
+    hist = History()
+    snap_steps = set(
+        int(round(s)) for s in torch.linspace(0, sim.n_steps - 1, sim.n_weight_snapshots).tolist()
+    )
+
+    dt = sim.dt
+    iterator = range(sim.n_steps)
+    if sim.progress:
+        regime = "replay" if model.pi_ST < 0 else "recall"
+        try:
+            from tqdm import tqdm
+            iterator = tqdm(iterator, desc=f"simulate[{sim.mode}/{regime}]")
+        except Exception:
+            pass
+
+    for step in iterator:
+        macro.step(dt, gen, mode=sim.mode, substeps=sim.s_substeps)
+        if step % sim.record_every == 0:
+            hist.record(step * dt, model, U_T, M)
+        if step in snap_steps:
+            hist.snapshot_weights(step * dt, step, model)
+
+    return hist
