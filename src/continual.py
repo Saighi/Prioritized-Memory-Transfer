@@ -1,4 +1,4 @@
-"""Continual learning by consolidation (buffer -> synthesis -> storage), on the `pmt.macro` engine.
+"""Continual learning by consolidation (buffer -> synthesis -> storage), on the `src.macro` engine.
 
 A complementary-learning-systems loop over THREE persistent networks (each a `Population` holding
 an evolving zero-diagonal weight matrix):
@@ -14,7 +14,7 @@ Per new memory `m_k`:
   2. CONSOLIDATE  `B + Z -> S`  by **interleaved rehearsal**: `S` (warm-started from `Z`) is coupled
      to ONE network per replay bout, alternating Buffer and Storage. Never summing the two removes
      the cross-term that pins single-memory sources, and the back-and-forth is the co-excitation that
-     cancels crosstalk between correlated memories (see `pmt.interleaved`);
+     cancels crosstalk between correlated memories (see `src.interleaved`);
   3. DOWNLOAD     `S -> Z`      (single-teacher transfer): Storage absorbs the union.
 
 Over the stream Storage retains the whole subspace sum of all memories (up to capacity `d-1`), while

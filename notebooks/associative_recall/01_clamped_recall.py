@@ -17,7 +17,7 @@
 # ### The network
 # One population of $d$ units with a frozen, zero-diagonal recurrent weight matrix $W$ built from
 # the stored pictures $M=[m_1\dots m_P]$ (the same covariance-PCN construction the teachers use
-# elsewhere in `pmt`). Its mismatch operator is $M_{\mathrm{op}} = I - W$ and its **free energy** is
+# elsewhere in `src`). Its mismatch operator is $M_{\mathrm{op}} = I - W$ and its **free energy** is
 #
 # $$
 # F(x) \;=\; \tfrac{1}{2}\,\pi\,\lVert M_{\mathrm{op}}\,x\rVert^2 .
@@ -47,7 +47,7 @@ import numpy as np
 import torch
 import torch.nn.functional as Fn
 
-# make `import pmt` work whether cwd is the repo root or notebooks/associative_recall/
+# make `import src` work whether cwd is the repo root or notebooks/associative_recall/
 
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"        # set PMT_NO_SHOW=1 to run headless
 
@@ -56,7 +56,7 @@ if not SHOW:
     matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from pmt import AssociativeMemory, make_mask
+from src import AssociativeMemory, make_mask
 
 torch.manual_seed(0)
 DT = torch.float64
@@ -386,7 +386,7 @@ fig_amb
 #   higher-dimensional manifold, so smaller cues start to blend sooner (§10).
 # - **Precision `pi`**: it scales `F` and the flow speed but not the fixed point — raising it just
 #   sharpens the descent (watch §6). The step guard is `dt·pi < 2/λ_max(S)`.
-# - **Noise**: add a small `sigma` term to the flow (in `pmt.recall.AssociativeMemory.recall`) to
+# - **Noise**: add a small `sigma` term to the flow (in `src.recall.AssociativeMemory.recall`) to
 #   see the state jitter within the flat manifold — the free on-manifold diffusion discussed in the
 #   single-network precision/curiosity analysis.
 # - **covpcn vs projector**: build with `W_kind="projector"` to see the ideal projector memory —

@@ -17,8 +17,8 @@ import seaborn as sns
 import torch
 
 
-from pmt import ModelConfig, SimConfig, build_system, simulate
-from pmt import experiments as ex
+from src import ModelConfig, SimConfig, build_system, simulate
+from src import experiments as ex
 
 sns.set_theme(context="notebook", style="whitegrid")
 

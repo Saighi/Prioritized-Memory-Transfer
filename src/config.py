@@ -79,7 +79,7 @@ class AdditiveSynthesisConfig:
     """Configuration for the additive three-network memory-synthesis model
     (`three_network_additive_memory_synthesis.md`): two frozen teachers `T1`, `T2` summed into
     `y = alpha1 x1 + alpha2 x2`, a common error `eps_Sigma = x_S - y` driving a plastic synthesis
-    network `S`. An ergonomic front-end; `pmt.additive.build_additive_synthesis` turns it into a
+    network `S`. An ergonomic front-end; `src.additive.build_additive_synthesis` turns it into a
     `MacroNetwork` (three `Population`s + one `AdditiveInterface`).
     """
     # --- sizes & teacher geometry (spec section 20) ---
@@ -141,7 +141,7 @@ class AdditiveSynthesisConfig:
 
 @dataclass
 class ContinualConfig:
-    """Configuration for the continual-learning loop (`pmt.continual`): a stream of memories is
+    """Configuration for the continual-learning loop (`src.continual`): a stream of memories is
     consolidated one at a time through a fast **Buffer**, a transient **Synthesis** workspace, and
     a slow **Storage** network, so Storage accumulates the whole stream without catastrophic
     forgetting. Each cycle: write the new memory into the buffer (one-shot covPCN), consolidate
@@ -204,5 +204,5 @@ class SimConfig:
     record_every: int = 100
     n_weight_snapshots: int = 6      # how many W_S heatmap snapshots to keep over the run
     pretrain_subset: Optional[Sequence[int]] = None  # pattern indices S already "knows"
-    bout_steps: int = 3000           # steps per replay bout in the interleaved merge (pmt.interleaved)
+    bout_steps: int = 3000           # steps per replay bout in the interleaved merge (src.interleaved)
     progress: bool = True

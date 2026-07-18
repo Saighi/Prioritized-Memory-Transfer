@@ -1,6 +1,6 @@
 """The two-population predictive-coding model (teacher T above student S in the hierarchy).
 
-This is now a thin instance of the composable engine in `pmt.macro`: `build_system` wires two
+This is now a thin instance of the composable engine in `src.macro`: `build_system` wires two
 `Population`s and one `AdditiveInterface`, and `TwoPopModel` is a backward-compatible **facade**
 over that `MacroNetwork` — every attribute (`W_T`, `W_S`, `x_T`, `x_S`, ...) and method
 (`eps_TS`, `F_S`, `novelty_operator`, `rate_*`, ...) reads or writes the underlying nodes/edge,

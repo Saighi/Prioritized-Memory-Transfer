@@ -1,6 +1,6 @@
 """Integrators and the simulation loop.
 
-The heavy lifting is the engine's `MacroNetwork.step` (see `pmt.macro`); `simulate` just resets
+The heavy lifting is the engine's `MacroNetwork.step` (see `src.macro`); `simulate` just resets
 state, drives the step, and records observables. Two integration modes (both handled by the
 engine):
   - "full":      explicit Euler on the fast perception nodes (you can watch them relax); noise on
@@ -30,7 +30,7 @@ def simulate(model, sim: SimConfig, info: Optional[Dict] = None) -> History:
 
     `model` is a `TwoPopModel` (two-population transfer) unless `info["kind"] == "additive"`, in
     which case it is a `MacroNetwork` and the additive recorder is used (see
-    `pmt.additive.simulate_additive`). The returned object is a `History` (two-pop) or an
+    `src.additive.simulate_additive`). The returned object is a `History` (two-pop) or an
     `AdditiveHistory` (additive).
     """
     if info is not None and info.get("kind") == "additive":

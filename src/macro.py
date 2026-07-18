@@ -1,17 +1,17 @@
-"""pmt.macro — a small "network of networks" engine (the LEGO layer).
+"""src.macro — a small "network of networks" engine (the LEGO layer).
 
 Compose predictive-coding **populations** (nodes) and **additive interfaces** (hyper-edges)
 into a `MacroNetwork`. Both shipped models are instances of this one engine:
 
-  - the two-population transfer model  = 2 populations (T, S) + 1 interface  (see `pmt.model`);
-  - the three-network additive model   = 3 populations (T1, T2, S) + 1 interface (`pmt.additive`).
+  - the two-population transfer model  = 2 populations (T, S) + 1 interface  (see `src.model`);
+  - the three-network additive model   = 3 populations (T1, T2, S) + 1 interface (`src.additive`).
 
 Nothing here is new mathematics — it is exactly the equations of
 `two_population_memory_transfer_model.md` / `three_network_additive_memory_synthesis.md`,
 factored so the *wiring* is data rather than code. That makes future architectures (chains,
 trees, several students, general coordinate maps `C_k`) drop in without touching the integrator.
 
-Conventions (inherited from `pmt.model`):
+Conventions (inherited from `src.model`):
   - Tied weights: each population owns ONE recurrent matrix `W`; the top-down path uses
     `M = I - W`, the bottom-up path uses `M^T` (the same matrix transposed).
   - Row-vector application so an optional leading batch dim broadcasts cleanly:
@@ -229,7 +229,7 @@ class MacroNetwork:
     part in, and steps the whole system with one integrator (`step`). A population that is the
     target of some interface is a *perception* node (it can be eliminated adiabatically); a
     population that only feeds interfaces is an *environment* node (it gets exploration noise and
-    the amplitude leash). This mirrors `pmt.dynamics` exactly for the two-population case.
+    the amplitude leash). This mirrors `src.dynamics` exactly for the two-population case.
     """
 
     def __init__(self, populations: List[Population], interfaces: List[AdditiveInterface]) -> None:

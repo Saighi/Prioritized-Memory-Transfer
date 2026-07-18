@@ -1,4 +1,4 @@
-"""The additive three-network memory-synthesis model, as an instance of the `pmt.macro` engine.
+"""The additive three-network memory-synthesis model, as an instance of the `src.macro` engine.
 
 Two frozen teachers `T1`, `T2` are summed into one combined prediction `y = alpha1 x1 + alpha2 x2`;
 a single common error `eps_Sigma = x_S - y` drives a plastic synthesis network `S`. In sleep the
@@ -9,7 +9,7 @@ novelty-homeostatic source rebalancing and clean self-termination. Full specific
 
 `build_additive_synthesis(cfg)` wires three `Population`s and one `AdditiveInterface` (or two
 single-source interfaces for the separate-error control, spec section 3 / ablation A) into a
-`MacroNetwork`; `simulate_additive` runs and records it (called via `pmt.simulate` when
+`MacroNetwork`; `simulate_additive` runs and records it (called via `src.simulate` when
 `info["kind"] == "additive"`).
 """
 from __future__ import annotations

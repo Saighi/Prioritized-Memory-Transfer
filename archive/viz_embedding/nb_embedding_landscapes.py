@@ -4,7 +4,7 @@
 # This notebook borrows a trick from a Hopfield energy-landscape project — **SMACOF-embed a cloud
 # of states into a reconstructed (non-isometric, intuitive) 2-D layout, then drape a scalar height
 # over it** — and applies it to *this* project's variational free energy. The network logic lives in
-# `pmt`; everything visual lives in the standalone `viz_embedding/` folder (`embedding.py` = pure
+# `src`; everything visual lives in the standalone `viz_embedding/` folder (`embedding.py` = pure
 # SMACOF/drape, `figures.py` = the six builders). Run cell-by-cell in VS Code with the **`pytorch`**
 # kernel, or headless as a script.
 #
@@ -23,10 +23,10 @@ import pathlib
 import numpy as np
 import torch
 
-# make `import pmt` and `import viz_embedding` work whatever the cwd / nesting depth
+# make `import src` and `import viz_embedding` work whatever the cwd / nesting depth
 
-from pmt import ModelConfig, SimConfig, build_system, simulate
-from pmt import diagnostics as dg
+from src import ModelConfig, SimConfig, build_system, simulate
+from src import diagnostics as dg
 from viz_embedding import embedding as emb
 from viz_embedding import figures as F
 

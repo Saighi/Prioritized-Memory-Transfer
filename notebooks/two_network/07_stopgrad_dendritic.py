@@ -18,7 +18,7 @@
 # pull (-π_TS ε_TS) are *interface* terms across the identity T↔S wiring — no recurrent Wᵀ —
 # so the stop-grad leaves the load-bearing transfer drive untouched.
 #
-# **What this notebook tests (confined; the core `pmt` package is not modified):**
+# **What this notebook tests (confined; the core `src` package is not modified):**
 #   1. *Full memory transfer still happens* under stop-grad: the novelty staircase falls
 #      to its floor, ‖M_S m_p‖→0 for every pattern, and W_S → W_T.
 #   2. *The crux risk*: S = MᵀM is PSD **by construction**; M is not. Does the student's
@@ -35,7 +35,7 @@ from collections import defaultdict
 
 import torch
 
-# make `import pmt` work whether cwd is the repo root or notebooks/
+# make `import src` work whether cwd is the repo root or notebooks/
 
 import matplotlib
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"   # set PMT_NO_SHOW=1 to run headless
@@ -45,8 +45,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-from pmt import ModelConfig, SimConfig, build_system
-from pmt.model import TwoPopModel
+from src import ModelConfig, SimConfig, build_system
+from src.model import TwoPopModel
 
 torch.manual_seed(0)
 print("torch", torch.__version__, "| cuda", torch.cuda.is_available())
@@ -134,7 +134,7 @@ def offmanifold_health(M_T, U_T, tol=1e-6):
 
 # %% [markdown]
 # ## A confined tracking loop
-# Mirrors `pmt.dynamics.simulate` (same Euler-Maruyama integration, same invariants:
+# Mirrors `src.dynamics.simulate` (same Euler-Maruyama integration, same invariants:
 # renormalize ‖x_T‖=r₀, zero diagonal of W_S), but records the asymmetry-aware novelty
 # spectrum and the M_S health trace. Works for both models via polymorphism.
 

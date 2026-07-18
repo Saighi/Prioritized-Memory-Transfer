@@ -22,8 +22,8 @@ import numpy as np
 import torch
 
 
-from pmt import ModelConfig, SimConfig, build_system, simulate
-from pmt import viz_eigenspace as ve
+from src import ModelConfig, SimConfig, build_system, simulate
+from src import viz_eigenspace as ve
 
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"   # set PMT_NO_SHOW=1 to run headless
 torch.manual_seed(0)

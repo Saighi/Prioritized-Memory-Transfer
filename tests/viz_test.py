@@ -5,9 +5,9 @@ Outputs PNGs + one HTML under tests/ for eyeballing.
 import matplotlib
 matplotlib.use("Agg")
 
-from pmt import ModelConfig, SimConfig, build_system, simulate
-from pmt import viz_static as vs
-from pmt import viz_interactive as vi
+from src import ModelConfig, SimConfig, build_system, simulate
+from src import viz_static as vs
+from src import viz_interactive as vi
 
 model, info = build_system(ModelConfig(d=40, P=5, seed=1))
 hist = simulate(
@@ -31,7 +31,7 @@ print("VIZ OK  static panels saved; plotly trace counts:",
       [len(f.data) for f in (f3, f4, f5)], "frames:", len(f5.frames))
 
 # --- eigenspace-geometry figures (tiny d=3 network: plane=manifold, line=off-manifold) ---
-from pmt import viz_eigenspace as ve
+from src import viz_eigenspace as ve
 
 _best = None
 for s in range(11):

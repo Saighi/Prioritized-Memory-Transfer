@@ -1,11 +1,11 @@
-"""Fast self-check of the pmt core: faithfulness invariants, gradient/circulation checks,
+"""Fast self-check of the src core: faithfulness invariants, gradient/circulation checks,
 and a short adiabatic run that should show the novelty spectrum falling. Run with:
     conda run -n pytorch python tests/smoke_test.py
 """
 import torch
 
-from pmt import ModelConfig, SimConfig, build_system, simulate
-from pmt import diagnostics as dg
+from src import ModelConfig, SimConfig, build_system, simulate
+from src import diagnostics as dg
 
 cfg = ModelConfig(d=40, P=5, seed=1)
 model, info = build_system(cfg)

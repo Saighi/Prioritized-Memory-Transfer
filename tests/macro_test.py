@@ -7,7 +7,7 @@ separate-error control's persistent residual (spec section 3); (D) overlap count
 """
 import torch
 
-from pmt import (AdditiveSynthesisConfig, ModelConfig, SimConfig, build_additive_synthesis,
+from src import (AdditiveSynthesisConfig, ModelConfig, SimConfig, build_additive_synthesis,
                  build_system, fwd, bwd, outer, simulate)
 
 torch.manual_seed(0)

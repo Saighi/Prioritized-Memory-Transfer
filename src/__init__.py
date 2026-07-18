@@ -1,20 +1,20 @@
-"""pmt — Prioritized Memory Transfer between predictive-coding associative memories.
+"""src — Prioritized Memory Transfer between predictive-coding associative memories.
 
-Two models, one engine. The composable "network of networks" engine lives in `pmt.macro`
+Two models, one engine. The composable "network of networks" engine lives in `src.macro`
 (`Population` + `AdditiveInterface` + `MacroNetwork`); both shipped models are instances of it:
 
     # two-population transfer (teacher T -> student S)
-    from pmt import ModelConfig, SimConfig, build_system, simulate
+    from src import ModelConfig, SimConfig, build_system, simulate
     model, info = build_system(ModelConfig())
     hist = simulate(model, SimConfig(), info)
 
     # additive three-network synthesis (frozen T1, T2 -> plastic S)
-    from pmt import AdditiveSynthesisConfig, SimConfig, build_additive_synthesis, simulate
+    from src import AdditiveSynthesisConfig, SimConfig, build_additive_synthesis, simulate
     macro, info = build_additive_synthesis(AdditiveSynthesisConfig())
     hist = simulate(macro, SimConfig(mode="adiabatic"), info)
 
-Visualization lives in `pmt.viz_static` / `pmt.viz_interactive` (two-population) and
-`pmt.viz_additive` (additive); they are imported lazily so the core has no plotting dependency.
+Visualization lives in `src.viz_static` / `src.viz_interactive` (two-population) and
+`src.viz_additive` (additive); they are imported lazily so the core has no plotting dependency.
 """
 from .config import AdditiveSynthesisConfig, ContinualConfig, ModelConfig, SimConfig
 from .macro import AdditiveInterface, MacroNetwork, Population

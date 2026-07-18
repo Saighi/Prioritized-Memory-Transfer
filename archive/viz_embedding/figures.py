@@ -1,6 +1,6 @@
 """The six SMACOF-landscape figures for the two-population predictive-coding model.
 
-This is where the model meets the embedding: it calls the live `pmt` network (via `model` / `info`
+This is where the model meets the embedding: it calls the live `src` network (via `model` / `info`
 / `hist` objects the notebook produces) for the operators S_T, N_S and the W_S weight snapshots,
 then hands scalar heights to the pure `embedding` toolkit to lay out and drape.
 

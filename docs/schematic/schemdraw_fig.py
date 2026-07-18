@@ -6,7 +6,7 @@ Consumes the shared spec.py (same nodes/edges/labels as every other backend) and
 renders schemdraw_<phase>.svg + .png. Labels use matplotlib mathtext, so the LaTeX
 bodies in spec.py (\\varepsilon, \\pi_{ST}, ...) render directly.
 
-This is the one that drops cleanly into the package as pmt/viz_schematic.py: it needs
+This is the one that drops cleanly into the package as src/viz_schematic.py: it needs
 no external toolchain and shows inline in the VS Code #%% interactive window.
 """
 from __future__ import annotations

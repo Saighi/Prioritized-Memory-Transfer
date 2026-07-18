@@ -63,7 +63,7 @@ class History:
 
 
 class AdditiveHistory:
-    """Recorded time series for the additive three-network model (`pmt.additive`).
+    """Recorded time series for the additive three-network model (`src.additive`).
 
     Tracks the spec's success observables (section 19): the transfer deficits `E_Sigma, E1, E2`,
     the restricted novelty spectrum on `U_Sigma`, the source-novelty contributions `J1, J2, J12`,
@@ -173,7 +173,7 @@ class AdditiveHistory:
 
 
 class ContinualHistory:
-    """Per-cycle record of the continual-learning loop (`pmt.continual`).
+    """Per-cycle record of the continual-learning loop (`src.continual`).
 
     After adding memory `k`, records how well **Storage** still nulls every memory seen so far
     (`storage_residual[k][i] = ||M_Z m_i||`, low = retained), the Storage subspace dimension, the
@@ -226,7 +226,7 @@ class ContinualHistory:
 
 
 class InterleavedHistory:
-    """Per-bout record of an interleaved merge (`pmt.interleaved`).
+    """Per-bout record of an interleaved merge (`src.interleaved`).
 
     Tracks the crosstalk-cancellation story: which teacher was rehearsed each bout, how well the
     plastic network nulls each teacher's memory (`resid1/resid2 = ||M_S U_k||_F`), and the deficit on

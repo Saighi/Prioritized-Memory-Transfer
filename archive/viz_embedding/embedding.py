@@ -6,7 +6,7 @@ then drape a scalar height over that layout and render it as a plotly Surface. T
 is deliberately NOT the true geometry — it just lays out states so that near-states sit near each
 other, which is enough to read plateaus, walls, and valleys off the draped scalar.
 
-No `torch`, no `pmt` — only numpy with scipy / scikit-learn / plotly lazy-imported inside the
+No `torch`, no `src` — only numpy with scipy / scikit-learn / plotly lazy-imported inside the
 functions that need them, so importing this module is cheap and dependency-light. Every figure
 helper returns a bare plotly object; the caller decides `.show()` / `.write_html()`.
 

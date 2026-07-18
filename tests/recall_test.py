@@ -1,4 +1,4 @@
-"""Self-check of the single-network associative-recall API (`pmt.recall`). Run with:
+"""Self-check of the single-network associative-recall API (`src.recall`). Run with:
     conda run -n pytorch python tests/recall_test.py
 
 Covers, on a small synthetic pattern set (no dataset download):
@@ -9,7 +9,7 @@ Covers, on a small synthetic pattern set (no dataset download):
 """
 import torch
 
-from pmt import AssociativeMemory, make_mask
+from src import AssociativeMemory, make_mask
 
 torch.manual_seed(0)
 DT = torch.float64

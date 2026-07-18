@@ -15,7 +15,7 @@ interleaved replay/rehearsal, the standard cure for catastrophic forgetting.
 
 Each bout is a single-teacher reversed-precision transfer (the same physics as the two-population
 model), so the synthesis only ever learns from a network's *replayed activity*, never from clamped
-input. `interleave_merge` is the reusable bout driver (also used by `pmt.continual`).
+input. `interleave_merge` is the reusable bout driver (also used by `src.continual`).
 """
 from __future__ import annotations
 

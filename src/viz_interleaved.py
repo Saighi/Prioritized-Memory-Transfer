@@ -1,4 +1,4 @@
-"""Visualization for the interleaved merge (`pmt.interleaved`).
+"""Visualization for the interleaved merge (`src.interleaved`).
 
   - crosstalk(hist):   THE plot — each teacher's residual over bouts, shaded by which teacher was
                        rehearsed, showing the decaying sawtooth (rehearse one -> its residual drops,

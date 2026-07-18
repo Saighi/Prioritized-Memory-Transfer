@@ -1,14 +1,14 @@
-"""pmt.recall — one linear associative memory, queried by clamping units.
+"""src.recall — one linear associative memory, queried by clamping units.
 
 The standalone, single-network counterpart to the transfer models. ONE predictive-coding
 population stores a set of pictures as memories in its flat memory manifold and completes a
 partial cue by minimizing its free energy.
 
-The physics (exactly the single-population special case of `pmt.macro`, no interfaces):
+The physics (exactly the single-population special case of `src.macro`, no interfaces):
 
   - Weights `W` are built from the stored pictures `M = [m_1 ... m_P]` (columns) with the same
     zero-diagonal covariance-PCN / projector construction the rest of the package uses
-    (`pmt.memory.build_W_T`). The mismatch operator is `M_op = I - W` and the self-surprise
+    (`src.memory.build_W_T`). The mismatch operator is `M_op = I - W` and the self-surprise
     operator is `S = M_op^T M_op`.
   - Every stored picture lies in the memory manifold `ker(M_op)` (its self prediction error is
     ~0), so the network's free energy

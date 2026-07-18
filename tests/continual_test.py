@@ -9,7 +9,7 @@ memories (the crosstalk is not cancelled).
 """
 import torch
 
-from pmt import ContinualConfig, ContinualLearner
+from src import ContinualConfig, ContinualLearner
 
 torch.manual_seed(0)
 TOL = 0.3

@@ -12,7 +12,7 @@ import numpy as np
 import torch
 
 
-from pmt import AdditiveSynthesisConfig, SimConfig, build_interleaved_synthesis, simulate_interleaved
+from src import AdditiveSynthesisConfig, SimConfig, build_interleaved_synthesis, simulate_interleaved
 
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"
 torch.manual_seed(0)

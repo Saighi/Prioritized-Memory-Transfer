@@ -1,7 +1,7 @@
 import numpy as np
 import torch
-from pmt import ModelConfig, build_system
-from pmt import experiments as ex
+from src import ModelConfig, build_system
+from src import experiments as ex
 
 base = ModelConfig(d=32, P=4, seed=2)
 _, info = build_system(base)

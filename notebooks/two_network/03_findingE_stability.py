@@ -24,8 +24,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-from pmt import ModelConfig, build_system
-from pmt import experiments as ex
+from src import ModelConfig, build_system
+from src import experiments as ex
 
 sns.set_theme(context="notebook", style="whitegrid")
 

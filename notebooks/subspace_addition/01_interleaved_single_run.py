@@ -20,9 +20,9 @@ import os
 import torch
 
 
-from pmt import (AdditiveSynthesisConfig, SimConfig, build_interleaved_synthesis,
+from src import (AdditiveSynthesisConfig, SimConfig, build_interleaved_synthesis,
                  simulate_interleaved, build_additive_synthesis, simulate_additive)
-from pmt import viz_interleaved as vi
+from src import viz_interleaved as vi
 
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"
 torch.manual_seed(0)

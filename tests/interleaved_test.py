@@ -1,4 +1,4 @@
-"""Self-check of the interleaved merge (`pmt.interleaved`). Run with:
+"""Self-check of the interleaved merge (`src.interleaved`). Run with:
     conda run -n pytorch --no-capture-output python tests/interleaved_test.py
 
 Core claim: for two CORRELATED SINGLE-memory teachers, interleaving builds the combined subspace
@@ -8,7 +8,7 @@ sawtooth is present for correlated memories and ~absent for orthogonal ones.
 import numpy as np
 import torch
 
-from pmt import (AdditiveSynthesisConfig, SimConfig, build_interleaved_synthesis,
+from src import (AdditiveSynthesisConfig, SimConfig, build_interleaved_synthesis,
                  simulate_interleaved, build_additive_synthesis, simulate_additive)
 
 torch.manual_seed(0)
