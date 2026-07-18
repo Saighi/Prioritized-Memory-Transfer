@@ -9,6 +9,21 @@ tests/_*.png
 tests/_*.html
 tests/_*.log
 
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+texput.log
+Paper/latex/*.log
+Paper/latex/*.out
+docs/schematic/tikz/*.log
+
+# archived heavy outputs
+archive/viz_embedding/html/
+
 # OS / editor
 .vscode/
 .DS_Store
