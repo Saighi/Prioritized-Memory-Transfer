@@ -1,15 +1,14 @@
 """Self-check of the interleaved merge (`src.interleaved`). Run with:
     conda run -n pytorch --no-capture-output python tests/interleaved_test.py
 
-Core claim: for two CORRELATED SINGLE-memory teachers, interleaving builds the combined subspace
-(both memories nulled) while the additive SUM collapses onto the blend and fails. The crosstalk
-sawtooth is present for correlated memories and ~absent for orthogonal ones.
+Core claim: for two CORRELATED SINGLE-memory teachers, interleaving builds the combined
+subspace (both memories nulled). The crosstalk sawtooth is present for correlated memories
+and ~absent for orthogonal ones.
 """
 import numpy as np
 import torch
 
-from src import (AdditiveSynthesisConfig, SimConfig, build_interleaved_synthesis,
-                 simulate_interleaved, build_additive_synthesis, simulate_additive)
+from src import InterleavedConfig, SimConfig, build_interleaved_synthesis, simulate_interleaved
 
 torch.manual_seed(0)
 
@@ -26,9 +25,9 @@ def crosstalk_gap(H):
 
 
 # --- two correlated single memories ---
-cfg = AdditiveSynthesisConfig(d=32, rank1=1, rank2=1, geometry="oblique", principal_angle=0.5,
-                              pi_S=0.5, pi_I=1.0, rho="auto", rho_safety=0.9, eta=0.05,
-                              sigma_xi1=0.1, sigma_xi2=0.1, seed=0)
+cfg = InterleavedConfig(d=32, rank1=1, rank2=1, geometry="oblique", principal_angle=0.5,
+                        pi_S=0.5, pi_I=1.0, rho="auto", rho_safety=0.9, eta=0.05,
+                        sigma_xi1=0.1, sigma_xi2=0.1, seed=0)
 sim = SimConfig(n_steps=72000, dt=0.5, mode="adiabatic", bout_steps=3000, progress=False)
 
 macro, info = build_interleaved_synthesis(cfg)
@@ -39,19 +38,12 @@ print(f"  interleaved: union deficit {Hi['union_deficit'][0]:.3f} -> {Hi['union_
 assert info["r_Sigma"] == 2, "two independent memories should give r_Sigma=2"
 assert Hi["union_deficit"][-1] < 0.1, "interleaving should null both correlated memories"
 
-# --- the additive SUM fails on the identical case ---
-amacro, ainfo = build_additive_synthesis(cfg)
-Ha = simulate_additive(amacro, SimConfig(n_steps=72000, dt=0.5, mode="adiabatic",
-                                         record_every=3000, progress=False), ainfo).to_numpy()
-print(f"  additive sum: E_Sigma {Ha['E_Sigma'][0]:.3f} -> {Ha['E_Sigma'][-1]:.3f} (collapses to blend)")
-assert Ha["E_Sigma"][-1] > 5 * Hi["union_deficit"][-1], "the sum should fail where interleaving succeeds"
-
 # --- sawtooth present for correlated, ~absent for orthogonal ---
 gap_corr = crosstalk_gap(Hi)
 macro_o, info_o = build_interleaved_synthesis(
-    AdditiveSynthesisConfig(d=32, rank1=1, rank2=1, geometry="orthogonal",
-                            pi_S=0.5, pi_I=1.0, rho="auto", rho_safety=0.9, eta=0.05,
-                            sigma_xi1=0.1, sigma_xi2=0.1, seed=0))
+    InterleavedConfig(d=32, rank1=1, rank2=1, geometry="orthogonal",
+                      pi_S=0.5, pi_I=1.0, rho="auto", rho_safety=0.9, eta=0.05,
+                      sigma_xi1=0.1, sigma_xi2=0.1, seed=0))
 Ho = simulate_interleaved(macro_o, sim, info_o).to_numpy()
 gap_orth = crosstalk_gap(Ho)
 print(f"  crosstalk gap: correlated={gap_corr:.3f}  orthogonal={gap_orth:.3f}")

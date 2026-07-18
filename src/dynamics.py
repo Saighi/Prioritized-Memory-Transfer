@@ -8,8 +8,8 @@ engine):
   - "adiabatic": replace each perception node by its exact steady state each step (infinite
                  timescale separation). Faster and matches the novelty-operator theory cleanly.
 
-The sleep/wake regime is read off the sign of the interface's signed precision (`pi_ST` for the
-two-population model, `rho` for the additive model): < 0 = sleep/replay = the transfer regime.
+The sleep/wake regime is read off the sign of the interface's signed precision (`pi_ST` in the
+two-population model, `rho` in the interleaved/continual models): < 0 = sleep/replay = transfer.
 
 Invariants enforced every step by the engine: `||x|| = r` on leashed nodes and `diag(W) = 0` on
 plastic nodes.
@@ -25,22 +25,8 @@ from .history import History
 from .model import TwoPopModel
 
 
-def simulate(model, sim: SimConfig, info: Optional[Dict] = None) -> History:
-    """Run a transfer simulation and record observables.
-
-    `model` is a `TwoPopModel` (two-population transfer) unless `info["kind"] == "additive"`, in
-    which case it is a `MacroNetwork` and the additive recorder is used (see
-    `src.additive.simulate_additive`). The returned object is a `History` (two-pop) or an
-    `AdditiveHistory` (additive).
-    """
-    if info is not None and info.get("kind") == "additive":
-        from .additive import simulate_additive
-        return simulate_additive(model, sim, info)
-
-    return _simulate_two_pop(model, sim, info)
-
-
-def _simulate_two_pop(model: TwoPopModel, sim: SimConfig, info: Optional[Dict]) -> History:
+def simulate(model: TwoPopModel, sim: SimConfig, info: Optional[Dict] = None) -> History:
+    """Run a two-population transfer simulation and record observables into a `History`."""
     cfg = model.cfg
     gen = torch.Generator(device=model.device).manual_seed(cfg.seed + 12345)
 

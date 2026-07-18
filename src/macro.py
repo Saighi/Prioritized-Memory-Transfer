@@ -1,15 +1,16 @@
 """src.macro — a small "network of networks" engine (the LEGO layer).
 
-Compose predictive-coding **populations** (nodes) and **additive interfaces** (hyper-edges)
-into a `MacroNetwork`. Both shipped models are instances of this one engine:
+Compose predictive-coding **populations** (nodes) and **coupling interfaces** (edges)
+into a `MacroNetwork`. Every shipped model is an instance of this one engine:
 
-  - the two-population transfer model  = 2 populations (T, S) + 1 interface  (see `src.model`);
-  - the three-network additive model   = 3 populations (T1, T2, S) + 1 interface (`src.additive`).
+  - two-population transfer     = 2 populations (T, S) + 1 interface  (`src.model`);
+  - interleaved subspace merge  = 3 populations (T1, T2, S) + 2 toggled interfaces
+                                  (`src.interleaved`, reused by `src.continual`).
 
 Nothing here is new mathematics — it is exactly the equations of
-`two_population_memory_transfer_model.md` / `three_network_additive_memory_synthesis.md`,
-factored so the *wiring* is data rather than code. That makes future architectures (chains,
-trees, several students, general coordinate maps `C_k`) drop in without touching the integrator.
+`two_population_memory_transfer_model.md`, factored so the *wiring* is data rather than
+code. Future architectures (chains, trees, several students, general coordinate maps
+`C_k`) drop in without touching the integrator.
 
 Conventions (inherited from `src.model`):
   - Tied weights: each population owns ONE recurrent matrix `W`; the top-down path uses
@@ -173,8 +174,8 @@ class Population:
 
 # ------------------------------------------------------------------------- hyper-edge
 @dataclass
-class AdditiveInterface:
-    """One additive prediction/error hyper-edge.
+class CouplingInterface:
+    """One coupling prediction/error edge (supports one or several summed sources).
 
     A set of `sources` is combined into a single prediction `y = sum_k alpha_k C_k x_k` and
     compared with the `target` state, giving the common error `eps = x_target - y`. Optional
@@ -205,7 +206,7 @@ class AdditiveInterface:
         return e if Ck is None else e @ Ck
 
     def y(self, pops: Dict[str, Population]) -> torch.Tensor:
-        """Combined additive prediction y = sum_k alpha_k C_k x_k."""
+        """Combined prediction y = sum_k alpha_k C_k x_k."""
         acc = None
         for k, s in enumerate(self.sources):
             term = self.alpha[k] * self._map_in(k, pops[s].x)
@@ -223,7 +224,7 @@ class AdditiveInterface:
 
 # --------------------------------------------------------------------------- the graph
 class MacroNetwork:
-    """A graph of `Population` nodes wired by `AdditiveInterface` hyper-edges.
+    """A graph of `Population` nodes wired by `CouplingInterface` hyper-edges.
 
     Assembles each population's state rate from its own self term plus every interface it takes
     part in, and steps the whole system with one integrator (`step`). A population that is the
@@ -232,9 +233,9 @@ class MacroNetwork:
     the amplitude leash). This mirrors `src.dynamics` exactly for the two-population case.
     """
 
-    def __init__(self, populations: List[Population], interfaces: List[AdditiveInterface]) -> None:
+    def __init__(self, populations: List[Population], interfaces: List[CouplingInterface]) -> None:
         self.populations: Dict[str, Population] = {p.name: p for p in populations}
-        self.interfaces: List[AdditiveInterface] = list(interfaces)
+        self.interfaces: List[CouplingInterface] = list(interfaces)
         ref = populations[0]
         self.d = ref.d
         self.dtype = ref.dtype
@@ -277,7 +278,7 @@ class MacroNetwork:
 
             (pi_S S_S + (sum_i pi_Ii) I) x* = sum_i pi_Ii y_i
 
-        For a single additive interface this is x* = pi_I (pi_I I + pi_S S_S)^-1 y (spec 8);
+        For a single interface this is x* = pi_I (pi_I I + pi_S S_S)^-1 y;
         summing over interfaces also covers the separate-error control (two single-source edges).
         """
         p = self.populations[name]

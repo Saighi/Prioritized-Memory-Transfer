@@ -1,7 +1,7 @@
 """The two-population predictive-coding model (teacher T above student S in the hierarchy).
 
 This is now a thin instance of the composable engine in `src.macro`: `build_system` wires two
-`Population`s and one `AdditiveInterface`, and `TwoPopModel` is a backward-compatible **facade**
+`Population`s and one `CouplingInterface`, and `TwoPopModel` is a backward-compatible **facade**
 over that `MacroNetwork` — every attribute (`W_T`, `W_S`, `x_T`, `x_S`, ...) and method
 (`eps_TS`, `F_S`, `novelty_operator`, `rate_*`, ...) reads or writes the underlying nodes/edge,
 so the equations and the public API are unchanged.
@@ -12,7 +12,7 @@ Tied-weight convention (architecture invariant):
   `M^T` — the SAME matrix transposed, never an independent tensor. The T<->S interface is
   hard-wired identity both ways, so the single shared signal is the interface error
   `eps_TS = x_S - x_T` (it sits at the lower / student level: T supplies the top-down
-  prediction, S carries the residual). In engine terms it is the additive interface
+  prediction, S carries the residual). In engine terms it is the coupling interface
   `y = 1 * x_T`, `eps = x_S - y`, with target-side precision `pi_TS` and signed source-side
   precision `pi_ST`.
 
@@ -37,7 +37,7 @@ import torch
 
 from .config import ModelConfig
 from .macro import (  # noqa: F401 (re-export)
-    AdditiveInterface,
+    CouplingInterface,
     MacroNetwork,
     Population,
     bwd,
@@ -49,7 +49,7 @@ from .memory import build_W_T, make_patterns, zero_diag
 
 
 class TwoPopModel:
-    """Facade over a 2-node `MacroNetwork` (populations "T", "S" + one additive interface).
+    """Facade over a 2-node `MacroNetwork` (populations "T", "S" + one coupling interface).
 
     Exposes the historical two-population surface — states, errors, energies, the novelty
     operator, and the three instantaneous rates (dx_T/dt, dx_S/dt, dW_S/dt) — by delegating to
@@ -86,7 +86,7 @@ class TwoPopModel:
                        sigma_xi=self.sigma_xi, r=self.r0)
         S = Population("S", torch.zeros_like(W_T), self.pi_S, self.tau_S,
                        plastic=True, eta=self.eta)
-        itf = AdditiveInterface(target="S", sources=["T"], alpha=[1.0],
+        itf = CouplingInterface(target="S", sources=["T"], alpha=[1.0],
                                 pi_I=self.pi_TS, rho=self.pi_ST)
         self.macro = MacroNetwork([T, S], [itf])
 
@@ -100,7 +100,7 @@ class TwoPopModel:
         return self.macro.populations["S"]
 
     @property
-    def _itf(self) -> AdditiveInterface:
+    def _itf(self) -> CouplingInterface:
         return self.macro.interfaces[0]
 
     # ----- weights / states as views on the engine -----

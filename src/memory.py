@@ -48,7 +48,7 @@ def make_patterns(cfg: ModelConfig) -> torch.Tensor:
 def make_teacher_subspaces(cfg) -> tuple:
     """Two teacher pattern matrices `(M1, M2)` with unit-norm columns and *controlled geometry*.
 
-    Used by the additive three-network model (`src.additive`) to place the two frozen memory
+    Used by the interleaved model (`src.interleaved`) to place the two frozen memory
     subspaces `U1 = span(M1)`, `U2 = span(M2)` in a prescribed relationship (spec section 20):
 
       - "orthogonal": `U1 ⟂ U2` (disjoint blocks of a shared random orthonormal frame);

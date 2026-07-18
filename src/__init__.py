@@ -1,50 +1,52 @@
-"""src — Prioritized Memory Transfer between predictive-coding associative memories.
+"""Prioritized Memory Transfer between predictive-coding associative memories.
 
-Two models, one engine. The composable "network of networks" engine lives in `src.macro`
-(`Population` + `AdditiveInterface` + `MacroNetwork`); both shipped models are instances of it:
+Three models, one engine. The composable "network of networks" engine lives in `src.macro`
+(`Population` + `CouplingInterface` + `MacroNetwork`); every model is an instance of it,
+and networks always communicate two at a time:
 
     # two-population transfer (teacher T -> student S)
     from src import ModelConfig, SimConfig, build_system, simulate
     model, info = build_system(ModelConfig())
     hist = simulate(model, SimConfig(), info)
 
-    # additive three-network synthesis (frozen T1, T2 -> plastic S)
-    from src import AdditiveSynthesisConfig, SimConfig, build_additive_synthesis, simulate
-    macro, info = build_additive_synthesis(AdditiveSynthesisConfig())
-    hist = simulate(macro, SimConfig(mode="adiabatic"), info)
+    # interleaved subspace addition (frozen T1, T2 -> plastic S, one teacher per bout)
+    from src import InterleavedConfig, SimConfig, build_interleaved_synthesis, simulate_interleaved
+    macro, info = build_interleaved_synthesis(InterleavedConfig())
+    hist = simulate_interleaved(macro, SimConfig(mode="adiabatic"), info)
 
-Visualization lives in `src.viz_static` / `src.viz_interactive` (two-population) and
-`src.viz_additive` (additive); they are imported lazily so the core has no plotting dependency.
+    # continual learning (buffer -> synthesis -> storage over a memory stream)
+    from src import ContinualConfig, ContinualLearner
+    hist = ContinualLearner(ContinualConfig()).run()
+
+Visualization lives in `src.viz_static` / `src.viz_interactive` / `src.viz_eigenspace`
+(two-population) and `src.viz_interleaved` / `src.viz_continual`; all are imported lazily
+so the core has no plotting dependency.
 """
-from .config import AdditiveSynthesisConfig, ContinualConfig, ModelConfig, SimConfig
-from .macro import AdditiveInterface, MacroNetwork, Population
+from .config import ContinualConfig, InterleavedConfig, ModelConfig, SimConfig
+from .macro import CouplingInterface, MacroNetwork, Population
 from .model import TwoPopModel, build_system, fwd, bwd, outer
-from .additive import build_additive_synthesis, simulate_additive
 from .interleaved import build_interleaved_synthesis, simulate_interleaved, interleave_merge
 from .continual import ContinualLearner
 from .memory import make_patterns, make_teacher_subspaces, build_W_T, zero_diag, memory_residual
 from .recall import AssociativeMemory, RecallTrace, make_mask
 from .dynamics import simulate
-from .history import AdditiveHistory, ContinualHistory, History, InterleavedHistory
+from .history import ContinualHistory, History, InterleavedHistory
 from . import diagnostics
 
 __all__ = [
     # configs
     "ModelConfig",
-    "AdditiveSynthesisConfig",
+    "InterleavedConfig",
     "ContinualConfig",
     "SimConfig",
     # engine (the LEGO layer)
     "Population",
-    "AdditiveInterface",
+    "CouplingInterface",
     "MacroNetwork",
     # two-population model
     "TwoPopModel",
     "build_system",
-    # additive three-network model
-    "build_additive_synthesis",
-    "simulate_additive",
-    # interleaved merge
+    # interleaved subspace addition
     "build_interleaved_synthesis",
     "simulate_interleaved",
     "interleave_merge",
@@ -53,7 +55,6 @@ __all__ = [
     # dynamics / recording
     "simulate",
     "History",
-    "AdditiveHistory",
     "ContinualHistory",
     "InterleavedHistory",
     "diagnostics",

@@ -29,7 +29,7 @@ import torch
 from .config import ContinualConfig, SimConfig
 from .history import ContinualHistory, InterleavedHistory
 from .interleaved import interleave_merge
-from .macro import AdditiveInterface, MacroNetwork, Population, resolve_signed_precision
+from .macro import CouplingInterface, MacroNetwork, Population, resolve_signed_precision
 from .memory import build_W_T
 
 
@@ -113,10 +113,10 @@ class ContinualLearner:
         cfg = self.cfg
         return Population(name, W_init.clone(), cfg.pi_S, cfg.tau_S, plastic=True, eta=cfg.eta)
 
-    def _single_interface(self, target: str, source: Population) -> AdditiveInterface:
+    def _single_interface(self, target: str, source: Population) -> CouplingInterface:
         """An inactive single-source interface `target <- source` with rho resolved from the source's
         live weights (the interleaving driver switches it on for its bout)."""
-        return AdditiveInterface(target=target, sources=[source.name], alpha=[1.0],
+        return CouplingInterface(target=target, sources=[source.name], alpha=[1.0],
                                  pi_I=self.cfg.pi_I, rho=self._resolve_rho([source], [1.0]),
                                  active=False)
 

@@ -12,14 +12,14 @@ import numpy as np
 import torch
 
 
-from src import AdditiveSynthesisConfig, SimConfig, build_interleaved_synthesis, simulate_interleaved
+from src import InterleavedConfig, SimConfig, build_interleaved_synthesis, simulate_interleaved
 
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"
 torch.manual_seed(0)
 
 
 def run(n_steps=90000, bout_steps=3000, **cfg_kw):
-    cfg = AdditiveSynthesisConfig(**{**dict(d=32, pi_S=0.5, pi_I=1.0, rho="auto", rho_safety=0.9,
+    cfg = InterleavedConfig(**{**dict(d=32, pi_S=0.5, pi_I=1.0, rho="auto", rho_safety=0.9,
                                             eta=0.05, sigma_xi1=0.1, sigma_xi2=0.1, seed=0), **cfg_kw})
     macro, info = build_interleaved_synthesis(cfg)
     H = simulate_interleaved(macro, SimConfig(n_steps=n_steps, dt=0.5, mode="adiabatic",

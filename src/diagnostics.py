@@ -98,11 +98,11 @@ def surprise_identity_error(model: TwoPopModel, n_trials: int = 5, seed: int = 0
     return err
 
 
-# ----------------------------------------------------- additive three-network diagnostics
+# --------------------------------------------------------------- subspace diagnostics
 def subspace_sum_basis(U1: torch.Tensor, U2: torch.Tensor, tol: float = 1e-6):
     """Orthonormal basis `U_Sigma` of the subspace sum `U1 + U2 = span(U1 ∪ U2)` plus the
-    intersection dimension and `r_Sigma = dim(U1 + U2)` (spec section 13). `U1`, `U2` are assumed
-    to have orthonormal columns (e.g. from `manifold_basis`)."""
+    intersection dimension and `r_Sigma = dim(U1 + U2)`. `U1`, `U2` are assumed to have
+    orthonormal columns (e.g. from `manifold_basis`)."""
     C = torch.cat([U1, U2], dim=1)
     Uc, S, _ = torch.linalg.svd(C, full_matrices=False)
     keep = S > tol * S.max() if S.numel() else S
@@ -112,40 +112,10 @@ def subspace_sum_basis(U1: torch.Tensor, U2: torch.Tensor, tol: float = 1e-6):
     return U_sigma, overlap, r_sigma
 
 
-def additive_novelty_operator(S_S: torch.Tensor, pi_I: float, pi_S: float) -> torch.Tensor:
-    """Synthesis novelty operator `N_S = pi_S S_S (pi_I I + pi_S S_S)^-1` (spec section 8). Uses
-    the interface precision `pi_I` in place of the two-population `pi_TS`; `eps_Sigma* = -N_S y`."""
-    d = S_S.shape[0]
-    I = torch.eye(d, dtype=S_S.dtype, device=S_S.device)
-    A = pi_I * I + pi_S * S_S
-    return pi_S * S_S @ torch.linalg.inv(A)
-
-
 def transfer_deficit(M_S: torch.Tensor, U: torch.Tensor) -> float:
-    """`||M_S U||_F^2` — how far the synthesis network is from nulling every direction of `U`
-    (spec section 19.1). Zero iff `S` has learned the whole subspace `span(U)`."""
+    """`||M_S U||_F^2` — how far a plastic network is from nulling every direction of `U`.
+    Zero iff it has learned the whole subspace `span(U)`."""
     return float((M_S @ U).pow(2).sum())
-
-
-def restricted_novelty_on(N_S: torch.Tensor, U: torch.Tensor) -> torch.Tensor:
-    """Eigenvalues (descending) of `U^T N_S U` — the novelty still present along the subspace
-    `span(U)` (spec section 19.2)."""
-    R = U.transpose(-2, -1) @ N_S @ U
-    return torch.linalg.eigvalsh(R).flip(-1)
-
-
-def manifold_leakage(x: torch.Tensor, U: torch.Tensor) -> float:
-    """`||Q x||^2 = ||x - U U^T x||^2` — how much of a teacher state has leaked off its own
-    memory subspace `span(U)` (spec section 19.7)."""
-    proj = U @ (U.transpose(-2, -1) @ x)
-    return float((x - proj).pow(2).sum())
-
-
-def mixture_min_eig(Sigma_y: torch.Tensor, U_Sigma: torch.Tensor) -> float:
-    """`lambda_min(U_Sigma^T Sigma_y U_Sigma)` — the persistent-excitation margin: how strongly the
-    additive teacher mixtures explore the full target subspace (spec section 19.5)."""
-    R = U_Sigma.transpose(-2, -1) @ Sigma_y @ U_Sigma
-    return float(torch.linalg.eigvalsh(R).min())
 
 
 def circulation(model: TwoPopModel, seed: int = 0) -> float:

@@ -20,7 +20,7 @@ import os
 import torch
 
 
-from src import (AdditiveSynthesisConfig, SimConfig, build_interleaved_synthesis,
+from src import (InterleavedConfig, SimConfig, build_interleaved_synthesis,
                  simulate_interleaved, build_additive_synthesis, simulate_additive)
 from src import viz_interleaved as vi
 
@@ -29,7 +29,7 @@ torch.manual_seed(0)
 print("torch", torch.__version__, "| cuda", torch.cuda.is_available())
 
 # %% configure: two CORRELATED SINGLE memories (the case the additive sum fails on)
-cfg = AdditiveSynthesisConfig(
+cfg = InterleavedConfig(
     d=32,
     rank1=1, rank2=1, geometry="oblique", principal_angle=0.5,   # two memories at ~60°, correlated
     pi_S=0.5, pi_I=1.0, rho="auto", rho_safety=0.9, eta=0.05,

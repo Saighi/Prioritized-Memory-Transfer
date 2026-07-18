@@ -75,14 +75,13 @@ class ModelConfig:
 
 
 @dataclass
-class AdditiveSynthesisConfig:
-    """Configuration for the additive three-network memory-synthesis model
-    (`three_network_additive_memory_synthesis.md`): two frozen teachers `T1`, `T2` summed into
-    `y = alpha1 x1 + alpha2 x2`, a common error `eps_Sigma = x_S - y` driving a plastic synthesis
-    network `S`. An ergonomic front-end; `src.additive.build_additive_synthesis` turns it into a
-    `MacroNetwork` (three `Population`s + one `AdditiveInterface`).
+class InterleavedConfig:
+    """Configuration for interleaved subspace addition (`src.interleaved`): two frozen teachers
+    `T1`, `T2` merged into a plastic synthesis network `S` by rehearsing ONE teacher per replay
+    bout. Each bout is a plain two-network reversed-precision transfer, so `S` learns the
+    subspace sum `U1 + U2` without any teacher cross-term.
     """
-    # --- sizes & teacher geometry (spec section 20) ---
+    # --- sizes & teacher geometry ---
     d: int = 64
     rank1: int = 4                   # dim U1 = ker M_T1
     rank2: int = 4                   # dim U2 = ker M_T2
@@ -90,18 +89,14 @@ class AdditiveSynthesisConfig:
     overlap: int = 2                 # dim(U1 ∩ U2) when geometry == "shared"
     principal_angle: float = 0.35    # principal angle (rad) when geometry == "oblique"
 
-    # --- precisions (guards: pi_I > pi_S ; |rho| below the structure guard, spec section 17) ---
+    # --- precisions (guards: pi_I > pi_S ; |rho| below the structure guard) ---
     pi_T1: float = 1.0               # teacher-1 self-precision
     pi_T2: float = 1.0               # teacher-2 self-precision
     pi_S: float = 0.5                # synthesis self-precision
     pi_I: float = 1.0                # synthesis interface precision (target side, positive)
     rho: Union[float, str] = "auto"  # SIGNED teacher-side precision: <0 sleep/replay, >0 wake.
     rho_safety: float = 0.5          # fraction of the structure guard used when rho == "auto"
-    exact_saddle: bool = False       # if True, rho = -pi_I (spec section 7 zero-sum condition)
-
-    # --- additive coupling ---
-    alpha1: float = 1.0
-    alpha2: float = 1.0
+    exact_saddle: bool = False       # if True, rho = -pi_I (the zero-sum condition)
 
     # --- time constants & learning rate (tau_S << tau_T1,tau_T2 << 1/eta) ---
     tau_T1: float = 10.0
@@ -112,14 +107,10 @@ class AdditiveSynthesisConfig:
     # --- noise & amplitude leash ---
     sigma_xi1: float = 0.05          # teacher-1 exploration noise std
     sigma_xi2: float = 0.05          # teacher-2 exploration noise std
-    correlated_noise: bool = False   # if True, teachers share one noise draw (ablation C)
-    r1: float = 1.0                  # fixed norm for ||x1|| (when norm_constraint)
+    r1: float = 1.0                  # fixed norm for ||x1||
     r2: float = 1.0                  # fixed norm for ||x2||
-    norm_constraint: bool = True     # if False, drop the renorm leash (ablation F)
 
-    # --- wiring & construction ---
-    separate_errors: bool = False    # if True, two single-source interfaces (ablation A / section 3)
-    init_on_manifold: bool = True    # initialize each teacher inside its own memory subspace
+    # --- construction ---
     W_T_kind: str = "covpcn"         # frozen-teacher construction ("covpcn" | "projector")
 
     # --- bookkeeping ---

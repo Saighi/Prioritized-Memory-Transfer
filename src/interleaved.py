@@ -1,21 +1,18 @@
-"""Interleaved merge: build the combined memory subspace by rehearsing ONE teacher at a time.
+"""Interleaved subspace addition: merge two teachers' memory subspaces into one plastic
+network by rehearsing ONE teacher at a time.
 
-The additive model sums the teachers (`y = alpha1 x1 + alpha2 x2`) and learns from the sum. That
-needs each teacher to *roam* (>= 2 memories); a single-memory teacher is pinned by the reversed-
-precision feedback, the sum collapses onto the rank-1 blend `(alpha1 m1 + alpha2 m2)` (the cross-term
-`alpha1 alpha2 E[x1 x2^T]` corrupts the covariance), and the merge fails.
+The plastic synthesis `S` is coupled to exactly one teacher per replay bout (its interface is
+`active`, the other is not), alternating bouts. The time-averaged covariance it learns from is
+`Sigma = p1 Sigma1 + p2 Sigma2` — no teacher cross-term, by construction — so it is full rank
+on `U_Sigma = U1 + U2` even for single-memory, correlated teachers. The back-and-forth is the
+co-excitation that lets the covariance inversion cancel crosstalk: rehearse T1 -> nulls `m1`,
+nudges `m2`; rehearse T2 -> nulls `m2`, nudges `m1`; repeat -> both nulled. This is interleaved
+replay/rehearsal, the standard cure for catastrophic forgetting.
 
-Interleaving never forms the sum. The plastic synthesis is coupled to exactly ONE teacher per replay
-bout (its interface is `active`, the other is not), alternating bouts. The time-averaged covariance
-it learns from is therefore `Sigma = p1 Sigma1 + p2 Sigma2` — **no cross-term, by construction** — so
-it is full rank on `U_Sigma = U1 + U2` even for single-memory, correlated teachers. The back-and-forth
-is the persistent co-excitation that lets the covariance inversion cancel the crosstalk: rehearse T1
--> nulls `m1`, nudges `m2`; rehearse T2 -> nulls `m2`, nudges `m1`; repeat -> both nulled. This is
-interleaved replay/rehearsal, the standard cure for catastrophic forgetting.
-
-Each bout is a single-teacher reversed-precision transfer (the same physics as the two-population
-model), so the synthesis only ever learns from a network's *replayed activity*, never from clamped
-input. `interleave_merge` is the reusable bout driver (also used by `src.continual`).
+Each bout is a single-teacher reversed-precision transfer (the same physics as the
+two-population model in `src.model`), so the synthesis only ever learns from a network's
+*replayed activity*, never from clamped input. `interleave_merge` is the reusable bout driver
+(also used by `src.continual`).
 """
 from __future__ import annotations
 
@@ -23,13 +20,13 @@ from typing import Callable, Dict, List, Optional
 
 import torch
 
-from .config import AdditiveSynthesisConfig, SimConfig
+from .config import InterleavedConfig, SimConfig
 from .history import InterleavedHistory
-from .macro import AdditiveInterface, MacroNetwork, Population, resolve_signed_precision, seed_state
+from .macro import CouplingInterface, MacroNetwork, Population, resolve_signed_precision, seed_state
 from .memory import build_W_T, make_teacher_subspaces
 
 
-def build_interleaved_synthesis(cfg: AdditiveSynthesisConfig):
+def build_interleaved_synthesis(cfg: InterleavedConfig):
     """Two frozen teachers `T1, T2` + a plastic synthesis `S`, wired with TWO single-source
     interfaces `S<-T1`, `S<-T2` (both `active=False`; the driver toggles one on per bout). Returns
     `(macro, info)` with the memory bases `U1, U2, U_Sigma`, the target rank `r_Sigma`, per-teacher
@@ -57,9 +54,9 @@ def build_interleaved_synthesis(cfg: AdditiveSynthesisConfig):
     S = Population("S", torch.zeros_like(W1), cfg.pi_S, cfg.tau_S, plastic=True, eta=cfg.eta)
 
     interfaces = [
-        AdditiveInterface(target="S", sources=["T1"], alpha=[1.0], pi_I=cfg.pi_I,
+        CouplingInterface(target="S", sources=["T1"], alpha=[1.0], pi_I=cfg.pi_I,
                           rho=_rho(cfg.pi_T1, sigma1_min), active=False),
-        AdditiveInterface(target="S", sources=["T2"], alpha=[1.0], pi_I=cfg.pi_I,
+        CouplingInterface(target="S", sources=["T2"], alpha=[1.0], pi_I=cfg.pi_I,
                           rho=_rho(cfg.pi_T2, sigma2_min), active=False),
     ]
     macro = MacroNetwork([T1, T2, S], interfaces)
@@ -97,7 +94,7 @@ def interleave_merge(
     `record(bout, active_index)` is called after each bout. Returns the learned `target` weight.
     """
     d = macro.d
-    itf_of: Dict[str, AdditiveInterface] = {}
+    itf_of: Dict[str, CouplingInterface] = {}
     for itf in macro.interfaces:
         for s in itf.sources:
             itf_of[s] = itf
@@ -120,7 +117,7 @@ def interleave_merge(
 
 def simulate_interleaved(macro: MacroNetwork, sim: SimConfig, info: Dict) -> InterleavedHistory:
     """Run the interleaved merge of `T1, T2 -> S` and record the crosstalk-cancellation trace."""
-    cfg: AdditiveSynthesisConfig = info["cfg"]
+    cfg: InterleavedConfig = info["cfg"]
     gen = torch.Generator(device=macro.device).manual_seed(cfg.seed + 12345)
     hist = InterleavedHistory(labels=tuple(info["order"]))
     U1, U2, U_Sigma = info["U1"], info["U2"], info["U_Sigma"]
