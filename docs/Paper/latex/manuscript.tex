@@ -124,9 +124,38 @@ zero-diagonal weight update is projected gradient descent on $F_S$.]}
 % diagonal is not a parameter, so learning is plain unconstrained descent on the
 % off-diagonal weights; full algebra in Materials and methods.
 
-\subsection{The novelty operator}
+\subsection{The student steers the teacher up the student's surprise}
+% Theorem 1. Two structural facts, no operator algebra:
+% (i) sign identity -- only the interface term of F_S contains x_T, so at ANY x_S
+%     grad_{x_T} F_S = pi_TS (x_T - x_S) = -pi_TS eps_TS; the model's push on the
+%     teacher is pi_ST eps_TS, so push = (|pi_ST|/pi_TS) grad_{x_T} F_S: teacher and
+%     student feel the SAME interface energy through opposite-signed precisions.
+% (ii) chain rule at the settled state -- x_S* is DEFINED by grad_{x_S} F_S = 0
+%     (unique: the stationarity system is linear with positive-definite matrix),
+%     so the chain-rule cross term vanishes identically and the partial gradient
+%     at x_S* IS the full gradient of F_S^eq(x_T) = F_S(x_S*(x_T), x_T)
+%     (= min_{x_S} F_S by strict convexity -- the variational reading, a remark
+%     not a proof step). Classical envelope argument; only the chain rule used.
+% No "teacher's surprise": F_T enters only through the self-pull.
+\begin{theorem}\label{thm:prioritized}
+\textit{[Fast student state, frozen student weights. Isolating the student's
+contribution to the teacher's sleep dynamics --- the push $u=\pi_{ST}\varepsilon_{TS}$
+--- the teacher performs exact gradient ascent on the student's settled variational
+free energy $F_S^{\mathrm{eq}}(x_T)\equiv\min_{x_S}F_S(x_S,x_T)$:
+$\tau_T\dot x_T|_{\mathrm{push}}=(|\pi_{ST}|/\pi_{TS})\,\nabla_{x_T}F_S^{\mathrm{eq}}(x_T)$
+--- at every point, with no approximation, hence locally steepest ascent of the
+student's surprise. Caveats: local ascent (not the global summit); the push rescales
+but does not seed an empty direction (noise seeds it).]}
+\end{theorem}
+
+\subsection{The landscape: the novelty operator}
 % Lemma 1: fast-student elimination -> N_S; annihilates learned directions.
-% Complement identity: x_S* = (I - N_S) x_T (student settles on what it can predict).
+% Proof is per-mode scalar (final_proofs.md §5): diagonalize S_S once, F_S
+% separates into d one-variable parabolas, minimize each -> s_k* = (1-n_k)c_k.
+% x_S* = (I - N_S) x_T: an attenuated copy (shrinkage, not a projector).
+% Not needed for Theorem 1 -- it describes the landscape the theorem climbs.
+% The per-mode teacher law (prioritization, c_k' ~ n_k c_k) follows directly from
+% the modes -- no landscape needed; Cor 1 is where the two readings provably meet.
 \begin{lemma}\label{lem:novelty}
 \textit{[Fast-student steady state gives $x_S^*=(I-N_S)x_T$, hence
 $\varepsilon_{TS}=-N_S x_T$, with $N_S=\pi_S S_S(\pi_{TS}I+\pi_S S_S)^{-1}$; $N_S$ is
@@ -134,46 +163,44 @@ symmetric PSD and $N_S u=0$ on learned directions.]}
 \end{lemma}
 
 \subsection{The surprise identity: the settled student's free energy is the novelty score}
-% Corollary 1. Bridges the two levels: novelty (weight-level operator N_S, eigenvalues
-% n_k) is the spectrum of surprise (state-level scalar F_S). Envelope argument or
-% direct computation (interface n^2 + self n(1-n) = n per direction).
+% Corollary 1 (of Lemma 1). Bridges the two levels: novelty (weight-level operator N_S,
+% eigenvalues n_k in [0,1)) is the spectrum of surprise (state-level scalar F_S).
+% Direct computation: interface n^2 + self n(1-n) = n per direction.
 \begin{corollary}\label{cor:surprise}
 \textit{[At the fast-student equilibrium,
-$F_S^{\mathrm{eq}}(x_T)\equiv\min_{x_S}F_S(x_S,x_T)=\tfrac{\pi_{TS}}{2}\,x_T^\top N_S\,x_T$,
-hence $\nabla_{x_T}F_S^{\mathrm{eq}}=\pi_{TS}N_S x_T$: the student's surprise about the
-teacher's state is the novelty-weighted energy of that state.]}
+$F_S^{\mathrm{eq}}(x_T)=\tfrac{\pi_{TS}}{2}\,x_T^\top N_S\,x_T$: the landscape
+Theorem~\ref{thm:prioritized} climbs is the novelty-weighted energy of the teacher's
+state --- a quadratic that is flat on learned directions and curved on novel ones.]}
 \end{corollary}
-
-\subsection{The student steers the teacher up the student's surprise}
-% Theorem 1. Fast student state (Lemma 1) + frozen weights, deterministic. No manifold.
-% No "teacher's surprise": the teacher's own surprise is F_T (self-pull); the push
-% climbs the STUDENT's surprise F_S^eq (Corollary 1).
-\begin{theorem}\label{thm:prioritized}
-\textit{[CORE: isolating the student's contribution (the push $u=|\pi_{ST}|N_S x_T$),
-the teacher's dynamics is exact gradient ascent on the student's settled variational
-free energy: $\tau_T\dot x_T|_{\mathrm{push}}=(|\pi_{ST}|/\pi_{TS})\nabla_{x_T}
-F_S^{\mathrm{eq}}(x_T)$ (Corollary~\ref{cor:surprise}) --- at every point, hence
-locally steepest ascent of the student's surprise. Consequences: (a) prioritization ---
-axis by axis, $\dot c_k=(|\pi_{ST}|/\tau_T)n_k c_k$: learned ($n_k=0$) frozen, novel
-amplified in proportion to novelty; (b) self-limiting --- the push on a direction dies
-as the student learns it ($|\pi_{ST}|n_k\le(|\pi_{ST}|\pi_S/\pi_{TS})\|M_S u_k\|^2$);
-(c) the full flow is $-\nabla F_T+(|\pi_{ST}|/\pi_{TS})\nabla F_S^{\mathrm{eq}}$: the
-teacher descends its own surprise while ascending the student's. Local ascent (not the
-global summit); the push rescales but does not seed an empty direction (noise seeds it).]}
-\end{theorem}
+% Remark (prioritization -- the paper's namesake). Gradient ascent on a PSD quadratic
+% decouples along the eigenvectors: in the student's frame, dc_k/dt =
+% (|pi_ST|/tau_T) n_k c_k. Learned axes (n_k = 0) exactly frozen; novel axes amplified
+% exponentially in proportion to novelty; among occupied axes the most novel dominates.
+% Self-limiting: n_k <= (pi_S/pi_TS)||M_S u_k||^2, so the push on a direction dies as
+% the student learns it -- the teacher climbs a landscape its own climbing flattens.
+\begin{remark}\label{rem:prioritized}
+\textit{[Axis by axis in the student's eigenframe, $\dot c_k=(|\pi_{ST}|/\tau_T)n_k
+c_k$: learned directions frozen, novel directions amplified in proportion to their
+novelty $n_k$; the push on each direction extinguishes as the student learns it.]}
+\end{remark}
 
 \subsection{Staying on the memory manifold}
-% Lemma 2: off-manifold normal stability; sets the precision-weighting regime.
-\begin{lemma}\label{lem:normal}
-\textit{[Under the conservative guard $|\pi_{ST}|<\pi_T\sigma_{\min}^2$ the
-off-manifold block is strictly contracting; caveat: not exact manifold
-invariance (cross-block leakage measured numerically).]}
-\end{lemma}
+% NO LEMMA HERE (cut 2026-07-20; archived in maths/additional_proofs_not_in_paper.md
+% -- do not reintroduce). Operating choice + measurement instead: |pi_ST| kept
+% well below pi_T (code default: half the stability threshold, pi_ST_safety=0.5);
+% containment verified numerically (manifold_leakage, terminal_occupancy).
+\textit{[We keep the reversed precision well below the teacher's self-precision
+(half the measured stability threshold throughout); the teacher's self-pull then
+dominates normal to the manifold, and we verify numerically that the teacher's
+off-manifold occupancy remains negligible during sleep. This sets the
+precision-weighting regime: strong enough to move the teacher along novel memory
+directions, weak enough that the self-pull wins off the manifold.]}
 
 \subsection{An exact free-energy saddle}
-% Proposition 3: exact saddle iff pi_ST = -pi_TS; active-inference-REMINISCENT.
-% Falls out of Theorem 1: the push is (|pi_ST|/pi_TS) grad F_S^eq, so a single
-% potential generates the teacher flow iff |pi_ST| = pi_TS (mobility matching).
+% Proposition 2: exact saddle iff pi_ST = -pi_TS; active-inference-REMINISCENT.
+% One line from Theorem 1: self-pull = -grad F_T, push = (|pi_ST|/pi_TS) grad F_S^eq,
+% so the single potential Phi = F_T - F_S^eq generates the teacher flow iff
+% |pi_ST| = pi_TS (mobility matching).
 \begin{proposition}\label{prop:saddle}
 \textit{[The physical functional $\Phi=F_T-F_S$ generates the sleep dynamics (on
 the teacher sphere, with the model's mobilities and projected $W_S$ ascent) iff
@@ -242,10 +269,13 @@ vs.\ a buffer-only control that catastrophically forgets.}
 %  MATERIALS AND METHODS   (full proofs + simulation details)
 %============================================================================
 \section*{Materials and methods}
-% Full, fully-justified proofs of Proposition~\ref{prop:descent},
-% Lemma~\ref{lem:novelty}, Theorem~\ref{thm:prioritized}, Lemma~\ref{lem:normal},
-% Proposition~\ref{prop:saddle}. (Drafted in ../maths/detailed_proofs.md.)
-% Adiabatic (fast-student) elimination; guard derivation; simulation conditions;
+% Full proofs of Proposition~\ref{prop:descent}, Theorem~\ref{thm:prioritized},
+% Lemma~\ref{lem:novelty}, Corollary~\ref{cor:surprise},
+% Proposition~\ref{prop:saddle}. (Source of record: ../maths/final_proofs.md —
+% sober, self-contained, model + assumptions + all proofs, in the paper's order.
+% Pedagogical long-form: detailed_proofs.md. Manifold containment: operating
+% choice + numerical verification only — no lemma.)
+% Adiabatic (fast-student) elimination; simulation conditions;
 % parameters; numerical diagnostics (novelty_operator, circulation, spectral_gap,
 % manifold_leakage). Future work: restricted-novelty (A_S) manifold analysis.
 

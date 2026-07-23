@@ -1,0 +1,45 @@
+% Auto-generated from docs/schematic/spec_units.py via render.py — edit the template, not the .tex.
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\definecolor{predcolor}{HTML}{ {{- colors.pred -}} }
+\definecolor{errcolor}{HTML}{ {{- colors.err -}} }
+\definecolor{valuestroke}{HTML}{ {{- colors.value_stroke -}} }
+\definecolor{errorstroke}{HTML}{ {{- colors.error_stroke -}} }
+\begin{document}
+\begin{tikzpicture}[
+  value/.style={circle, draw=valuestroke, line width=1.4pt, minimum size=12.5mm, inner sep=0pt, font=\normalsize},
+  error/.style={rounded corners=3.5pt, draw=errorstroke, dashed, line width=1.1pt,
+                minimum width=14mm, minimum height=9mm, inner sep=2pt, font=\normalsize},
+  pred/.style={predcolor, line width=1.3pt},
+  err/.style={errcolor, line width=1.3pt},
+  excit/.style={-{Stealth[length=2.8mm]}},
+  inhib/.style={-{Circle[length=2mm, width=2mm]}},
+  glab/.style={font=\footnotesize, fill=white, inner sep=1.5pt},
+]
+% ---- nodes ----
+{% for n in nodes -%}
+\node[{{ n.kind }}] ({{ n.id }}) at ({{ "%.2f"|format(n.x*sx) }},{{ "%.2f"|format(-n.y*sy) }}) {${{ n.tex }}$};
+{% endfor %}
+% ---- couplings (reciprocal pairs separate under the uniform bend) ----
+{% for e in edges -%}
+\draw[{{ e.flow }}, {{ 'excit' if e.sign == '+' else 'inhib' }}] ({{ e.src }}) to[bend left={{ e.bend }}] {% if e.tex %}node[glab, pos={{ e.lpos }}]{${{ e.tex }}$} {% endif %}({{ e.dst }});
+{% endfor %}
+% ---- population captions + interface note ----
+\node[font=\small\bfseries, gray, anchor=east] at ({{ "%.2f"|format(-0.55*sx) }},{{ "%.2f"|format(-0.75*sy) }}) {TEACHER\,T};
+\node[font=\small\bfseries, gray, anchor=east] at ({{ "%.2f"|format(-0.55*sx) }},{{ "%.2f"|format(-5.25*sy) }}) {STUDENT\,S};
+\node[font=\footnotesize, gray, anchor=west] at ({{ "%.2f"|format(2.6*sx+1.25) }},{{ "%.2f"|format(-3.0*sy) }}) {${{ note_tex }}$};
+% ---- legend (2 x 2 block, centred under the figure) ----
+\begin{scope}[shift={ ({{ "%.2f"|format(1.3*sx) }},{{ "%.2f"|format(-6.0*sy-1.6) }}) }, font=\footnotesize]
+  \draw[gray, line width=1.3pt, excit] (-3.5, 0.4) -- ++(0.6,0);
+  \node[anchor=west, gray] at (-2.8, 0.4) {excitatory};
+  \draw[gray, line width=1.3pt, inhib] (-3.5, -0.2) -- ++(0.6,0);
+  \node[anchor=west, gray] at (-2.8, -0.2) {inhibitory};
+  \draw[pred] (0.6, 0.4) -- ++(0.6,0);
+  \node[anchor=west, gray] at (1.3, 0.4) {prediction (descending)};
+  \draw[err] (0.6, -0.2) -- ++(0.6,0);
+  \node[anchor=west, gray] at (1.3, -0.2) {error / drive (ascending)};
+\end{scope}
+\end{tikzpicture}
+\end{document}

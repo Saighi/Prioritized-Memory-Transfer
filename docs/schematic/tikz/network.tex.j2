@@ -3,10 +3,10 @@
 \usepackage{amsmath}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,calc}
-\definecolor{predcolor}{HTML}{4C8DFF}
-\definecolor{errcolor}{HTML}{E0772B}
-\definecolor{valuestroke}{HTML}{222222}
-\definecolor{errorstroke}{HTML}{888888}
+\definecolor{predcolor}{HTML}{ {{- colors.pred -}} }
+\definecolor{errcolor}{HTML}{ {{- colors.err -}} }
+\definecolor{valuestroke}{HTML}{ {{- colors.value_stroke -}} }
+\definecolor{errorstroke}{HTML}{ {{- colors.error_stroke -}} }
 \begin{document}
 \begin{tikzpicture}[
   >={Stealth[length=2.2mm]},

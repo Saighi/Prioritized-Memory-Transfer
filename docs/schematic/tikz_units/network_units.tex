@@ -1,0 +1,74 @@
+% Auto-generated from docs/schematic/spec_units.py via render.py — edit the template, not the .tex.
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\definecolor{predcolor}{HTML}{4C8DFF}
+\definecolor{errcolor}{HTML}{E0772B}
+\definecolor{valuestroke}{HTML}{222222}
+\definecolor{errorstroke}{HTML}{888888}
+\begin{document}
+\begin{tikzpicture}[
+  value/.style={circle, draw=valuestroke, line width=1.4pt, minimum size=12.5mm, inner sep=0pt, font=\normalsize},
+  error/.style={rounded corners=3.5pt, draw=errorstroke, dashed, line width=1.1pt,
+                minimum width=14mm, minimum height=9mm, inner sep=2pt, font=\normalsize},
+  pred/.style={predcolor, line width=1.3pt},
+  err/.style={errcolor, line width=1.3pt},
+  excit/.style={-{Stealth[length=2.8mm]}},
+  inhib/.style={-{Circle[length=2mm, width=2mm]}},
+  glab/.style={font=\footnotesize, fill=white, inner sep=1.5pt},
+]
+% ---- nodes ----
+\node[error] (eT1) at (0.00,-0.00) {$\varepsilon_{T,1}$};
+\node[value] (xT1) at (0.00,-2.62) {$x_{T,1}$};
+\node[error] (eTS1) at (0.00,-5.25) {$\varepsilon_{TS,1}$};
+\node[value] (xS1) at (0.00,-7.88) {$x_{S,1}$};
+\node[error] (eS1) at (0.00,-10.50) {$\varepsilon_{S,1}$};
+\node[error] (eT2) at (5.20,-0.00) {$\varepsilon_{T,2}$};
+\node[value] (xT2) at (5.20,-2.62) {$x_{T,2}$};
+\node[error] (eTS2) at (5.20,-5.25) {$\varepsilon_{TS,2}$};
+\node[value] (xS2) at (5.20,-7.88) {$x_{S,2}$};
+\node[error] (eS2) at (5.20,-10.50) {$\varepsilon_{S,2}$};
+
+% ---- couplings (reciprocal pairs separate under the uniform bend) ----
+\draw[err, excit] (xT1) to[bend left=16.0] (eT1);
+\draw[pred, inhib] (eT1) to[bend left=16.0] node[glab, pos=0.5]{$\pi_T$} (xT1);
+\draw[pred, inhib] (xT1) to[bend left=16.0] (eTS1);
+\draw[err, inhib] (eTS1) to[bend left=16.0] node[glab, pos=0.5]{$\pi_{ST}<0$} (xT1);
+\draw[err, excit] (xS1) to[bend left=16.0] (eTS1);
+\draw[pred, inhib] (eTS1) to[bend left=16.0] node[glab, pos=0.5]{$\pi_{TS}$} (xS1);
+\draw[err, excit] (xS1) to[bend left=16.0] (eS1);
+\draw[pred, inhib] (eS1) to[bend left=16.0] node[glab, pos=0.5]{$\pi_S$} (xS1);
+\draw[err, excit] (xT2) to[bend left=16.0] (eT2);
+\draw[pred, inhib] (eT2) to[bend left=16.0] node[glab, pos=0.5]{$\pi_T$} (xT2);
+\draw[pred, inhib] (xT2) to[bend left=16.0] (eTS2);
+\draw[err, inhib] (eTS2) to[bend left=16.0] node[glab, pos=0.5]{$\pi_{ST}<0$} (xT2);
+\draw[err, excit] (xS2) to[bend left=16.0] (eTS2);
+\draw[pred, inhib] (eTS2) to[bend left=16.0] node[glab, pos=0.5]{$\pi_{TS}$} (xS2);
+\draw[err, excit] (xS2) to[bend left=16.0] (eS2);
+\draw[pred, inhib] (eS2) to[bend left=16.0] node[glab, pos=0.5]{$\pi_S$} (xS2);
+\draw[err, inhib] (xT2) to[bend left=10] (eT1);
+\draw[pred, excit] (eT1) to[bend left=10] node[glab, pos=0.18]{$W_{T,12}$} (xT2);
+\draw[err, inhib] (xS2) to[bend left=10] (eS1);
+\draw[pred, excit] (eS1) to[bend left=10] node[glab, pos=0.18]{$W_{S,12}$} (xS2);
+\draw[err, inhib] (xT1) to[bend left=10] (eT2);
+\draw[pred, excit] (eT2) to[bend left=10] node[glab, pos=0.18]{$W_{T,21}$} (xT1);
+\draw[err, inhib] (xS1) to[bend left=10] (eS2);
+\draw[pred, excit] (eS2) to[bend left=10] node[glab, pos=0.18]{$W_{S,21}$} (xS1);
+
+% ---- population captions + interface note ----
+\node[font=\small\bfseries, gray, anchor=east] at (-1.10,-1.31) {TEACHER\,T};
+\node[font=\small\bfseries, gray, anchor=east] at (-1.10,-9.19) {STUDENT\,S};
+% ---- legend (2 x 2 block, centred under the figure) ----
+\begin{scope}[shift={ (2.60,-12.10) }, font=\footnotesize]
+  \draw[gray, line width=1.3pt, excit] (-3.5, 0.4) -- ++(0.6,0);
+  \node[anchor=west, gray] at (-2.8, 0.4) {excitatory};
+  \draw[gray, line width=1.3pt, inhib] (-3.5, -0.2) -- ++(0.6,0);
+  \node[anchor=west, gray] at (-2.8, -0.2) {inhibitory};
+  \draw[pred] (0.6, 0.4) -- ++(0.6,0);
+  \node[anchor=west, gray] at (1.3, 0.4) {prediction (descending)};
+  \draw[err] (0.6, -0.2) -- ++(0.6,0);
+  \node[anchor=west, gray] at (1.3, -0.2) {error / drive (ascending)};
+\end{scope}
+\end{tikzpicture}
+\end{document}

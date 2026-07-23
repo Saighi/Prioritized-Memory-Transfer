@@ -207,9 +207,10 @@ def build_system(cfg: ModelConfig):
     S_T = M_T.transpose(-2, -1) @ M_T
     sigma2_min = spectral_gap(S_T)
 
-    # conservative guard (Lemma 2): |pi_ST| < pi_T sigma2_min. The "auto" default sits at
-    # pi_ST_safety of it (before this fix the pi_T factor was dropped, which was only
-    # correct at the default pi_T = 1).
+    # conservative stability threshold: |pi_ST| < pi_T sigma2_min (not a paper theorem;
+    # archived analysis in docs/Paper/maths/additional_proofs_not_in_paper.md). The "auto"
+    # default sits at pi_ST_safety of it (before this fix the pi_T factor was dropped,
+    # which was only correct at the default pi_T = 1).
     guard_safe = cfg.pi_T * sigma2_min
     pi_ST = resolve_signed_precision(
         cfg.pi_ST, guard=guard_safe, safety=cfg.pi_ST_safety,
@@ -226,7 +227,7 @@ def build_system(cfg: ModelConfig):
         "W_T": W_T,
         "S_T": S_T,
         "sigma2_min": sigma2_min,
-        "guard_safe": guard_safe,                # |pi_ST| < pi_T sigma2_min : conservative (Lemma 2)
+        "guard_safe": guard_safe,                # |pi_ST| < pi_T sigma2_min : conservative threshold
         "guard_scalar": guard_scalar,            # |pi_ST| < pi_T sigma2_min (pi_TS+pi_S)/pi_S : aligned case
         "pi_ST": pi_ST,                          # signed (negative in the replay regime)
         "exact_saddle": bool(cfg.exact_saddle),
@@ -234,7 +235,7 @@ def build_system(cfg: ModelConfig):
         "manifold_dim": U_T.shape[1],
         "memory_residual": (M_T @ M).norm(dim=0).max().item(),
         "precision_ok": cfg.pi_TS > cfg.pi_S,
-        "pi_ST_ok": abs(pi_ST) < guard_safe,          # conservative guard, matches the paper's Lemma 2
+        "pi_ST_ok": abs(pi_ST) < guard_safe,          # within the conservative stability threshold
         "pi_ST_ok_aligned": abs(pi_ST) < guard_scalar,  # looser aligned-case bound
     }
     return model, info

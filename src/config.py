@@ -21,7 +21,9 @@ class ModelConfig:
     d: int = 48                      # neurons per population (state dimension)
     P: int = 6                       # number of stored memories in T (needs P <= d-1)
 
-    # --- precisions / gains (guards: pi_TS > pi_S; |pi_ST| < pi_T * sigma2_min, Lemma 2) ---
+    # --- precisions / gains (operating regime: pi_TS > pi_S; |pi_ST| < pi_T * sigma2_min,
+    #     the stability threshold — not a paper theorem; archived analysis in
+    #     docs/Paper/maths/additional_proofs_not_in_paper.md) ---
     pi_T: float = 1.0                # teacher self-precision (how much T trusts its own recurrent model)
     pi_S: float = 0.5                # student self-precision (how much S trusts its own model)
     pi_TS: float = 1.0               # student's interface precision (how much S trusts T's activity)

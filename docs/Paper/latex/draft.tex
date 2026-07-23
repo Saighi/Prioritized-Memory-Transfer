@@ -102,7 +102,6 @@
 \newline
 \\
 Saighi Paul*\textsuperscript{1},
-Rozenberg Marcelo\textsuperscript{1,2}
 \\
 \bigskip
 \textbf{1} Universit\'e Paris-Saclay, CNRS, Laboratoire de Physique des Solides, 91405, Orsay, France
@@ -282,8 +281,8 @@ out states the student cannot match. This is \emph{sleep}, or replay. No separat
 phase; the sign of a single precision \emph{is} the phase. This is the paper's pivot, and the rest of
 the analysis simply works out its consequences.
 
-\paragraph{Surprise and free energy.} Each network carries a free energy, the precision-weighted sum of
-its squared errors,
+\paragraph{Surprise and free energy.} Each network carries a free energy, a precision-weighted sum of
+squared errors,
 \begin{equation}
 \label{eq:freeenergy}
 \FS = \tfrac{\piTS}{2}\,\|\epsTS\|^{2} + \tfrac{\piS}{2}\,\|\epsS\|^{2},
@@ -302,10 +301,20 @@ $\FS,\FT$. Novelty is the spectrum; surprise is the score. There is no ``teacher
 $\FT$.
 \end{remark}
 
+These energies are descriptors of the dynamics, not its generators, and the accounting deserves to be
+explicit. In wake ($\piST>0$) every force in the network is the gradient of a bounded free energy and
+the model is standard predictive coding. The sleep flip is our one deliberate departure from that
+framework: for $\piST<0$ no bounded free energy owns the teacher's interface term, so the
+reversed-precision push is postulated rather than derived --- the results that follow then characterize
+it exactly (ascent on the student's settled free energy, Theorem~\ref{thm:prioritized}; the negative
+half of a single zero-sum potential at $\piST=-\piTS$, Proposition~\ref{prop:saddle}).
+
 Two inequalities delimit the regime we operate in, and we state them as such rather than as hypotheses
 of the theorems: the input guard $\piTS>\piS$ (the student trusts its teacher input over its own
-recurrent prior, which prevents it from confabulating), and a stability guard on the \emph{magnitude} of
-the reversed precision, made precise in Lemma~\ref{lem:normal}.
+recurrent prior, which prevents it from confabulating), and a bound on the \emph{magnitude} of the
+reversed precision --- we keep $|\piST|$ well below the teacher's self-precision (half the measured
+stability threshold throughout), which keeps the teacher on its memory manifold during sleep, as we
+verify numerically.
 
 \subsection{Inference and learning descend a free energy}
 The first property justifies calling $\FS$ a free energy at all: the student's dynamics are gradient
@@ -412,20 +421,11 @@ most novel direction), and a direction the teacher does not currently occupy ($c
 
 \subsection{Staying on the memory manifold}
 The push must not tip over into chasing noise off the manifold. The teacher's self-pull prevents this,
-provided the reversed precision is not too strong.
-
-\begin{lemma}[Off-manifold stability]
-\label{lem:normal}
-Under the conservative guard $|\piST| < \piT\,\sigma_{\min}^{2}$, where $\sigma_{\min}^{2}$ is the
-smallest nonzero eigenvalue of $\ST$, the block of the dynamics normal to the teacher's memory manifold
-is strictly contracting, so the teacher consolidates on-manifold and stays quiescent. Above the guard
-it is driven off-manifold into noise. (The guard is not exact manifold invariance; residual cross-block
-leakage is small and measured numerically.)
-\end{lemma}
-
-This is what sets the precision-weighting regime: the reversed precision must be strong enough to move
-the teacher along novel memory directions, yet weak enough that the self-pull wins normal to the
-manifold.
+provided the reversed precision is not too strong: we operate with $|\piST|$ well below the teacher's
+self-precision (half the measured stability threshold throughout), and verify numerically that the
+teacher's off-manifold occupancy remains negligible during sleep. This is what sets the
+precision-weighting regime: the reversed precision must be strong enough to move the teacher along
+novel memory directions, yet weak enough that the self-pull wins normal to the manifold.
 
 \subsection{An exact free-energy saddle}
 Both forces in Theorem~\ref{thm:prioritized} are gradients, so it is natural to ask when the coupled
@@ -535,8 +535,9 @@ precision.
 
 Two further checks confirm the mechanism is the one we claim, and we relegate their figures to Supporting
 information. First, stability: sweeping the strength $|\piST|$ shows the teacher consolidating
-on-manifold below the guard of Lemma~\ref{lem:normal} and abruptly chasing noise above it, with the
-turnover at the predicted value. Second, selection is spectral, not a race in time: across the entire
+on-manifold at small $|\piST|$ and abruptly chasing noise once the push overwhelms the self-pull;
+our operating point sits well inside the stable regime, at half the measured turnover threshold.
+Second, selection is spectral, not a race in time: across the entire
 fast-student regime a known direction is explained away while a novel one is not, and the discrimination
 collapses only as $\tauS\to\tauT$, i.e.\ only when the student is no longer fast --- so it is what the
 student's weights can null, not raw speed, that decides.
@@ -693,14 +694,15 @@ learning $-\nabla_{\WS}\FS$ (autograd-verified to $<10^{-8}$).
 Lemma~\ref{lem:novelty} (fast-student elimination and $\NS$), Corollary~\ref{cor:surprise} (the surprise
 identity, via per-direction summation $n^2+n(1-n)=n$ and, independently, the envelope theorem), and
 Theorem~\ref{thm:prioritized} (the three readings of the push) are proved in full, every matrix step
-justified, in Appendix~\ref{app:proofs}. Lemma~\ref{lem:normal} (the guard $|\piST|<\piT\sigma_{\min}^2$)
-and Proposition~\ref{prop:saddle} (the saddle at $\piST=-\piTS$) are established with the numerical
-diagnostics below.
+justified, in Appendix~\ref{app:proofs}. Proposition~\ref{prop:saddle} (the saddle at $\piST=-\piTS$)
+and the on-manifold containment of the teacher at our operating point are established with the
+numerical diagnostics below.
 
 \paragraph{Numerical diagnostics.} We verify: the surprise identity
 $\FS(\xS^*,\xT)=\tfrac{\piTS}{2}\xT\tr\NS\xT$ (error $\sim10^{-15}$); the saddle circulation
 $|\piST+\piTS|\sqrt{d}$, vanishing only at $\piST=-\piTS$; the off-manifold growth eigenvalue and terminal
-manifold occupancy, both turning over at the guard; the restricted novelty spectrum
+manifold occupancy across $|\piST|$, both stable at our operating point and turning over only well
+above it; the restricted novelty spectrum
 $\mathrm{eig}(\UT\tr\NS\UT)$ (the staircase); and, for the union and continual loops, per-bout residuals
 and the retention matrix. Adiabatic (fast-student) elimination is used throughout for the reduced teacher
 dynamics of Eq.~\eqref{eq:teacher_reduced}. Simulations use the timescale ordering
@@ -711,7 +713,7 @@ accompany each experiment notebook.
 \section*{Supporting information}
 %============================================================================
 \textbf{S1. Stability and timescale sweeps.} On-manifold consolidation vs.\ noise-chasing across
-$|\piST|$ (the guard turnover); spectral, not temporal, selection across $\tauS/\tauT$.
+$|\piST|$ (the stability turnover); spectral, not temporal, selection across $\tauS/\tauT$.
 \textbf{S2. Effective-rank detail.} Staircase step count vs.\ pattern correlation.
 \textbf{S3. Dendritic (stop-gradient) variant.} The mechanism under Tang et al.'s bio-plausible
 stop-gradient relaxation \cite{tang2023covpcn}: transfer still completes, at the cost of a
