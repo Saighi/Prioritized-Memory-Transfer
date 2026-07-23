@@ -14,10 +14,10 @@ Faithfulness notes:
 from __future__ import annotations
 
 import math
+from types import SimpleNamespace
 
 import torch
 
-from .artifacts import MemoryBuildResult
 from .config import ModelConfig
 
 
@@ -116,32 +116,20 @@ def _validate_pattern_matrix(M: torch.Tensor) -> None:
         raise ValueError("every pattern column must have non-zero norm.")
 
 
-def _pattern_rank(M: torch.Tensor, tol: float) -> int:
-    if M.shape[1] == 0:
-        return 0
-    singular = torch.linalg.svdvals(M)
-    threshold = tol * float(singular.max())
-    return int((singular > threshold).sum())
-
-
 def build_memory(
     M: torch.Tensor,
     *,
     ridge: float = 1e-8,
     tolerance: float = 1e-3,
-    require_representable: bool = True,
-) -> MemoryBuildResult:
+) -> SimpleNamespace:
     """Fit a zero-diagonal covariance-PCN memory to pattern columns ``M``.
 
-    The returned diagnostics make the fit explicit.  If ``require_representable`` is true,
-    reject pattern sets that cannot be stored within ``tolerance`` under the no-autapse
+    Reject pattern sets that cannot be stored within ``tolerance`` under the no-autapse
     constraint instead of silently returning weights that do not encode the requested memory.
     """
     _validate_pattern_matrix(M)
-    if not math.isfinite(float(ridge)) or ridge < 0:
-        raise ValueError(f"ridge must be finite and >= 0 (got {ridge!r}).")
-    if not math.isfinite(float(tolerance)) or tolerance <= 0:
-        raise ValueError(f"tolerance must be finite and > 0 (got {tolerance!r}).")
+    if ridge < 0 or tolerance <= 0:
+        raise ValueError("ridge must be non-negative and tolerance must be positive.")
 
     d = M.shape[0]
     dtype, device = M.dtype, M.device
@@ -149,50 +137,24 @@ def build_memory(
     # from the other components. X has patterns as rows (P, d).
     X = M.T
     W = torch.zeros(d, d, dtype=dtype, device=device)
-    fit_conditions = []
     for i in range(d):
         others = [j for j in range(d) if j != i]
         Xi = X[:, others]                  # (P, d-1)
         target = X[:, i]                   # (P,)
-        if Xi.numel():
-            singular = torch.linalg.svdvals(Xi)
-            numerical_floor = (
-                torch.finfo(dtype).eps * max(Xi.shape) * float(singular.max())
-            )
-            nonzero = singular[singular > numerical_floor]
-            fit_conditions.append(
-                float(nonzero.max() / nonzero.min()) if nonzero.numel() else float("inf")
-            )
         A = Xi.T @ Xi + ridge * torch.eye(d - 1, dtype=dtype, device=device)
         W[i, others] = torch.linalg.solve(A, Xi.T @ target)
 
     M_op = torch.eye(d, dtype=dtype, device=device) - W
     residuals = (M_op @ M).norm(dim=0)
     max_residual = float(residuals.max()) if residuals.numel() else 0.0
-    pattern_rank = _pattern_rank(M, tolerance)
-    condition = max(fit_conditions, default=float("nan"))
-    manifold_singular = torch.linalg.svdvals(M_op)
-    manifold_rank = int((manifold_singular < tolerance).sum())
-    representable = max_residual <= tolerance and manifold_rank >= pattern_rank
-    result = MemoryBuildResult(
-        W=W,
-        M_op=M_op,
-        residuals=residuals,
-        max_residual=max_residual,
-        pattern_rank=pattern_rank,
-        manifold_rank=manifold_rank,
-        condition_number=condition,
-        representable=representable,
-        tolerance=float(tolerance),
-    )
-    if require_representable and not representable:
+    if max_residual > tolerance:
         raise ValueError(
             "patterns are not representable by a zero-diagonal covariance-PCN: "
-            f"max ||(I-W)m_p||={max_residual:.3e}, numerical pattern rank={pattern_rank}, "
-            f"memory-manifold rank={manifold_rank}. P <= d-1 is necessary but not sufficient; "
+            f"max ||(I-W)m_p||={max_residual:.3e}. "
+            "P <= d-1 is necessary but not sufficient; "
             "each neuron's pattern values must be predictable from the remaining neurons."
         )
-    return result
+    return SimpleNamespace(W=W, M_op=M_op, max_residual=max_residual)
 
 
 def memory_residual(W_T: torch.Tensor, M: torch.Tensor) -> float:

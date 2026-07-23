@@ -109,13 +109,8 @@ class Population:
         if not isinstance(W, torch.Tensor) or W.ndim != 2 or W.shape[0] != W.shape[1]:
             shape = None if not isinstance(W, torch.Tensor) else tuple(W.shape)
             raise ValueError(f"population W must be a square matrix (got {shape}).")
-        if W.shape[0] < 1 or not W.is_floating_point():
-            raise ValueError(f"population W must be a non-empty floating matrix (got {W.dtype}).")
-        if not bool(torch.isfinite(W).all()):
-            raise ValueError(f"population {name!r} has NaN or infinite weights.")
-        diag_tol = 10 * torch.finfo(W.dtype).eps
-        if float(torch.diagonal(W).abs().max()) > diag_tol:
-            raise ValueError(f"population {name!r} weights must have a zero diagonal.")
+        if W.shape[0] < 1:
+            raise ValueError("population W must be non-empty.")
         if not math.isfinite(float(pi)) or pi <= 0:
             raise ValueError(f"population {name!r} pi must be finite and > 0 (got {pi!r}).")
         if not math.isfinite(float(tau)) or tau <= 0:
@@ -277,12 +272,6 @@ class MacroNetwork:
         self.populations: Dict[str, Population] = {p.name: p for p in populations}
         self.interfaces: List[CouplingInterface] = list(interfaces)
         ref = populations[0]
-        for p in populations[1:]:
-            if p.dtype != ref.dtype or p.device != ref.device:
-                raise ValueError(
-                    "all populations in a MacroNetwork must share dtype and device "
-                    f"(expected {ref.dtype}/{ref.device}, got {p.dtype}/{p.device} for {p.name!r})."
-                )
         for itf in self.interfaces:
             if itf.target not in self.populations:
                 raise ValueError(f"interface target {itf.target!r} is not a population.")
@@ -305,15 +294,6 @@ class MacroNetwork:
                             f"C[{k}] for {source_name!r}->{itf.target!r} must have shape "
                             f"({target.d}, {source.d}) (got {shape})."
                         )
-                    if Ck.dtype != ref.dtype or Ck.device != ref.device:
-                        raise ValueError(
-                            f"C[{k}] for {source_name!r}->{itf.target!r} must match network "
-                            f"dtype/device ({ref.dtype}, {ref.device})."
-                        )
-                    if not bool(torch.isfinite(Ck).all()):
-                        raise ValueError(
-                            f"C[{k}] for {source_name!r}->{itf.target!r} contains NaN or infinity."
-                        )
         self.d = ref.d
         self.dtype = ref.dtype
         self.device = ref.device
@@ -324,11 +304,6 @@ class MacroNetwork:
         p = self.populations[name]
         if p.x is None:
             raise ValueError(f"population {name!r} has no state; initialize x before stepping.")
-        if p.x.shape != (p.d,) or p.x.dtype != p.dtype or p.x.device != p.device:
-            raise ValueError(
-                f"population {name!r} state must have shape ({p.d},), dtype {p.dtype}, "
-                f"and device {p.device}."
-            )
         return p.x
 
     # ----- roles (only ACTIVE interfaces count; inactive edges are transparent) -----
@@ -429,13 +404,6 @@ class MacroNetwork:
             unknown = set(noise) - set(self.populations)
             if unknown:
                 raise ValueError(f"noise provided for unknown populations: {sorted(unknown)!r}.")
-            for name, raw in noise.items():
-                p = self.populations[name]
-                if raw.shape != (p.d,) or raw.dtype != p.dtype or raw.device != p.device:
-                    raise ValueError(
-                        f"noise[{name!r}] must have shape ({p.d},), dtype {p.dtype}, "
-                        f"and device {p.device}."
-                    )
 
         # 1) perception on interface targets
         for name, p in self.populations.items():

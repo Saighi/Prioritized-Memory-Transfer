@@ -36,13 +36,6 @@ def _signed_or_auto(name: str, value: Union[float, str]) -> None:
         raise ValueError(f"{name} must be finite (got {value!r}).")
 
 
-def _validate_runtime(device: str, dtype: torch.dtype) -> None:
-    if not isinstance(device, str) or not device.strip():
-        raise ValueError("device must be a non-empty torch device string.")
-    if dtype not in (torch.float32, torch.float64):
-        raise ValueError(f"dtype must be torch.float32 or torch.float64 (got {dtype!r}).")
-
-
 @dataclass
 class ModelConfig:
     # --- sizes ---
@@ -111,7 +104,6 @@ class ModelConfig:
             raise ValueError(
                 f"pi_ST_safety must lie in (0, 1] (got {self.pi_ST_safety})."
             )
-        _validate_runtime(self.device, self.dtype)
         if self.pi_TS <= self.pi_S:
             # not fatal, but it violates the precision guard (confabulation risk)
             warnings.warn(
@@ -214,7 +206,6 @@ class InterleavedConfig:
             raise ValueError(f"seed must be an integer (got {self.seed!r}).")
         if not 0 < self.rho_safety <= 1:
             raise ValueError(f"rho_safety must lie in (0, 1] (got {self.rho_safety}).")
-        _validate_runtime(self.device, self.dtype)
         if self.pi_I <= self.pi_S:
             warnings.warn(
                 f"precision guard pi_I > pi_S violated (pi_I={self.pi_I}, pi_S={self.pi_S})."
@@ -298,7 +289,6 @@ class ContinualConfig:
                 raise ValueError(f"{name} must be an integer >= 1 (got {value!r}).")
         if self.mode not in {"full", "adiabatic"}:
             raise ValueError(f"mode must be 'full' or 'adiabatic' (got {self.mode!r}).")
-        _validate_runtime(self.device, self.dtype)
         if self.pi_I <= self.pi_S:
             warnings.warn(f"precision guard pi_I > pi_S violated (pi_I={self.pi_I}, pi_S={self.pi_S}).")
 

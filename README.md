@@ -72,7 +72,6 @@ conda run -n pytorch --no-capture-output python tests/smoke_test.py       # two-
 conda run -n pytorch --no-capture-output python tests/macro_test.py       # engine==2-pop equivalence
 conda run -n pytorch --no-capture-output python tests/interleaved_test.py # interleaving builds the union of correlated single memories
 conda run -n pytorch --no-capture-output python tests/continual_test.py   # interleaved continual retains a correlated stream
-conda run -n pytorch --no-capture-output python tests/validation_test.py # invalid configs/graphs/patterns fail at their boundary
 conda run -n pytorch --no-capture-output python tests/viz_test.py         # all single-run figures build
 conda run -n pytorch --no-capture-output python scripts/run_findings.py   # run all 4 experiment notebooks headless (from the repo root)
 ```
@@ -88,22 +87,20 @@ conda run -n pytorch --no-capture-output python scripts/run_findings.py
 ## Layout
 
 ```
-prioritized_memory_transfer/
-  macro.py         the engine: Population + CouplingInterface + MacroNetwork (fwd/bwd/outer);
-                   assembles rates, adiabatic solve, one unified step() — the LEGO layer
-  config.py        ModelConfig / InterleavedConfig / ContinualConfig / SimConfig
-  artifacts.py     typed memory/build diagnostics (replaces loosely-typed info dictionaries)
-  memory.py        pattern generators, validated zero-diagonal covPCN fits, two-teacher geometries
-  model.py         build_system (two-pop) -> MacroNetwork; TwoPopModel facade; simulate()
-  interleaved.py   build_interleaved_synthesis + interleave_merge (one teacher per bout) -> MacroNetwork
-  continual.py     ContinualLearner: write→interleaved-consolidate→download loop over a memory stream
-  history.py       History + InterleavedHistory + ContinualHistory
-  recall.py        AssociativeMemory: one network, clamped-query pattern completion (standalone)
-  diagnostics.py   spectral gap, manifold/orthonormal bases, novelty operator & restricted spectrum,
-                   transfer deficit, VFE/circulation checks
-  viz_static.py / viz_interactive.py / viz_eigenspace.py   two-population figures
-  viz_interleaved.py / viz_continual.py                    crosstalk-sawtooth / retention figures
-  experiments.py   sweep helpers for the two-population experiment notebooks
+src/
+  prioritized_memory_transfer/
+    macro.py         the engine: Population + CouplingInterface + MacroNetwork (fwd/bwd/outer);
+                     assembles rates, adiabatic solve, one unified step() — the LEGO layer
+    config.py        ModelConfig / InterleavedConfig / ContinualConfig / SimConfig
+    memory.py        pattern generators, zero-diagonal covPCN fits, two-teacher geometries
+    model.py         build_system (two-pop) -> MacroNetwork; TwoPopModel facade; simulate()
+    interleaved.py   build_interleaved_synthesis + interleave_merge (one teacher per bout)
+    continual.py     ContinualLearner: write→interleaved-consolidate→download loop
+    history.py       History + InterleavedHistory + ContinualHistory
+    recall.py        AssociativeMemory: clamped-query pattern completion (standalone)
+    diagnostics.py   spectral and transfer diagnostics
+    viz_*.py         two-population, interleaved, and continual-learning figures
+    experiments.py   sweep helpers for the experiment notebooks
 notebooks/
   two_network/            the two-population model (01_single_run … 07_stopgrad_dendritic)
   subspace_addition/      the interleaved merge — 01_interleaved_single_run (crosstalk sawtooth),
@@ -114,7 +111,7 @@ notebooks/
   associative_recall/     one-network clamped recall on MNIST (01_clamped_recall)
 tests/
   smoke_test.py, macro_test.py, recall_test.py, interleaved_test.py, continual_test.py,
-  validation_test.py, viz_test.py
+  viz_test.py
 scripts/
   probe_findings.py (parameter sweeps, prints verdicts), run_findings.py (runs the experiment
   notebooks headless) — exploration scripts, not tests

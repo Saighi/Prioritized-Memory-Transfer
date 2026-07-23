@@ -10,11 +10,11 @@ Process/progress tracker for writing the paper. **Rich content plan lives in [ou
 
 Abstract → Author summary → Introduction → **Models** (equations only, one subsection per component) → **Results** (declarative-claim headings; theorems stated inline next to their figure) → **Discussion** (Summary → Relationship to other models → Relationship to experimental data → Future directions) → Materials & Methods / Supporting Information (proofs, sim details).
 
-## OPEN DECISIONS (resolve before drafting the affected part)
+## DECISIONS (resolved)
 
-- [ ] **D1 — Models/Results split.** Option A (Tang-faithful: `Models` equations-only, then theorems woven into `Results`) vs Option B (current skeleton: standalone "Model and analysis" theory block). *Claude recommends A.* → **awaiting Paul.**
-- [ ] **D2 — Final title** (see candidates in outline.md).
-- [ ] **D3 — Abstract now (provisional) or after body?** Claude suggests provisional now + revisit pass at end.
+- [x] **D1 — Models/Results split → Option A** (Tang-faithful: `Models` equations-only, then theorems woven into `Results`). *Skeleton to be re-shaped to A.*
+- [ ] **D2 — Final title** — drafting now, marked PROVISIONAL until end-of-body revisit.
+- [x] **D3 — Abstract & title provisional now**, one revisit pass after the body is done.
 
 ## Working method (per part)
 
@@ -31,8 +31,8 @@ Style card (enforce every draft): sober, informative, scientific; no overstateme
 
 Status: ☐ not started · ◐ drafting · ☑ locked
 
-- [ ] **Title** — working: see outline.md; decide D2.
-- [ ] **Abstract** — hook = catastrophic forgetting + sleep replay; twist = priority is the student's own prediction error; transfer = primitive, continual learning = payoff. (≤300 words)
+- [ ] **Title** [PROVISIONAL] — working: see outline.md; decide D2.
+- [ ] **Abstract** [PROVISIONAL] — hook = catastrophic forgetting + sleep replay; twist = priority is the student's own prediction error; transfer = primitive, continual learning = payoff. (≤300 words)
 - [ ] **Author summary** — lay framing of prioritized replay + continual learning. (150–200 words)
 - [ ] **Introduction** — continual learning/forgetting; sleep replay + the open question (how is replay prioritized & autonomous?); our answer (novelty-gated transfer in linear covPCN); the ladder; positioning (Tang, Friston, Schaul, McClelland, prev paper).
 - [ ] **Models** — two-population wiring; three dynamics eqns; reversed precision π_ST (signed sleep/wake); F_S, F_T; operating regime (π_TS>π_S, |π_ST| well below π_T); interleaved interface; continual loop.
@@ -50,7 +50,8 @@ Status: ☐ not started · ◐ drafting · ☑ locked
 ## Decisions log (append as we go)
 
 - 2026-07-23 — Confirmed Tang structure via PLOS article; created this tracker.
+- 2026-07-23 — D1 → Option A (Tang-faithful). D3 → title+abstract provisional now, revisit at end. Claims-ledger method adopted.
 
 ## Next action
 
-Resolve **D1** (Models/Results split), then start the **Title** (D2).
+Drafting the **Title** (provisional): claims-ledger posted, awaiting Paul's steer.

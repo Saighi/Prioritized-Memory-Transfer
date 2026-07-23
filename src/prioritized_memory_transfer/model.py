@@ -17,11 +17,11 @@ the teacher's interface term is `+pi_ST * eps_TS` with `pi_ST` *signed* —
 """
 from __future__ import annotations
 
+from types import SimpleNamespace
 from typing import TYPE_CHECKING, Optional, Sequence
 
 import torch
 
-from .artifacts import TwoPopBuildInfo
 from .config import ModelConfig, SimConfig
 from .macro import (  # noqa: F401 (re-export)
     CouplingInterface,
@@ -73,8 +73,6 @@ class TwoPopModel:
             raise ValueError(
                 f"patterns must have shape ({self.d}, P) (got {tuple(patterns.shape)})."
             )
-        if patterns.dtype != self.dtype or patterns.device != self.device:
-            raise ValueError("patterns must match W_T dtype and device.")
         self.patterns = patterns              # (d, P), unit-norm columns
 
         # the engine: T (frozen, noisy, leashed) above S (plastic, driven by the interface)
@@ -114,21 +112,6 @@ class TwoPopModel:
 
     @W_S.setter
     def W_S(self, value: torch.Tensor) -> None:
-        if (
-            not isinstance(value, torch.Tensor)
-            or value.shape != (self.d, self.d)
-            or value.dtype != self.dtype
-            or value.device != self.device
-        ):
-            shape = None if not isinstance(value, torch.Tensor) else tuple(value.shape)
-            raise ValueError(
-                f"W_S must have shape ({self.d}, {self.d}), dtype {self.dtype}, "
-                f"and device {self.device} (got shape {shape})."
-            )
-        if not bool(torch.isfinite(value).all()):
-            raise ValueError("W_S contains NaN or infinite values.")
-        if float(torch.diagonal(value).abs().max()) > 10 * torch.finfo(value.dtype).eps:
-            raise ValueError("W_S must have a zero diagonal.")
         self._S.W = value
 
     @property
@@ -141,7 +124,7 @@ class TwoPopModel:
 
     @x_T.setter
     def x_T(self, value: torch.Tensor) -> None:
-        self._T.x = self._validated_state("x_T", value)
+        self._T.x = value
 
     @property
     def x_S(self) -> Optional[torch.Tensor]:
@@ -149,23 +132,7 @@ class TwoPopModel:
 
     @x_S.setter
     def x_S(self, value: torch.Tensor) -> None:
-        self._S.x = self._validated_state("x_S", value)
-
-    def _validated_state(self, name: str, value: torch.Tensor) -> torch.Tensor:
-        if (
-            not isinstance(value, torch.Tensor)
-            or value.shape != (self.d,)
-            or value.dtype != self.dtype
-            or value.device != self.device
-        ):
-            shape = None if not isinstance(value, torch.Tensor) else tuple(value.shape)
-            raise ValueError(
-                f"{name} must have shape ({self.d},), dtype {self.dtype}, "
-                f"and device {self.device} (got shape {shape})."
-            )
-        if not bool(torch.isfinite(value).all()):
-            raise ValueError(f"{name} contains NaN or infinite values.")
-        return value
+        self._S.x = value
 
     # ----- errors -----
     def eps_T(self) -> torch.Tensor:
@@ -242,7 +209,7 @@ class TwoPopModel:
         self.zero_diag_W_S()
 
 
-def build_system(cfg: ModelConfig) -> tuple[TwoPopModel, TwoPopBuildInfo]:
+def build_system(cfg: ModelConfig) -> tuple[TwoPopModel, SimpleNamespace]:
     """Build patterns + frozen W_T, resolve pi_ST against the spectral gap, and return
     (model, info). `info` carries the spectral gap, guard values, and the manifold basis."""
     from .diagnostics import manifold_basis, spectral_gap   # lazy import (avoid cycle)
@@ -268,9 +235,8 @@ def build_system(cfg: ModelConfig) -> tuple[TwoPopModel, TwoPopBuildInfo]:
     U_T = manifold_basis(M_T)
 
     guard_scalar = cfg.pi_T * sigma2_min * (cfg.pi_TS + cfg.pi_S) / cfg.pi_S   # aligned-case bound
-    info = TwoPopBuildInfo(
+    info = SimpleNamespace(
         patterns=M,
-        memory=memory,
         S_T=S_T,
         sigma2_min=sigma2_min,
         guard_safe=guard_safe,
@@ -281,6 +247,8 @@ def build_system(cfg: ModelConfig) -> tuple[TwoPopModel, TwoPopBuildInfo]:
         precision_ok=cfg.pi_TS > cfg.pi_S,
         pi_ST_ok=abs(pi_ST) < guard_safe,
         pi_ST_ok_aligned=abs(pi_ST) < guard_scalar,
+        manifold_dim=U_T.shape[1],
+        memory_residual=memory.max_residual,
     )
     return model, info
 
@@ -288,7 +256,7 @@ def build_system(cfg: ModelConfig) -> tuple[TwoPopModel, TwoPopBuildInfo]:
 def simulate(
     model: TwoPopModel,
     sim: SimConfig,
-    info: Optional[TwoPopBuildInfo] = None,
+    info: Optional[SimpleNamespace] = None,
 ) -> "History":
     """Run a two-population transfer simulation and record observables into a `History`.
 

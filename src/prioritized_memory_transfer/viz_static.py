@@ -13,7 +13,6 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .artifacts import TwoPopBuildInfo
 from .history import History
 from .model import TwoPopModel
 from .viz_style import despine_all, mpl_style
@@ -22,7 +21,7 @@ from .viz_style import despine_all, mpl_style
 def dashboard(
     hist: History,
     model: TwoPopModel,
-    info: Optional[TwoPopBuildInfo] = None,
+    info: Optional[object] = None,
 ):
     """6-panel overview: novelty staircase, replay raster, energies, per-memory residual,
     weight convergence + manifold occupancy, and the teacher spectrum with the pi_ST guard."""

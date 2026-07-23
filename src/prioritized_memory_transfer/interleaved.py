@@ -16,11 +16,11 @@ two-population model in `prioritized_memory_transfer.model`), so the synthesis o
 """
 from __future__ import annotations
 
+from types import SimpleNamespace
 from typing import Callable, Dict, Optional, Sequence
 
 import torch
 
-from .artifacts import InterleavedBuildInfo
 from .config import InterleavedConfig, SimConfig
 from .history import InterleavedHistory
 from .macro import CouplingInterface, MacroNetwork, Population, resolve_signed_precision, seed_state
@@ -29,7 +29,7 @@ from .memory import build_memory, make_teacher_subspaces
 
 def build_interleaved_synthesis(
     cfg: InterleavedConfig,
-) -> tuple[MacroNetwork, InterleavedBuildInfo]:
+) -> tuple[MacroNetwork, SimpleNamespace]:
     """Two frozen teachers `T1, T2` + a plastic synthesis `S`, wired with TWO single-source
     interfaces `S<-T1`, `S<-T2` (both `active=False`; the driver toggles one on per bout). Returns
     `(macro, info)` with the memory bases `U1, U2, U_Sigma`, the target rank `r_Sigma`, per-teacher
@@ -66,26 +66,18 @@ def build_interleaved_synthesis(
     ]
     macro = MacroNetwork([T1, T2, S], interfaces)
 
-    info = InterleavedBuildInfo(
+    info = SimpleNamespace(
         cfg=cfg,
-        M1=M1,
-        M2=M2,
-        memory1=memory1,
-        memory2=memory2,
         U1=U1,
         U2=U2,
         U_Sigma=U_Sigma,
         overlap=overlap,
         r_Sigma=r_Sigma,
-        capacity_ok=r_Sigma <= cfg.d - 1,
-        sigma1_min=sigma1_min,
-        sigma2_min=sigma2_min,
-        rho1=rho1,
-        rho2=rho2,
         target="S",
         order=("T1", "T2"),
         bases={"T1": U1, "T2": U2},
-        seed=cfg.seed,
+        rank1=U1.shape[1],
+        rank2=U2.shape[1],
     )
     return macro, info
 
@@ -139,11 +131,6 @@ def interleave_merge(
             raise ValueError(
                 f"basis for source {name!r} must have shape ({source.d}, k) (got {shape})."
             )
-        if basis.dtype != source.dtype or basis.device != source.device:
-            raise ValueError(
-                f"basis for source {name!r} must match its dtype/device "
-                f"({source.dtype}, {source.device})."
-            )
         itf_of[name] = matches[0]
 
     def seed(name: str) -> None:
@@ -168,7 +155,7 @@ def interleave_merge(
 def simulate_interleaved(
     macro: MacroNetwork,
     sim: SimConfig,
-    info: InterleavedBuildInfo,
+    info: SimpleNamespace,
 ) -> InterleavedHistory:
     """Run the interleaved merge of `T1, T2 -> S` and record the crosstalk-cancellation trace."""
     cfg = info.cfg

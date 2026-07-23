@@ -23,7 +23,6 @@ Visualization lives in `prioritized_memory_transfer.viz_static` / `prioritized_m
 so the core has no plotting dependency.
 """
 from .config import ContinualConfig, InterleavedConfig, ModelConfig, SimConfig
-from .artifacts import InterleavedBuildInfo, MemoryBuildResult, TwoPopBuildInfo
 from .macro import CouplingInterface, MacroNetwork, Population
 from .model import TwoPopModel, build_system, simulate, fwd, bwd, outer
 from .interleaved import build_interleaved_synthesis, simulate_interleaved, interleave_merge
@@ -39,10 +38,6 @@ __all__ = [
     "InterleavedConfig",
     "ContinualConfig",
     "SimConfig",
-    # typed construction results
-    "MemoryBuildResult",
-    "TwoPopBuildInfo",
-    "InterleavedBuildInfo",
     # engine (the LEGO layer)
     "Population",
     "CouplingInterface",

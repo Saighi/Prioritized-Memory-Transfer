@@ -18,4 +18,5 @@ dependencies = [
 progress = ["tqdm"]
 
 [tool.setuptools]
+package-dir = {"" = "src"}
 packages = ["prioritized_memory_transfer"]

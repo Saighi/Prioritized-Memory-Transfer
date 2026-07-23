@@ -13,7 +13,6 @@ from typing import Optional
 import numpy as np
 import torch
 
-from .artifacts import TwoPopBuildInfo
 from .history import History
 from .model import TwoPopModel
 from .viz_style import PLOTLY_LAYOUT
@@ -53,7 +52,7 @@ def raster(hist: History):
     return fig
 
 
-def trajectory_3d(hist: History, model: TwoPopModel, info: Optional[TwoPopBuildInfo] = None,
+def trajectory_3d(hist: History, model: TwoPopModel, info: Optional[object] = None,
                   basis: str = "patterns", max_frames: int = 120):
     """Animate x_T's path projected onto 3 directions, with a time slider.
 

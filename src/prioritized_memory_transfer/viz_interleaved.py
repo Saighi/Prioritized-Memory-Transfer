@@ -13,7 +13,6 @@ from typing import Optional
 
 import numpy as np
 
-from .artifacts import InterleavedBuildInfo
 from .viz_style import PLOTLY_LAYOUT, mpl_style
 
 
@@ -49,7 +48,7 @@ def crosstalk(hist, ax=None):
     return ax
 
 
-def dashboard(hist, info: Optional[InterleavedBuildInfo] = None):
+def dashboard(hist, info: Optional[object] = None):
     """Two panels: the crosstalk sawtooth and the union deficit (subspace being constructed)."""
     import matplotlib.pyplot as plt
     mpl_style()

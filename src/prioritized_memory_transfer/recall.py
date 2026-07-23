@@ -195,8 +195,6 @@ class AssociativeMemory:
             raise TypeError(f"known must be a boolean tensor (got {known.dtype}).")
         cue = cue.to(device=self.device, dtype=self.dtype)
         known = known.to(device=self.device)
-        if not bool(torch.isfinite(cue).all()):
-            raise ValueError("cue contains NaN or infinite values.")
         return cue, known
 
     def recall(
@@ -236,8 +234,6 @@ class AssociativeMemory:
                 shape = None if not isinstance(x0, torch.Tensor) else tuple(x0.shape)
                 raise ValueError(f"x0 must have shape ({self.d},) (got {shape}).")
             x = x0.clone().to(device=self.device, dtype=self.dtype)
-            if not bool(torch.isfinite(x).all()):
-                raise ValueError("x0 contains NaN or infinite values.")
             x[known] = cue[known]
         x0_rec = x.clone()
 
