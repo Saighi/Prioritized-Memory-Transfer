@@ -8,17 +8,22 @@ Both return a matplotlib Figure (displays inline in the VS Code interactive wind
 """
 from __future__ import annotations
 
-from typing import Dict, Optional
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
 
+from .artifacts import TwoPopBuildInfo
 from .history import History
 from .model import TwoPopModel
 from .viz_style import despine_all, mpl_style
 
 
-def dashboard(hist: History, model: TwoPopModel, info: Optional[Dict] = None):
+def dashboard(
+    hist: History,
+    model: TwoPopModel,
+    info: Optional[TwoPopBuildInfo] = None,
+):
     """6-panel overview: novelty staircase, replay raster, energies, per-memory residual,
     weight convergence + manifold occupancy, and the teacher spectrum with the pi_ST guard."""
     mpl_style()
@@ -81,14 +86,14 @@ def dashboard(hist: History, model: TwoPopModel, info: Optional[Dict] = None):
     a = ax[2, 1]
     if info is not None and "S_T" in info:
         import torch
-        evals = torch.linalg.eigvalsh(info["S_T"]).cpu().numpy()
+        evals = torch.linalg.eigvalsh(info.S_T).cpu().numpy()
         a.bar(range(len(evals)), np.sort(evals), color="C7")
-        a.axhline(info["sigma2_min"], ls="--", c="C0",
-                  label=rf"$\sigma^2_{{\min}}$ = {info['sigma2_min']:.2f}")
-        a.axhline(abs(info["pi_ST"]), ls="-", c="C3",
-                  label=rf"$|\pi_{{ST}}|$ = {abs(info['pi_ST']):.2f}")
-        a.axhline(info["guard_scalar"], ls=":", c="C2",
-                  label=f"guard = {info['guard_scalar']:.2f}")
+        a.axhline(info.sigma2_min, ls="--", c="C0",
+                  label=rf"$\sigma^2_{{\min}}$ = {info.sigma2_min:.2f}")
+        a.axhline(abs(info.pi_ST), ls="-", c="C3",
+                  label=rf"$|\pi_{{ST}}|$ = {abs(info.pi_ST):.2f}")
+        a.axhline(info.guard_scalar, ls=":", c="C2",
+                  label=f"guard = {info.guard_scalar:.2f}")
         a.set(title="Teacher spectrum & guard", xlabel="eigenvalue index",
               ylabel=r"eig$(S_T)$")
         a.legend()

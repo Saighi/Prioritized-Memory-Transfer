@@ -36,7 +36,7 @@ def make_cfg(seed):
         pi_ST="auto", pi_ST_safety=0.5,
         tau_T=30.0, tau_S=3.0, eta=0.005,
         sigma_xi=0.04, r0=1.0,
-        pattern_kind="orthonormal", W_T_kind="covpcn",
+        pattern_kind="orthonormal",
         seed=seed, device="cpu",
     )
 
@@ -56,10 +56,10 @@ dt = min(0.5, 0.5 * model_cfg.tau_T / sigma2_min)
 
 print(f"chosen seed           : {seed}")
 print(f"spectral gap σ²_min   : {sigma2_min:.3f}")
-print(f"manifold dim (eff rank): {info['manifold_dim']}   (memory plane is 2-D)")
-print(f"pi_ST                 : {info['pi_ST']:.3f}  (reversed/<0)   (guard |π_ST|<σ²_min? {abs(info['pi_ST']) < info['guard_safe']})")
+print(f"manifold dim (eff rank): {info.manifold_dim}   (memory plane is 2-D)")
+print(f"pi_ST                 : {info.pi_ST:.3f}  (reversed/<0)   (guard |π_ST|<σ²_min? {abs(info.pi_ST) < info.guard_safe})")
 print(f"adaptive dt           : {dt:.3f}")
-assert info["manifold_dim"] == 2, "expected a 2-D memory plane for d=3, P=2"
+assert info.manifold_dim == 2, "expected a 2-D memory plane for d=3, P=2"
 
 # %% run the transfer; the student's operators are recovered from the weight snapshots
 total_time = 6000.0
@@ -118,7 +118,7 @@ if SHOW:
 # %% verdict
 nov_top_fell = H["novelty_spec"][-1].max() < 0.5 * H["novelty_spec"][0].max()
 mem_eigs_small = np.sort(eig_Sf)[:2].max() < 0.5    # the two memory eigenvalues collapsed
-ok = (info["manifold_dim"] == 2) and nov_top_fell and mem_eigs_small
+ok = (info.manifold_dim == 2) and nov_top_fell and mem_eigs_small
 print(f"\n[{'CONFIRMED' if ok else 'CHECK'}] In d=3 the memory manifold is a 2-D plane (degenerate λ=0 "
       "eigenspace of S_T). As the student learns it, S_S's two in-plane eigenvalues collapse to 0 while "
       "the off-manifold eigenvalue grows: the novelty sphere cools on the memory great circle, the "

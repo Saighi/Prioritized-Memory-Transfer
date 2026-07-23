@@ -23,7 +23,7 @@ from .diagnostics import orthonormal_basis, spectral_gap, transfer_deficit
 from .history import ContinualHistory, InterleavedHistory
 from .interleaved import interleave_merge
 from .macro import CouplingInterface, MacroNetwork, Population, resolve_signed_precision
-from .memory import build_W_T
+from .memory import build_memory
 
 
 def _make_memories(cfg: ContinualConfig) -> torch.Tensor:
@@ -50,8 +50,8 @@ def _make_memories(cfg: ContinualConfig) -> torch.Tensor:
 class ContinualLearner:
     """Orchestrates the write -> consolidate -> download loop over a stream of memories.
 
-    Pass an explicit `(d, n)` `memories` matrix to control the stream (e.g. revisits / correlated
-    columns); otherwise it is generated from `cfg.memory_kind`.
+    Pass an explicit `(d, n_memories)` `memories` matrix to control the stream; otherwise it is
+    generated from `cfg.memory_kind`.
     """
 
     def __init__(self, cfg: ContinualConfig, memories: Optional[torch.Tensor] = None) -> None:
@@ -61,7 +61,25 @@ class ContinualLearner:
         self.device = cfg.device
         self.I = torch.eye(self.d, dtype=self.dtype, device=self.device)
 
-        self.memories = memories if memories is not None else _make_memories(cfg)
+        if memories is None:
+            self.memories = _make_memories(cfg)
+        else:
+            if not isinstance(memories, torch.Tensor):
+                raise TypeError(
+                    f"memories must be a torch.Tensor (got {type(memories).__name__})."
+                )
+            if memories.ndim != 2 or memories.shape != (cfg.d, cfg.n_memories):
+                raise ValueError(
+                    f"memories must have shape ({cfg.d}, {cfg.n_memories}) "
+                    f"(got {tuple(memories.shape)})."
+                )
+            values = memories.to(device=cfg.device, dtype=cfg.dtype).clone()
+            if not bool(torch.isfinite(values).all()):
+                raise ValueError("memories contain NaN or infinite values.")
+            norms = values.norm(dim=0, keepdim=True)
+            if bool((norms <= 0).any()):
+                raise ValueError("every memory column must have non-zero norm.")
+            self.memories = values / norms
         self.n_memories = self.memories.shape[1]
 
         z = torch.zeros(self.d, self.d, dtype=self.dtype, device=self.device)
@@ -110,8 +128,12 @@ class ContinualLearner:
     # ----- the three phase primitives -----
     def store_in_buffer(self, m: torch.Tensor) -> None:
         """One-shot covPCN of the single new memory; overwrites the buffer (and the control)."""
+        if m.ndim != 1 or m.shape[0] != self.d:
+            raise ValueError(f"buffer memory must have shape ({self.d},) (got {tuple(m.shape)}).")
+        if not bool(torch.isfinite(m).all()) or float(m.norm()) <= 0:
+            raise ValueError("buffer memory must be finite and have non-zero norm.")
         col = (m / m.norm().clamp_min(1e-12)).reshape(self.d, 1)
-        self.W_B = build_W_T(col, self.cfg)
+        self.W_B = build_memory(col).W
         self.W_ctrl = self.W_B.clone()     # the baseline network only ever holds the latest memory
 
     def consolidate(self, k: int) -> None:
@@ -163,6 +185,10 @@ class ContinualLearner:
 
     # ----- the loop -----
     def add_memory(self, k: int) -> None:
+        if not isinstance(k, int) or not 0 <= k < self.n_memories:
+            raise ValueError(
+                f"memory index must lie in [0, {self.n_memories - 1}] (got {k!r})."
+            )
         self.store_in_buffer(self.memories[:, k])
         self.consolidate(k)
         self.download(k)

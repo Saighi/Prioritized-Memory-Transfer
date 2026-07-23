@@ -9,8 +9,11 @@ Matplotlib / plotly are imported lazily.
 """
 from __future__ import annotations
 
+from typing import Optional
+
 import numpy as np
 
+from .artifacts import InterleavedBuildInfo
 from .viz_style import PLOTLY_LAYOUT, mpl_style
 
 
@@ -46,7 +49,7 @@ def crosstalk(hist, ax=None):
     return ax
 
 
-def dashboard(hist, info=None):
+def dashboard(hist, info: Optional[InterleavedBuildInfo] = None):
     """Two panels: the crosstalk sawtooth and the union deficit (subspace being constructed)."""
     import matplotlib.pyplot as plt
     mpl_style()
@@ -60,9 +63,9 @@ def dashboard(hist, info=None):
     ax[1].set_yscale("log")
     if info is not None:
         fig.suptitle(
-            f"Interleaved merge: {info['rank1']}+{info['rank2']} memories, "
-            f"overlap {info['overlap']}, "
-            rf"$r_\Sigma$ = {info['r_Sigma']}")
+            f"Interleaved merge: {info.rank1}+{info.rank2} memories, "
+            f"overlap {info.overlap}, "
+            rf"$r_\Sigma$ = {info.r_Sigma}")
     fig.tight_layout()
     return fig
 

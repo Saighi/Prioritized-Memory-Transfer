@@ -9,17 +9,17 @@ from src import diagnostics as dg
 
 cfg = ModelConfig(d=40, P=5, seed=1)
 model, info = build_system(cfg)
-print(f"sigma2_min      = {info['sigma2_min']:.4f}")
-print(f"manifold_dim    = {info['manifold_dim']} (expected P={cfg.P})")
-print(f"memory_residual = {info['memory_residual']:.2e}  (want ~0)")
-print(f"pi_ST           = {info['pi_ST']:.4f}  (reversed: <0)  "
-      f"|pi_ST|<guard_safe={info['guard_safe']:.4f}? {info['pi_ST_ok']}  "
-      f"(aligned bound {info['guard_scalar']:.4f}? {info['pi_ST_ok_aligned']})")
+print(f"sigma2_min      = {info.sigma2_min:.4f}")
+print(f"manifold_dim    = {info.manifold_dim} (expected P={cfg.P})")
+print(f"memory_residual = {info.memory_residual:.2e}  (want ~0)")
+print(f"pi_ST           = {info.pi_ST:.4f}  (reversed: <0)  "
+      f"|pi_ST|<guard_safe={info.guard_safe:.4f}? {info.pi_ST_ok}  "
+      f"(aligned bound {info.guard_scalar:.4f}? {info.pi_ST_ok_aligned})")
 
 # --- zero-diagonal invariant ---
 assert float(torch.diagonal(model.W_T).abs().max()) < 1e-12, "W_T has nonzero diagonal"
-assert info["manifold_dim"] == cfg.P, "manifold dim != P for orthonormal patterns"
-assert info["memory_residual"] < 1e-4, "M_T m_p not ~0"
+assert info.manifold_dim == cfg.P, "manifold dim != P for orthonormal patterns"
+assert info.memory_residual < 1e-4, "M_T m_p not ~0"
 
 # --- gradient check: perception & learning are gradient descent on F_S ---
 e_xS, e_WS = dg.check_gradients(model)

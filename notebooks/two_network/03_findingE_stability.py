@@ -31,7 +31,7 @@ sns.set_theme(context="notebook", style="whitegrid")
 
 base = ModelConfig(d=32, P=4, pi_TS=1.0, pi_S=0.5, seed=2)
 _, info = build_system(base)
-gap = info["sigma2_min"]; guard = info["guard_scalar"]
+gap = info.sigma2_min; guard = info.guard_scalar
 print(f"σ²_min (safe default) = {gap:.3f}   scalar guard |π_ST|* = π_T·σ²_min(π_TS+π_S)/π_S = {guard:.3f}")
 
 # %% test 1 — spectral liftoff (sweep the reversed-precision magnitude)

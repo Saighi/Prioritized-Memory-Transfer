@@ -17,10 +17,11 @@ the teacher's interface term is `+pi_ST * eps_TS` with `pi_ST` *signed* —
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, Optional, Sequence
+from typing import TYPE_CHECKING, Optional, Sequence
 
 import torch
 
+from .artifacts import TwoPopBuildInfo
 from .config import ModelConfig, SimConfig
 from .macro import (  # noqa: F401 (re-export)
     CouplingInterface,
@@ -31,7 +32,7 @@ from .macro import (  # noqa: F401 (re-export)
     outer,
     resolve_signed_precision,
 )
-from .memory import build_W_T, make_patterns, zero_diag
+from .memory import build_memory, make_patterns
 
 if TYPE_CHECKING:
     from .history import History
@@ -191,19 +192,28 @@ class TwoPopModel:
     def pretrain(self, subset: Sequence[int]) -> None:
         """Make S already 'know' a subset of patterns by setting W_S to the zero-diagonal
         covPCN solution for those patterns (so M_S nulls them -> they are 'known')."""
-        Msub = self.patterns[:, list(subset)]
-        self._S.W = build_W_T(Msub, self.cfg)   # reuse the same faithful construction
+        indices = list(subset)
+        if len(set(indices)) != len(indices):
+            raise ValueError(f"pretrain_subset contains duplicate indices: {indices!r}.")
+        if any(not isinstance(i, int) or i < 0 or i >= self.patterns.shape[1] for i in indices):
+            raise ValueError(
+                f"pretrain_subset indices must lie in [0, {self.patterns.shape[1] - 1}] "
+                f"(got {indices!r})."
+            )
+        Msub = self.patterns[:, indices]
+        self._S.W = build_memory(Msub).W
         self.zero_diag_W_S()
 
 
-def build_system(cfg: ModelConfig):
+def build_system(cfg: ModelConfig) -> tuple[TwoPopModel, TwoPopBuildInfo]:
     """Build patterns + frozen W_T, resolve pi_ST against the spectral gap, and return
     (model, info). `info` carries the spectral gap, guard values, and the manifold basis."""
     from .diagnostics import manifold_basis, spectral_gap   # lazy import (avoid cycle)
 
     M = make_patterns(cfg)
-    W_T = build_W_T(M, cfg)
-    M_T = torch.eye(cfg.d, dtype=cfg.dtype, device=cfg.device) - W_T
+    memory = build_memory(M)
+    W_T = memory.W
+    M_T = memory.M_op
     S_T = M_T.transpose(-2, -1) @ M_T
     sigma2_min = spectral_gap(S_T)
 
@@ -221,27 +231,28 @@ def build_system(cfg: ModelConfig):
     U_T = manifold_basis(M_T)
 
     guard_scalar = cfg.pi_T * sigma2_min * (cfg.pi_TS + cfg.pi_S) / cfg.pi_S   # aligned-case bound
-    info = {
-        "kind": "two_pop",
-        "patterns": M,
-        "W_T": W_T,
-        "S_T": S_T,
-        "sigma2_min": sigma2_min,
-        "guard_safe": guard_safe,                # |pi_ST| < pi_T sigma2_min : conservative threshold
-        "guard_scalar": guard_scalar,            # |pi_ST| < pi_T sigma2_min (pi_TS+pi_S)/pi_S : aligned case
-        "pi_ST": pi_ST,                          # signed (negative in the replay regime)
-        "exact_saddle": bool(cfg.exact_saddle),
-        "U_T": U_T,                              # (d, k) orthonormal basis of ker M_T
-        "manifold_dim": U_T.shape[1],
-        "memory_residual": (M_T @ M).norm(dim=0).max().item(),
-        "precision_ok": cfg.pi_TS > cfg.pi_S,
-        "pi_ST_ok": abs(pi_ST) < guard_safe,          # within the conservative stability threshold
-        "pi_ST_ok_aligned": abs(pi_ST) < guard_scalar,  # looser aligned-case bound
-    }
+    info = TwoPopBuildInfo(
+        patterns=M,
+        memory=memory,
+        S_T=S_T,
+        sigma2_min=sigma2_min,
+        guard_safe=guard_safe,
+        guard_scalar=guard_scalar,
+        pi_ST=pi_ST,
+        exact_saddle=bool(cfg.exact_saddle),
+        U_T=U_T,
+        precision_ok=cfg.pi_TS > cfg.pi_S,
+        pi_ST_ok=abs(pi_ST) < guard_safe,
+        pi_ST_ok_aligned=abs(pi_ST) < guard_scalar,
+    )
     return model, info
 
 
-def simulate(model: TwoPopModel, sim: SimConfig, info: Optional[Dict] = None) -> "History":
+def simulate(
+    model: TwoPopModel,
+    sim: SimConfig,
+    info: Optional[TwoPopBuildInfo] = None,
+) -> "History":
     """Run a two-population transfer simulation and record observables into a `History`.
 
     Two integration modes (both handled by the engine's `MacroNetwork.step`):
@@ -260,7 +271,7 @@ def simulate(model: TwoPopModel, sim: SimConfig, info: Optional[Dict] = None) ->
     if sim.pretrain_subset is not None:
         model.pretrain(sim.pretrain_subset)
 
-    U_T = info["U_T"] if info is not None else None
+    U_T = info.U_T if info is not None else None
     if U_T is None:
         from .diagnostics import manifold_basis
         U_T = manifold_basis(model.M_T)

@@ -9,10 +9,38 @@ that transfers memory). There is no separate gate: the phase *is* the sign.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+import math
+import warnings
+from dataclasses import dataclass
 from typing import Optional, Sequence, Union
 
 import torch
+
+
+def _positive(name: str, value: float) -> None:
+    if not math.isfinite(float(value)) or float(value) <= 0:
+        raise ValueError(f"{name} must be finite and > 0 (got {value!r}).")
+
+
+def _nonnegative(name: str, value: float) -> None:
+    if not math.isfinite(float(value)) or float(value) < 0:
+        raise ValueError(f"{name} must be finite and >= 0 (got {value!r}).")
+
+
+def _signed_or_auto(name: str, value: Union[float, str]) -> None:
+    if isinstance(value, str):
+        if value != "auto":
+            raise ValueError(f"{name} must be a finite number or 'auto' (got {value!r}).")
+        return
+    if not math.isfinite(float(value)):
+        raise ValueError(f"{name} must be finite (got {value!r}).")
+
+
+def _validate_runtime(device: str, dtype: torch.dtype) -> None:
+    if not isinstance(device, str) or not device.strip():
+        raise ValueError("device must be a non-empty torch device string.")
+    if dtype not in (torch.float32, torch.float64):
+        raise ValueError(f"dtype must be torch.float32 or torch.float64 (got {dtype!r}).")
 
 
 @dataclass
@@ -43,7 +71,6 @@ class ModelConfig:
 
     # --- construction choices ---
     pattern_kind: str = "orthonormal"   # "orthonormal" (rank P) | "correlated" (rank < P)
-    W_T_kind: str = "covpcn"            # "covpcn" (faithful, learned, zero-diag) | "projector"
     corr_rank: Optional[int] = None     # effective rank for correlated patterns (default P//2)
     corr_noise: float = 0.1             # additive noise for correlated patterns
 
@@ -53,13 +80,33 @@ class ModelConfig:
     dtype: torch.dtype = torch.float64
 
     def __post_init__(self) -> None:
+        if self.d < 2:
+            raise ValueError(f"d must be >= 2 (got {self.d}).")
+        if self.P < 1:
+            raise ValueError(f"P must be >= 1 (got {self.P}).")
         if self.P > self.d - 1:
             raise ValueError(
                 f"Need P <= d-1 for an exact zero-diagonal fit (got P={self.P}, d={self.d})."
             )
+        if self.pattern_kind not in {"orthonormal", "correlated"}:
+            raise ValueError(
+                f"pattern_kind must be 'orthonormal' or 'correlated' (got {self.pattern_kind!r})."
+            )
+        if self.corr_rank is not None and not 1 <= self.corr_rank <= self.P:
+            raise ValueError(f"corr_rank must lie in [1, P] (got {self.corr_rank}, P={self.P}).")
+        _nonnegative("corr_noise", self.corr_noise)
+        for name in ("pi_T", "pi_S", "pi_TS", "tau_T", "tau_S", "r0"):
+            _positive(name, getattr(self, name))
+        for name in ("eta", "sigma_xi"):
+            _nonnegative(name, getattr(self, name))
+        _signed_or_auto("pi_ST", self.pi_ST)
+        if not 0 < self.pi_ST_safety <= 1:
+            raise ValueError(
+                f"pi_ST_safety must lie in (0, 1] (got {self.pi_ST_safety})."
+            )
+        _validate_runtime(self.device, self.dtype)
         if self.pi_TS <= self.pi_S:
             # not fatal, but it violates the precision guard (confabulation risk)
-            import warnings
             warnings.warn(
                 f"precision guard pi_TS > pi_S violated (pi_TS={self.pi_TS}, pi_S={self.pi_S})."
             )
@@ -102,20 +149,62 @@ class InterleavedConfig:
     r2: float = 1.0                  # fixed norm for ||x2||
 
     # --- construction ---
-    W_T_kind: str = "covpcn"         # frozen-teacher construction ("covpcn" | "projector")
-
     # --- bookkeeping ---
     seed: int = 0
     device: str = "cpu"
     dtype: torch.dtype = torch.float64
 
     def __post_init__(self) -> None:
+        if self.d < 2:
+            raise ValueError(f"d must be >= 2 (got {self.d}).")
+        if self.rank1 < 1 or self.rank2 < 1:
+            raise ValueError(
+                f"rank1 and rank2 must be >= 1 (got {self.rank1}, {self.rank2})."
+            )
         if self.rank1 > self.d - 1 or self.rank2 > self.d - 1:
             raise ValueError(
                 f"Need rank <= d-1 per teacher (got rank1={self.rank1}, rank2={self.rank2}, d={self.d})."
             )
+        if self.geometry not in {"orthogonal", "shared", "oblique"}:
+            raise ValueError(
+                f"geometry must be 'orthogonal', 'shared', or 'oblique' (got {self.geometry!r})."
+            )
+        if self.geometry == "orthogonal" and self.rank1 + self.rank2 > self.d:
+            raise ValueError(
+                f"orthogonal geometry needs rank1+rank2 <= d "
+                f"(got {self.rank1}+{self.rank2} > {self.d})."
+            )
+        if self.geometry == "shared":
+            if not 0 <= self.overlap <= min(self.rank1, self.rank2):
+                raise ValueError(
+                    "shared geometry needs overlap in "
+                    f"[0, min(rank1, rank2)] (got {self.overlap})."
+                )
+            if self.rank1 + self.rank2 - self.overlap > self.d:
+                raise ValueError(
+                    "shared geometry needs rank1+rank2-overlap <= d "
+                    f"(got {self.rank1}+{self.rank2}-{self.overlap} > {self.d})."
+                )
+        if self.geometry == "oblique":
+            if self.rank1 + self.rank2 > self.d:
+                raise ValueError(
+                    f"oblique geometry needs rank1+rank2 <= d "
+                    f"(got {self.rank1}+{self.rank2} > {self.d})."
+                )
+            if not 0 < self.principal_angle <= math.pi / 2:
+                raise ValueError(
+                    "principal_angle must lie in (0, pi/2] for oblique geometry "
+                    f"(got {self.principal_angle})."
+                )
+        for name in ("pi_T1", "pi_T2", "pi_S", "pi_I", "tau_T1", "tau_T2", "tau_S", "r1", "r2"):
+            _positive(name, getattr(self, name))
+        for name in ("eta", "sigma_xi1", "sigma_xi2"):
+            _nonnegative(name, getattr(self, name))
+        _signed_or_auto("rho", self.rho)
+        if not 0 < self.rho_safety <= 1:
+            raise ValueError(f"rho_safety must lie in (0, 1] (got {self.rho_safety}).")
+        _validate_runtime(self.device, self.dtype)
         if self.pi_I <= self.pi_S:
-            import warnings
             warnings.warn(
                 f"precision guard pi_I > pi_S violated (pi_I={self.pi_I}, pi_S={self.pi_S})."
             )
@@ -136,7 +225,6 @@ class ContinualConfig:
     d: int = 32
     n_memories: int = 5
     memory_kind: str = "correlated"  # "correlated" (low-rank + overlaps) | "random" unit vectors
-    revisit: Optional[Sequence[int]] = None
 
     # --- precisions (guards: pi_I > pi_S ; |rho| below the structure guard) ---
     pi_teacher: float = 1.0          # self-precision of the frozen networks in each phase
@@ -164,7 +252,6 @@ class ContinualConfig:
     # --- loop wiring ---
     synthesis_warm_start: bool = True    # start Synthesis as the current Storage (fast increment)
     storage_support: bool = True         # interleave Storage in as a rehearsal co-teacher
-    W_T_kind: str = "covpcn"             # frozen-network construction ("covpcn" | "projector")
 
     # --- bookkeeping ---
     seed: int = 0
@@ -172,8 +259,29 @@ class ContinualConfig:
     dtype: torch.dtype = torch.float64
 
     def __post_init__(self) -> None:
+        if self.d < 2:
+            raise ValueError(f"d must be >= 2 (got {self.d}).")
+        if self.n_memories < 1:
+            raise ValueError(f"n_memories must be >= 1 (got {self.n_memories}).")
+        if self.memory_kind not in {"correlated", "random"}:
+            raise ValueError(
+                f"memory_kind must be 'correlated' or 'random' (got {self.memory_kind!r})."
+            )
+        for name in ("pi_teacher", "pi_S", "pi_I", "tau_teacher", "tau_S", "r", "dt"):
+            _positive(name, getattr(self, name))
+        for name in ("eta", "sigma_xi"):
+            _nonnegative(name, getattr(self, name))
+        _signed_or_auto("rho", self.rho)
+        if not 0 < self.rho_safety <= 1:
+            raise ValueError(f"rho_safety must lie in (0, 1] (got {self.rho_safety}).")
+        for name in ("consolidate_bouts", "download_bouts", "bout_steps"):
+            value = getattr(self, name)
+            if not isinstance(value, int) or value < 1:
+                raise ValueError(f"{name} must be an integer >= 1 (got {value!r}).")
+        if self.mode not in {"full", "adiabatic"}:
+            raise ValueError(f"mode must be 'full' or 'adiabatic' (got {self.mode!r}).")
+        _validate_runtime(self.device, self.dtype)
         if self.pi_I <= self.pi_S:
-            import warnings
             warnings.warn(f"precision guard pi_I > pi_S violated (pi_I={self.pi_I}, pi_S={self.pi_S}).")
 
 
@@ -188,3 +296,19 @@ class SimConfig:
     pretrain_subset: Optional[Sequence[int]] = None  # pattern indices S already "knows"
     bout_steps: int = 3000           # steps per replay bout in the interleaved merge (src.interleaved)
     progress: bool = True
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.n_steps, int) or self.n_steps < 1:
+            raise ValueError(f"n_steps must be an integer >= 1 (got {self.n_steps!r}).")
+        _positive("dt", self.dt)
+        if self.mode not in {"full", "adiabatic"}:
+            raise ValueError(f"mode must be 'full' or 'adiabatic' (got {self.mode!r}).")
+        for name in ("s_substeps", "record_every", "bout_steps"):
+            value = getattr(self, name)
+            if not isinstance(value, int) or value < 1:
+                raise ValueError(f"{name} must be an integer >= 1 (got {value!r}).")
+        if not isinstance(self.n_weight_snapshots, int) or self.n_weight_snapshots < 0:
+            raise ValueError(
+                "n_weight_snapshots must be an integer >= 0 "
+                f"(got {self.n_weight_snapshots!r})."
+            )

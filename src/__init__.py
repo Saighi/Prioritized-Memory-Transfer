@@ -23,11 +23,12 @@ Visualization lives in `src.viz_static` / `src.viz_interactive` / `src.viz_eigen
 so the core has no plotting dependency.
 """
 from .config import ContinualConfig, InterleavedConfig, ModelConfig, SimConfig
+from .artifacts import InterleavedBuildInfo, MemoryBuildResult, TwoPopBuildInfo
 from .macro import CouplingInterface, MacroNetwork, Population
 from .model import TwoPopModel, build_system, simulate, fwd, bwd, outer
 from .interleaved import build_interleaved_synthesis, simulate_interleaved, interleave_merge
 from .continual import ContinualLearner
-from .memory import make_patterns, make_teacher_subspaces, build_W_T, zero_diag, memory_residual
+from .memory import make_patterns, make_teacher_subspaces, build_memory, zero_diag, memory_residual
 from .recall import AssociativeMemory, RecallTrace, make_mask
 from .history import ContinualHistory, History, InterleavedHistory
 from . import diagnostics
@@ -38,6 +39,10 @@ __all__ = [
     "InterleavedConfig",
     "ContinualConfig",
     "SimConfig",
+    # typed construction results
+    "MemoryBuildResult",
+    "TwoPopBuildInfo",
+    "InterleavedBuildInfo",
     # engine (the LEGO layer)
     "Population",
     "CouplingInterface",
@@ -60,7 +65,7 @@ __all__ = [
     # memory / weight construction
     "make_patterns",
     "make_teacher_subspaces",
-    "build_W_T",
+    "build_memory",
     "zero_diag",
     "memory_residual",
     # single-network associative recall (clamped query)

@@ -20,7 +20,7 @@ d = SIDE * SIDE
 raw = torch.rand(d, P, dtype=DT)                 # non-negative, like pixels
 patterns = raw / raw.norm(dim=0, keepdim=True)
 
-mem = AssociativeMemory(patterns, pi=1.0, W_kind="covpcn")
+mem = AssociativeMemory(patterns, pi=1.0)
 
 # (A) patterns are memories: M_op m_p ~ 0, and the manifold has the expected dimension
 res = (mem.M_op @ patterns).norm(dim=0).max().item()
@@ -29,7 +29,7 @@ assert mem.manifold.shape[1] == P, "memory manifold dim != number of independent
 assert res < 1e-5, "stored pictures are not in ker(M_op)"
 
 # (B) closed-form completion from a half cue recovers the exact stored picture
-known = make_mask((SIDE, SIDE), "bottom", frac=0.5, dtype=DT)
+known = make_mask((SIDE, SIDE), "bottom", frac=0.5)
 errs = []
 for p in range(P):
     xstar = mem.recall_steady(patterns[:, p], known)
@@ -51,7 +51,7 @@ assert tr.occupancy[-1] > 0.999, "converged state is not inside the memory manif
 
 # (D) mask counts
 for kind, frac, exp in [("bottom", 0.5, d // 2), ("left", 0.25, (SIDE // 4) * SIDE)]:
-    k = make_mask((SIDE, SIDE), kind, frac=frac, dtype=DT)
+    k = make_mask((SIDE, SIDE), kind, frac=frac)
     print(f"(D) mask {kind} frac={frac}: known={int(k.sum())} (expect {exp})")
     assert int(k.sum()) == exp, "mask known-count wrong"
 

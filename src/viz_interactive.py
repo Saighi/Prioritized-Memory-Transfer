@@ -8,11 +8,12 @@
 """
 from __future__ import annotations
 
-from typing import Dict, Optional
+from typing import Optional
 
 import numpy as np
 import torch
 
+from .artifacts import TwoPopBuildInfo
 from .history import History
 from .model import TwoPopModel
 from .viz_style import PLOTLY_LAYOUT
@@ -52,7 +53,7 @@ def raster(hist: History):
     return fig
 
 
-def trajectory_3d(hist: History, model: TwoPopModel, info: Optional[Dict] = None,
+def trajectory_3d(hist: History, model: TwoPopModel, info: Optional[TwoPopBuildInfo] = None,
                   basis: str = "patterns", max_frames: int = 120):
     """Animate x_T's path projected onto 3 directions, with a time slider.
 
@@ -65,7 +66,7 @@ def trajectory_3d(hist: History, model: TwoPopModel, info: Optional[Dict] = None
     xT = torch.as_tensor(H["x_T"])                 # (T, d)
 
     if basis == "manifold" and info is not None:
-        B3 = info["U_T"][:, :3].cpu()
+        B3 = info.U_T[:, :3].cpu()
         labels = ["u0", "u1", "u2"]
     else:
         B3 = model.patterns[:, :3].cpu()

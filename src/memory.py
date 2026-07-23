@@ -1,14 +1,13 @@
-"""Pattern generation and construction of the teacher's frozen recurrent weights `W_T`.
+"""Pattern generation and construction of zero-diagonal covariance-PCN memories.
 
 Faithfulness notes:
   - `W_T` and `W_S` carry a ZERO DIAGONAL at all times (no autapses). `build_W_T` produces
     a zero-diagonal matrix by construction.
   - The default `covpcn` build learns, per node, the zero-diagonal linear predictor of that
-    node from the *others* across all patterns. For P <= d-1 this drives the residual
-    `M_T m_p = m_p - W_T m_p` to ~0, so the patterns span `ker M_T` (T is "flat") while the
-    diagonal stays exactly zero. This is the linear covariance-PCN memory.
-  - The `projector` build uses the ideal orthogonal projector onto span(patterns) with the
-    diagonal zeroed afterwards — handy for clean-theory comparisons.
+    node from the *others* across all patterns. For generic dense patterns with P <= d-1 this
+    drives `M_T m_p = m_p - W_T m_p` to ~0. P <= d-1 is necessary but not sufficient for
+    arbitrary patterns: every neuron's values must be predictable from the other neurons.
+    `build_memory` therefore measures representability and rejects an invalid fit.
   - The same construction also pre-seeds a student that already "knows" a subset of patterns
     (see `TwoPopModel.pretrain`).
 """
@@ -18,6 +17,7 @@ import math
 
 import torch
 
+from .artifacts import MemoryBuildResult
 from .config import ModelConfig
 
 
@@ -27,7 +27,11 @@ def zero_diag(W: torch.Tensor) -> torch.Tensor:
 
 
 def make_patterns(cfg: ModelConfig) -> torch.Tensor:
-    """Return stored memories as a (d, P) matrix with unit-norm columns."""
+    """Return stored memories as a `(d, P)` matrix with unit-norm columns.
+
+    ``pattern_kind="correlated"`` is exactly rank ``corr_rank`` only when ``corr_noise=0``.
+    Positive noise keeps the columns correlated but makes the set generically full-rank.
+    """
     gen = torch.Generator().manual_seed(cfg.seed)
     d, P = cfg.d, cfg.P
     if cfg.pattern_kind == "orthonormal":
@@ -97,35 +101,98 @@ def make_teacher_subspaces(cfg) -> tuple:
     return M1.to(cfg.device), M2.to(cfg.device)
 
 
-def build_W_T(M: torch.Tensor, cfg, ridge: float = 1e-8) -> torch.Tensor:
-    """Build frozen, zero-diagonal recurrent weights from patterns M (d, P).
+def _validate_pattern_matrix(M: torch.Tensor) -> None:
+    if not isinstance(M, torch.Tensor):
+        raise TypeError(f"patterns must be a torch.Tensor (got {type(M).__name__}).")
+    if M.ndim != 2:
+        raise ValueError(f"patterns must have shape (d, P) (got shape {tuple(M.shape)}).")
+    if M.shape[0] < 2:
+        raise ValueError(f"patterns need d >= 2 rows (got d={M.shape[0]}).")
+    if not M.is_floating_point():
+        raise TypeError(f"patterns must use a floating dtype (got {M.dtype}).")
+    if not bool(torch.isfinite(M).all()):
+        raise ValueError("patterns contain NaN or infinite values.")
+    if M.shape[1] and bool((M.norm(dim=0) <= 0).any()):
+        raise ValueError("every pattern column must have non-zero norm.")
 
-    Used for the teacher's `W_T`, and (via `pretrain`) to pre-seed a student that already
-    holds a subset of the patterns.
+
+def _pattern_geometry(M: torch.Tensor, tol: float) -> tuple[int, float]:
+    if M.shape[1] == 0:
+        return 0, float("nan")
+    singular = torch.linalg.svdvals(M)
+    threshold = tol * float(singular.max())
+    nonzero = singular[singular > threshold]
+    rank = int(nonzero.numel())
+    condition = float(nonzero.max() / nonzero.min()) if rank else float("inf")
+    return rank, condition
+
+
+def build_memory(
+    M: torch.Tensor,
+    *,
+    ridge: float = 1e-8,
+    tolerance: float = 1e-6,
+    require_representable: bool = True,
+) -> MemoryBuildResult:
+    """Fit a zero-diagonal covariance-PCN memory to pattern columns ``M``.
+
+    The returned diagnostics make the fit explicit.  If ``require_representable`` is true,
+    reject pattern sets that cannot be stored within ``tolerance`` under the no-autapse
+    constraint instead of silently returning weights that do not encode the requested memory.
     """
+    _validate_pattern_matrix(M)
+    if not math.isfinite(float(ridge)) or ridge < 0:
+        raise ValueError(f"ridge must be finite and >= 0 (got {ridge!r}).")
+    if not math.isfinite(float(tolerance)) or tolerance <= 0:
+        raise ValueError(f"tolerance must be finite and > 0 (got {tolerance!r}).")
+
     d = M.shape[0]
     dtype, device = M.dtype, M.device
-    if cfg.W_T_kind == "projector":
-        G = M.T @ M
-        Pj = M @ torch.linalg.solve(G + ridge * torch.eye(G.shape[0], dtype=dtype, device=device), M.T)
-        return zero_diag(Pj)
-    if cfg.W_T_kind == "covpcn":
-        # Per-node zero-diagonal least squares: row i predicts component i of each pattern
-        # from the other components. X has patterns as rows (P, d).
-        X = M.T
-        W = torch.zeros(d, d, dtype=dtype, device=device)
-        for i in range(d):
-            others = [j for j in range(d) if j != i]
-            Xi = X[:, others]                  # (P, d-1)
-            t = X[:, i]                        # (P,)
-            A_ = Xi.T @ Xi + ridge * torch.eye(d - 1, dtype=dtype, device=device)
-            w = torch.linalg.solve(A_, Xi.T @ t)
-            W[i, others] = w
-        return W                                # zero diagonal by construction
-    raise ValueError(f"unknown W_T_kind={cfg.W_T_kind!r}")
+    # Per-node zero-diagonal least squares: row i predicts component i of each pattern
+    # from the other components. X has patterns as rows (P, d).
+    X = M.T
+    W = torch.zeros(d, d, dtype=dtype, device=device)
+    for i in range(d):
+        others = [j for j in range(d) if j != i]
+        Xi = X[:, others]                  # (P, d-1)
+        target = X[:, i]                   # (P,)
+        A = Xi.T @ Xi + ridge * torch.eye(d - 1, dtype=dtype, device=device)
+        W[i, others] = torch.linalg.solve(A, Xi.T @ target)
+
+    M_op = torch.eye(d, dtype=dtype, device=device) - W
+    residuals = (M_op @ M).norm(dim=0)
+    max_residual = float(residuals.max()) if residuals.numel() else 0.0
+    pattern_rank, condition = _pattern_geometry(M, tolerance)
+    manifold_singular = torch.linalg.svdvals(M_op)
+    manifold_rank = int((manifold_singular < tolerance).sum())
+    representable = max_residual <= tolerance and manifold_rank >= pattern_rank
+    result = MemoryBuildResult(
+        W=W,
+        M_op=M_op,
+        residuals=residuals,
+        max_residual=max_residual,
+        pattern_rank=pattern_rank,
+        manifold_rank=manifold_rank,
+        condition_number=condition,
+        representable=representable,
+        tolerance=float(tolerance),
+    )
+    if require_representable and not representable:
+        raise ValueError(
+            "patterns are not representable by a zero-diagonal covariance-PCN: "
+            f"max ||(I-W)m_p||={max_residual:.3e}, numerical pattern rank={pattern_rank}, "
+            f"memory-manifold rank={manifold_rank}. P <= d-1 is necessary but not sufficient; "
+            "each neuron's pattern values must be predictable from the remaining neurons."
+        )
+    return result
 
 
 def memory_residual(W_T: torch.Tensor, M: torch.Tensor) -> float:
-    """max_p ||M_T m_p|| with M_T = I - W_T. Should be ~0 for a faithful covPCN/projector."""
+    """Return ``max_p ||(I-W_T)m_p||`` for an already-built memory."""
+    _validate_pattern_matrix(M)
+    if W_T.ndim != 2 or W_T.shape != (M.shape[0], M.shape[0]):
+        raise ValueError(
+            f"W_T must have shape ({M.shape[0]}, {M.shape[0]}) (got {tuple(W_T.shape)})."
+        )
     M_T = torch.eye(W_T.shape[0], dtype=W_T.dtype, device=W_T.device) - W_T
     return (M_T @ M).norm(dim=0).max().item()

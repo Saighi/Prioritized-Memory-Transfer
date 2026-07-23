@@ -44,7 +44,7 @@ def offmanifold_growth(base: ModelConfig, pi_ST_mags: Sequence[float]):
     G lifts off 0 exactly at the stability bound."""
     model, info = build_system(replace(base, pi_ST=0.0))
     model.W_S = model.W_T.clone()              # S has consolidated the whole manifold
-    S_T = info["S_T"]
+    S_T = info.S_T
     gmax = []
     for m in pi_ST_mags:
         G = -model.pi_T * S_T + float(m) * model.novelty_operator()

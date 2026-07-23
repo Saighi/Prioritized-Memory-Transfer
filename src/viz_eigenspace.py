@@ -24,6 +24,7 @@ from typing import Dict, List, Optional
 import numpy as np
 import torch
 
+from .artifacts import TwoPopBuildInfo
 from .diagnostics import novelty_operator
 from .viz_style import PLOTLY_LAYOUT
 from .history import History
@@ -45,7 +46,7 @@ def n_s_of(W_S: torch.Tensor, pi_TS: float, pi_S: float) -> torch.Tensor:
 
 
 # --------------------------------------------------------------- per-frame data extractor
-def eigenframes(hist: History, model: TwoPopModel, info: Optional[Dict] = None,
+def eigenframes(hist: History, model: TwoPopModel, info: Optional[TwoPopBuildInfo] = None,
                 n_frames: Optional[int] = None) -> List[Dict]:
     """One dict per weight snapshot: t, S_S, N_S (numpy), eigvals/eigvecs of S_S, and the
     x_T path/head recorded up to that snapshot's time. Sub-sample to n_frames if given."""
@@ -90,9 +91,9 @@ def _great_circle(U2: np.ndarray, n: int = 200) -> np.ndarray:
     return np.cos(s)[:, None] * U2[:, 0][None, :] + np.sin(s)[:, None] * U2[:, 1][None, :]
 
 
-def _off_axis(info: Dict) -> np.ndarray:
+def _off_axis(info: TwoPopBuildInfo) -> np.ndarray:
     """The off-manifold normal: eigenvector of the LARGEST eigenvalue of S_T."""
-    evals, evecs = torch.linalg.eigh(info["S_T"])
+    evals, evecs = torch.linalg.eigh(info.S_T)
     return evecs[:, -1].cpu().numpy()
 
 
@@ -158,7 +159,7 @@ def novelty_sphere_animated(hist, model, info, n_frames=None):
     import plotly.graph_objects as go
     frames = eigenframes(hist, model, info, n_frames)
     X, Y, Z = _unit_sphere()
-    circ = _great_circle(info["U_T"][:, :2].cpu().numpy()) * 1.02
+    circ = _great_circle(info.U_T[:, :2].cpu().numpy()) * 1.02
     cmax = max(0.34, max(float(_novelty_on_sphere(fr["N_S"], X, Y, Z).max()) for fr in frames))
 
     circ_tr = go.Scatter3d(x=circ[:, 0], y=circ[:, 1], z=circ[:, 2], mode="lines",
@@ -185,7 +186,7 @@ def novelty_sphere_triptych(hist, model, info, n_frames=None):
     from plotly.subplots import make_subplots
     frames = eigenframes(hist, model, info, n_frames)
     X, Y, Z = _unit_sphere()
-    circ = _great_circle(info["U_T"][:, :2].cpu().numpy()) * 1.02
+    circ = _great_circle(info.U_T[:, :2].cpu().numpy()) * 1.02
     cmax = max(0.34, max(float(_novelty_on_sphere(fr["N_S"], X, Y, Z).max()) for fr in frames))
 
     fig = make_subplots(rows=1, cols=3, specs=[[{"type": "scene"}] * 3],
@@ -268,7 +269,7 @@ def stretch_ellipsoid_triptych(hist, model, info, n_frames=None):
 
 # =============================================================== 3. ENERGY VALLEY
 def _valley_grid(info, ng: int = 50, span: float = 1.5):
-    u_mem = info["U_T"][:, 0].cpu().numpy()
+    u_mem = info.U_T[:, 0].cpu().numpy()
     n_off = _off_axis(info)
     a = np.linspace(-span, span, ng)
     A, Bm = np.meshgrid(a, a)

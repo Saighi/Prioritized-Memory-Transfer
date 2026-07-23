@@ -29,17 +29,17 @@ def run(pattern_kind, **kw):
     model, info = build_system(cfg)
     sim = SimConfig(n_steps=45000, dt=0.5, mode="adiabatic", record_every=150, progress=False)
     H = simulate(model, sim, info).to_numpy()
-    rank = ex.effective_rank(info["patterns"])
-    gram_evals = torch.linalg.eigvalsh(info["patterns"].T @ info["patterns"]).flip(0).cpu().numpy()
+    rank = ex.effective_rank(info.patterns)
+    gram_evals = torch.linalg.eigvalsh(info.patterns.T @ info.patterns).flip(0).cpu().numpy()
     return H, info, rank, gram_evals
 
 
 H_o, info_o, rank_o, gram_o = run("orthonormal")
 H_c, info_c, rank_c, gram_c = run("correlated", corr_rank=3, corr_noise=0.0)
 
-print(f"orthonormal: P=6  effective rank={rank_o}  manifold_dim={info_o['manifold_dim']}  "
+print(f"orthonormal: P=6  effective rank={rank_o}  manifold_dim={info_o.manifold_dim}  "
       f"#staircase curves={H_o['novelty_spec'].shape[1]}")
-print(f"correlated : P=6  effective rank={rank_c}  manifold_dim={info_c['manifold_dim']}  "
+print(f"correlated : P=6  effective rank={rank_c}  manifold_dim={info_c.manifold_dim}  "
       f"#staircase curves={H_c['novelty_spec'].shape[1]}")
 
 # %% figure
@@ -79,6 +79,6 @@ fig
 ok = (rank_o == 6 and info_o["manifold_dim"] == 6
       and rank_c == 3 and info_c["manifold_dim"] == 3)
 print(f"\n[{'CONFIRMED' if ok else 'CHECK'}] orthonormal patterns give {info_o['manifold_dim']} "
-      f"staircase directions (= P), correlated give {info_c['manifold_dim']} (= effective rank "
+      f"staircase directions (= P), correlated give {info_c.manifold_dim} (= effective rank "
       "< P). The linear model transfers a *subspace*: the step count is the memory set's "
       "effective rank. (Discrete one-per-pattern replay would need an added nonlinearity / soft-WTA.)")

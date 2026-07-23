@@ -1,8 +1,8 @@
 """One linear associative memory, queried by clamping units (the standalone single-network
 counterpart to the transfer models; see `docs/understanding_pc_associative_memory.md`).
 
-Weights are built from the stored pictures with the zero-diagonal covPCN / projector
-construction (`src.memory.build_W_T`), so every picture lies in `ker(M_op)` and the free
+Weights are fitted with the zero-diagonal covariance-PCN construction
+(`src.memory.build_memory`), so every representable picture lies in `ker(M_op)` and the free
 energy `F(x) = 0.5 pi ||M_op x||^2` is a quadratic bowl whose zero-floor is the memory
 manifold. Recall clamps the *known* units to a partial cue and lets the free units descend F
 by projected gradient flow (`tau xdot = -pi S x`, clamped units held fixed) until the state
@@ -13,13 +13,13 @@ gradient-flow query; `make_mask` builds the occlusion patterns.
 """
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
-from types import SimpleNamespace
 from typing import Optional, Tuple
 
 import torch
 
-from .memory import build_W_T
+from .memory import build_memory
 
 
 # --------------------------------------------------------------------------- occlusion masks
@@ -28,7 +28,6 @@ def make_mask(
     kind: str = "bottom",
     frac: float = 0.5,
     seed: int = 0,
-    dtype: torch.dtype = torch.float64,
     device: str = "cpu",
 ) -> torch.Tensor:
     """Return a boolean vector `known` of length `h*w` (row-major) — True where a unit is CLAMPED
@@ -41,6 +40,10 @@ def make_mask(
       - "random": a random fraction `frac` of pixels is known (reproducible via `seed`).
     """
     h, w = shape
+    if not isinstance(h, int) or not isinstance(w, int) or h < 1 or w < 1:
+        raise ValueError(f"shape entries must be positive integers (got {shape!r}).")
+    if not math.isfinite(float(frac)) or not 0 <= frac <= 1:
+        raise ValueError(f"frac must lie in [0, 1] (got {frac!r}).")
     known = torch.zeros(h, w, dtype=torch.bool, device=device)
     if kind == "top":
         known[: max(1, int(round(frac * h))), :] = True
@@ -95,18 +98,19 @@ class AssociativeMemory:
     columns) as memories, queried by clamping units.
 
     `pi` is the self-precision (an overall gain on F; it does not change the fixed point).
-    `W_kind` is "covpcn" (the faithful learned, zero-diagonal weights the project uses) or
-    "projector" (the ideal zero-diagonal projector onto span(patterns)).
+    Construction fails early if the supplied patterns are not representable by a zero-diagonal
+    covariance-PCN.
     """
 
     def __init__(
         self,
         patterns: torch.Tensor,
         pi: float = 1.0,
-        W_kind: str = "covpcn",
         ridge: float = 1e-8,
         tol: float = 1e-6,
     ) -> None:
+        if not math.isfinite(float(pi)) or pi <= 0:
+            raise ValueError(f"pi must be finite and > 0 (got {pi!r}).")
         self.patterns = patterns                       # (d, P)
         self.d, self.P = patterns.shape
         self.pi = float(pi)
@@ -115,8 +119,9 @@ class AssociativeMemory:
         self.I = torch.eye(self.d, dtype=self.dtype, device=self.device)
 
         # zero-diagonal weights from the stored pictures (reuse the package builder)
-        self.W = build_W_T(patterns, SimpleNamespace(W_T_kind=W_kind), ridge=ridge)
-        self.M_op = self.I - self.W                    # mismatch operator
+        self.memory_build = build_memory(patterns, ridge=ridge, tolerance=tol)
+        self.W = self.memory_build.W
+        self.M_op = self.memory_build.M_op
         self.S = self.M_op.transpose(-2, -1) @ self.M_op   # self-surprise operator
 
         # orthonormal bases: the stored-picture span and the actual zero-floor manifold ker(M_op)
@@ -155,6 +160,7 @@ class AssociativeMemory:
         Splitting S into free (u) / known (k) blocks, the stationary condition
         (S x)_u = 0 gives  S_uu x_u = -S_uk cue_k.
         """
+        cue, known = self._validated_query(cue, known)
         u = (~known).nonzero(as_tuple=True)[0]
         k = known.nonzero(as_tuple=True)[0]
         x = cue.clone()
@@ -163,8 +169,33 @@ class AssociativeMemory:
         S_uu = self.S.index_select(0, u).index_select(1, u)
         S_uk = self.S.index_select(0, u).index_select(1, k)
         rhs = -S_uk @ cue.index_select(0, k)
-        x[u] = torch.linalg.solve(S_uu, rhs)
+        try:
+            x[u] = torch.linalg.solve(S_uu, rhs)
+        except RuntimeError as exc:
+            raise ValueError(
+                "the clamp does not determine a unique completion; reveal more independent "
+                "units or use a pattern set with a better-conditioned free-state system."
+            ) from exc
         return x
+
+    def _validated_query(
+        self,
+        cue: torch.Tensor,
+        known: torch.Tensor,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        if not isinstance(cue, torch.Tensor) or cue.ndim != 1 or cue.shape[0] != self.d:
+            shape = None if not isinstance(cue, torch.Tensor) else tuple(cue.shape)
+            raise ValueError(f"cue must have shape ({self.d},) (got {shape}).")
+        if not isinstance(known, torch.Tensor) or known.ndim != 1 or known.shape[0] != self.d:
+            shape = None if not isinstance(known, torch.Tensor) else tuple(known.shape)
+            raise ValueError(f"known must have shape ({self.d},) (got {shape}).")
+        if known.dtype != torch.bool:
+            raise TypeError(f"known must be a boolean tensor (got {known.dtype}).")
+        cue = cue.to(device=self.device, dtype=self.dtype)
+        known = known.to(device=self.device)
+        if not bool(torch.isfinite(cue).all()):
+            raise ValueError("cue contains NaN or infinite values.")
+        return cue, known
 
     def recall(
         self,
@@ -184,12 +215,27 @@ class AssociativeMemory:
         The known units are clamped to the cue; the free units descend F onto the manifold.
         `x0` overrides the initial free-unit values (default: `fill`, i.e. a blank cue).
         """
-        cue = cue.to(self.dtype)
+        if not isinstance(n_steps, int) or n_steps < 1:
+            raise ValueError(f"n_steps must be an integer >= 1 (got {n_steps!r}).")
+        if not isinstance(record_every, int) or record_every < 1:
+            raise ValueError(
+                f"record_every must be an integer >= 1 (got {record_every!r})."
+            )
+        if not math.isfinite(float(dt)) or dt <= 0:
+            raise ValueError(f"dt must be finite and > 0 (got {dt!r}).")
+        if not math.isfinite(float(tau)) or tau <= 0:
+            raise ValueError(f"tau must be finite and > 0 (got {tau!r}).")
+        cue, known = self._validated_query(cue, known)
         if x0 is None:
             x = torch.full((self.d,), float(fill), dtype=self.dtype, device=self.device)
             x[known] = cue[known]
         else:
-            x = x0.clone().to(self.dtype)
+            if not isinstance(x0, torch.Tensor) or x0.ndim != 1 or x0.shape[0] != self.d:
+                shape = None if not isinstance(x0, torch.Tensor) else tuple(x0.shape)
+                raise ValueError(f"x0 must have shape ({self.d},) (got {shape}).")
+            x = x0.clone().to(device=self.device, dtype=self.dtype)
+            if not bool(torch.isfinite(x).all()):
+                raise ValueError("x0 contains NaN or infinite values.")
             x[known] = cue[known]
         x0_rec = x.clone()
 

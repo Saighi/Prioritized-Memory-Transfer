@@ -45,7 +45,7 @@ for name, kw in [("orthogonal", dict(geometry="orthogonal", rank1=1, rank2=1)),
                  ("oblique θ=0.5", dict(geometry="oblique", rank1=1, rank2=1, principal_angle=0.5)),
                  ("near-parallel θ=0.2", dict(geometry="oblique", rank1=1, rank2=1, principal_angle=0.2))]:
     H, info = run(**kw)
-    print(f"{name:20s}  r_Σ={info['r_Sigma']}  union deficit -> {H['union_deficit'][-1]:.4f}  "
+    print(f"{name:20s}  r_Σ={info.r_Sigma}  union deficit -> {H['union_deficit'][-1]:.4f}  "
           f"crosstalk bump ~ {crosstalk_bump(H):.3f}")
 print("→ more correlation = larger, slower-to-cancel crosstalk, but interleaving still builds 𝒰_Σ")
 

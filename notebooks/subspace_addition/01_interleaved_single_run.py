@@ -32,8 +32,8 @@ cfg = InterleavedConfig(
     sigma_xi1=0.1, sigma_xi2=0.1, seed=0,
 )
 macro, info = build_interleaved_synthesis(cfg)
-cos = float((info["U1"][:, 0] * info["U2"][:, 0]).sum())
-print(f"two single memories, |cos(m1,m2)| = {abs(cos):.2f}  |  r_Σ = {info['r_Sigma']} (want 2)")
+cos = float((info.U1[:, 0] * info.U2[:, 0]).sum())
+print(f"two single memories, |cos(m1,m2)| = {abs(cos):.2f}  |  r_Σ = {info.r_Sigma} (want 2)")
 
 # %% run the interleaved merge (alternating T1 / T2 replay bouts)
 sim = SimConfig(n_steps=90000, dt=0.5, mode="adiabatic", bout_steps=3000, progress=False)

@@ -34,22 +34,22 @@ model_cfg = ModelConfig(
     pi_ST="auto", pi_ST_safety=0.5,   # pi_ST = 0.5 * spectral gap (well inside the guard)
     tau_T=10.0, tau_S=1.0, eta=0.005,  # tau_S << tau_T << 1/eta
     sigma_xi=0.05, r0=1.0,
-    pattern_kind="orthonormal", W_T_kind="covpcn",
+    pattern_kind="orthonormal",
     seed=0, device="cpu",
 )
 model, info = build_system(model_cfg)
 
-print(f"spectral gap σ²_min   : {info['sigma2_min']:.4f}")
-print(f"manifold dim (eff rank): {info['manifold_dim']}  (= P for orthonormal patterns)")
-print(f"memory residual maxₚ‖M_T mₚ‖: {info['memory_residual']:.2e}")
-print(f"pi_ST                 : {info['pi_ST']:.4f}  (reversed / negative ⇒ sleep-replay)")
-print(f"stability guards      : |π_ST|<σ²_min? {abs(info['pi_ST']) < info['guard_safe']} | "
-      f"|π_ST|<scalar({info['guard_scalar']:.3f})? {info['pi_ST_ok']}")
-print(f"precision guard pi_TS>pi_S: {info['precision_ok']}")
+print(f"spectral gap σ²_min   : {info.sigma2_min:.4f}")
+print(f"manifold dim (eff rank): {info.manifold_dim}  (= P for orthonormal patterns)")
+print(f"memory residual maxₚ‖M_T mₚ‖: {info.memory_residual:.2e}")
+print(f"pi_ST                 : {info.pi_ST:.4f}  (reversed / negative ⇒ sleep-replay)")
+print(f"stability guards      : |π_ST|<σ²_min? {abs(info.pi_ST) < info.guard_safe} | "
+      f"|π_ST|<scalar({info.guard_scalar:.3f})? {info.pi_ST_ok_aligned}")
+print(f"precision guard pi_TS>pi_S: {info.precision_ok}")
 
 # %% faithfulness self-checks (cheap; assert the invariants)
 assert float(torch.diagonal(model.W_T).abs().max()) < 1e-12, "W_T diagonal not zero"
-assert info["memory_residual"] < 1e-4, "patterns not in ker M_T"
+assert info.memory_residual < 1e-4, "patterns not in ker M_T"
 
 e_xS, e_WS = dg.check_gradients(model)
 print(f"gradient check: err_xS={e_xS:.1e}  err_WS={e_WS:.1e}  (perception=-∇F_S, learning=-∇_W F_S)")

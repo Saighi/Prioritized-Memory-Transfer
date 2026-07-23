@@ -31,11 +31,11 @@ cfg = InterleavedConfig(d=32, rank1=1, rank2=1, geometry="oblique", principal_an
 sim = SimConfig(n_steps=72000, dt=0.5, mode="adiabatic", bout_steps=3000, progress=False)
 
 macro, info = build_interleaved_synthesis(cfg)
-cos = abs(float((info["U1"][:, 0] * info["U2"][:, 0]).sum()))
+cos = abs(float((info.U1[:, 0] * info.U2[:, 0]).sum()))
 Hi = simulate_interleaved(macro, sim, info).to_numpy()
-print(f"correlated single memories (|cos|={cos:.2f}), r_Sigma={info['r_Sigma']}")
+print(f"correlated single memories (|cos|={cos:.2f}), r_Sigma={info.r_Sigma}")
 print(f"  interleaved: union deficit {Hi['union_deficit'][0]:.3f} -> {Hi['union_deficit'][-1]:.4f}")
-assert info["r_Sigma"] == 2, "two independent memories should give r_Sigma=2"
+assert info.r_Sigma == 2, "two independent memories should give r_Sigma=2"
 assert Hi["union_deficit"][-1] < 0.1, "interleaving should null both correlated memories"
 
 # --- sawtooth present for correlated, ~absent for orthogonal ---
