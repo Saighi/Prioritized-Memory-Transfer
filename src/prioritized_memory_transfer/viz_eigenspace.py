@@ -45,7 +45,7 @@ def n_s_of(W_S: torch.Tensor, pi_TS: float, pi_S: float) -> torch.Tensor:
 
 
 # --------------------------------------------------------------- per-frame data extractor
-def eigenframes(hist: History, model: TwoPopModel, info: Optional[object] = None,
+def eigenframes(hist: History, model: TwoPopModel, info=None,
                 n_frames: Optional[int] = None) -> List[Dict]:
     """One dict per weight snapshot: t, S_S, N_S (numpy), eigvals/eigvecs of S_S, and the
     x_T path/head recorded up to that snapshot's time. Sub-sample to n_frames if given."""
@@ -90,7 +90,7 @@ def _great_circle(U2: np.ndarray, n: int = 200) -> np.ndarray:
     return np.cos(s)[:, None] * U2[:, 0][None, :] + np.sin(s)[:, None] * U2[:, 1][None, :]
 
 
-def _off_axis(info: object) -> np.ndarray:
+def _off_axis(info) -> np.ndarray:
     """The off-manifold normal: eigenvector of the LARGEST eigenvalue of S_T."""
     evals, evecs = torch.linalg.eigh(info.S_T)
     return evecs[:, -1].cpu().numpy()

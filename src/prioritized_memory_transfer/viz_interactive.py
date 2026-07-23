@@ -8,8 +8,6 @@
 """
 from __future__ import annotations
 
-from typing import Optional
-
 import numpy as np
 import torch
 
@@ -52,7 +50,7 @@ def raster(hist: History):
     return fig
 
 
-def trajectory_3d(hist: History, model: TwoPopModel, info: Optional[object] = None,
+def trajectory_3d(hist: History, model: TwoPopModel, info=None,
                   basis: str = "patterns", max_frames: int = 120):
     """Animate x_T's path projected onto 3 directions, with a time slider.
 

@@ -32,8 +32,7 @@ def build_interleaved_synthesis(
 ) -> tuple[MacroNetwork, SimpleNamespace]:
     """Two frozen teachers `T1, T2` + a plastic synthesis `S`, wired with TWO single-source
     interfaces `S<-T1`, `S<-T2` (both `active=False`; the driver toggles one on per bout). Returns
-    `(macro, info)` with the memory bases `U1, U2, U_Sigma`, the target rank `r_Sigma`, per-teacher
-    reversed precisions, and `kind="interleaved"`."""
+    `(macro, info)` with the memory bases `U1, U2, U_Sigma` and target rank `r_Sigma`."""
     from .diagnostics import manifold_basis, spectral_gap, subspace_sum_basis
 
     M1, M2 = make_teacher_subspaces(cfg)
@@ -59,9 +58,9 @@ def build_interleaved_synthesis(
     rho1 = _rho(cfg.pi_T1, sigma1_min)
     rho2 = _rho(cfg.pi_T2, sigma2_min)
     interfaces = [
-        CouplingInterface(target="S", sources=["T1"], alpha=[1.0], pi_I=cfg.pi_I,
+        CouplingInterface(target="S", source="T1", pi_I=cfg.pi_I,
                           rho=rho1, active=False),
-        CouplingInterface(target="S", sources=["T2"], alpha=[1.0], pi_I=cfg.pi_I,
+        CouplingInterface(target="S", source="T2", pi_I=cfg.pi_I,
                           rho=rho2, active=False),
     ]
     macro = MacroNetwork([T1, T2, S], interfaces)
@@ -99,39 +98,14 @@ def interleave_merge(
     precision transfer so the plastic `target` perceives that teacher and takes slow learning steps.
     `record(bout, active_index)` is called after each bout. Returns the learned `target` weight.
     """
-    if target not in macro.populations:
-        raise ValueError(f"unknown interleaved target population {target!r}.")
-    if not macro.populations[target].plastic:
-        raise ValueError(f"interleaved target {target!r} must be plastic.")
     order = list(order)
-    if not order:
-        raise ValueError("interleaved order must contain at least one source.")
-    if len(set(order)) != len(order):
-        raise ValueError(f"interleaved order contains duplicate sources: {order!r}.")
-    if not isinstance(n_bouts, int) or n_bouts < 1:
-        raise ValueError(f"n_bouts must be an integer >= 1 (got {n_bouts!r}).")
-
-    itf_of: Dict[str, CouplingInterface] = {}
-    for name in order:
-        if name not in macro.populations:
-            raise ValueError(f"unknown interleaved source population {name!r}.")
-        matches = [
+    itf_of = {
+        name: next(
             itf for itf in macro.interfaces
-            if itf.target == target and itf.sources == [name]
-        ]
-        if len(matches) != 1:
-            raise ValueError(
-                f"source {name!r} must have exactly one single-source interface into "
-                f"{target!r} (found {len(matches)})."
-            )
-        basis = bases.get(name)
-        source = macro.populations[name]
-        if basis is None or basis.ndim != 2 or basis.shape[0] != source.d:
-            shape = None if basis is None else tuple(basis.shape)
-            raise ValueError(
-                f"basis for source {name!r} must have shape ({source.d}, k) (got {shape})."
-            )
-        itf_of[name] = matches[0]
+            if itf.target == target and itf.source == name
+        )
+        for name in order
+    }
 
     def seed(name: str) -> None:
         seed_state(macro.populations[name], bases[name], gen)

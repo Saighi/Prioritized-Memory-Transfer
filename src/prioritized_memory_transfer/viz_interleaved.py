@@ -9,8 +9,6 @@ Matplotlib / plotly are imported lazily.
 """
 from __future__ import annotations
 
-from typing import Optional
-
 import numpy as np
 
 from .viz_style import PLOTLY_LAYOUT, mpl_style
@@ -48,7 +46,7 @@ def crosstalk(hist, ax=None):
     return ax
 
 
-def dashboard(hist, info: Optional[object] = None):
+def dashboard(hist, info=None):
     """Two panels: the crosstalk sawtooth and the union deficit (subspace being constructed)."""
     import matplotlib.pyplot as plt
     mpl_style()

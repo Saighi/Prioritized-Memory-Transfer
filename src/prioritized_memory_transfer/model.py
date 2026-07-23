@@ -80,7 +80,7 @@ class TwoPopModel:
                        sigma_xi=self.sigma_xi, r=self.r0)
         S = Population("S", torch.zeros_like(W_T), self.pi_S, self.tau_S,
                        plastic=True, eta=self.eta)
-        itf = CouplingInterface(target="S", sources=["T"], alpha=[1.0],
+        itf = CouplingInterface(target="S", source="T",
                                 pi_I=self.pi_TS, rho=self.pi_ST)
         self.macro = MacroNetwork([T, S], [itf])
 
@@ -197,9 +197,7 @@ class TwoPopModel:
         """Make S already 'know' a subset of patterns by setting W_S to the zero-diagonal
         covPCN solution for those patterns (so M_S nulls them -> they are 'known')."""
         indices = list(subset)
-        if len(set(indices)) != len(indices):
-            raise ValueError(f"pretrain_subset contains duplicate indices: {indices!r}.")
-        if any(not isinstance(i, int) or i < 0 or i >= self.patterns.shape[1] for i in indices):
+        if any(i < 0 or i >= self.patterns.shape[1] for i in indices):
             raise ValueError(
                 f"pretrain_subset indices must lie in [0, {self.patterns.shape[1] - 1}] "
                 f"(got {indices!r})."
@@ -242,7 +240,6 @@ def build_system(cfg: ModelConfig) -> tuple[TwoPopModel, SimpleNamespace]:
         guard_safe=guard_safe,
         guard_scalar=guard_scalar,
         pi_ST=pi_ST,
-        exact_saddle=bool(cfg.exact_saddle),
         U_T=U_T,
         precision_ok=cfg.pi_TS > cfg.pi_S,
         pi_ST_ok=abs(pi_ST) < guard_safe,

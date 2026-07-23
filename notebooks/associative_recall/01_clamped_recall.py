@@ -391,5 +391,5 @@ fig_amb
 #   see the state jitter within the flat manifold — the free on-manifold diffusion discussed in the
 #   single-network precision/curiosity analysis.
 # - **Representability**: try different dense pattern sets and inspect
-#   `mem.memory_build.max_residual` / `condition_number`. Construction fails early when the
-#   no-autapse network cannot faithfully store the requested columns.
+#   `mem.memory_build.max_residual`. Construction fails early when the no-autapse network
+#   cannot faithfully store the requested columns.

@@ -13,7 +13,7 @@ Abstract → Author summary → Introduction → **Models** (equations only, one
 ## DECISIONS (resolved)
 
 - [x] **D1 — Models/Results split → Option A** (Tang-faithful: `Models` equations-only, then theorems woven into `Results`). *Skeleton to be re-shaped to A.*
-- [ ] **D2 — Final title** — drafting now, marked PROVISIONAL until end-of-body revisit.
+- [x] **D2 — Title (PROVISIONAL)** → *"Novelty-gated replay drives memory transfer and continual learning in predictive-coding associative memories"* (R2 + "associative memories"). Revisit at end.
 - [x] **D3 — Abstract & title provisional now**, one revisit pass after the body is done.
 
 ## Working method (per part)
@@ -31,7 +31,7 @@ Style card (enforce every draft): sober, informative, scientific; no overstateme
 
 Status: ☐ not started · ◐ drafting · ☑ locked
 
-- [ ] **Title** [PROVISIONAL] — working: see outline.md; decide D2.
+- [x] **Title** [PROVISIONAL] — *"Novelty-gated replay drives memory transfer and continual learning in predictive-coding associative memories"* (in manuscript.tex). Notes: "replay" earned = teacher explores its manifold, reactivating stored directions in novelty order (subspace-level caveat → abstract); "associative memories" scopes to AM (Paul: don't oversell, no backprop tasks); substrate claim, NOT a free-energy-descent claim.
 - [ ] **Abstract** [PROVISIONAL] — hook = catastrophic forgetting + sleep replay; twist = priority is the student's own prediction error; transfer = primitive, continual learning = payoff. (≤300 words)
 - [ ] **Author summary** — lay framing of prioritized replay + continual learning. (150–200 words)
 - [ ] **Introduction** — continual learning/forgetting; sleep replay + the open question (how is replay prioritized & autonomous?); our answer (novelty-gated transfer in linear covPCN); the ladder; positioning (Tang, Friston, Schaul, McClelland, prev paper).
@@ -51,7 +51,8 @@ Status: ☐ not started · ◐ drafting · ☑ locked
 
 - 2026-07-23 — Confirmed Tang structure via PLOS article; created this tracker.
 - 2026-07-23 — D1 → Option A (Tang-faithful). D3 → title+abstract provisional now, revisit at end. Claims-ledger method adopted.
+- 2026-07-23 — Title (provisional) locked = R2 + "associative memories" (Paul: don't oversell, AM not backprop tasks). "replay" accepted as dynamically earned (spontaneous manifold exploration), not decorative.
 
 ## Next action
 
-Drafting the **Title** (provisional): claims-ledger posted, awaiting Paul's steer.
+Draft the **Abstract** (provisional): post claims-ledger, get Paul's steer, then 3 options.

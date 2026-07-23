@@ -98,8 +98,6 @@ class ModelConfig:
         for name in ("eta", "sigma_xi"):
             _nonnegative(name, getattr(self, name))
         _signed_or_auto("pi_ST", self.pi_ST)
-        if type(self.seed) is not int:
-            raise ValueError(f"seed must be an integer (got {self.seed!r}).")
         if not 0 < self.pi_ST_safety <= 1:
             raise ValueError(
                 f"pi_ST_safety must lie in (0, 1] (got {self.pi_ST_safety})."
@@ -202,8 +200,6 @@ class InterleavedConfig:
         for name in ("eta", "sigma_xi1", "sigma_xi2"):
             _nonnegative(name, getattr(self, name))
         _signed_or_auto("rho", self.rho)
-        if type(self.seed) is not int:
-            raise ValueError(f"seed must be an integer (got {self.seed!r}).")
         if not 0 < self.rho_safety <= 1:
             raise ValueError(f"rho_safety must lie in (0, 1] (got {self.rho_safety}).")
         if self.pi_I <= self.pi_S:
@@ -279,8 +275,6 @@ class ContinualConfig:
         for name in ("eta", "sigma_xi"):
             _nonnegative(name, getattr(self, name))
         _signed_or_auto("rho", self.rho)
-        if type(self.seed) is not int:
-            raise ValueError(f"seed must be an integer (got {self.seed!r}).")
         if not 0 < self.rho_safety <= 1:
             raise ValueError(f"rho_safety must lie in (0, 1] (got {self.rho_safety}).")
         for name in ("consolidate_bouts", "download_bouts", "bout_steps"):

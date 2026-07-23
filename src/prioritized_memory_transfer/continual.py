@@ -64,18 +64,12 @@ class ContinualLearner:
         if memories is None:
             self.memories = _make_memories(cfg)
         else:
-            if not isinstance(memories, torch.Tensor):
-                raise TypeError(
-                    f"memories must be a torch.Tensor (got {type(memories).__name__})."
-                )
-            if memories.ndim != 2 or memories.shape != (cfg.d, cfg.n_memories):
+            values = torch.as_tensor(memories, dtype=cfg.dtype, device=cfg.device).clone()
+            if values.shape != (cfg.d, cfg.n_memories):
                 raise ValueError(
                     f"memories must have shape ({cfg.d}, {cfg.n_memories}) "
-                    f"(got {tuple(memories.shape)})."
+                    f"(got {tuple(values.shape)})."
                 )
-            values = memories.to(device=cfg.device, dtype=cfg.dtype).clone()
-            if not bool(torch.isfinite(values).all()):
-                raise ValueError("memories contain NaN or infinite values.")
             norms = values.norm(dim=0, keepdim=True)
             if bool((norms <= 0).any()):
                 raise ValueError("every memory column must have non-zero norm.")
@@ -96,13 +90,12 @@ class ContinualLearner:
     def _M(self, W: torch.Tensor) -> torch.Tensor:
         return self.I - W
 
-    def _resolve_rho(self, sources: List[Population], alphas: List[float]) -> float:
+    def _resolve_rho(self, source: Population) -> float:
         """Reversed source-side precision inside the structure guard. The guard's sigma^2_min is the
         smallest *off-manifold* surprise eigenvalue, so we ignore the small-but-nonzero eigenvalues of
         the approximately-learned memory directions (tol=0.1) that would otherwise collapse it."""
         cfg = self.cfg
-        Cnorm2 = sum(a * a for a in alphas)
-        guard = min(cfg.pi_teacher * spectral_gap(p.S_op(), tol=0.1) for p in sources) / Cnorm2
+        guard = cfg.pi_teacher * spectral_gap(source.S_op(), tol=0.1)
         return resolve_signed_precision(cfg.rho, guard=guard, safety=cfg.rho_safety)
 
     def _source_pop(self, name: str, W: torch.Tensor) -> Population:
@@ -117,8 +110,8 @@ class ContinualLearner:
     def _single_interface(self, target: str, source: Population) -> CouplingInterface:
         """An inactive single-source interface `target <- source` with rho resolved from the source's
         live weights (the interleaving driver switches it on for its bout)."""
-        return CouplingInterface(target=target, sources=[source.name], alpha=[1.0],
-                                 pi_I=self.cfg.pi_I, rho=self._resolve_rho([source], [1.0]),
+        return CouplingInterface(target=target, source=source.name,
+                                 pi_I=self.cfg.pi_I, rho=self._resolve_rho(source),
                                  active=False)
 
     def _sim(self) -> SimConfig:
@@ -128,10 +121,6 @@ class ContinualLearner:
     # ----- the three phase primitives -----
     def store_in_buffer(self, m: torch.Tensor) -> None:
         """One-shot covPCN of the single new memory; overwrites the buffer (and the control)."""
-        if m.ndim != 1 or m.shape[0] != self.d:
-            raise ValueError(f"buffer memory must have shape ({self.d},) (got {tuple(m.shape)}).")
-        if not bool(torch.isfinite(m).all()) or float(m.norm()) <= 0:
-            raise ValueError("buffer memory must be finite and have non-zero norm.")
         col = (m / m.norm().clamp_min(1e-12)).reshape(self.d, 1)
         self.W_B = build_memory(col).W
         self.W_ctrl = self.W_B.clone()     # the baseline network only ever holds the latest memory
@@ -185,10 +174,6 @@ class ContinualLearner:
 
     # ----- the loop -----
     def add_memory(self, k: int) -> None:
-        if not isinstance(k, int) or not 0 <= k < self.n_memories:
-            raise ValueError(
-                f"memory index must lie in [0, {self.n_memories - 1}] (got {k!r})."
-            )
         self.store_in_buffer(self.memories[:, k])
         self.consolidate(k)
         self.download(k)

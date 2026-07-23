@@ -104,25 +104,6 @@ class Population:
         sigma_xi: float = 0.0,
         r: Optional[float] = None,
     ) -> None:
-        if not isinstance(name, str) or not name.strip():
-            raise ValueError("population name must be a non-empty string.")
-        if not isinstance(W, torch.Tensor) or W.ndim != 2 or W.shape[0] != W.shape[1]:
-            shape = None if not isinstance(W, torch.Tensor) else tuple(W.shape)
-            raise ValueError(f"population W must be a square matrix (got {shape}).")
-        if W.shape[0] < 1:
-            raise ValueError("population W must be non-empty.")
-        if not math.isfinite(float(pi)) or pi <= 0:
-            raise ValueError(f"population {name!r} pi must be finite and > 0 (got {pi!r}).")
-        if not math.isfinite(float(tau)) or tau <= 0:
-            raise ValueError(f"population {name!r} tau must be finite and > 0 (got {tau!r}).")
-        if not math.isfinite(float(eta)) or eta < 0:
-            raise ValueError(f"population {name!r} eta must be finite and >= 0 (got {eta!r}).")
-        if not math.isfinite(float(sigma_xi)) or sigma_xi < 0:
-            raise ValueError(
-                f"population {name!r} sigma_xi must be finite and >= 0 (got {sigma_xi!r})."
-            )
-        if r is not None and (not math.isfinite(float(r)) or r <= 0):
-            raise ValueError(f"population {name!r} r must be finite and > 0 (got {r!r}).")
         self.name = name
         self.W = W                      # recurrent weights, zero diagonal
         self.pi = float(pi)
@@ -178,82 +159,35 @@ class Population:
         self.W = zero_diag(self.W)
 
 
-# ------------------------------------------------------------------------- hyper-edge
+# ------------------------------------------------------------------------------- edge
 @dataclass
 class CouplingInterface:
-    """One coupling prediction/error edge (supports one or several summed sources).
-
-    A set of `sources` is combined into a single prediction `y = sum_k alpha_k C_k x_k` and
-    compared with the `target` state, giving the common error `eps = x_target - y`. Optional
-    coordinate maps `C_k` (C_k : R^{d_k} -> R^{d_target}) let sources live in different neural
-    coordinates; `None` means identity.
+    """One coupling error ``eps = x_target - x_source`` between two populations.
 
     Rate contributions:
-      - to the target:   -pi_I * eps                     (ordinary positive precision)
-      - to source k:     +rho * alpha_k * C_k^T eps      (signed teacher-side precision; <0 sleep)
+      - to the target: -pi_I * eps   (ordinary positive precision)
+      - to the source: +rho * eps    (signed source-side precision; <0 sleep)
     """
 
     target: str
-    sources: List[str]
-    alpha: List[float]
+    source: str
     pi_I: float
     rho: float
-    C: Optional[List[Optional[torch.Tensor]]] = None   # coordinate maps; entry None => identity
-    active: bool = True                                # inactive edges contribute nothing (interleaving)
-
-    def __post_init__(self) -> None:
-        if not isinstance(self.target, str) or not self.target.strip():
-            raise ValueError("interface target must be a non-empty population name.")
-        if not self.sources or any(not isinstance(s, str) or not s.strip() for s in self.sources):
-            raise ValueError("interface sources must contain non-empty population names.")
-        if len(set(self.sources)) != len(self.sources):
-            raise ValueError(f"interface contains duplicate sources: {self.sources!r}.")
-        if len(self.alpha) != len(self.sources):
-            raise ValueError(
-                f"interface alpha length must match sources "
-                f"({len(self.alpha)} != {len(self.sources)})."
-            )
-        if any(not math.isfinite(float(a)) for a in self.alpha):
-            raise ValueError("interface alpha values must be finite.")
-        if self.C is not None and len(self.C) != len(self.sources):
-            raise ValueError(
-                f"interface C length must match sources ({len(self.C)} != {len(self.sources)})."
-            )
-        if not math.isfinite(float(self.pi_I)) or self.pi_I <= 0:
-            raise ValueError(f"interface pi_I must be finite and > 0 (got {self.pi_I!r}).")
-        if not math.isfinite(float(self.rho)):
-            raise ValueError(f"interface rho must be finite (got {self.rho!r}).")
-
-    def _map_in(self, k: int, x: torch.Tensor) -> torch.Tensor:
-        """Apply C_k to a source state: C_k x = x @ C_k^T (row-vector convention)."""
-        Ck = None if self.C is None else self.C[k]
-        return x if Ck is None else x @ Ck.transpose(-2, -1)
-
-    def _map_back(self, k: int, e: torch.Tensor) -> torch.Tensor:
-        """Apply C_k^T to a target-space error: C_k^T e = e @ C_k (row-vector convention)."""
-        Ck = None if self.C is None else self.C[k]
-        return e if Ck is None else e @ Ck
+    active: bool = True
 
     def y(self, pops: Dict[str, Population]) -> torch.Tensor:
-        """Combined prediction y = sum_k alpha_k C_k x_k."""
-        acc = None
-        for k, s in enumerate(self.sources):
-            term = self.alpha[k] * self._map_in(k, pops[s].x)
-            acc = term if acc is None else acc + term
-        return acc
+        return pops[self.source].x
 
     def eps(self, pops: Dict[str, Population]) -> torch.Tensor:
-        """Common interface error eps = x_target - y."""
         return pops[self.target].x - self.y(pops)
 
-    def source_feedback(self, k: int, e: torch.Tensor) -> torch.Tensor:
-        """Source-side drive +rho alpha_k C_k^T eps for source index k given the error e."""
-        return self.rho * self.alpha[k] * self._map_back(k, e)
+    def source_feedback(self, e: torch.Tensor) -> torch.Tensor:
+        return self.rho * e
 
 
 # --------------------------------------------------------------------------- the graph
 class MacroNetwork:
-    """A graph of `Population` nodes wired by `CouplingInterface` hyper-edges.
+    """A graph of `Population` nodes wired by binary `CouplingInterface` edges.
 
     Assembles each population's state rate from its own self term plus every interface it takes
     part in, and steps the whole system with one integrator (`step`). A population that is the
@@ -276,71 +210,44 @@ class MacroNetwork:
             if itf.target not in self.populations:
                 raise ValueError(f"interface target {itf.target!r} is not a population.")
             target = self.populations[itf.target]
-            for k, source_name in enumerate(itf.sources):
-                if source_name not in self.populations:
-                    raise ValueError(f"interface source {source_name!r} is not a population.")
-                source = self.populations[source_name]
-                Ck = None if itf.C is None else itf.C[k]
-                if Ck is None:
-                    if source.d != target.d:
-                        raise ValueError(
-                            f"identity interface {source_name!r}->{itf.target!r} needs equal "
-                            f"dimensions (got {source.d} and {target.d}); provide C[{k}]."
-                        )
-                else:
-                    if not isinstance(Ck, torch.Tensor) or Ck.shape != (target.d, source.d):
-                        shape = None if not isinstance(Ck, torch.Tensor) else tuple(Ck.shape)
-                        raise ValueError(
-                            f"C[{k}] for {source_name!r}->{itf.target!r} must have shape "
-                            f"({target.d}, {source.d}) (got {shape})."
-                        )
+            if itf.source not in self.populations:
+                raise ValueError(f"interface source {itf.source!r} is not a population.")
+            source = self.populations[itf.source]
+            if source.d != target.d:
+                raise ValueError(
+                    f"interface {itf.source!r}->{itf.target!r} needs equal dimensions "
+                    f"(got {source.d} and {target.d})."
+                )
         self.d = ref.d
         self.dtype = ref.dtype
         self.device = ref.device
-
-    def _require_state(self, name: str) -> torch.Tensor:
-        if name not in self.populations:
-            raise ValueError(f"unknown population {name!r}.")
-        p = self.populations[name]
-        if p.x is None:
-            raise ValueError(f"population {name!r} has no state; initialize x before stepping.")
-        return p.x
 
     # ----- roles (only ACTIVE interfaces count; inactive edges are transparent) -----
     def targets(self) -> set:
         return {itf.target for itf in self.interfaces if itf.active}
 
     def sources(self) -> set:
-        ss: set = set()
-        for itf in self.interfaces:
-            if itf.active:
-                ss.update(itf.sources)
-        return ss
+        return {itf.source for itf in self.interfaces if itf.active}
 
     # ----- assembled rates -----
     def rate_x(self, name: str) -> torch.Tensor:
         """Full dx/dt for population `name`: self term + all active interface contributions, over tau."""
-        self._require_state(name)
         p = self.populations[name]
         drift = p.rate_self()
         for itf in self.interfaces:
             if not itf.active:
                 continue
             is_target = itf.target == name
-            src_idx = [k for k, s in enumerate(itf.sources) if s == name]
-            if is_target or src_idx:
-                self._require_state(itf.target)
-                for source_name in itf.sources:
-                    self._require_state(source_name)
+            is_source = itf.source == name
+            if is_target or is_source:
                 e = itf.eps(self.populations)
                 if is_target:
                     drift = drift - itf.pi_I * e
-                for k in src_idx:
-                    drift = drift + itf.source_feedback(k, e)
+                if is_source:
+                    drift = drift + itf.source_feedback(e)
         return drift / p.tau
 
     def rate_W(self, name: str) -> torch.Tensor:
-        self._require_state(name)
         return self.populations[name].rate_W()
 
     def solve_steady(self, name: str) -> torch.Tensor:
@@ -351,7 +258,6 @@ class MacroNetwork:
         For a single interface this is x* = pi_I (pi_I I + pi_S S_S)^-1 y;
         summing over interfaces also covers the separate-error control (two single-source edges).
         """
-        self._require_state(name)
         active_inputs = [
             itf for itf in self.interfaces if itf.active and itf.target == name
         ]
@@ -361,8 +267,6 @@ class MacroNetwork:
         A = p.pi * p.S_op()
         rhs = torch.zeros_like(p.x)
         for itf in active_inputs:
-            for source_name in itf.sources:
-                self._require_state(source_name)
             A = A + itf.pi_I * p.I
             rhs = rhs + itf.pi_I * itf.y(self.populations)
         return torch.linalg.solve(A, rhs)
@@ -387,23 +291,8 @@ class MacroNetwork:
         name, scaled by `sigma_xi/tau*sqrt(dt)`; when omitted each noisy population draws its
         own independent vector from `gen`.
         """
-        if not math.isfinite(float(dt)) or dt <= 0:
-            raise ValueError(f"dt must be finite and > 0 (got {dt!r}).")
-        if mode not in {"full", "adiabatic"}:
-            raise ValueError(f"mode must be 'full' or 'adiabatic' (got {mode!r}).")
-        if not isinstance(substeps, int) or substeps < 1:
-            raise ValueError(f"substeps must be an integer >= 1 (got {substeps!r}).")
         targets = self.targets()
         sources = self.sources()
-        required = targets | sources | {
-            name for name, p in self.populations.items() if p.plastic
-        }
-        for name in required:
-            self._require_state(name)
-        if noise is not None:
-            unknown = set(noise) - set(self.populations)
-            if unknown:
-                raise ValueError(f"noise provided for unknown populations: {sorted(unknown)!r}.")
 
         # 1) perception on interface targets
         for name, p in self.populations.items():

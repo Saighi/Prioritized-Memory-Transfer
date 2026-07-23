@@ -23,13 +23,10 @@ Visualization lives in `prioritized_memory_transfer.viz_static` / `prioritized_m
 so the core has no plotting dependency.
 """
 from .config import ContinualConfig, InterleavedConfig, ModelConfig, SimConfig
-from .macro import CouplingInterface, MacroNetwork, Population
-from .model import TwoPopModel, build_system, simulate, fwd, bwd, outer
-from .interleaved import build_interleaved_synthesis, simulate_interleaved, interleave_merge
+from .model import build_system, simulate, fwd, bwd, outer
+from .interleaved import build_interleaved_synthesis, simulate_interleaved
 from .continual import ContinualLearner
-from .memory import make_patterns, make_teacher_subspaces, build_memory, zero_diag, memory_residual
 from .recall import AssociativeMemory, RecallTrace, make_mask
-from .history import ContinualHistory, History, InterleavedHistory
 from . import diagnostics
 
 __all__ = [
@@ -38,31 +35,16 @@ __all__ = [
     "InterleavedConfig",
     "ContinualConfig",
     "SimConfig",
-    # engine (the LEGO layer)
-    "Population",
-    "CouplingInterface",
-    "MacroNetwork",
     # two-population model
-    "TwoPopModel",
     "build_system",
     # interleaved subspace addition
     "build_interleaved_synthesis",
     "simulate_interleaved",
-    "interleave_merge",
     # continual learning
     "ContinualLearner",
     # dynamics / recording
     "simulate",
-    "History",
-    "ContinualHistory",
-    "InterleavedHistory",
     "diagnostics",
-    # memory / weight construction
-    "make_patterns",
-    "make_teacher_subspaces",
-    "build_memory",
-    "zero_diag",
-    "memory_residual",
     # single-network associative recall (clamped query)
     "AssociativeMemory",
     "RecallTrace",

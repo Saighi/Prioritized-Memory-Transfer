@@ -128,8 +128,8 @@ archive/
 - **VFE**: the student's perception is exact descent on `F_S`; learning is the gradient projected
   onto the zero-diagonal weight subspace (autograd-verified before projection).
 - **Saddle**: `circulation ≈ 0` only when `π_ST = −π_TS` (`ModelConfig(exact_saddle=True)`).
-- **Memories in `ker M_T`**: construction measures `max_p ‖M_T m_p‖`, numerical rank, and
-  conditioning, and rejects a pattern set that the no-autapse network cannot represent.
+- **Memories in `ker M_T`**: construction measures `max_p ‖M_T m_p‖` and rejects a pattern
+  set that the no-autapse network cannot represent.
   `P ≤ d−1` is necessary but not sufficient for arbitrary sparse/adversarial patterns; it succeeds
   generically for the dense generated patterns used by the experiments.
 - **Reversed precision (sleep/wake)**: the teacher's interface precision `π_ST` is *signed*.

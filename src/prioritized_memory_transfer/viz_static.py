@@ -8,8 +8,6 @@ Both return a matplotlib Figure (displays inline in the VS Code interactive wind
 """
 from __future__ import annotations
 
-from typing import Optional
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -21,7 +19,7 @@ from .viz_style import despine_all, mpl_style
 def dashboard(
     hist: History,
     model: TwoPopModel,
-    info: Optional[object] = None,
+    info=None,
 ):
     """6-panel overview: novelty staircase, replay raster, energies, per-memory residual,
     weight convergence + manifold occupancy, and the teacher spectrum with the pi_ST guard."""

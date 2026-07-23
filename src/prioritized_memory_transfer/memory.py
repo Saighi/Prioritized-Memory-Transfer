@@ -68,16 +68,10 @@ def make_teacher_subspaces(cfg) -> tuple:
     Q, _ = torch.linalg.qr(torch.randn(d, d, generator=gen, dtype=cfg.dtype))  # random ON frame
 
     if cfg.geometry == "orthogonal":
-        if r1 + r2 > d:
-            raise ValueError(f"orthogonal needs rank1+rank2 <= d (got {r1}+{r2} > {d}).")
         U1 = Q[:, :r1]
         U2 = Q[:, r1:r1 + r2]
     elif cfg.geometry == "shared":
         ov = cfg.overlap
-        if ov > min(r1, r2):
-            raise ValueError(f"overlap <= min(rank1,rank2) required (got {ov} > {min(r1, r2)}).")
-        if r1 + (r2 - ov) > d:
-            raise ValueError(f"shared geometry needs rank1+rank2-overlap <= d.")
         shared = Q[:, :ov]
         U1 = Q[:, :r1]                                   # cols 0..r1-1 (includes the shared block)
         own2 = Q[:, r1:r1 + (r2 - ov)]                   # T2's private directions
@@ -155,15 +149,3 @@ def build_memory(
             "each neuron's pattern values must be predictable from the remaining neurons."
         )
     return SimpleNamespace(W=W, M_op=M_op, max_residual=max_residual)
-
-
-def memory_residual(W_T: torch.Tensor, M: torch.Tensor) -> float:
-    """Return ``max_p ||(I-W_T)m_p||`` for an already-built memory."""
-    _validate_pattern_matrix(M)
-    if W_T.ndim != 2 or W_T.shape != (M.shape[0], M.shape[0]):
-        raise ValueError(
-            f"W_T must have shape ({M.shape[0]}, {M.shape[0]}) (got {tuple(W_T.shape)})."
-        )
-    M_T = torch.eye(W_T.shape[0], dtype=W_T.dtype, device=W_T.device) - W_T
-    residuals = (M_T @ M).norm(dim=0)
-    return residuals.max().item() if residuals.numel() else 0.0
