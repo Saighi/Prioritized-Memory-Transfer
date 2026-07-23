@@ -1,4 +1,4 @@
-"""Self-check of the interleaved merge (`src.interleaved`). Run with:
+"""Self-check of the interleaved merge (`prioritized_memory_transfer.interleaved`). Run with:
     conda run -n pytorch --no-capture-output python tests/interleaved_test.py
 
 Core claim: for two CORRELATED SINGLE-memory teachers, interleaving builds the combined
@@ -8,7 +8,7 @@ and ~absent for orthogonal ones.
 import numpy as np
 import torch
 
-from src import InterleavedConfig, SimConfig, build_interleaved_synthesis, simulate_interleaved
+from prioritized_memory_transfer import InterleavedConfig, SimConfig, build_interleaved_synthesis, simulate_interleaved
 
 torch.manual_seed(0)
 

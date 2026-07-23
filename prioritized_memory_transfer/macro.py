@@ -1,7 +1,7 @@
 """The composable "network of networks" engine: `Population` nodes + `CouplingInterface`
 edges assembled into a `MacroNetwork`. Every shipped model is an instance of it — the
-two-population transfer (`src.model`) and the interleaved merge (`src.interleaved`, reused
-by `src.continual`). The equations are those of `two_population_memory_transfer_model.md`,
+two-population transfer (`prioritized_memory_transfer.model`) and the interleaved merge (`prioritized_memory_transfer.interleaved`, reused
+by `prioritized_memory_transfer.continual`). The equations are those of `two_population_memory_transfer_model.md`,
 factored so the *wiring* is data rather than code.
 
 Conventions:
@@ -264,7 +264,7 @@ class MacroNetwork:
     part in, and steps the whole system with one integrator (`step`). A population that is the
     target of some interface is a *perception* node (it can be eliminated adiabatically); a
     population that only feeds interfaces is an *environment* node (it gets exploration noise and
-    the amplitude leash). This mirrors `src.model.simulate` exactly for the two-population case.
+    the amplitude leash). This mirrors `prioritized_memory_transfer.model.simulate` exactly for the two-population case.
     """
 
     def __init__(self, populations: List[Population], interfaces: List[CouplingInterface]) -> None:
@@ -329,8 +329,6 @@ class MacroNetwork:
                 f"population {name!r} state must have shape ({p.d},), dtype {p.dtype}, "
                 f"and device {p.device}."
             )
-        if not bool(torch.isfinite(p.x).all()):
-            raise ValueError(f"population {name!r} state contains NaN or infinity.")
         return p.x
 
     # ----- roles (only ACTIVE interfaces count; inactive edges are transparent) -----
@@ -356,6 +354,9 @@ class MacroNetwork:
             is_target = itf.target == name
             src_idx = [k for k, s in enumerate(itf.sources) if s == name]
             if is_target or src_idx:
+                self._require_state(itf.target)
+                for source_name in itf.sources:
+                    self._require_state(source_name)
                 e = itf.eps(self.populations)
                 if is_target:
                     drift = drift - itf.pi_I * e
@@ -385,6 +386,8 @@ class MacroNetwork:
         A = p.pi * p.S_op()
         rhs = torch.zeros_like(p.x)
         for itf in active_inputs:
+            for source_name in itf.sources:
+                self._require_state(source_name)
             A = A + itf.pi_I * p.I
             rhs = rhs + itf.pi_I * itf.y(self.populations)
         return torch.linalg.solve(A, rhs)

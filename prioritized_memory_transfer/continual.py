@@ -1,4 +1,4 @@
-"""Continual learning by consolidation (buffer -> synthesis -> storage), on the `src.macro` engine.
+"""Continual learning by consolidation (buffer -> synthesis -> storage), on the `prioritized_memory_transfer.macro` engine.
 
 A complementary-learning-systems loop over three persistent networks: a fast one-slot Buffer `B`
 (the ONLY network that ever learns from an actual memory, via one-shot covPCN; overwritten each
@@ -6,7 +6,7 @@ cycle), a slow long-term Storage `Z` (starts empty), and a transient Synthesis w
 
 Per new memory `m_k`: (1) write `m_k` into `B`; (2) CONSOLIDATE `B + Z -> S` by interleaved
 rehearsal — `S` (warm-started from `Z`) is coupled to ONE network per replay bout, alternating,
-so no cross-term and the back-and-forth cancels crosstalk (see `src.interleaved`);
+so no cross-term and the back-and-forth cancels crosstalk (see `prioritized_memory_transfer.interleaved`);
 (3) DOWNLOAD `S -> Z` by single-teacher transfer.
 
 Over the stream Storage retains the whole subspace sum of all memories (up to capacity `d-1`),

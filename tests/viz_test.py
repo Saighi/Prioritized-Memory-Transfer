@@ -5,9 +5,9 @@ Outputs PNGs + one HTML under tests/ for eyeballing.
 import matplotlib
 matplotlib.use("Agg")
 
-from src import ModelConfig, SimConfig, build_system, simulate
-from src import viz_static as vs
-from src import viz_interactive as vi
+from prioritized_memory_transfer import ModelConfig, SimConfig, build_system, simulate
+from prioritized_memory_transfer import viz_static as vs
+from prioritized_memory_transfer import viz_interactive as vi
 
 model, info = build_system(ModelConfig(d=40, P=5, seed=1))
 hist = simulate(
@@ -31,13 +31,13 @@ print("VIZ OK  static panels saved; plotly trace counts:",
       [len(f.data) for f in (f3, f4, f5)], "frames:", len(f5.frames))
 
 # --- eigenspace-geometry figures (tiny d=3 network: plane=manifold, line=off-manifold) ---
-from src import viz_eigenspace as ve
+from prioritized_memory_transfer import viz_eigenspace as ve
 
 _best = None
 for s in range(11):
     _, _inf3 = build_system(ModelConfig(d=3, P=2, seed=s))
-    if _inf3["manifold_dim"] == 2 and (_best is None or _inf3["sigma2_min"] < _best[1]):
-        _best = (s, float(_inf3["sigma2_min"]))
+    if _inf3.manifold_dim == 2 and (_best is None or _inf3.sigma2_min < _best[1]):
+        _best = (s, float(_inf3.sigma2_min))
 seed3, s2min = _best
 m3, info3 = build_system(ModelConfig(d=3, P=2, seed=seed3))
 dt3 = min(0.5, 0.5 * 10.0 / s2min)                      # explicit-Euler stability for -S_T x_T

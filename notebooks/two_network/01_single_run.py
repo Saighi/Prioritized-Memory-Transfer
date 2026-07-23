@@ -16,12 +16,12 @@ import os
 
 import torch
 
-# make `import src` work whether cwd is the repo root or notebooks/
+# make `import prioritized_memory_transfer` work whether cwd is the repo root or notebooks/
 
-from src import ModelConfig, SimConfig, build_system, simulate
-from src import diagnostics as dg
-from src import viz_static as vs
-from src import viz_interactive as vi
+from prioritized_memory_transfer import ModelConfig, SimConfig, build_system, simulate
+from prioritized_memory_transfer import diagnostics as dg
+from prioritized_memory_transfer import viz_static as vs
+from prioritized_memory_transfer import viz_interactive as vi
 
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"   # set PMT_NO_SHOW=1 to run headless
 torch.manual_seed(0)

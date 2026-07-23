@@ -1,4 +1,4 @@
-"""Self-check of the composable engine (`src.macro`). Run with:
+"""Self-check of the composable engine (`prioritized_memory_transfer.macro`). Run with:
     conda run -n pytorch python tests/macro_test.py
 
 The engine must reproduce the documented two-population equations exactly (the one-teacher
@@ -6,7 +6,7 @@ limit): assembled rates, Hebbian update, and the adiabatic steady state.
 """
 import torch
 
-from src import ModelConfig, build_system, fwd, bwd, outer
+from prioritized_memory_transfer import ModelConfig, build_system, fwd, bwd, outer
 
 torch.manual_seed(0)
 

@@ -1,7 +1,7 @@
 """Pattern generation and construction of zero-diagonal covariance-PCN memories.
 
 Faithfulness notes:
-  - `W_T` and `W_S` carry a ZERO DIAGONAL at all times (no autapses). `build_W_T` produces
+  - `W_T` and `W_S` carry a ZERO DIAGONAL at all times (no autapses). `build_memory` produces
     a zero-diagonal matrix by construction.
   - The default `covpcn` build learns, per node, the zero-diagonal linear predictor of that
     node from the *others* across all patterns. For generic dense patterns with P <= d-1 this
@@ -52,7 +52,7 @@ def make_patterns(cfg: ModelConfig) -> torch.Tensor:
 def make_teacher_subspaces(cfg) -> tuple:
     """Two teacher pattern matrices `(M1, M2)` with unit-norm columns and *controlled geometry*.
 
-    Used by the interleaved model (`src.interleaved`) to place the two frozen memory
+    Used by the interleaved model (`prioritized_memory_transfer.interleaved`) to place the two frozen memory
     subspaces `U1 = span(M1)`, `U2 = span(M2)` in a prescribed relationship:
 
       - "orthogonal": `U1 ⟂ U2` (disjoint blocks of a shared random orthonormal frame);
@@ -116,22 +116,19 @@ def _validate_pattern_matrix(M: torch.Tensor) -> None:
         raise ValueError("every pattern column must have non-zero norm.")
 
 
-def _pattern_geometry(M: torch.Tensor, tol: float) -> tuple[int, float]:
+def _pattern_rank(M: torch.Tensor, tol: float) -> int:
     if M.shape[1] == 0:
-        return 0, float("nan")
+        return 0
     singular = torch.linalg.svdvals(M)
     threshold = tol * float(singular.max())
-    nonzero = singular[singular > threshold]
-    rank = int(nonzero.numel())
-    condition = float(nonzero.max() / nonzero.min()) if rank else float("inf")
-    return rank, condition
+    return int((singular > threshold).sum())
 
 
 def build_memory(
     M: torch.Tensor,
     *,
     ridge: float = 1e-8,
-    tolerance: float = 1e-6,
+    tolerance: float = 1e-3,
     require_representable: bool = True,
 ) -> MemoryBuildResult:
     """Fit a zero-diagonal covariance-PCN memory to pattern columns ``M``.
@@ -152,17 +149,28 @@ def build_memory(
     # from the other components. X has patterns as rows (P, d).
     X = M.T
     W = torch.zeros(d, d, dtype=dtype, device=device)
+    fit_conditions = []
     for i in range(d):
         others = [j for j in range(d) if j != i]
         Xi = X[:, others]                  # (P, d-1)
         target = X[:, i]                   # (P,)
+        if Xi.numel():
+            singular = torch.linalg.svdvals(Xi)
+            numerical_floor = (
+                torch.finfo(dtype).eps * max(Xi.shape) * float(singular.max())
+            )
+            nonzero = singular[singular > numerical_floor]
+            fit_conditions.append(
+                float(nonzero.max() / nonzero.min()) if nonzero.numel() else float("inf")
+            )
         A = Xi.T @ Xi + ridge * torch.eye(d - 1, dtype=dtype, device=device)
         W[i, others] = torch.linalg.solve(A, Xi.T @ target)
 
     M_op = torch.eye(d, dtype=dtype, device=device) - W
     residuals = (M_op @ M).norm(dim=0)
     max_residual = float(residuals.max()) if residuals.numel() else 0.0
-    pattern_rank, condition = _pattern_geometry(M, tolerance)
+    pattern_rank = _pattern_rank(M, tolerance)
+    condition = max(fit_conditions, default=float("nan"))
     manifold_singular = torch.linalg.svdvals(M_op)
     manifold_rank = int((manifold_singular < tolerance).sum())
     representable = max_residual <= tolerance and manifold_rank >= pattern_rank
@@ -195,4 +203,5 @@ def memory_residual(W_T: torch.Tensor, M: torch.Tensor) -> float:
             f"W_T must have shape ({M.shape[0]}, {M.shape[0]}) (got {tuple(W_T.shape)})."
         )
     M_T = torch.eye(W_T.shape[0], dtype=W_T.dtype, device=W_T.device) - W_T
-    return (M_T @ M).norm(dim=0).max().item()
+    residuals = (M_T @ M).norm(dim=0)
+    return residuals.max().item() if residuals.numel() else 0.0

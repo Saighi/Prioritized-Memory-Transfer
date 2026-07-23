@@ -8,7 +8,7 @@
 
 Two associative-memory networks, **T** (teacher) and **S** (student), are coupled across a hierarchy: the teacher sits **above** the student (hippocampus-like, above an association-cortex-like student). T holds a set of stored memories; S starts empty. The goal is **prioritized memory transfer**: S should learn T's memories, *visiting the ones it does not yet have first*, with the prioritization emerging from the dynamics rather than from an external scheduler.
 
-The intended new behavior: during **sleep / replay**, noise stirs T; S cannot predict the memories it has not learned; that **T–S mismatch** drives T's state into the unlearned memory; S learns it; the mismatch vanishes there; the system moves to the next novel memory; the process self-terminates once S has learned everything T holds.
+The intended new behavior: during **sleep / replay**, noise stirs T; S cannot predict the memories it has not learned; that **T–S mismatch** drives T's state into the unlearned memory; S learns it; the mismatch vanishes there; and the drive moves on to the remaining novel subspace. Once S has learned everything T holds, the **learning drive self-extinguishes**. This is a statement about the dynamics, not an automatic stopping rule: the simulation runner still executes its configured fixed step budget.
 
 Why this is interesting:
 - It is a model of **replay / consolidation** (teacher → student), in the spirit of hippocampus → neocortex transfer, but with **priority = what the student lacks**.
@@ -123,7 +123,7 @@ In sleep (`π_ST < 0`) the second term is `+|π_ST| N_S x_T` — a *growth* term
 
 ---
 
-## 5. Intended behavior (the "completion race") and termination
+## 5. Intended behavior (the "completion race") and self-extinguishing drive
 
 The selection mechanism is a **race in time** between two pattern-completers — but note that in the required `τ_S ≪ τ_T` regime, S reaches its steady state at each instant, so the *known-vs-novel* discrimination is effectively **spectral** (set by what `M_S` can null), not by raw speed. The "dynamic" content is the competition *among* novel directions, below.
 

@@ -16,7 +16,11 @@ from .config import InterleavedConfig
 
 @dataclass(frozen=True)
 class MemoryBuildResult:
-    """Result of fitting one zero-diagonal covariance-PCN memory."""
+    """Result of fitting one zero-diagonal covariance-PCN memory.
+
+    ``condition_number`` is the worst conditioning of the per-neuron regression problems,
+    which is the numerically relevant quantity under the no-autapse constraint.
+    """
 
     W: torch.Tensor
     M_op: torch.Tensor

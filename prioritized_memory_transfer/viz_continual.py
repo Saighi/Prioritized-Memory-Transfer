@@ -1,4 +1,4 @@
-"""Visualization for the continual-learning loop (`src.continual`).
+"""Visualization for the continual-learning loop (`prioritized_memory_transfer.continual`).
 
   - dashboard(hist):   static 4-panel matplotlib overview (retention heatmaps + growth + fractions).
   - retention(hist):   interactive plotly retention heatmap (Storage vs buffer-only baseline).

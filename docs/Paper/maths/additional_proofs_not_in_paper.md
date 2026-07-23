@@ -4,7 +4,7 @@
 reintroduce it into final_proofs.md, detailed_proofs.md, the outline, or the LaTeX drafts. The
 paper instead states an *operating choice* plus a *measurement*: the reversed precision is kept
 conservatively small — the code default (`pi_ST = "auto"`, `pi_ST_safety = 0.5` in
-`src/config.py`) sets |π_ST| to half the stability threshold π_T σ_min² — and the teacher's
+`prioritized_memory_transfer/config.py`) sets |π_ST| to half the stability threshold π_T σ_min² — and the teacher's
 containment on its memory manifold during sleep is verified numerically (`manifold_leakage`,
 `offmanifold_growth`, `terminal_occupancy`). Rationale for the cut: the paper is already
 mathematically complete; the projector machinery and the mixed-state caveats below add ownership

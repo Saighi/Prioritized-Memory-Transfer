@@ -17,8 +17,8 @@ import seaborn as sns
 import torch
 
 
-from src import ModelConfig, SimConfig, build_system, simulate
-from src import experiments as ex
+from prioritized_memory_transfer import ModelConfig, SimConfig, build_system, simulate
+from prioritized_memory_transfer import experiments as ex
 
 sns.set_theme(context="notebook", style="whitegrid")
 
@@ -76,9 +76,9 @@ fig.tight_layout()
 fig
 
 # %% verdict
-ok = (rank_o == 6 and info_o["manifold_dim"] == 6
-      and rank_c == 3 and info_c["manifold_dim"] == 3)
-print(f"\n[{'CONFIRMED' if ok else 'CHECK'}] orthonormal patterns give {info_o['manifold_dim']} "
+ok = (rank_o == 6 and info_o.manifold_dim == 6
+      and rank_c == 3 and info_c.manifold_dim == 3)
+print(f"\n[{'CONFIRMED' if ok else 'CHECK'}] orthonormal patterns give {info_o.manifold_dim} "
       f"staircase directions (= P), correlated give {info_c.manifold_dim} (= effective rank "
       "< P). The linear model transfers a *subspace*: the step count is the memory set's "
       "effective rank. (Discrete one-per-pattern replay would need an added nonlinearity / soft-WTA.)")

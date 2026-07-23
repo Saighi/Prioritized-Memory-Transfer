@@ -12,7 +12,7 @@ import numpy as np
 import torch
 
 
-from src import InterleavedConfig, SimConfig, build_interleaved_synthesis, simulate_interleaved
+from prioritized_memory_transfer import InterleavedConfig, SimConfig, build_interleaved_synthesis, simulate_interleaved
 
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"
 torch.manual_seed(0)
@@ -56,7 +56,7 @@ print("→ more correlation = larger, slower-to-cancel crosstalk, but interleavi
 
 # %%
 Hm, infom = run(geometry="shared", rank1=2, rank2=2, overlap=1, n_steps=140000, bout_steps=3500)
-print(f"multi-memory (2+2, overlap 1): r_Σ={infom['r_Sigma']}  "
+print(f"multi-memory (2+2, overlap 1): r_Σ={infom.r_Sigma}  "
       f"‖M_S U1‖ -> {Hm['resid1'][-1]:.3f}  ‖M_S U2‖ -> {Hm['resid2'][-1]:.3f}  "
       f"union deficit -> {Hm['union_deficit'][-1]:.4f}")
 assert Hm["union_deficit"][-1] < 0.3, "interleaving should merge multi-memory teachers too"

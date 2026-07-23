@@ -4,8 +4,8 @@ and a short adiabatic run that should show the novelty spectrum falling. Run wit
 """
 import torch
 
-from src import ModelConfig, SimConfig, build_system, simulate
-from src import diagnostics as dg
+from prioritized_memory_transfer import ModelConfig, SimConfig, build_system, simulate
+from prioritized_memory_transfer import diagnostics as dg
 
 cfg = ModelConfig(d=40, P=5, seed=1)
 model, info = build_system(cfg)

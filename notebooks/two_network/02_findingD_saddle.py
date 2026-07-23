@@ -18,8 +18,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-from src import ModelConfig
-from src import experiments as ex
+from prioritized_memory_transfer import ModelConfig
+from prioritized_memory_transfer import experiments as ex
 
 sns.set_theme(context="notebook", style="whitegrid")
 

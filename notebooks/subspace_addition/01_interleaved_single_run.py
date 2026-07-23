@@ -17,8 +17,8 @@ import os
 import torch
 
 
-from src import InterleavedConfig, SimConfig, build_interleaved_synthesis, simulate_interleaved
-from src import viz_interleaved as vi
+from prioritized_memory_transfer import InterleavedConfig, SimConfig, build_interleaved_synthesis, simulate_interleaved
+from prioritized_memory_transfer import viz_interleaved as vi
 
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"
 torch.manual_seed(0)

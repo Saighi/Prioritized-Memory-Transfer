@@ -1,6 +1,6 @@
 """The two-population predictive-coding model (teacher T above student S) and its run loop.
 
-A thin instance of the engine in `src.macro`: `build_system` wires two `Population`s and one
+A thin instance of the engine in `prioritized_memory_transfer.macro`: `build_system` wires two `Population`s and one
 `CouplingInterface` (`y = x_T`, `eps_TS = x_S - x_T`, target precision `pi_TS`, signed source
 precision `pi_ST`); `TwoPopModel` is a facade over that `MacroNetwork` exposing the historical
 surface (`W_T/W_S/x_T/x_S`, `eps_*`, `F_*`, `novelty_operator`, `rate_*`). `simulate` runs it
@@ -69,6 +69,12 @@ class TwoPopModel:
         self.eta = float(cfg.eta)
         self.sigma_xi = float(cfg.sigma_xi)
         self.r0 = float(cfg.r0)
+        if patterns.ndim != 2 or patterns.shape[0] != self.d:
+            raise ValueError(
+                f"patterns must have shape ({self.d}, P) (got {tuple(patterns.shape)})."
+            )
+        if patterns.dtype != self.dtype or patterns.device != self.device:
+            raise ValueError("patterns must match W_T dtype and device.")
         self.patterns = patterns              # (d, P), unit-norm columns
 
         # the engine: T (frozen, noisy, leashed) above S (plastic, driven by the interface)
@@ -108,6 +114,21 @@ class TwoPopModel:
 
     @W_S.setter
     def W_S(self, value: torch.Tensor) -> None:
+        if (
+            not isinstance(value, torch.Tensor)
+            or value.shape != (self.d, self.d)
+            or value.dtype != self.dtype
+            or value.device != self.device
+        ):
+            shape = None if not isinstance(value, torch.Tensor) else tuple(value.shape)
+            raise ValueError(
+                f"W_S must have shape ({self.d}, {self.d}), dtype {self.dtype}, "
+                f"and device {self.device} (got shape {shape})."
+            )
+        if not bool(torch.isfinite(value).all()):
+            raise ValueError("W_S contains NaN or infinite values.")
+        if float(torch.diagonal(value).abs().max()) > 10 * torch.finfo(value.dtype).eps:
+            raise ValueError("W_S must have a zero diagonal.")
         self._S.W = value
 
     @property
@@ -120,7 +141,7 @@ class TwoPopModel:
 
     @x_T.setter
     def x_T(self, value: torch.Tensor) -> None:
-        self._T.x = value
+        self._T.x = self._validated_state("x_T", value)
 
     @property
     def x_S(self) -> Optional[torch.Tensor]:
@@ -128,7 +149,23 @@ class TwoPopModel:
 
     @x_S.setter
     def x_S(self, value: torch.Tensor) -> None:
-        self._S.x = value
+        self._S.x = self._validated_state("x_S", value)
+
+    def _validated_state(self, name: str, value: torch.Tensor) -> torch.Tensor:
+        if (
+            not isinstance(value, torch.Tensor)
+            or value.shape != (self.d,)
+            or value.dtype != self.dtype
+            or value.device != self.device
+        ):
+            shape = None if not isinstance(value, torch.Tensor) else tuple(value.shape)
+            raise ValueError(
+                f"{name} must have shape ({self.d},), dtype {self.dtype}, "
+                f"and device {self.device} (got shape {shape})."
+            )
+        if not bool(torch.isfinite(value).all()):
+            raise ValueError(f"{name} contains NaN or infinite values.")
+        return value
 
     # ----- errors -----
     def eps_T(self) -> torch.Tensor:

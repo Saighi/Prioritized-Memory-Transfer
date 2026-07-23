@@ -57,7 +57,7 @@ if not SHOW:
     matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from src import AssociativeMemory, make_mask
+from prioritized_memory_transfer import AssociativeMemory, make_mask
 
 torch.manual_seed(0)
 DT = torch.float64
@@ -132,7 +132,7 @@ def to_img(vec):
 # linearly independent), and each stored picture should have essentially zero self-error.
 
 # %% build
-mem = AssociativeMemory(patterns, pi=1.0, W_kind="covpcn")
+mem = AssociativeMemory(patterns, pi=1.0)
 
 S_eig = torch.linalg.eigvalsh(mem.S)
 resid = (mem.M_op @ patterns).norm(dim=0).max().item()
@@ -167,7 +167,7 @@ fig_gal
 
 # %% choose a query and run recall
 target = 2                                          # which stored memory to cue (index into the gallery)
-known = make_mask((SIDE, SIDE), "top", frac=0.5, dtype=DT)     # clamp the TOP half; fill the bottom
+known = make_mask((SIDE, SIDE), "top", frac=0.5)     # clamp the TOP half; fill the bottom
 cue = patterns[:, target]
 
 trace = mem.recall(cue, known, fill=0.0, n_steps=1000, dt=0.2, tau=1.0, record_every=10)
@@ -335,7 +335,7 @@ if SHOW:
 masks = [("top", 0.5), ("bottom", 0.5), ("left", 0.5), ("center", 0.35), ("random", 0.5)]
 fig_occ, axes = plt.subplots(len(masks), 2, figsize=(4.2, 2.0 * len(masks)))
 for row, (kind, frac) in enumerate(masks):
-    k = make_mask((SIDE, SIDE), kind, frac=frac, dtype=DT)
+    k = make_mask((SIDE, SIDE), kind, frac=frac)
     tr = mem.recall(cue, k, n_steps=1000, dt=0.2, record_every=50)
     show_cue(axes[row, 0], cue, k)
     axes[row, 0].set_title(f"{kind} ({int(k.sum())} known)", fontsize=9)
@@ -387,9 +387,9 @@ fig_amb
 #   higher-dimensional manifold, so smaller cues start to blend sooner (§10).
 # - **Precision `pi`**: it scales `F` and the flow speed but not the fixed point — raising it just
 #   sharpens the descent (watch §6). The step guard is `dt·pi < 2/λ_max(S)`.
-# - **Noise**: add a small `sigma` term to the flow (in `src.recall.AssociativeMemory.recall`) to
+# - **Noise**: add a small `sigma` term to the flow (in `prioritized_memory_transfer.recall.AssociativeMemory.recall`) to
 #   see the state jitter within the flat manifold — the free on-manifold diffusion discussed in the
 #   single-network precision/curiosity analysis.
-# - **covpcn vs projector**: build with `W_kind="projector"` to see the ideal projector memory —
-#   its zero-diagonal perturbation lifts the manifold slightly, so stored pictures are recalled
-#   only approximately (a nice contrast with the exact covPCN fit).
+# - **Representability**: try different dense pattern sets and inspect
+#   `mem.memory_build.max_residual` / `condition_number`. Construction fails early when the
+#   no-autapse network cannot faithfully store the requested columns.

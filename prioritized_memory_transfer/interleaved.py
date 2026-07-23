@@ -10,13 +10,13 @@ nudges `m2`; rehearse T2 -> nulls `m2`, nudges `m1`; repeat -> both nulled. This
 replay/rehearsal, the standard cure for catastrophic forgetting.
 
 Each bout is a single-teacher reversed-precision transfer (the same physics as the
-two-population model in `src.model`), so the synthesis only ever learns from a network's
+two-population model in `prioritized_memory_transfer.model`), so the synthesis only ever learns from a network's
 *replayed activity*, never from clamped input. `interleave_merge` is the reusable bout driver
-(also used by `src.continual`).
+(also used by `prioritized_memory_transfer.continual`).
 """
 from __future__ import annotations
 
-from typing import Callable, Dict, List, Optional, Sequence
+from typing import Callable, Dict, Optional, Sequence
 
 import torch
 
@@ -36,7 +36,6 @@ def build_interleaved_synthesis(
     reversed precisions, and `kind="interleaved"`."""
     from .diagnostics import manifold_basis, spectral_gap, subspace_sum_basis
 
-    I = torch.eye(cfg.d, dtype=cfg.dtype, device=cfg.device)
     M1, M2 = make_teacher_subspaces(cfg)
     memory1, memory2 = build_memory(M1), build_memory(M2)
     W1, W2 = memory1.W, memory2.W

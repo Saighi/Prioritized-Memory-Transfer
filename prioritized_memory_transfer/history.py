@@ -63,7 +63,7 @@ class History:
 
 
 class ContinualHistory:
-    """Per-cycle record of the continual-learning loop (`src.continual`).
+    """Per-cycle record of the continual-learning loop (`prioritized_memory_transfer.continual`).
 
     After adding memory `k`, records how well **Storage** still nulls every memory seen so far
     (`storage_residual[k][i] = ||M_Z m_i||`, low = retained), the Storage subspace dimension, the
@@ -116,7 +116,7 @@ class ContinualHistory:
 
 
 class InterleavedHistory:
-    """Per-bout record of an interleaved merge (`src.interleaved`).
+    """Per-bout record of an interleaved merge (`prioritized_memory_transfer.interleaved`).
 
     Tracks the crosstalk-cancellation story: which teacher was rehearsed each bout, how well the
     plastic network nulls each teacher's memory (`resid1/resid2 = ||M_S U_k||_F`), and the deficit on

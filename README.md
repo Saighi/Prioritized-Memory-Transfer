@@ -10,15 +10,16 @@ PyTorch implementation of the predictive-coding memory-transfer models. **One en
    rehearsing one teacher per replay bout);
 3. a **continual-learning loop** (buffer → synthesis → storage) built on the interleaved merge.
 
-All are instances of one composable **"network of networks" engine** (`src.macro`): predictive-coding
+All are instances of one composable **"network of networks" engine** (`prioritized_memory_transfer.macro`): predictive-coding
 `Population` nodes wired by `CouplingInterface` edges into a `MacroNetwork` (edges can be switched
 `active`/off, which is how the interleaving alternates teachers).
 
 **Two-population.** A **teacher** T (a flat, linear covPCN associative memory, higher in the hierarchy)
 and an empty **student** S below it are coupled. During **sleep / replay** — a **reversed (negative)
 precision** `π_ST < 0` on the teacher's interface — noise stirs T; S's prediction error along memories
-it lacks drives T into those memories; S learns them; the drive there vanishes; the system
-self-terminates. Because T is linear, what transfers is the memory **subspace** (the staircase has
+it lacks drives T into those memories; S learns them; and the replay/learning drive along each learned
+direction extinguishes itself. The numerical runner still uses a fixed `n_steps` budget—there is no
+automatic convergence detector. Because T is linear, what transfers is the memory **subspace** (the staircase has
 ~effective-rank steps, = `P` for orthonormal patterns) — see §9 of the analysis.
 
 **Interleaved subspace addition.** Two frozen teachers, one plastic synthesis network; the synthesis
@@ -42,13 +43,11 @@ Uses the existing **`pytorch`** conda env (Python 3.10, torch 2.5, CUDA optional
 editable install of the package (plus plotly/nbformat for the interactive figures):
 
 ```bash
-conda run -n pytorch pip install -e . --config-settings editable_mode=compat --no-deps
+conda run -n pytorch pip install -e . --no-deps
 conda run -n pytorch pip install plotly nbformat
 ```
 
-After this, `import src` works from anywhere in the env — the notebooks have no path hacks.
-(`editable_mode=compat` puts the repo root on `sys.path`, which keeps the real package ahead of
-the unrelated `src/` folder that ships inside the conda env root.)
+After this, `import prioritized_memory_transfer` works from anywhere in the environment.
 
 ## Run
 
@@ -65,26 +64,36 @@ PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python not
 PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python notebooks/subspace_addition/01_interleaved_single_run.py
 ```
 
-Self-checks (also collectable with `pytest tests/`):
+The checks are executable scripts with top-level assertions; pytest is not currently a declared
+dependency. Run them directly:
 
 ```bash
 conda run -n pytorch --no-capture-output python tests/smoke_test.py       # two-pop invariants, gradients (Prop 1), surprise identity (Cor 1), circulation (Prop 3), transfer
 conda run -n pytorch --no-capture-output python tests/macro_test.py       # engine==2-pop equivalence
 conda run -n pytorch --no-capture-output python tests/interleaved_test.py # interleaving builds the union of correlated single memories
 conda run -n pytorch --no-capture-output python tests/continual_test.py   # interleaved continual retains a correlated stream
+conda run -n pytorch --no-capture-output python tests/validation_test.py # invalid configs/graphs/patterns fail at their boundary
 conda run -n pytorch --no-capture-output python tests/viz_test.py         # all single-run figures build
 conda run -n pytorch --no-capture-output python scripts/run_findings.py   # run all 4 experiment notebooks headless (from the repo root)
 ```
-(Use `--no-capture-output`; plain `conda run` mangles tqdm progress bars and reports a spurious error.)
+
+Use `--no-capture-output`; plain `conda run` mangles tqdm progress bars. On Windows consoles, enable
+UTF-8 before `scripts/run_findings.py` because its verdicts contain mathematical Unicode:
+
+```powershell
+$env:PYTHONUTF8 = "1"
+conda run -n pytorch --no-capture-output python scripts/run_findings.py
+```
 
 ## Layout
 
 ```
-src/
+prioritized_memory_transfer/
   macro.py         the engine: Population + CouplingInterface + MacroNetwork (fwd/bwd/outer);
                    assembles rates, adiabatic solve, one unified step() — the LEGO layer
   config.py        ModelConfig / InterleavedConfig / ContinualConfig / SimConfig
-  memory.py        pattern generators, zero-diagonal W_T (covPCN / projector), two-teacher geometries
+  artifacts.py     typed memory/build diagnostics (replaces loosely-typed info dictionaries)
+  memory.py        pattern generators, validated zero-diagonal covPCN fits, two-teacher geometries
   model.py         build_system (two-pop) -> MacroNetwork; TwoPopModel facade; simulate()
   interleaved.py   build_interleaved_synthesis + interleave_merge (one teacher per bout) -> MacroNetwork
   continual.py     ContinualLearner: write→interleaved-consolidate→download loop over a memory stream
@@ -104,7 +113,8 @@ notebooks/
     02_continual_edge_cases.py      storage-rehearsal ablation, capacity, correlated-vs-random
   associative_recall/     one-network clamped recall on MNIST (01_clamped_recall)
 tests/
-  smoke_test.py, macro_test.py, recall_test.py, interleaved_test.py, continual_test.py, viz_test.py
+  smoke_test.py, macro_test.py, recall_test.py, interleaved_test.py, continual_test.py,
+  validation_test.py, viz_test.py
 scripts/
   probe_findings.py (parameter sweeps, prints verdicts), run_findings.py (runs the experiment
   notebooks headless) — exploration scripts, not tests
@@ -118,9 +128,13 @@ archive/
 - **Tied weights**: one matrix per population (`W_T`, `W_S`); top-down uses `M = I − W`,
   bottom-up uses `Mᵀ` (the same matrix transposed). The T↔S interface is identity both ways.
 - **No autapses, ever**: `diag(W_T) = diag(W_S) = 0` at construction and after every update.
-- **VFE**: the student's perception = `−∇_{x_S}F_S`, learning = `−∇_{W_S}F_S` (autograd-verified).
+- **VFE**: the student's perception is exact descent on `F_S`; learning is the gradient projected
+  onto the zero-diagonal weight subspace (autograd-verified before projection).
 - **Saddle**: `circulation ≈ 0` only when `π_ST = −π_TS` (`ModelConfig(exact_saddle=True)`).
-- **Memories in `ker M_T`**: `max_p ‖M_T m_p‖ ≈ 0` for `P ≤ d−1`.
+- **Memories in `ker M_T`**: construction measures `max_p ‖M_T m_p‖`, numerical rank, and
+  conditioning, and rejects a pattern set that the no-autapse network cannot represent.
+  `P ≤ d−1` is necessary but not sufficient for arbitrary sparse/adversarial patterns; it succeeds
+  generically for the dense generated patterns used by the experiments.
 - **Reversed precision (sleep/wake)**: the teacher's interface precision `π_ST` is *signed*.
   Transfer is simulated with a **reversed (negative) precision** `π_ST < 0` (the teacher
   maximizes the interface error — drive-to-disagree); `π_ST > 0` is ordinary inference/recall
@@ -141,6 +155,7 @@ figure and prints a verdict. All are **confirmed numerically**:
   regime while a novel one stays at `n(1)`; the discrimination only collapses as `τ_S→τ_T`, so
   selection is spectral, not a speed race.
 - **Subspace** — orthonormal `P=6` patterns give 6 staircase steps; correlated rank-3 patterns
+  generated with `corr_rank=3, corr_noise=0`
   give 3 (= effective rank `< P`). The linear model transfers a *subspace*; discrete one-per-pattern
   (episodic) replay would need an added nonlinearity / soft-WTA.
 - **Stop-gradient** — the Tang-style dendritic variant (drop the backward `Wᵀε` term) still

@@ -2,7 +2,7 @@
 counterpart to the transfer models; see `docs/understanding_pc_associative_memory.md`).
 
 Weights are fitted with the zero-diagonal covariance-PCN construction
-(`src.memory.build_memory`), so every representable picture lies in `ker(M_op)` and the free
+(`prioritized_memory_transfer.memory.build_memory`), so every representable picture lies in `ker(M_op)` and the free
 energy `F(x) = 0.5 pi ||M_op x||^2` is a quadratic bowl whose zero-floor is the memory
 manifold. Recall clamps the *known* units to a partial cue and lets the free units descend F
 by projected gradient flow (`tau xdot = -pi S x`, clamped units held fixed) until the state
@@ -111,6 +111,9 @@ class AssociativeMemory:
     ) -> None:
         if not math.isfinite(float(pi)) or pi <= 0:
             raise ValueError(f"pi must be finite and > 0 (got {pi!r}).")
+        self.memory_build = build_memory(patterns, ridge=ridge, tolerance=tol)
+        if patterns.shape[1] < 1:
+            raise ValueError("AssociativeMemory needs at least one pattern column.")
         self.patterns = patterns                       # (d, P)
         self.d, self.P = patterns.shape
         self.pi = float(pi)
@@ -119,7 +122,6 @@ class AssociativeMemory:
         self.I = torch.eye(self.d, dtype=self.dtype, device=self.device)
 
         # zero-diagonal weights from the stored pictures (reuse the package builder)
-        self.memory_build = build_memory(patterns, ridge=ridge, tolerance=tol)
         self.W = self.memory_build.W
         self.M_op = self.memory_build.M_op
         self.S = self.M_op.transpose(-2, -1) @ self.M_op   # self-surprise operator

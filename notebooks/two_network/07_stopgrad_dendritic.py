@@ -46,8 +46,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-from src import ModelConfig, SimConfig, build_system
-from src.model import TwoPopModel
+from prioritized_memory_transfer import ModelConfig, SimConfig, build_system
+from prioritized_memory_transfer.model import TwoPopModel
 
 torch.manual_seed(0)
 print("torch", torch.__version__, "| cuda", torch.cuda.is_available())
@@ -135,7 +135,7 @@ def offmanifold_health(M_T, U_T, tol=1e-6):
 
 # %% [markdown]
 # ## A confined tracking loop
-# Mirrors `src.model.simulate` (same Euler-Maruyama integration, same invariants:
+# Mirrors `prioritized_memory_transfer.model.simulate` (same Euler-Maruyama integration, same invariants:
 # renormalize ‖x_T‖=r₀, zero diagonal of W_S), but records the asymmetry-aware novelty
 # spectrum and the M_S health trace. Works for both models via polymorphism.
 
@@ -148,7 +148,7 @@ def track(model, sim, info, seed_offset=12345):
     if sim.pretrain_subset is not None:
         model.pretrain(sim.pretrain_subset)
 
-    U_T, M = info["U_T"], model.patterns
+    U_T, M = info.U_T, model.patterns
     dt = sim.dt
     noise_scale = model.sigma_xi / model.tau_T * math.sqrt(dt)
     rec = defaultdict(list)
@@ -211,25 +211,25 @@ model_cfg = ModelConfig(
     pi_ST="auto", pi_ST_safety=0.5,    # π_ST = 0.5 · σ²_min (well inside the guard)
     tau_T=10.0, tau_S=1.0, eta=0.02,   # τ_S << τ_T << 1/η
     sigma_xi=0.05, r0=1.0,             # enough exploration noise for robust subspace coverage
-    pattern_kind="orthonormal", W_T_kind="covpcn",
+    pattern_kind="orthonormal",
     seed=0, device="cpu",
 )
 baseline, info = build_system(model_cfg)                       # full-PC reference
 stopgrad = StopGradModel(baseline.W_T, model_cfg,              # shares W_T + patterns
-                         pi_ST=info["pi_ST"], patterns=baseline.patterns)
+                         pi_ST=info.pi_ST, patterns=baseline.patterns)
 
-U_T = info["U_T"]
-sig2 = info["sigma2_min"]
+U_T = info.U_T
+sig2 = info.sigma2_min
 # stop-grad damping is M_T (eigs ~ σ) not S_T (eigs ~ σ²): the guard rescales σ²_min -> σ_min.
 sym_MT = 0.5 * (baseline.M_T + baseline.M_T.T)
 ev_symMT = torch.linalg.eigvalsh(sym_MT)
 sigma_min = float(ev_symMT[ev_symMT > 1e-6].min())            # off-manifold gap of sym(M_T)
 
-print(f"manifold dim (eff rank) : {info['manifold_dim']}  (= P for orthonormal patterns)")
-print(f"π_ST                    : {info['pi_ST']:.4f}  (reversed / <0)")
-print(f"full-PC guard σ²_min     : {sig2:.4f}    (|π_ST| < σ²_min? {abs(info['pi_ST']) < sig2})")
-print(f"stop-grad guard σ_min    : {sigma_min:.4f}    (|π_ST| < σ_min?  {abs(info['pi_ST']) < sigma_min})")
-print(f"precision guard π_TS>π_S  : {info['precision_ok']}")
+print(f"manifold dim (eff rank) : {info.manifold_dim}  (= P for orthonormal patterns)")
+print(f"π_ST                    : {info.pi_ST:.4f}  (reversed / <0)")
+print(f"full-PC guard σ²_min     : {sig2:.4f}    (|π_ST| < σ²_min? {abs(info.pi_ST) < sig2})")
+print(f"stop-grad guard σ_min    : {sigma_min:.4f}    (|π_ST| < σ_min?  {abs(info.pi_ST) < sigma_min})")
+print(f"precision guard π_TS>π_S  : {info.precision_ok}")
 
 # %% sanity: at W_S = 0 the two novelty operators must coincide (the 'extremes agree' claim)
 n_base, _ = restricted_novelty(baseline, U_T)

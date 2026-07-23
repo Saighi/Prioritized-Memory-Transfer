@@ -70,7 +70,7 @@ class ModelConfig:
     r0: float = 1.0                  # fixed norm to which ||x_T|| is renormalized
 
     # --- construction choices ---
-    pattern_kind: str = "orthonormal"   # "orthonormal" (rank P) | "correlated" (rank < P)
+    pattern_kind: str = "orthonormal"   # "orthonormal" | "correlated" (exact low-rank only at zero noise)
     corr_rank: Optional[int] = None     # effective rank for correlated patterns (default P//2)
     corr_noise: float = 0.1             # additive noise for correlated patterns
 
@@ -80,26 +80,33 @@ class ModelConfig:
     dtype: torch.dtype = torch.float64
 
     def __post_init__(self) -> None:
+        if type(self.d) is not int or type(self.P) is not int:
+            raise ValueError(f"d and P must be integers (got d={self.d!r}, P={self.P!r}).")
         if self.d < 2:
             raise ValueError(f"d must be >= 2 (got {self.d}).")
         if self.P < 1:
             raise ValueError(f"P must be >= 1 (got {self.P}).")
         if self.P > self.d - 1:
             raise ValueError(
-                f"Need P <= d-1 for an exact zero-diagonal fit (got P={self.P}, d={self.d})."
+                "ModelConfig keeps generated pattern sets below the zero-diagonal capacity, "
+                f"so it needs P <= d-1 (got P={self.P}, d={self.d})."
             )
         if self.pattern_kind not in {"orthonormal", "correlated"}:
             raise ValueError(
                 f"pattern_kind must be 'orthonormal' or 'correlated' (got {self.pattern_kind!r})."
             )
-        if self.corr_rank is not None and not 1 <= self.corr_rank <= self.P:
-            raise ValueError(f"corr_rank must lie in [1, P] (got {self.corr_rank}, P={self.P}).")
+        if self.corr_rank is not None and (
+            type(self.corr_rank) is not int or not 1 <= self.corr_rank <= self.P
+        ):
+            raise ValueError(f"corr_rank must be an integer in [1, P] (got {self.corr_rank!r}).")
         _nonnegative("corr_noise", self.corr_noise)
         for name in ("pi_T", "pi_S", "pi_TS", "tau_T", "tau_S", "r0"):
             _positive(name, getattr(self, name))
         for name in ("eta", "sigma_xi"):
             _nonnegative(name, getattr(self, name))
         _signed_or_auto("pi_ST", self.pi_ST)
+        if type(self.seed) is not int:
+            raise ValueError(f"seed must be an integer (got {self.seed!r}).")
         if not 0 < self.pi_ST_safety <= 1:
             raise ValueError(
                 f"pi_ST_safety must lie in (0, 1] (got {self.pi_ST_safety})."
@@ -114,7 +121,7 @@ class ModelConfig:
 
 @dataclass
 class InterleavedConfig:
-    """Configuration for interleaved subspace addition (`src.interleaved`): two frozen teachers
+    """Configuration for interleaved subspace addition (`prioritized_memory_transfer.interleaved`): two frozen teachers
     `T1`, `T2` merged into a plastic synthesis network `S` by rehearsing ONE teacher per replay
     bout. Each bout is a plain two-network reversed-precision transfer, so `S` learns the
     subspace sum `U1 + U2` without any teacher cross-term.
@@ -155,6 +162,8 @@ class InterleavedConfig:
     dtype: torch.dtype = torch.float64
 
     def __post_init__(self) -> None:
+        if any(type(v) is not int for v in (self.d, self.rank1, self.rank2, self.overlap)):
+            raise ValueError("d, rank1, rank2, and overlap must be integers.")
         if self.d < 2:
             raise ValueError(f"d must be >= 2 (got {self.d}).")
         if self.rank1 < 1 or self.rank2 < 1:
@@ -201,6 +210,8 @@ class InterleavedConfig:
         for name in ("eta", "sigma_xi1", "sigma_xi2"):
             _nonnegative(name, getattr(self, name))
         _signed_or_auto("rho", self.rho)
+        if type(self.seed) is not int:
+            raise ValueError(f"seed must be an integer (got {self.seed!r}).")
         if not 0 < self.rho_safety <= 1:
             raise ValueError(f"rho_safety must lie in (0, 1] (got {self.rho_safety}).")
         _validate_runtime(self.device, self.dtype)
@@ -212,7 +223,7 @@ class InterleavedConfig:
 
 @dataclass
 class ContinualConfig:
-    """Configuration for the continual-learning loop (`src.continual`): a stream of memories is
+    """Configuration for the continual-learning loop (`prioritized_memory_transfer.continual`): a stream of memories is
     consolidated one at a time through a fast **Buffer**, a transient **Synthesis** workspace, and
     a slow **Storage** network, so Storage accumulates the whole stream without catastrophic
     forgetting. Each cycle: write the new memory into the buffer (one-shot covPCN), consolidate
@@ -259,6 +270,11 @@ class ContinualConfig:
     dtype: torch.dtype = torch.float64
 
     def __post_init__(self) -> None:
+        if type(self.d) is not int or type(self.n_memories) is not int:
+            raise ValueError(
+                f"d and n_memories must be integers "
+                f"(got d={self.d!r}, n_memories={self.n_memories!r})."
+            )
         if self.d < 2:
             raise ValueError(f"d must be >= 2 (got {self.d}).")
         if self.n_memories < 1:
@@ -272,11 +288,13 @@ class ContinualConfig:
         for name in ("eta", "sigma_xi"):
             _nonnegative(name, getattr(self, name))
         _signed_or_auto("rho", self.rho)
+        if type(self.seed) is not int:
+            raise ValueError(f"seed must be an integer (got {self.seed!r}).")
         if not 0 < self.rho_safety <= 1:
             raise ValueError(f"rho_safety must lie in (0, 1] (got {self.rho_safety}).")
         for name in ("consolidate_bouts", "download_bouts", "bout_steps"):
             value = getattr(self, name)
-            if not isinstance(value, int) or value < 1:
+            if type(value) is not int or value < 1:
                 raise ValueError(f"{name} must be an integer >= 1 (got {value!r}).")
         if self.mode not in {"full", "adiabatic"}:
             raise ValueError(f"mode must be 'full' or 'adiabatic' (got {self.mode!r}).")
@@ -294,20 +312,20 @@ class SimConfig:
     record_every: int = 100
     n_weight_snapshots: int = 6      # how many W_S heatmap snapshots to keep over the run
     pretrain_subset: Optional[Sequence[int]] = None  # pattern indices S already "knows"
-    bout_steps: int = 3000           # steps per replay bout in the interleaved merge (src.interleaved)
+    bout_steps: int = 3000           # steps per replay bout in the interleaved merge (prioritized_memory_transfer.interleaved)
     progress: bool = True
 
     def __post_init__(self) -> None:
-        if not isinstance(self.n_steps, int) or self.n_steps < 1:
+        if type(self.n_steps) is not int or self.n_steps < 1:
             raise ValueError(f"n_steps must be an integer >= 1 (got {self.n_steps!r}).")
         _positive("dt", self.dt)
         if self.mode not in {"full", "adiabatic"}:
             raise ValueError(f"mode must be 'full' or 'adiabatic' (got {self.mode!r}).")
         for name in ("s_substeps", "record_every", "bout_steps"):
             value = getattr(self, name)
-            if not isinstance(value, int) or value < 1:
+            if type(value) is not int or value < 1:
                 raise ValueError(f"{name} must be an integer >= 1 (got {value!r}).")
-        if not isinstance(self.n_weight_snapshots, int) or self.n_weight_snapshots < 0:
+        if type(self.n_weight_snapshots) is not int or self.n_weight_snapshots < 0:
             raise ValueError(
                 "n_weight_snapshots must be an integer >= 0 "
                 f"(got {self.n_weight_snapshots!r})."

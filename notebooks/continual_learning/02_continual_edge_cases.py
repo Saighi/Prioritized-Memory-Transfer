@@ -11,7 +11,7 @@ import numpy as np
 import torch
 
 
-from src import ContinualConfig, ContinualLearner
+from prioritized_memory_transfer import ContinualConfig, ContinualLearner
 
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"
 torch.manual_seed(0)

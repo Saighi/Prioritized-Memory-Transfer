@@ -20,9 +20,9 @@ import os
 import torch
 
 
-from src import ContinualConfig, ContinualLearner
-from src import viz_continual as vc
-from src import viz_interleaved as vi
+from prioritized_memory_transfer import ContinualConfig, ContinualLearner
+from prioritized_memory_transfer import viz_continual as vc
+from prioritized_memory_transfer import viz_interleaved as vi
 
 SHOW = os.environ.get("PMT_NO_SHOW") != "1"
 torch.manual_seed(0)

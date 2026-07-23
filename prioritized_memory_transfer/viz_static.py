@@ -84,7 +84,7 @@ def dashboard(
 
     # (2,1) S_T spectrum with pi_ST guard
     a = ax[2, 1]
-    if info is not None and "S_T" in info:
+    if info is not None:
         import torch
         evals = torch.linalg.eigvalsh(info.S_T).cpu().numpy()
         a.bar(range(len(evals)), np.sort(evals), color="C7")
