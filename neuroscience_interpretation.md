@@ -44,3 +44,7 @@ can bias the trajectory taken by the bottom representation neuron in an inverse 
 
 this is typically what my network do, as their are recurrent synapses in my bottom population (the teacher), by creating an
 negative image we push it toward exploring other memories. this can't be obtain by classical alignment PC.
+
+During Awake activity , the PCF is heavily implicated in inhibition of memory recall from the hippocampus.
+This is considered as a form of selection process whereby the PCF hinder memory recalls which would impair ongoing task performance. As an example, the PCF can mitigate fear response after fear conditioning when this response is unapropriated.
+

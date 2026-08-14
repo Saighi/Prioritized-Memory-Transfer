@@ -54,8 +54,11 @@ def trajectory_3d(hist: History, model: TwoPopModel, info=None,
                   basis: str = "patterns", max_frames: int = 120):
     """Animate x_T's path projected onto 3 directions, with a time slider.
 
-    basis="patterns": project onto the first 3 stored memories (axes are interpretable as
-    'how much of m0/m1/m2'); basis="manifold": project onto the first 3 columns of U_T.
+    basis="patterns": the *expansion coefficients* over the first 3 stored memories, so the axes
+    really mean 'how much of m0/m1/m2'. These are least-squares coefficients, not inner products:
+    the two coincide for an orthonormal pattern set but diverge badly for a correlated or
+    nonnegative one, where every state has positive overlap with every pattern.
+    basis="manifold": project onto the first 3 columns of U_T (already orthonormal).
     """
     import plotly.graph_objects as go
     H = hist.to_numpy()
@@ -65,10 +68,11 @@ def trajectory_3d(hist: History, model: TwoPopModel, info=None,
     if basis == "manifold" and info is not None:
         B3 = info.U_T[:, :3].cpu()
         labels = ["u0", "u1", "u2"]
+        coords = (xT @ B3).numpy()                 # (T, 3), orthonormal -> projection is exact
     else:
         B3 = model.patterns[:, :3].cpu()
-        labels = ["m0", "m1", "m2"]
-    coords = (xT @ B3).numpy()                     # (T, 3)
+        labels = ["c0", "c1", "c2"]
+        coords = torch.linalg.lstsq(B3, xT.transpose(-2, -1)).solution.transpose(-2, -1).numpy()
 
     # base path, colored by time
     base = go.Scatter3d(

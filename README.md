@@ -51,7 +51,7 @@ After this, `import prioritized_memory_transfer` works from anywhere in the envi
 
 ## Run
 
-Open [`notebooks/two_network/01_single_run.py`](notebooks/two_network/01_single_run.py) (or the
+Open [`notebooks/memory_transfer/01_single_run.py`](notebooks/memory_transfer/01_single_run.py) (or the
 interleaved [`notebooks/subspace_addition/01_interleaved_single_run.py`](notebooks/subspace_addition/01_interleaved_single_run.py))
 in VS Code, pick the **`pytorch`** interpreter as the kernel, and run the `# %%` cells top to bottom.
 You get the spectral guards, the faithfulness self-checks, a full transfer run, a 6-panel static
@@ -60,7 +60,7 @@ dashboard, `W_S`-convergence snapshots, and interactive plotly figures.
 Headless (no figures shown), e.g. to verify a notebook runs:
 
 ```bash
-PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python notebooks/two_network/01_single_run.py
+PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python notebooks/memory_transfer/01_single_run.py
 PMT_NO_SHOW=1 MPLBACKEND=Agg conda run -n pytorch --no-capture-output python notebooks/subspace_addition/01_interleaved_single_run.py
 ```
 
@@ -73,6 +73,7 @@ conda run -n pytorch --no-capture-output python tests/macro_test.py       # engi
 conda run -n pytorch --no-capture-output python tests/interleaved_test.py # interleaving builds the union of correlated single memories
 conda run -n pytorch --no-capture-output python tests/continual_test.py   # interleaved continual retains a correlated stream
 conda run -n pytorch --no-capture-output python tests/viz_test.py         # all single-run figures build
+conda run -n pytorch --no-capture-output python tests/nonlinear_test.py   # ReLU units: rates vs equations, memories fixed, transfer still works
 conda run -n pytorch --no-capture-output python scripts/run_findings.py   # run all 4 experiment notebooks headless (from the repo root)
 ```
 
@@ -102,7 +103,9 @@ src/
     viz_*.py         two-population, interleaved, and continual-learning figures
     experiments.py   sweep helpers for the experiment notebooks
 notebooks/
-  two_network/            the two-population model (01_single_run … 07_stopgrad_dendritic)
+  memory_transfer/        the two-population model (01_single_run … 07_stopgrad_dendritic)
+  memory_transfer_non_linear/  the same model with ReLU units (01_single_run_non_linear,
+                          02_arbitrary_memories, 03_mnist_dreams)
   subspace_addition/      the interleaved merge — 01_interleaved_single_run (crosstalk sawtooth),
                           02_interleaved_edge_cases (correlation sweep, multi-memory)
   continual_learning/     the buffer → synthesis → storage loop (interleaved consolidation)
@@ -111,7 +114,7 @@ notebooks/
   associative_recall/     one-network clamped recall on MNIST (01_clamped_recall)
 tests/
   smoke_test.py, macro_test.py, recall_test.py, interleaved_test.py, continual_test.py,
-  viz_test.py
+  viz_test.py, nonlinear_test.py
 scripts/
   probe_findings.py (parameter sweeps, prints verdicts), run_findings.py (runs the experiment
   notebooks headless) — exploration scripts, not tests

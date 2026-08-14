@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import torch
 
+from .activations import resolve_activation
 from .model import TwoPopModel, bwd, fwd, outer
 from .memory import zero_diag
 
@@ -49,15 +50,48 @@ def novelty_operator(S_op: torch.Tensor, pi_in: float, pi_self: float) -> torch.
 # --------------------------------------------------------------- primary novelty observable
 def restricted_novelty_spectrum(model: TwoPopModel, U_T: torch.Tensor) -> torch.Tensor:
     """Eigenvalues (descending) of U_T^T N_S U_T — which directions of the teacher's manifold
-    the student still cannot explain. The largest eigenvalue -> 0 marks transfer complete."""
+    the student still cannot explain. The largest eigenvalue -> 0 marks transfer complete.
+    With a nonlinear activation `N_S` is the local within-cone linearization, so this is an
+    instantaneous novelty readout rather than the exact spectrum."""
     N = model.novelty_operator()
     R = U_T.transpose(-2, -1) @ N @ U_T
     return torch.linalg.eigvalsh(R).flip(-1)
 
 
+def manifold_surprise_spectrum(model: TwoPopModel, M: torch.Tensor) -> torch.Tensor:
+    """Exact surprise density of the student over the WHOLE memory manifold, as `P` eigenvalues
+    (descending). The honest replacement for `restricted_novelty_spectrum` in a nonlinear net.
+
+    On the memory manifold the student's error map is linear (identity activation, or a
+    rectifying one on nonnegative patterns), so with per-pattern error vectors
+    `E = [m_p - W_S f(m_p)]`, every manifold state `x = M c` has
+
+        F_S(M c) = 0.5 pi_S c^T G c ,    G = E^T E ,    ||M c||^2 = c^T K c ,   K = M^T M .
+
+    The eigenvalues of the pencil `(G, K)` are therefore `F_S` per unit `||x||^2` over the entire
+    manifold — no linearization, no state dependence, no arbitrary basis. They are the exact
+    range of the surprise density, and they fall to zero as transfer completes. At `c = e_p` the
+    density is `model.pattern_energy()[p]`, so the two readouts share their units.
+
+    (Under a rectifying activation the true manifold is the patterns' CONE, `c >= 0`, a subset of
+    the span; these unconstrained eigenvalues therefore bracket the cone values.)
+    """
+    E = M - model.W_S @ model._S.f(M)             # (d, P) per-pattern error vectors
+    G = E.transpose(-2, -1) @ E
+    K = M.transpose(-2, -1) @ M
+    L = torch.linalg.cholesky(K)                  # K is PD for independent patterns
+    Linv = torch.linalg.solve_triangular(
+        L, torch.eye(K.shape[0], dtype=K.dtype, device=K.device), upper=False
+    )
+    A = Linv @ G @ Linv.transpose(-2, -1)
+    lam = torch.linalg.eigvalsh(0.5 * (A + A.transpose(-2, -1))).flip(-1)
+    return 0.5 * model.pi_S * lam
+
+
 def per_direction_residual(model: TwoPopModel, M: torch.Tensor) -> torch.Tensor:
-    """||M_S m_p|| for each stored pattern: S's self-error residual along each named memory."""
-    return (model.M_S @ M).norm(dim=0)
+    """||m_p - W_S f(m_p)|| for each stored pattern: S's self-error residual along each named
+    memory (= ||M_S m_p|| in the linear model)."""
+    return model.pattern_residual(M)
 
 
 def alignment(x_T: torch.Tensor, M: torch.Tensor) -> torch.Tensor:
@@ -73,21 +107,29 @@ def manifold_occupancy(x_T: torch.Tensor, U_T: torch.Tensor) -> float:
 # -------------------------------------------------------------------- correctness checks
 def check_gradients(model: TwoPopModel, seed: int = 0):
     """Confirm that the student's perception = -grad_{x_S} F_S and the Hebbian rule =
-    -grad_{W_S} F_S (full, unconstrained gradient). Returns (err_xS, err_WS), both ~1e-10."""
+    -grad_{W_S} F_S (full, unconstrained gradient). Returns (err_xS, err_WS), both ~1e-10.
+
+    Covers the nonlinear case too: with `eps_S = x_S - W_S f(x_S)` the perception term carries the
+    Jacobian factor `J_S^T = I - diag(f'(x_S)) W_S^T` and the Hebbian rule's presynaptic factor is
+    `f(x_S)`. Both reduce to the linear expressions when `f` is the identity, so this asserts the
+    activation algebra in `Population` against autograd."""
     d, dtype, device = model.d, model.dtype, model.device
+    f, f_prime = resolve_activation(getattr(model, "act", None))
     gen = torch.Generator(device=device).manual_seed(seed)
     xT = torch.randn(d, generator=gen, dtype=dtype, device=device)
     xS = torch.randn(d, generator=gen, dtype=dtype, device=device, requires_grad=True)
     WS = zero_diag(torch.randn(d, d, generator=gen, dtype=dtype, device=device)).requires_grad_(True)
-    MS = torch.eye(d, dtype=dtype, device=device) - WS
 
     eps_TS = xS - xT
-    eps_S = fwd(MS, xS)
+    eps_S = xS - fwd(WS, f(xS))            # = M_S x_S when f is the identity
     F_S = 0.5 * model.pi_TS * (eps_TS ** 2).sum() + 0.5 * model.pi_S * (eps_S ** 2).sum()
     g_xS, g_WS = torch.autograd.grad(F_S, [xS, WS])
 
-    perception_rhs = -model.pi_TS * eps_TS.detach() - model.pi_S * bwd(MS.detach(), eps_S.detach())
-    learn_rhs = model.pi_S * outer(eps_S.detach(), xS.detach())
+    xS_d, WS_d, eps_S_d = xS.detach(), WS.detach(), eps_S.detach()
+    # J_S^T eps_S = eps_S - f'(x_S) * (W_S^T eps_S)
+    self_term = eps_S_d - f_prime(xS_d) * bwd(WS_d, eps_S_d)
+    perception_rhs = -model.pi_TS * eps_TS.detach() - model.pi_S * self_term
+    learn_rhs = model.pi_S * outer(eps_S_d, f(xS_d))
     err_xS = float((g_xS + perception_rhs).norm())     # grad should equal -perception_rhs
     err_WS = float((g_WS + learn_rhs).norm())          # grad should equal -learn_rhs
     return err_xS, err_WS
@@ -137,7 +179,11 @@ def circulation(model: TwoPopModel, seed: int = 0) -> float:
     """Frobenius norm of the saddle mismatch  d f_T/d x_S + (d f_S/d x_T)^T.
     For a true single-potential saddle it is 0; with the signed precision it equals
     |pi_ST + pi_TS| * sqrt(d), i.e. ~0 only when pi_ST == -pi_TS (the exact-saddle / zero-sum
-    regime: the teacher's reversed precision exactly mirrors the student's)."""
+    regime: the teacher's reversed precision exactly mirrors the student's).
+
+    Unaffected by any unit nonlinearity: only the *interface* contributes cross-derivatives
+    (d f_T/d x_S = pi_ST I, d f_S/d x_T = pi_TS I) and the interface is linear, so the linear
+    closures below give the exact value in the nonlinear model too."""
     d, dtype, device = model.d, model.dtype, model.device
     gen = torch.Generator(device=device).manual_seed(seed)
     xT = torch.randn(d, generator=gen, dtype=dtype, device=device)

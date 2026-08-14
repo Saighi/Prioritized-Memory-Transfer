@@ -1,0 +1,62 @@
+% Auto-generated from docs/schematic/spec_bio.py via render.py — edit the template, not the .tex.
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\definecolor{predcolor}{HTML}{4C8DFF}
+\definecolor{errcolor}{HTML}{E0772B}
+\definecolor{regionstroke}{HTML}{222222}
+\definecolor{relaystroke}{HTML}{888888}
+\definecolor{interfill}{HTML}{6E6E6E}
+\definecolor{rulecol}{HTML}{C9C9C9}
+\definecolor{titlecol}{HTML}{222222}
+\begin{document}
+\begin{tikzpicture}[
+  % --- nodes ---
+  region/.style={rounded corners=4pt, draw=regionstroke, line width=1.1pt, fill=white,
+                 align=center, inner sep=3pt, text=titlecol},
+  relay/.style={rounded corners=3pt, draw=relaystroke, line width=0.9pt, fill=white,
+                align=center, inner sep=3pt, text=titlecol},
+  inter/.style={circle, draw=interfill, fill=interfill, minimum size=3.4mm, inner sep=0pt},
+  value/.style={circle, draw=regionstroke, line width=1.1pt, fill=white,
+                align=center, inner sep=0pt, text=titlecol},
+  err/.style={rounded corners=3pt, draw=relaystroke, dashed, line width=0.9pt, fill=white,
+              align=center, inner sep=2pt, text=titlecol},
+  ghost/.style={inner sep=0pt, minimum size=0pt},
+  % --- couplings: colour = direction, terminal = sign ---
+  down/.style={predcolor, line width=1.25pt},
+  up/.style={errcolor, line width=1.25pt},
+  local/.style={relaystroke, line width=1.1pt},
+  corr/.style={relaystroke!75, line width=0.7pt, dotted},
+  excit/.style={-{Stealth[length=2.6mm]}},
+  inhib/.style={-{Circle[length=2.2mm, width=2.2mm]}},
+  selfloop/.style={-{Stealth[length=2.2mm]}, relaystroke, line width=0.9pt, looseness=11},
+  % --- lettering ---
+  glab/.style={font=\scriptsize, fill=white, inner sep=1.5pt, align=center, text=titlecol},
+  note/.style={font=\scriptsize, text=relaystroke, align=center},
+  panel/.style={font=\scriptsize\bfseries, text=relaystroke, align=center},
+  lgd/.style={font=\scriptsize, text=relaystroke},
+]
+% ---- regions, relays, interneurons ----
+\node[region, minimum width=4.80cm, minimum height=1.35cm] (pfc) at (0.00,-0.00) { { \footnotesize\bfseries PREFRONTAL CORTEX }\\[1.5pt]{ \scriptsize\color{relaystroke} $x_S$ (receiver) } };
+\node[region, minimum width=4.80cm, minimum height=1.35cm] (hpc) at (0.00,-4.20) { { \footnotesize\bfseries HIPPOCAMPUS (CA1) }\\[1.5pt]{ \scriptsize\color{relaystroke} $x_T$ (source) } };
+
+% ---- recurrent self-loops ----
+
+% ---- projections ----
+\draw[up, excit] (hpc) to[out=58, in=-58, looseness=1.15] node[glab, pos=0.5, anchor=west, xshift=3pt]{ reactivation\\[1pt]{\tiny SWR replay} } (pfc);
+\draw[down, inhib] (pfc) to[out=-122, in=122, looseness=1.15] node[glab, pos=0.5, anchor=east, xshift=-3pt]{ top-down\\suppression\\[1pt]{\tiny PFC ripples} } (hpc);
+
+% ---- panel rules ----
+
+% ---- captions ----
+\node[note, anchor=center] at (0.00,-6.35) { the receiver suppresses the source it also learns from:\\[1pt]in the model, an interface drive of reversed sign ($\pi_{ST}<0$) };
+
+% ---- legend: arrowhead = excitatory, dot = inhibitory ----
+\draw[local, excit, line width=1.1pt] (-2.35,-5.55) -- ++(0.55,0);
+\node[lgd, anchor=west] at (-1.66,-5.55) { excitatory };
+\draw[local, inhib, line width=1.1pt] (0.20,-5.55) -- ++(0.55,0);
+\node[lgd, anchor=west] at (0.89,-5.55) { inhibitory };
+
+\end{tikzpicture}
+\end{document}

@@ -22,6 +22,7 @@ Visualization lives in `prioritized_memory_transfer.viz_static` / `prioritized_m
 (two-population) and `prioritized_memory_transfer.viz_interleaved` / `prioritized_memory_transfer.viz_continual`; all are imported lazily
 so the core has no plotting dependency.
 """
+from .activations import available_activations, resolve_activation
 from .config import ContinualConfig, InterleavedConfig, ModelConfig, SimConfig
 from .model import build_system, simulate, fwd, bwd, outer
 from .interleaved import build_interleaved_synthesis, simulate_interleaved
@@ -53,4 +54,7 @@ __all__ = [
     "fwd",
     "bwd",
     "outer",
+    # unit nonlinearity (ModelConfig.activation)
+    "available_activations",
+    "resolve_activation",
 ]

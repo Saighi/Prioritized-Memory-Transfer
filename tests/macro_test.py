@@ -10,7 +10,9 @@ from prioritized_memory_transfer import ModelConfig, build_system, fwd, bwd, out
 
 torch.manual_seed(0)
 
-cfg = ModelConfig(d=32, P=4, seed=1)
+# activation=None pinned: this test checks the LINEAR two-population equations and the
+# adiabatic steady state, both of which only exist for a linear population.
+cfg = ModelConfig(d=32, P=4, seed=1, activation=None)
 model, info = build_system(cfg)
 d = model.d
 model.x_T = torch.randn(d, dtype=model.dtype)

@@ -14,14 +14,20 @@ the teacher's interface term is `+pi_ST * eps_TS` with `pi_ST` *signed* —
   - wake / recall  (`pi_ST > 0`): the teacher minimizes the interface error; no transfer.
   - sleep / replay (`pi_ST < 0`): reversed precision, the teacher *maximizes* the interface
     error (drive-to-disagree) — the transfer drive. Default is negative.
+
+`ModelConfig.activation` optionally gives both populations a unit nonlinearity (self error
+`x - W f(x)`); `None` is the linear model the paper analyses. See
+`notebooks/memory_transfer_non_linear/01_single_run_non_linear.py` for what survives.
 """
 from __future__ import annotations
 
+import warnings
 from types import SimpleNamespace
 from typing import TYPE_CHECKING, Optional, Sequence
 
 import torch
 
+from .activations import resolve_activation
 from .config import ModelConfig, SimConfig
 from .macro import (  # noqa: F401 (re-export)
     CouplingInterface,
@@ -74,12 +80,13 @@ class TwoPopModel:
                 f"patterns must have shape ({self.d}, P) (got {tuple(patterns.shape)})."
             )
         self.patterns = patterns              # (d, P), unit-norm columns
+        self.act = cfg.activation             # None = the linear model
 
         # the engine: T (frozen, noisy, leashed) above S (plastic, driven by the interface)
         T = Population("T", W_T, self.pi_T, self.tau_T, plastic=False,
-                       sigma_xi=self.sigma_xi, r=self.r0)
+                       sigma_xi=self.sigma_xi, r=self.r0, act=self.act)
         S = Population("S", torch.zeros_like(W_T), self.pi_S, self.tau_S,
-                       plastic=True, eta=self.eta)
+                       plastic=True, eta=self.eta, act=self.act)
         itf = CouplingInterface(target="S", source="T",
                                 pi_I=self.pi_TS, rho=self.pi_ST)
         self.macro = MacroNetwork([T, S], [itf])
@@ -157,17 +164,46 @@ class TwoPopModel:
 
     # ----- novelty operator N_S and S's steady state (fast-S reduction) -----
     def S_S(self) -> torch.Tensor:
+        """S's self-surprise operator J_S^T J_S. With a nonlinear activation this is evaluated at
+        S's *current state*, i.e. it is the operator of the activation cone S sits in."""
         return self._S.S_op()
 
     def novelty_operator(self) -> torch.Tensor:
-        """N_S = pi_S S_S (pi_TS I + pi_S S_S)^-1 ; eps_TS* = -N_S x_T at S's steady state."""
+        """N_S = pi_S S_S (pi_TS I + pi_S S_S)^-1 ; eps_TS* = -N_S x_T at S's steady state.
+        Exact in the linear model; with a nonlinear activation it is the local (within-cone)
+        linearization, so read it as an instantaneous novelty measure rather than an identity."""
         from .diagnostics import novelty_operator   # lazy import (avoid cycle)
         return novelty_operator(self.S_S(), self.pi_TS, self.pi_S)
 
     def solve_xS_steady(self, x_T: torch.Tensor) -> torch.Tensor:
-        """x_S* = pi_TS (pi_TS I + pi_S S_S)^-1 x_T (adiabatic elimination of fast S)."""
+        """x_S* = pi_TS (pi_TS I + pi_S S_S)^-1 x_T (adiabatic elimination of fast S).
+        Linear model only — see `MacroNetwork.solve_steady`."""
+        if not self._S.linear:
+            raise ValueError(
+                f"the student has a nonlinear activation ({self.act!r}), so its steady state is "
+                "not a linear solve; integrate it with mode='full' instead."
+            )
         Amat = self.pi_TS * self.I + self.pi_S * self.S_S()
         return self.pi_TS * torch.linalg.solve(Amat, x_T)
+
+    # ----- the student's state at the stored memories (the prioritization readout) -----
+    def pattern_residual(self, M: Optional[torch.Tensor] = None) -> torch.Tensor:
+        """`||m_p - W_S f(m_p)||` per stored pattern — S's self-error at each named memory, which
+        falls to zero as that memory is consolidated. Equals `||M_S m_p||` in the linear model,
+        and also under a rectifying `f` with nonnegative patterns (where `f(m_p) = m_p`)."""
+        M = self.patterns if M is None else M
+        return (M - self.W_S @ self._S.f(M)).norm(dim=0)
+
+    def recall(self, x0: torch.Tensor, **kw) -> torch.Tensor:
+        """Settle the STUDENT alone from `x0` (no teacher, no interface), optionally clamping
+        `known` units to a `cue` — the pattern-completion query. See `Population.relax`."""
+        return self._S.relax(x0, **kw)
+
+    def pattern_energy(self, M: Optional[torch.Tensor] = None) -> torch.Tensor:
+        """`0.5 pi_S ||m_p - W_S f(m_p)||^2` — the student's free energy *at* each stored memory
+        (the interface term vanishes there, since x_S = x_T = m_p). This is the per-memory
+        "is it learned yet" energy; the transfer drives them to zero one at a time."""
+        return 0.5 * self.pi_S * self.pattern_residual(M) ** 2
 
     # ----- instantaneous rates (assembled by the engine) -----
     def rate_x_T_det(self) -> torch.Tensor:
@@ -189,6 +225,8 @@ class TwoPopModel:
         self._S.zero_diag_W()
 
     def reset_state(self, generator: Optional[torch.Generator] = None) -> None:
+        """Initialize both populations at sleep onset: the student silent, the teacher at a random
+        point on the sphere ||x_T|| = r0."""
         self._S.x = torch.zeros(self.d, dtype=self.dtype, device=self.device)
         x = torch.randn(self.d, generator=generator, dtype=self.dtype, device=self.device)
         self._T.x = x * (self.r0 / x.norm().clamp_min(1e-12))
@@ -203,7 +241,7 @@ class TwoPopModel:
                 f"(got {indices!r})."
             )
         Msub = self.patterns[:, indices]
-        self._S.W = build_memory(Msub).W
+        self._S.W = build_memory(Msub, act=self.act).W
         self.zero_diag_W_S()
 
 
@@ -213,11 +251,29 @@ def build_system(cfg: ModelConfig) -> tuple[TwoPopModel, SimpleNamespace]:
     from .diagnostics import manifold_basis, spectral_gap   # lazy import (avoid cycle)
 
     M = make_patterns(cfg)
-    memory = build_memory(M)
+    memory = build_memory(M, act=cfg.activation)
     W_T = memory.W
     M_T = memory.M_op
     S_T = M_T.transpose(-2, -1) @ M_T
     sigma2_min = spectral_gap(S_T)
+
+    # Does the activation FIX the patterns (f(m_p) == m_p)? That is the condition under which the
+    # linear scaffolding still describes the nonlinear network: the memory condition stays
+    # m_p = W_T m_p, so ker(I - W_T) really is the teacher's memory manifold (restricted to the
+    # cone where f is the identity) and every U_T-based diagnostic keeps its meaning. It holds
+    # for the identity, and for relu with NONNEGATIVE patterns. It fails for relu on signed
+    # patterns (relu(m_p) != m_p): the memories are still zero-error states, but isolated ones, so
+    # ker(I - W_T) collapses to {0} and the novelty spectrum / manifold occupancy go blank.
+    f_act, _ = resolve_activation(cfg.activation)
+    patterns_fixed = bool(torch.allclose(f_act(M), M, atol=1e-10))
+    if not patterns_fixed:
+        warnings.warn(
+            f"activation={cfg.activation!r} does not fix the stored patterns (f(m_p) != m_p), so "
+            "ker(I - W_T) is no longer the teacher's memory manifold: the memories become "
+            "isolated fixed points and the U_T-based diagnostics (novelty spectrum, manifold "
+            "occupancy, restricted transfer deficit) are not meaningful. Pair relu with a "
+            "nonnegative pattern_kind ('nonneg' or 'target_corr_nonneg')."
+        )
 
     # conservative stability threshold: |pi_ST| < pi_T sigma2_min (not a paper theorem;
     # archived analysis in docs/Paper/maths/additional_proofs_not_in_paper.md). The "auto"
@@ -235,6 +291,11 @@ def build_system(cfg: ModelConfig) -> tuple[TwoPopModel, SimpleNamespace]:
     guard_scalar = cfg.pi_T * sigma2_min * (cfg.pi_TS + cfg.pi_S) / cfg.pi_S   # aligned-case bound
     info = SimpleNamespace(
         patterns=M,
+        activation=cfg.activation,
+        patterns_fixed=patterns_fixed,      # f(m_p) == m_p; see the note above
+        # NOTE with a nonlinear activation S_T, sigma2_min and both guards below are those of the
+        # ALL-ACTIVE cone; the binding constraint is the worst value over visited cones, so treat
+        # them as optimistic and keep the amplitude leash on.
         S_T=S_T,
         sigma2_min=sigma2_min,
         guard_safe=guard_safe,

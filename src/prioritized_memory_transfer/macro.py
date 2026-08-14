@@ -12,6 +12,10 @@ Conventions:
   - Reversed precision (the sleep/wake knob) is the interface's *signed* source-side
     precision `rho`: < 0 sleep/replay (drive-to-disagree, the transfer regime), > 0
     wake/recall. The target side always uses an ordinary positive precision `pi_I`.
+  - Optional unit nonlinearity (`Population(act=...)`): the self error becomes
+    `eps = x - W f(x)`, so `M = I - W` generalizes to the state-dependent Jacobian
+    `J = I - W diag(f'(x))` (`Population.jac`). `act=None` is the linear model and takes
+    exactly the same code path as before.
 """
 from __future__ import annotations
 
@@ -21,6 +25,7 @@ from typing import Dict, List, Optional
 
 import torch
 
+from .activations import ActivationSpec, is_linear, resolve_activation
 from .memory import zero_diag
 
 
@@ -90,6 +95,13 @@ class Population:
     sets `plastic=True` with a learning rate `eta`. `sigma_xi > 0` adds exploration noise and a
     finite `r` renormalizes `||x|| = r` each step (the amplitude leash); leave `r=None` for a
     population whose amplitude is set by its inputs (a synthesis network).
+
+    `act` optionally rectifies (or otherwise squashes) what the units *transmit*: the self error
+    becomes `eps = x - W f(x)` instead of `M x`, and everything downstream is derived from the
+    Jacobian `J = I - W diag(f'(x))` rather than from `M`. `act=None` (the default) is the linear
+    model and follows the identical code path it always did. Note the leash is doing real work
+    here: it forbids the all-silent state, which under a rectifying `f` with no bias is itself a
+    zero-error memory and would otherwise swallow the dynamics.
     """
 
     def __init__(
@@ -103,6 +115,7 @@ class Population:
         eta: float = 0.0,
         sigma_xi: float = 0.0,
         r: Optional[float] = None,
+        act: ActivationSpec = None,
     ) -> None:
         self.name = name
         self.W = W                      # recurrent weights, zero diagonal
@@ -113,40 +126,121 @@ class Population:
         self.sigma_xi = float(sigma_xi)
         self.r = None if r is None else float(r)
 
+        self.act = act
+        self.linear = is_linear(act)
+        self._f, self._f_prime = resolve_activation(act)
+
         self.d = W.shape[0]
         self.dtype = W.dtype
         self.device = W.device
         self.I = torch.eye(self.d, dtype=self.dtype, device=self.device)
         self.x: Optional[torch.Tensor] = None
 
+    # ----- unit nonlinearity -----
+    def f(self, x: Optional[torch.Tensor] = None) -> torch.Tensor:
+        """Transmitted output f(x) of the units (identity in the linear model). Defaults to the
+        live state; pass `x` to evaluate anywhere (e.g. at a stored pattern)."""
+        return self._f(self.x if x is None else x)
+
+    def f_prime(self, x: Optional[torch.Tensor] = None) -> torch.Tensor:
+        """Elementwise f'(x) — the diagonal of the transmission Jacobian."""
+        return self._f_prime(self.x if x is None else x)
+
     # ----- tied operators -----
     @property
     def M(self) -> torch.Tensor:
-        """Mismatch operator M = I - W."""
+        """Mismatch operator M = I - W. Exact for a linear population; for a nonlinear one it is
+        the operator of the *all-active* cone (use `jac` for the local one)."""
         return self.I - self.W
 
-    def S_op(self) -> torch.Tensor:
-        """Self-surprise operator S = M^T M."""
-        M = self.M
-        return M.transpose(-2, -1) @ M
+    def jac(self, x: Optional[torch.Tensor] = None) -> torch.Tensor:
+        """Jacobian of the self error, J = d eps/d x = I - W diag(f'(x)).
+
+        Equals `M` in the linear model; under a rectifying `f` it is the `M` operator of the
+        activation cone the state currently sits in. Falls back to `M` when there is no state
+        yet (build time), i.e. to the all-active cone.
+        """
+        if self.linear:
+            return self.M
+        x = self.x if x is None else x
+        if x is None:
+            return self.M
+        # W diag(g): scale column j by g_j
+        return self.I - self.W * self.f_prime(x).unsqueeze(-2)
+
+    def S_op(self, x: Optional[torch.Tensor] = None) -> torch.Tensor:
+        """Self-surprise operator S = J^T J (= M^T M in the linear model)."""
+        J = self.jac(x)
+        return J.transpose(-2, -1) @ J
 
     # ----- self error / energy / rates (external clamp v = 0) -----
     def eps_self(self) -> torch.Tensor:
-        """Self prediction error M x (zero on this population's own memory manifold)."""
-        return fwd(self.M, self.x)
+        """Self prediction error x - W f(x), zero on this population's own memory manifold
+        (= M x in the linear model)."""
+        if self.linear:
+            return fwd(self.M, self.x)
+        return self.x - fwd(self.W, self.f())
 
     def F_self(self) -> torch.Tensor:
-        """Self free energy 0.5 pi ||M x||^2."""
+        """Self free energy 0.5 pi ||eps_self||^2."""
         return 0.5 * self.pi * (self.eps_self() ** 2).sum(-1)
 
     def rate_self(self) -> torch.Tensor:
-        """The self term of the state rate: -pi M^T eps_self = -pi S x (before dividing by tau)."""
-        return -self.pi * bwd(self.M, self.eps_self())
+        """The self term of the state rate: -pi J^T eps_self (= -pi S x when linear), before
+        dividing by tau."""
+        e = self.eps_self()
+        if self.linear:
+            return -self.pi * bwd(self.M, e)
+        # J^T e = e - diag(f'(x)) W^T e
+        return -self.pi * (e - self.f_prime() * bwd(self.W, e))
 
     def rate_W(self) -> torch.Tensor:
-        """dW/dt = eta pi eps_self x^T (Hebbian on the self-error and activity). The diagonal is
-        re-zeroed by the network after the update, so it is not removed here."""
-        return self.eta * self.pi * outer(self.eps_self(), self.x)
+        """dW/dt = eta pi eps_self f(x)^T (Hebbian on the self-error and the *transmitted*
+        activity; f(x) = x in the linear model). The diagonal is re-zeroed by the network after
+        the update, so it is not removed here."""
+        return self.eta * self.pi * outer(self.eps_self(), self.f())
+
+    # ----- probes -----
+    def relax(
+        self,
+        x0: torch.Tensor,
+        *,
+        known: Optional[torch.Tensor] = None,
+        cue: Optional[torch.Tensor] = None,
+        n_steps: int = 1500,
+        dt: float = 0.2,
+    ) -> torch.Tensor:
+        """Descend this population's OWN free energy from `x0`, with no interface input.
+
+        This is the recall query: with `known` (a boolean mask) and `cue`, the flagged units are
+        clamped to the cue at every step and the rest descend `F` onto the memory manifold —
+        projected gradient flow. Without a mask it is free relaxation, which answers "is `x0` in
+        the basin of a memory?".
+
+        Exact for a nonlinear population (it descends the true `F` via `rate_self`, no
+        linearization). `x0` may be batched as `(B, d)`; `cue` broadcasts over the batch. This is
+        a probe: the population's live state is restored before returning.
+        """
+        if x0.shape[-1] != self.d:
+            raise ValueError(f"x0 must have trailing dimension {self.d} (got {tuple(x0.shape)}).")
+        if (known is None) != (cue is None):
+            raise ValueError("pass `known` and `cue` together, or neither.")
+        if known is not None and known.dtype != torch.bool:
+            raise TypeError(f"known must be a boolean mask (got {known.dtype}).")
+
+        saved = self.x
+        try:
+            x = x0.clone()
+            if known is not None:
+                x[..., known] = cue[known]
+            for _ in range(int(n_steps)):
+                self.x = x
+                x = x + (dt / self.tau) * self.rate_self()
+                if known is not None:
+                    x[..., known] = cue[known]
+            return x
+        finally:
+            self.x = saved
 
     # ----- state maintenance -----
     def renorm(self) -> None:
@@ -257,6 +351,9 @@ class MacroNetwork:
 
         For a single interface this is x* = pi_I (pi_I I + pi_S S_S)^-1 y;
         summing over interfaces also covers the separate-error control (two single-source edges).
+
+        Linear targets only: with a unit nonlinearity the steady state is not a linear solve, and
+        pretending otherwise would silently integrate the wrong dynamics — use `mode="full"`.
         """
         active_inputs = [
             itf for itf in self.interfaces if itf.active and itf.target == name
@@ -264,6 +361,12 @@ class MacroNetwork:
         if not active_inputs:
             raise ValueError(f"population {name!r} has no active incoming interface to solve.")
         p = self.populations[name]
+        if not p.linear:
+            raise ValueError(
+                f"population {name!r} has a nonlinear activation ({p.act!r}), so its steady "
+                "state is not a linear solve; run with mode='full' (optionally raising "
+                "SimConfig.s_substeps) instead of mode='adiabatic'."
+            )
         A = p.pi * p.S_op()
         rhs = torch.zeros_like(p.x)
         for itf in active_inputs:

@@ -23,24 +23,23 @@ from .diagnostics import orthonormal_basis, spectral_gap, transfer_deficit
 from .history import ContinualHistory, InterleavedHistory
 from .interleaved import interleave_merge
 from .macro import CouplingInterface, MacroNetwork, Population, resolve_signed_precision
-from .memory import build_memory
+from .memory import build_memory, make_correlated
 
 
 def _make_memories(cfg: ContinualConfig) -> torch.Tensor:
     """A `(d, n_memories)` matrix of unit-norm memory columns for the stream.
 
-    "correlated" (default): each memory shares a common component, so the memories are pairwise
-    non-orthogonal (average cosine ~0.5) but still full rank `n` — the regime where interleaved
-    rehearsal has to cancel crosstalk. "random": near-orthogonal unit vectors.
+    "correlated" (default): pairwise correlation fixed at `cfg.corr_target` by `make_correlated`,
+    full rank `n` — the regime where interleaved rehearsal has to cancel crosstalk.
+    "random": near-orthogonal unit vectors.
     """
     gen = torch.Generator().manual_seed(cfg.seed)
     d, n = cfg.d, cfg.n_memories
     if cfg.memory_kind == "random":
         M = torch.randn(d, n, generator=gen, dtype=cfg.dtype)
     elif cfg.memory_kind == "correlated":
-        base = torch.randn(d, n, generator=gen, dtype=cfg.dtype)
-        shared = torch.randn(d, 1, generator=gen, dtype=cfg.dtype)
-        M = base + shared                       # common component -> correlated but full rank
+        return make_correlated(d, n, cfg.corr_target, seed=cfg.seed,
+                               dtype=cfg.dtype).to(cfg.device)
     else:
         raise ValueError(f"unknown memory_kind={cfg.memory_kind!r} (pass memories= explicitly)")
     M = M / M.norm(dim=0, keepdim=True)

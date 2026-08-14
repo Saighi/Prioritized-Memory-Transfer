@@ -22,7 +22,8 @@ class History:
         self.eps_TS_norm: List[float] = []
         self.manifold_occ: List[float] = []
         self.align: List[torch.Tensor] = []          # (P,) per record
-        self.novelty_spec: List[torch.Tensor] = []    # (k,) per record
+        self.novelty_spec: List[torch.Tensor] = []    # (k,) per record — LOCAL linearization
+        self.manifold_spec: List[torch.Tensor] = []   # (P,) per record — exact surprise density
         self.residual: List[torch.Tensor] = []        # (P,) per record
         self.WS_dist: List[float] = []                # ||W_S - W_T||_F
         self.x_T: List[torch.Tensor] = []             # (d,) per record
@@ -37,6 +38,7 @@ class History:
         self.manifold_occ.append(dg.manifold_occupancy(model.x_T, U_T))
         self.align.append(dg.alignment(model.x_T, M).detach().cpu())
         self.novelty_spec.append(dg.restricted_novelty_spectrum(model, U_T).detach().cpu())
+        self.manifold_spec.append(dg.manifold_surprise_spectrum(model, M).detach().cpu())
         self.residual.append(dg.per_direction_residual(model, M).detach().cpu())
         self.WS_dist.append(float((model.W_S - model.W_T).norm()))
         self.x_T.append(model.x_T.detach().cpu().clone())
@@ -56,6 +58,7 @@ class History:
             "manifold_occ": np.asarray(self.manifold_occ),
             "align": torch.stack(self.align).numpy(),
             "novelty_spec": torch.stack(self.novelty_spec).numpy(),
+            "manifold_spec": torch.stack(self.manifold_spec).numpy(),
             "residual": torch.stack(self.residual).numpy(),
             "WS_dist": np.asarray(self.WS_dist),
             "x_T": torch.stack(self.x_T).numpy(),

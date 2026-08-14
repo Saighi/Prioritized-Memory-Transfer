@@ -9,7 +9,8 @@ from prioritized_memory_transfer import ModelConfig, SimConfig, build_system, si
 from prioritized_memory_transfer import viz_static as vs
 from prioritized_memory_transfer import viz_interactive as vi
 
-model, info = build_system(ModelConfig(d=40, P=5, seed=1))
+# activation=None pinned: the figures below are built from an adiabatic run.
+model, info = build_system(ModelConfig(d=40, P=5, seed=1, activation=None))
 hist = simulate(
     model,
     SimConfig(n_steps=12000, dt=0.5, mode="adiabatic", record_every=100,
@@ -35,11 +36,11 @@ from prioritized_memory_transfer import viz_eigenspace as ve
 
 _best = None
 for s in range(11):
-    _, _inf3 = build_system(ModelConfig(d=3, P=2, seed=s))
+    _, _inf3 = build_system(ModelConfig(d=3, P=2, seed=s, activation=None))
     if _inf3.manifold_dim == 2 and (_best is None or _inf3.sigma2_min < _best[1]):
         _best = (s, float(_inf3.sigma2_min))
 seed3, s2min = _best
-m3, info3 = build_system(ModelConfig(d=3, P=2, seed=seed3))
+m3, info3 = build_system(ModelConfig(d=3, P=2, seed=seed3, activation=None))
 dt3 = min(0.5, 0.5 * 10.0 / s2min)                      # explicit-Euler stability for -S_T x_T
 h3 = simulate(m3, SimConfig(n_steps=int(2000 / dt3), dt=dt3, mode="adiabatic",
               record_every=max(1, int(2000 / dt3) // 40), n_weight_snapshots=12, progress=False), info3)

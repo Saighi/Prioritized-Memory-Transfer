@@ -1,5 +1,39 @@
 # Prioritized memory transfer — model and analysis (final)
 
+> **⚠ STATUS 2026-07-27 — THIS DOCUMENT IS NOW OUT OF DATE WITH THE PAPER'S FRAMING.**
+> The mathematics below is unchanged and still correct; the **naming and ordering** are not.
+> A rename/renumber pass is pending. Until it is done, read this document with these substitutions:
+>
+> 1. **`π_ST` → `κ`** ("adversarial coupling", signed, plain, no subscript; derivations use `|κ|`).
+>    It is **never** called a precision: a precision weights an error term in a free energy the agent
+>    *minimizes*; κ weights one the teacher *maximizes*, so it is not an inverse variance.
+> 2. **The system is "adversarially coupled predictive coding"**, not a predictive-coding network.
+>    Components descend free energies; the coupled system does not. No global VFE claim.
+> 3. **Order is saddle-first.** The paper's order is:
+>    Prop 1 (setup) → **Theorem 1 = the min-max** (this document's §8 Proposition 2, promoted to
+>    first) → **Corollary 1** = the push is ascent on the student's surprise (this document's §4
+>    Theorem 1, now downstream) → **Lemma 1** (§5, unchanged) → **Corollary 2** = the surprise
+>    identity (this document's §6 Corollary 1) → prioritization remark (§7).
+>    **Proposition 2 no longer exists as a number.**
+>    *Justification (checked 2026-07-27):* §8 needs only `∇F_T` + the **sign identity** of §4 Step 1
+>    (valid at any `x_S`) and explicitly does NOT use A1a/A1b. The adiabatic elimination, the
+>    uniqueness argument and the envelope step enter only at **Corollary 1** (§4 Steps 0 and 2). So
+>    the min-max is the result with the fewest assumptions, and saddle-first is the logically minimal
+>    ordering, not a rhetorical one.
+> 4. **Operating point is now `κ = −π_TS`** (the exact zero-sum point) as the default, for all
+>    simulations. Containment is therefore NOT obtained by shrinking κ any more: `π_T` is raised
+>    above `|κ|` by a hand-chosen, numerically verified factor. The note at the end of the Results
+>    list below (about keeping |π_ST| at half the stability threshold) is superseded.
+> 5. **`Φ_w = F_T − w·F_S^eq` (`w = |κ|/π_TS`): CHECKED 2026-07-27, and it is NOT a minimax.**
+>    True for the **teacher block alone under adiabatic elimination** (= §8 Remark 3 with the
+>    coefficient left general). It is **false** for the joint system: §8's (⇒) direction proves that
+>    for `κ ≠ −π_TS` *no* C² potential generates the descent–ascent flow with these fixed block
+>    mobilities, and the circulation `|κ+π_TS|√d` measures precisely that non-integrability.
+>    Never write `Φ_w` as a "weighted minimax"; it would contradict §8.
+>
+> Rationale and full detail: [../outline.md](../outline.md) "Math placement" and
+> [../writing_tracker.md](../writing_tracker.md) decisions D6–D9.
+
 This document is self-contained: it defines the model, states every assumption, and proves every
 formal result intended for the paper, in logical order. Results are stated at the level of detail
 meant for checking, not for teaching. Empirical claims (completion of the full learning loop,

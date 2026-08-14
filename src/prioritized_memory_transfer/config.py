@@ -16,6 +16,8 @@ from typing import Optional, Sequence, Union
 
 import torch
 
+from .activations import ActivationSpec, resolve_activation
+
 
 def _positive(name: str, value: float) -> None:
     if not math.isfinite(float(value)) or float(value) <= 0:
@@ -60,12 +62,39 @@ class ModelConfig:
 
     # --- noise & amplitude leash ---
     sigma_xi: float = 0.05           # std of white noise on T
-    r0: float = 1.0                  # fixed norm to which ||x_T|| is renormalized
+    r0: float = 1.0                  # fixed norm to which ||x_T|| is renormalized each step.
+                                     # Not optional: on the memory manifold the sleep drive is
+                                     # tau_T xdot = |pi_ST| N_S x, a pure expansion with nothing
+                                     # opposing it, and both available activations are positively
+                                     # homogeneous, so no amplitude scale ever appears to stop it.
+                                     # The leash is what makes the sleep dynamics well posed.
 
     # --- construction choices ---
-    pattern_kind: str = "orthonormal"   # "orthonormal" | "correlated" (exact low-rank only at zero noise)
-    corr_rank: Optional[int] = None     # effective rank for correlated patterns (default P//2)
-    corr_noise: float = 0.1             # additive noise for correlated patterns
+    pattern_kind: str = "orthonormal"
+    # "orthonormal"          exact G = I (QR of a Gaussian).
+    # "nonneg"               rectified Gaussian; correlation is whatever it comes out (~1/pi).
+    # "correlated"           LOW-RANK + noise (signed). Kept because a rank-deficient pattern set
+    #                        is what makes effective rank < P, i.e. the subspace/staircase result.
+    #                        Uses corr_rank / corr_noise; the realized correlation is not targeted.
+    # "target_corr"          PRESCRIBED correlation (signed), by gradient descent on the Gram.
+    # "target_corr_nonneg"   the same, nonnegative -- one tool, differing only by the projection.
+    #                        Both use `corr_target`; see `memory.make_correlated`.
+    corr_rank: Optional[int] = None     # "correlated" only: effective rank (default P//2)
+    corr_noise: float = 0.1             # "correlated" only: private (decorrelating) component
+    corr_target: float = 0.3            # "target_corr*" only: the pairwise correlation to hit.
+                                        # Needs corr_target >= -1/(P-1) to be PSD, and >= 0 for
+                                        # the nonneg variant (nonnegative vectors cannot be
+                                        # anti-correlated). Pass an explicit target Gram to
+                                        # `make_correlated` directly for non-uniform structure.
+
+    # --- unit nonlinearity (None = the linear model the paper analyses) ---
+    activation: ActivationSpec = None   # None/"identity" (linear) | "relu".
+                                        # Applied to BOTH populations' transmitted output, so the
+                                        # self error is x - W f(x). No bias term: with "relu" the
+                                        # all-silent state is itself a zero-error memory, which is
+                                        # why the r0 amplitude leash stays on. Note `mode="full"`
+                                        # is required (adiabatic elimination needs linearity), and
+                                        # the spectral guards below become cone-local.
 
     # --- bookkeeping ---
     seed: int = 0
@@ -84,10 +113,22 @@ class ModelConfig:
                 "ModelConfig keeps generated pattern sets below the zero-diagonal capacity, "
                 f"so it needs P <= d-1 (got P={self.P}, d={self.d})."
             )
-        if self.pattern_kind not in {"orthonormal", "correlated"}:
+        kinds = {"orthonormal", "correlated", "nonneg", "target_corr", "target_corr_nonneg"}
+        if self.pattern_kind not in kinds:
             raise ValueError(
-                f"pattern_kind must be 'orthonormal' or 'correlated' (got {self.pattern_kind!r})."
+                f"pattern_kind must be one of {sorted(kinds)} (got {self.pattern_kind!r})."
             )
+        if self.pattern_kind.startswith("target_corr"):
+            lo = 0.0 if self.pattern_kind.endswith("_nonneg") else -1.0 / max(1, self.P - 1)
+            if not lo <= float(self.corr_target) < 1.0:
+                raise ValueError(
+                    f"corr_target must lie in [{lo:.3f}, 1) for pattern_kind="
+                    f"{self.pattern_kind!r} (got {self.corr_target}). Nonnegative patterns cannot "
+                    "be anti-correlated, and below -1/(P-1) the target Gram is not PSD."
+                )
+        resolve_activation(self.activation)   # fail fast on a bad activation spec
+        # NOTE the semantic check on the activation (does it fix the patterns, f(m_p) == m_p?)
+        # needs the actual patterns and lives in `model.build_system`.
         if self.corr_rank is not None and (
             type(self.corr_rank) is not int or not 1 <= self.corr_rank <= self.P
         ):
@@ -222,7 +263,8 @@ class ContinualConfig:
     # --- stream (correlated by default: the regime where interleaving matters) ---
     d: int = 32
     n_memories: int = 5
-    memory_kind: str = "correlated"  # "correlated" (low-rank + overlaps) | "random" unit vectors
+    memory_kind: str = "correlated"  # "correlated" (fixed pairwise correlation) | "random"
+    corr_target: float = 0.5         # "correlated" only: the pairwise correlation to hit
 
     # --- precisions (guards: pi_I > pi_S ; |rho| below the structure guard) ---
     pi_teacher: float = 1.0          # self-precision of the frozen networks in each phase

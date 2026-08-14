@@ -1,0 +1,66 @@
+% Auto-generated from docs/schematic/spec_bio.py via render.py — edit the template, not the .tex.
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\definecolor{predcolor}{HTML}{ {{- colors.pred -}} }
+\definecolor{errcolor}{HTML}{ {{- colors.err -}} }
+\definecolor{regionstroke}{HTML}{ {{- colors.region_stroke -}} }
+\definecolor{relaystroke}{HTML}{ {{- colors.relay_stroke -}} }
+\definecolor{interfill}{HTML}{ {{- colors.inter_fill -}} }
+\definecolor{rulecol}{HTML}{ {{- colors.rule -}} }
+\definecolor{titlecol}{HTML}{ {{- colors.title -}} }
+\begin{document}
+\begin{tikzpicture}[
+  % --- nodes ---
+  region/.style={rounded corners=4pt, draw=regionstroke, line width=1.1pt, fill=white,
+                 align=center, inner sep=3pt, text=titlecol},
+  relay/.style={rounded corners=3pt, draw=relaystroke, line width=0.9pt, fill=white,
+                align=center, inner sep=3pt, text=titlecol},
+  inter/.style={circle, draw=interfill, fill=interfill, minimum size=3.4mm, inner sep=0pt},
+  value/.style={circle, draw=regionstroke, line width=1.1pt, fill=white,
+                align=center, inner sep=0pt, text=titlecol},
+  err/.style={rounded corners=3pt, draw=relaystroke, dashed, line width=0.9pt, fill=white,
+              align=center, inner sep=2pt, text=titlecol},
+  ghost/.style={inner sep=0pt, minimum size=0pt},
+  % --- couplings: colour = direction, terminal = sign ---
+  down/.style={predcolor, line width=1.25pt},
+  up/.style={errcolor, line width=1.25pt},
+  local/.style={relaystroke, line width=1.1pt},
+  corr/.style={relaystroke!75, line width=0.7pt, dotted},
+  excit/.style={-{Stealth[length=2.6mm]}},
+  inhib/.style={-{Circle[length=2.2mm, width=2.2mm]}},
+  selfloop/.style={-{Stealth[length=2.2mm]}, relaystroke, line width=0.9pt, looseness=11},
+  % --- lettering ---
+  glab/.style={font=\scriptsize, fill=white, inner sep=1.5pt, align=center, text=titlecol},
+  note/.style={font=\scriptsize, text=relaystroke, align=center},
+  panel/.style={font=\scriptsize\bfseries, text=relaystroke, align=center},
+  lgd/.style={font=\scriptsize, text=relaystroke},
+]
+% ---- regions, relays, interneurons ----
+{% for n in boxes -%}
+\node[{{ n.kind }}{% if n.w %}, minimum width={{ "%.2f"|format(n.w) }}cm{% endif %}{% if n.h %}, minimum height={{ "%.2f"|format(n.h) }}cm{% endif %}] ({{ n.id }}) at ({{ "%.2f"|format(n.x*sx) }},{{ "%.2f"|format(-n.y*sy) }}) { {% if n.title %}{ {{ n.font }} {{ n.title }} }{% endif %}{% if n.sub %}\\[1.5pt]{ \scriptsize\color{relaystroke} {{ n.sub }} }{% endif %} };
+{% endfor %}
+% ---- recurrent self-loops ----
+{% for n in boxes if n.loop -%}
+\draw[selfloop] ({{ n.id }}) edge[loop {{ n.loop_side }}] node[glab]{ ${{ n.loop }}$ } ({{ n.id }});
+{% endfor %}
+% ---- projections ----
+{% for e in links -%}
+\draw[{{ e.flow }}{% if e.term %}, {{ e.term }}{% endif %}{% if e.opts %}, {{ e.opts }}{% endif %}] ({{ e.src }}) to[{{ e.path }}] {% if e.label %}node[glab, pos={{ e.lpos }}{% if e.lopt %}, {{ e.lopt }}{% endif %}]{ {{ e.label }} } {% endif %}({{ e.dst }});
+{% endfor %}
+% ---- panel rules ----
+{% for r in rules -%}
+\draw[rulecol, line width=0.6pt] ({{ "%.2f"|format(r.x0*sx) }},{{ "%.2f"|format(-r.y0*sy) }}) -- ({{ "%.2f"|format(r.x1*sx) }},{{ "%.2f"|format(-r.y1*sy) }});
+{% endfor %}
+% ---- captions ----
+{% for t in texts -%}
+\node[{{ t.style }}, anchor={{ t.anchor }}] at ({{ "%.2f"|format(t.x*sx) }},{{ "%.2f"|format(-t.y*sy) }}) { {{ t.tex }} };
+{% endfor %}
+% ---- legend: arrowhead = excitatory, dot = inhibitory ----
+{% for l in legend -%}
+\draw[{{ l.flow }}, {{ l.term }}, line width=1.1pt] ({{ "%.2f"|format(l.x*sx) }},{{ "%.2f"|format(-l.y*sy) }}) -- ++({{ "%.2f"|format(l.length) }},0);
+\node[lgd, anchor=west] at ({{ "%.2f"|format(l.x*sx + l.length + 0.14) }},{{ "%.2f"|format(-l.y*sy) }}) { {{ l.text }} };
+{% endfor %}
+\end{tikzpicture}
+\end{document}

@@ -13,7 +13,6 @@
 
 # %% imports & path setup
 import os
-
 import torch
 
 # make `import prioritized_memory_transfer` work whether cwd is the repo root or notebooks/

@@ -6,9 +6,13 @@ recurrent weights, and the labelled prediction/drive couplings).
 
 Blue = top-down prediction, orange = bottom-up / drive. `ε_TS = x_S − x_T`.
 
-Two granularities, same pipeline:
+Three figures, same pipeline:
 
 - **`tikz/`** — population level: one node per population/error (the compact paper figure).
+- **`tikz_bio/`** — the **biological counterpart**: the inhibitory influence of PFC on the
+  hippocampus and the routes it takes, in four minimal propositions (`a` bare, `b` with the
+  descending pathways, `c` the sign flip across ripple regimes, `d` circuit ↔ interface).
+  See [`tikz_bio/README.md`](tikz_bio/README.md).
 - **`tikz_units/`** — unit level, **2 units per population** (Tang et al. 2023 Fig. 1 style):
   shows the strictly **one-to-one interface** (`x_T,i ↔ ε_TS,i ↔ x_S,i`, no crossing) and
   the **lateral cross-communication inside each population** (zero-diagonal recurrent
@@ -24,6 +28,9 @@ python tikz/render.py --phase wake    # the recall/inference control
 python tikz/render.py --no-svg        # skip the dvisvgm step
 
 python tikz_units/render.py           # -> tikz_units/network_units.pdf + .svg (same flags)
+
+python tikz_bio/render.py             # -> tikz_bio/pfc_hpc_{a,b,c,d}_*.pdf + .svg
+python tikz_bio/render.py --variant b # just one proposition
 ```
 
 Runs in the `pytorch` conda env (needs only `jinja2`). Requires a LaTeX toolchain with
@@ -42,6 +49,10 @@ PDF→SVG step.
 | [`tikz_units/network_units.tex.j2`](tikz_units/network_units.tex.j2) | Unit-level template: adds excitatory/inhibitory terminals + legend |
 | [`tikz_units/render.py`](tikz_units/render.py) | Same render pipeline for the unit-level figure |
 | `tikz_units/network_units.tex` / `.pdf` / `.svg` | Generated — **don't hand-edit** |
+| [`spec_bio.py`](spec_bio.py) | The **PFC → hippocampus** figure, four variants declared as one flat scene |
+| [`tikz_bio/pfc_hpc.tex.j2`](tikz_bio/pfc_hpc.tex.j2) | Variant-agnostic template: styles only |
+| [`tikz_bio/render.py`](tikz_bio/render.py) | Same render pipeline, once per variant |
+| `tikz_bio/pfc_hpc_*.tex` / `.pdf` / `.svg` | Generated — **don't hand-edit** |
 
 ## Parametrization
 
