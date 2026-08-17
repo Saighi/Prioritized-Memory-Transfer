@@ -30,3 +30,6 @@ archive/viz_embedding/html/
 
 # downloaded datasets (MNIST etc.)
 data/
+
+# litterature
+litterature/

@@ -1,56 +1,72 @@
-# A minimax principle for cortical memory consolidation
+# A free-energy minimax principle for cortical memory consolidation
 
-## Worst-case reconstruction guarantees and adversarial replay in a two-network model
+## Worst-case free-energy and reconstruction guarantees in a two-network model
 
 ### Overview and central claim
 
 This note derives a two-network memory-transfer architecture from one normative requirement:
-reduce the largest settled cortical reconstruction deficit over the content currently supported by
-a hippocampal teacher. The derivation is self-contained for the linear, timescale-separated model
-and states explicitly which parts remain approximations in the simulated network.
+minimize the largest settled free energy of the complete network over the states currently
+supported by a hippocampal teacher. The derivation is self-contained for the linear,
+timescale-separated model and states explicitly which parts remain approximations in the simulated
+network.
 
-The central object is the **largest settled cortical reconstruction deficit over everything
-the hippocampal teacher currently represents**. In the linear model it is
+Let the complete network free energy be
+
+$$
+F(x_T,x_S;W_T,W_S)
+=
+F_T(x_T;W_T)+F_S(x_S,x_T;W_S),
+$$
+
+where $F_T$ is the teacher's recurrent free energy and $F_S$ contains the interface mismatch and
+the student's recurrent free energy. Valid teacher states lie on the fixed-energy memory sphere
+$\mathbb S_T\subseteq\ker M_T$. Therefore $F_T=0$ throughout the optimization domain, and the
+network free energy restricted to that domain is exactly $F_S$.
+
+The fundamental object is the **largest settled free energy of the complete network over everything
+the hippocampal teacher currently represents**:
 
 $$
 \boxed{
-\mathcal{D}_{\max}(W_S;W_T)
+\mathcal{F}_{\max}(W_S;W_T)
 =
 \max_{x_T\in\mathbb S_T}
 \min_{x_S}
-F_S(x_S,x_T;W_S),
+F(x_T,x_S;W_T,W_S).
 }
 $$
 
-where $\mathbb S_T$ is the fixed-energy sphere of valid teacher memories and $F_S$ measures both
-cortical mismatch and cortical recurrent inconsistency. The complete idealized computation is
+The complete idealized computation is
 
 $$
 \boxed{
 \min_{W_S}
 \max_{x_T\in\mathbb S_T}
 \min_{x_S}
-F_S(x_S,x_T;W_S).
+F(x_T,x_S;W_T,W_S).
 }
 $$
 
 The three nested operations map directly onto the three timescales of the network:
 
-1. the fast student state minimizes $F_S$ and evaluates a candidate teacher state;
-2. the teacher state maximizes the settled deficit and exposes the current cortical blind spot;
-3. the slow student weights descend the exposed worst-case deficit.
+1. the fast student state minimizes $F$ and evaluates the settled network free energy for a
+   candidate teacher state;
+2. the teacher state maximizes that settled free energy over its memory manifold and exposes the
+   current cortical blind spot;
+3. the slow student weights descend the resulting worst-case free-energy envelope.
 
 Under the explicit assumptions below, the proof establishes:
 
-- $\mathcal{D}_{\max}$ is a uniform certificate on cortical reconstruction error and cortical
+- $\mathcal{F}_{\max}$ is a uniform certificate on cortical reconstruction error and cortical
   self-inconsistency for every valid teacher state;
 - any Lipschitz downstream readout inherits a uniform functional-error bound;
-- teacher ascent on the deficit requires a negative teacher-side interface coupling;
+- teacher ascent on the settled network free energy requires a negative teacher-side interface
+  coupling;
 - once a generic worst-case direction has been selected, the local plasticity rule is exact
-  gradient descent on $\mathcal{D}_{\max}$;
+  gradient descent on $\mathcal{F}_{\max}$;
 - among sufficiently small synaptic changes of the same amplitude, that negative-gradient direction
   gives the greatest possible first-order decrease of the bound;
-- $\mathcal{D}_{\max}=0$ exactly when the student stores every teacher-memory direction.
+- $\mathcal{F}_{\max}=0$ exactly when the student stores every teacher-memory direction.
 
 The result is local and timescale-separated. It is not a claim of globally optimal learning time,
 global convergence for arbitrary nonlinear networks, or exact minimax behavior when inference,
@@ -83,6 +99,37 @@ $$
 \varepsilon_{TS}=x_S-x_T.
 $$
 
+With positive precisions $\pi_T,\pi_{TS},\pi_S$, define the teacher, recipient-side and complete
+network free energies by
+
+$$
+F_T(x_T;W_T)
+=
+\frac{\pi_T}{2}\|\varepsilon_T\|^2,
+$$
+
+$$
+F_S(x_S,x_T;W_S)
+=
+\frac{\pi_{TS}}2\|\varepsilon_{TS}\|^2
++
+\frac{\pi_S}{2}\|\varepsilon_S\|^2,
+$$
+
+and
+
+$$
+\boxed{
+F(x_T,x_S;W_T,W_S)
+=
+F_T(x_T;W_T)+F_S(x_S,x_T;W_S).
+}
+$$
+
+This $F$ is the variational free energy of the complete two-network hierarchy. The teacher weights
+$W_T$ remain fixed; consolidation changes $W_S$ so that the hierarchy can attain low free energy
+uniformly over the content supported by the teacher.
+
 The proof uses the following assumptions.
 
 **A1 — Linear memory criterion.** A state is stored by a network when its recurrent prediction
@@ -106,8 +153,8 @@ $$
 \|x_T\|=1.
 $$
 
-This prevents the maximization from increasing a quadratic deficit merely by increasing activity
-amplitude. It makes the comparison one between directions at equal state energy.
+This prevents the maximization from increasing a quadratic free energy merely by increasing
+activity amplitude. It makes the comparison one between directions at equal state energy.
 
 **A4 — Timescale separation.** The state and learning timescales satisfy
 
@@ -206,8 +253,34 @@ $$
 }
 $$
 
+For every $x_T\in\mathbb S_T$,
+
+$$
+\varepsilon_T=M_Tx_T=0,
+\qquad
+F_T(x_T;W_T)=0,
+$$
+
+and consequently
+
+$$
+\boxed{
+F(x_T,x_S;W_T,W_S)
+=
+F_S(x_S,x_T;W_S)
+\qquad
+\text{for every }x_T\in\mathbb S_T.
+}
+$$
+
+Thus the teacher memory sphere is simultaneously the search domain and the zero-free-energy
+manifold of the teacher. Restricting the complete network to this manifold leaves only the free
+energy that remains because the student has not yet reconstructed and recurrently supported the
+teacher state.
+
 The sphere is closed and bounded in a finite-dimensional space, and is therefore compact. That
-elementary fact will guarantee that a continuous discrepancy actually attains a maximum on it.
+elementary fact will guarantee that the continuous settled free energy actually attains a maximum
+on it.
 
 ---
 
@@ -224,57 +297,82 @@ memory space, and similar matrices need not support the same states.
 
 The relevant directed question is instead:
 
-> For a state supported by the teacher, can the student reconstruct a matching state that its own
-> recurrent model can sustain?
+> For every zero-free-energy state supported by the teacher, how much free energy must remain in the
+> complete hierarchy after the student has made its best possible reconstruction?
 
 This question is deliberately asymmetric. We want all teacher content to become available in the
 student, but we do not want to penalize the student for memories it already stores in addition to
-the teacher's current content.
+the teacher's current content. Reconstruction and recurrent support enter as consequences of making
+the whole hierarchy low in free energy on the teacher's memory manifold.
 
 ---
 
-## 4. The cortical deficit for one teacher state
+## 4. The settled network free energy for one teacher state
 
 Fix $x_T\in\mathbb S_T$ and consider a candidate cortical state $x_S$. It must meet two demands:
 
 1. **Reconstruct the teacher state:** $x_S$ should be close to $x_T$.
 2. **Be cortically supportable:** $M_Sx_S$ should be close to zero.
 
-The student cost is
+For this candidate pair of states, the complete network free energy is
 
 $$
 \boxed{
-F_S(x_S,x_T;W_S)
+F(x_T,x_S;W_T,W_S)
 =
+\frac{\pi_T}{2}\|M_Tx_T\|^2
++
 \frac{\pi_{TS}}2\|x_S-x_T\|^2
 +
 \frac{\pi_S}2\|M_Sx_S\|^2,
 }
 $$
 
-where $\pi_{TS},\pi_S>0$.
+where $\pi_T,\pi_{TS},\pi_S>0$. Because $x_T\in\mathbb S_T$, the teacher term is exactly zero.
+The restricted network free energy is therefore
+
+$$
+F(x_T,x_S;W_T,W_S)
+=
+F_S(x_S,x_T;W_S)
+=
+\frac{\pi_{TS}}2\|x_S-x_T\|^2
++
+\frac{\pi_S}2\|M_Sx_S\|^2.
+$$
 
 The first term measures reconstruction mismatch. The second measures the failure of the student
-state to satisfy its own recurrent memory equation. Either failure is a cortical deficit: the
-student must either disagree with the teacher or occupy a state it cannot maintain autonomously.
+state to satisfy its own recurrent memory equation. These are the only contributions that can
+remain in the whole-network free energy on the teacher manifold: the student must either disagree
+with the teacher or occupy a state it cannot maintain autonomously.
 
 The state should be evaluated after the student has made its best response. Define the **settled
-deficit**
+network free energy for one teacher state**
 
 $$
 \boxed{
 q(x_T;W_S)
 =
-\min_{x_S}F_S(x_S,x_T;W_S).
+\min_{x_S}F(x_T,x_S;W_T,W_S).
 }
 $$
 
-This is not an arbitrary loss attached to a transient state. It is the smallest joint
-reconstruction-and-support error the current student can achieve for the specified teacher state.
+Equivalently, because $F_T=0$ on $\mathbb S_T$,
 
-### When is the settled deficit zero?
+$$
+q(x_T;W_S)
+=
+\min_{x_S}F_S(x_S,x_T;W_S).
+$$
 
-Both terms of $F_S$ are nonnegative. Therefore $q\ge0$.
+This is not an arbitrary loss attached to a transient state. It is the smallest free energy the
+complete hierarchy can attain for the specified teacher-supported state after the student has
+settled. Its value is also the student's irreducible joint reconstruction-and-support deficit for
+that state.
+
+### When is the settled network free energy zero?
+
+All terms of $F$ are nonnegative. Therefore $q\ge0$.
 
 If the student stores $x_T$, choose $x_S=x_T$. Then
 
@@ -305,16 +403,20 @@ x_T\in\ker M_S.
 }
 $$
 
-So $q$ is a directed measure of how far one teacher-supported state remains from cortical storage.
+Thus zero settled free energy on a teacher-supported state is equivalent to cortical storage of
+that state. The same quantity is simultaneously a network-level free energy and a directed measure
+of how far the teacher-supported state remains from cortical storage.
 
 ---
 
 ## 5. The student minimization, one direction at a time
 
-For a fixed teacher state $x_T$, the inner minimization asks which cortical state remains after the
-student has settled. Instead of solving a matrix equation, rotate once into the student's own
-orthogonal directions. In those coordinates the full problem separates into $d$ independent
-one-dimensional minimizations.
+For a fixed teacher state $x_T$, the inner minimization asks which cortical state minimizes the
+complete network free energy after the student has settled. The teacher term is constant with
+respect to $x_S$ and is zero on $\mathbb S_T$, so this minimization is exactly the minimization of
+$F_S$. Instead of solving a matrix equation, rotate once into the student's own orthogonal
+directions. In those coordinates the full problem separates into $d$ independent one-dimensional
+minimizations.
 
 Introduce the student self-error operator
 
@@ -491,7 +593,7 @@ the scalar fractions that appear in this solution.
 
 ---
 
-## 6. The novelty operator and the closed form of the deficit
+## 6. The novelty operator and the closed form of settled free energy
 
 Section 5 found the settled student coordinate
 
@@ -632,9 +734,10 @@ If an eigenvalue $\mu$ of $S_S$ is repeated, its entire eigenspace receives the 
 $n(\mu)$. Therefore the reassembled operator does not depend on which orthonormal basis is chosen
 inside a repeated eigenspace.
 
-### The settled cost, one direction at a time
+### The settled network free energy, one direction at a time
 
-We can now substitute $x_S^*$ into both terms of $F_S$. Orthogonality gives
+On the teacher memory sphere, $F_T=0$ and $F=F_S$. We can therefore substitute $x_S^*$ into the
+two remaining terms of the complete network free energy. Orthogonality gives
 
 $$
 \|x_S^*-x_T\|^2
@@ -652,7 +755,7 @@ x_S^{*\top}S_Sx_S^*
 \sum_k\mu_k(1-n_k)^2c_k^2.
 $$
 
-Therefore the contribution of mode $k$ to the settled cost is
+Therefore the contribution of mode $k$ to the settled network free energy is
 
 $$
 \frac{\pi_{TS}}2n_k^2c_k^2
@@ -682,8 +785,9 @@ q(x_T;W_S)
 }
 $$
 
-This formula is the promised elimination of the fast student variable: $q$ now depends on the
-teacher state and student weights only through the novelty operator $N_S$.
+This formula is the promised elimination of the fast student variable: the complete network's
+settled free energy $q$ now depends on the teacher state and student weights only through the
+novelty operator $N_S$.
 
 ### Agreement with the compact matrix formula
 
@@ -741,20 +845,28 @@ operator $N_S$ to the teacher memory space and only then finds the worst valid t
 
 ---
 
-## 7. The central object: maximal unresolved cortical deficit
+## 7. The central object: largest settled network free energy
 
 Define
 
 $$
 \boxed{
-\mathcal{D}_{\max}(W_S;W_T)
+\mathcal{F}_{\max}(W_S;W_T)
 =
-\max_{x_T\in\mathbb S_T}q(x_T;W_S).
+\max_{x_T\in\mathbb S_T}q(x_T;W_S)
+=
+\max_{x_T\in\mathbb S_T}
+\min_{x_S}
+F(x_T,x_S;W_T,W_S).
 }
 $$
 
-The notation emphasizes that this is the maximal cortical deficit: it retains the largest deficit
-rather than averaging deficits over teacher states.
+The notation emphasizes that this is a free-energy envelope: for each teacher-supported state the
+student first attains its best response, and the maximum then retains the largest settled free
+energy rather than averaging over teacher states. Since the teacher's own term vanishes on
+$\mathbb S_T$, this whole-network quantity is numerically equal to the largest unresolved cortical
+deficit. Its network-level free-energy meaning is primary; its reconstruction and functional-error
+bounds are consequences derived below.
 
 The maximum exists. The set $\mathbb S_T$ is compact and $q$ is continuous in $x_T$, so the
 **extreme-value theorem** applies: a continuous real-valued function on a compact set attains both
@@ -903,7 +1015,7 @@ Applying the theorem to $A_S$ now gives
 
 $$
 \begin{aligned}
-\mathcal{D}_{\max}(W_S;W_T)
+\mathcal{F}_{\max}(W_S;W_T)
 &=
 \max_{\|a\|=1}q(U_Ta;W_S)
 \\
@@ -920,7 +1032,7 @@ Therefore
 
 $$
 \boxed{
-\mathcal{D}_{\max}(W_S;W_T)
+\mathcal{F}_{\max}(W_S;W_T)
 =
 \frac{\pi_{TS}}{2}\lambda_{\max}(A_S).
 }
@@ -949,9 +1061,12 @@ eigenvalue, every normalized mixture within their common eigenspace is also a ma
 
 ---
 
-## 8. Why this is a distance-like object, but not a metric
+## 8. The induced distance-like interpretation
 
-$\mathcal{D}_{\max}$ is a functional distance-like quantity, but it is not a mathematical metric.
+The primary object $\mathcal{F}_{\max}$ is a worst-case settled free energy. Because its teacher
+term vanishes and its remaining terms measure mismatch and recurrent inconsistency, it also induces
+a functional distance-like quantity between the two memory systems. This induced quantity is not a
+mathematical metric.
 
 - It is directed from teacher to student.
 - It is not generally symmetric under exchanging the networks.
@@ -989,7 +1104,7 @@ $$
 and
 
 $$
-\mathcal{D}_{\max}
+\mathcal{F}_{\max}
 \longrightarrow
 \frac{\pi_{TS}}2
 \max_{x_T\in\mathbb S_T}
@@ -1033,7 +1148,7 @@ $$
 By definition of the maximum,
 
 $$
-q(x_T;W_S)\le\mathcal{D}_{\max}
+q(x_T;W_S)\le\mathcal{F}_{\max}
 $$
 
 for every $x_T\in\mathbb S_T$. Combining the inequalities and taking square roots gives
@@ -1042,7 +1157,7 @@ $$
 \boxed{
 \|x_S^*(x_T)-x_T\|
 \le
-\sqrt{\frac{2\mathcal{D}_{\max}}{\pi_{TS}}}
+\sqrt{\frac{2\mathcal{F}_{\max}}{\pi_{TS}}}
 \qquad
 \text{for every }x_T\in\mathbb S_T.
 }
@@ -1054,7 +1169,7 @@ $$
 \boxed{
 \|M_Sx_S^*(x_T)\|
 \le
-\sqrt{\frac{2\mathcal{D}_{\max}}{\pi_S}}
+\sqrt{\frac{2\mathcal{F}_{\max}}{\pi_S}}
 \qquad
 \text{for every }x_T\in\mathbb S_T.
 }
@@ -1065,7 +1180,7 @@ is later queried.
 
 The first inequality bounds representational reconstruction error. The second bounds cortical
 self-inconsistency, meaning the amount of recurrent error remaining in the reconstruction. The
-quantity $\mathcal{D}_{\max}$ jointly certifies both properties.
+quantity $\mathcal{F}_{\max}$ jointly certifies both properties.
 
 The inequalities are upper bounds, not identities. Because $q$ contains both error terms, the
 reconstruction-only bound can be conservative. Its value is that it holds simultaneously for every
@@ -1121,13 +1236,13 @@ $$
 \boxed{
 \|h(x_S^*(x_T))-h(x_T)\|
 \le
-L\sqrt{\frac{2\mathcal{D}_{\max}}{\pi_{TS}}}
+L\sqrt{\frac{2\mathcal{F}_{\max}}{\pi_{TS}}}
 \qquad
 \text{for every }x_T\in\mathbb S_T.
 }
 $$
 
-This is the promised worst-case functional-error certificate. Minimizing $\mathcal{D}_{\max}$ tightens
+This is the promised worst-case functional-error certificate. Minimizing $\mathcal{F}_{\max}$ tightens
 the guarantee for every $L$-Lipschitz function of the reconstructed state.
 
 ### Linear readouts
@@ -1163,7 +1278,7 @@ $$
 \|Rx_S^*(x_T)-Rx_T\|
 \le
 \|R\|_2
-\sqrt{\frac{2\mathcal{D}_{\max}}{\pi_{TS}}}.
+\sqrt{\frac{2\mathcal{F}_{\max}}{\pi_{TS}}}.
 }
 $$
 
@@ -1281,7 +1396,7 @@ guaranteed to preserve the class whenever
 
 $$
 \boxed{
-2L\sqrt{\frac{2\mathcal{D}_{\max}}{\pi_{TS}}}
+2L\sqrt{\frac{2\mathcal{F}_{\max}}{\pi_{TS}}}
 <
 \gamma(x_T).
 }
@@ -1305,14 +1420,16 @@ mere equality of latent dimensions is not enough biologically.
 
 ---
 
-## 11. The teacher finds the maximally deficient state
+## 11. The teacher finds the state of maximal settled free energy
 
 Hold the student weights $W_S$ fixed and suppose that, for each candidate teacher state $x_T$, the
-student has already settled to its best response $x_S^*(x_T)$. The teacher then sees the settled
-deficit
+student has already settled to its best response $x_S^*(x_T)$. The teacher then sees the complete
+network's settled free energy
 
 $$
 q(x_T;W_S)
+=
+F(x_T,x_S^*(x_T);W_T,W_S)
 =
 F_S(x_S^*(x_T),x_T;W_S)
 $$
@@ -1334,7 +1451,8 @@ current network errors rather than explicitly constructing and diagonalizing $A_
 The answer is yes for the idealized, hard-constrained, timescale-separated system. The argument has
 three parts:
 
-1. the settled interface error gives the derivative of $q$ with respect to the teacher state;
+1. the settled interface error gives the derivative of the network free-energy envelope $q$ with
+   respect to the teacher state;
 2. tangent projection converts that derivative direction into ascent on the valid teacher-memory sphere;
 3. in teacher coordinates, the resulting dynamics are continuous-time power iteration.
 
@@ -1345,30 +1463,40 @@ Recall
 $$
 q(x_T;W_S)
 =
-F_S(x_S^*(x_T),x_T;W_S).
+F(x_T,x_S^*(x_T);W_T,W_S).
 $$
 
-Changing $x_T$ affects this expression in two ways: directly through the mismatch term in $F_S$,
-and indirectly because the best response $x_S^*(x_T)$ changes. Differentiating with respect to
-$x_T$ while holding $W_S$ fixed, the ordinary chain rule gives
+Changing $x_T$ affects this expression directly through $F_T$ and the mismatch term, and indirectly
+because the best response $x_S^*(x_T)$ changes. Differentiating with respect to $x_T$ while holding
+$W_S$ and $W_T$ fixed, the ordinary chain rule gives
 
 $$
 \frac{\partial q}{\partial x_T}
 =
 \left(\frac{dx_S^*}{dx_T}\right)^\top
-\underbrace{\left.\frac{\partial F_S}{\partial x_S}\right|_{x_S^*}}_{0}
+\underbrace{\left.\frac{\partial F}{\partial x_S}\right|_{x_S^*}}_{0}
 +
-\left.\frac{\partial F_S}{\partial x_T}\right|_{x_S^*}.
+\left.\frac{\partial F}{\partial x_T}\right|_{x_S^*}.
 $$
 
 The first term vanishes because $x_S^*$ is the minimizer and therefore satisfies
-$\partial F_S/\partial x_S=0$. This elementary use of the chain rule is often called the
+$\partial F/\partial x_S=0$. This elementary use of the chain rule is often called the
 **envelope theorem**:
 when differentiating an optimized value, the derivative through the optimizing argument disappears
 at an interior stationary optimum. The theorem does not say that $x_S^*$ is independent of $x_T$;
 it says that its first-order contribution is multiplied by a zero derivative at the settled optimum.
 
-Only the mismatch term of $F_S$ depends directly on $x_T$. Therefore
+The direct teacher derivative is
+
+$$
+\frac{\partial F}{\partial x_T}
+=
+\pi_TM_T^\top M_Tx_T
++
+\pi_{TS}(x_T-x_S).
+$$
+
+On $\mathbb S_T$, $M_Tx_T=0$, so the teacher contribution and its gradient both vanish. Therefore
 
 $$
 \boxed{
@@ -1391,7 +1519,7 @@ $q=(\pi_{TS}/2)x_T^\top N_Sx_T$, because $N_S$ is symmetric. The identity is imp
 computationally: the teacher does not need to represent $N_S$, form $A_S$, or differentiate through
 the student's settling trajectory. Once the student has settled, the locally available mismatch
 $\varepsilon_{TS}^*$ points exactly opposite to the derivative direction that increases the settled
-deficit.
+network free energy.
 
 ### Why the derivative direction must be projected
 
@@ -1467,8 +1595,8 @@ P_{T,x}\frac{\partial q}{\partial x_T}
 \end{aligned}
 $$
 
-The last equality uses the fact that $P_{T,x}$ is an orthogonal projector. Thus the settled
-deficit cannot decrease along the ideal teacher search. Equality holds exactly when the tangent
+The last equality uses the fact that $P_{T,x}$ is an orthogonal projector. Thus the settled network
+free energy cannot decrease along the ideal teacher search. Equality holds exactly when the tangent
 derivative vanishes. This establishes monotone ascent, but it does not yet prove that every
 stationary point is a global maximum.
 
@@ -1574,9 +1702,9 @@ a(t)\longrightarrow
 $$
 
 Consequently, $x_T(t)=U_Ta(t)$ approaches one of the two unit teacher states with maximal settled
-deficit. If the largest eigenvalue is repeated and the initial state has a nonzero projection onto
-its eigenspace, the dynamics approach a unit vector in that top eigenspace rather than selecting a
-unique direction.
+network free energy. If the largest eigenvalue is repeated and the initial state has a nonzero
+projection onto its eigenspace, the dynamics approach a unit vector in that top eigenspace rather
+than selecting a unique direction.
 
 Every eigenvector is a stationary point of the projected dynamics, not only the top eigenvector.
 A lower eigenvector is unstable to any perturbation along a higher-eigenvalue direction, but an
@@ -1609,8 +1737,8 @@ $$
 \frac{\partial q}{\partial x_T}=-\pi_{TS}\varepsilon_{TS}^*.
 $$
 
-Thus $\varepsilon_{TS}^*$ itself points toward decreasing deficit, whereas
-$-\varepsilon_{TS}^*$ points toward increasing deficit. To make the interface drive equal to the
+Thus $\varepsilon_{TS}^*$ itself points toward decreasing settled network free energy, whereas
+$-\varepsilon_{TS}^*$ points toward increasing it. To make the interface drive equal to the
 desired unprojected ascent drive $\mu_T\,\partial q/\partial x_T$, we require
 
 $$
@@ -1627,9 +1755,10 @@ $$
 }
 $$
 
-The negative sign is therefore determined by the fact that the teacher maximizes the student's
-settled deficit. A positive coupling would move the teacher toward the settled student response and
-would descend, rather than ascend, the mismatch contribution.
+The negative sign is therefore determined by the fact that the teacher maximizes the complete
+network's settled free energy on its memory manifold. A positive coupling would move the teacher
+toward the settled student response and would descend, rather than ascend, the mismatch
+contribution.
 
 The raw interface term supplies the ascent direction. Teacher recurrence must keep the activity
 within $\mathcal U_T$, and normalization or radial projection must remove the component that changes
@@ -1666,8 +1795,8 @@ The argument does not show that:
    comparable timescales;
 5. the selected direction must be a named episodic pattern—it may be any linear combination in the
    teacher memory space;
-6. teacher ascent itself reduces $\mathcal{D}_{\max}$—it exposes the current worst direction, while
-   the later student plasticity step is what reduces that deficit.
+6. teacher ascent itself reduces $\mathcal{F}_{\max}$—it exposes the current worst direction, while
+   the later student plasticity step is what reduces the worst-case free-energy envelope.
 
 ---
 
@@ -1678,13 +1807,14 @@ For each student coordinate $(x_S)_i$, let the dynamics move opposite to its ord
 $$
 \tau_S\dot{(x_S)_i}
 =
--\frac{\partial F_S}{\partial (x_S)_i}.
+-\frac{\partial F}{\partial (x_S)_i}.
 $$
 
-Direct differentiation of the original cost with respect to coordinate $(x_S)_i$ gives
+Because $F_T$ is independent of $x_S$, direct differentiation of the complete network free energy
+with respect to coordinate $(x_S)_i$ gives
 
 $$
-\frac{\partial F_S}{\partial (x_S)_i}
+\frac{\partial F}{\partial (x_S)_i}
 =
 \pi_{TS}(\varepsilon_{TS})_i
 +
@@ -1717,7 +1847,7 @@ The interface term pulls the student toward the teacher state. The recurrent tra
 the student toward states supported by its current memory. The transpose is not separately
 postulated: it follows from differentiating the squared recurrent error.
 
-Because $F_S$ is strictly convex in $x_S$, this state dynamics has one equilibrium for fixed
+Because $F$ is strictly convex in $x_S$, this state dynamics has one equilibrium for fixed
 $x_T,W_S$, and that equilibrium is the global minimizer used to define $q$.
 
 ---
@@ -1749,12 +1879,12 @@ $$
 -\delta_{ki}(x_S)_j,
 $$
 
-where $\delta_{ki}=1$ if $k=i$ and $0$ otherwise. The mismatch term of $F_S$ does not depend
-directly on $w_{ij}$. Therefore
+where $\delta_{ki}=1$ if $k=i$ and $0$ otherwise. The teacher and mismatch terms of $F$ do not
+depend directly on $w_{ij}$. Therefore
 
 $$
 \begin{aligned}
-\frac{\partial F_S}{\partial w_{ij}}
+\frac{\partial F}{\partial w_{ij}}
 &=
 \pi_S\sum_k
 (\varepsilon_S)_k
@@ -1770,7 +1900,7 @@ Now hold the teacher state fixed and recall
 $$
 q(x_T;W_S)
 =
-F_S\!\left(x_S^*(x_T,W_S),x_T;W_S\right).
+F\!\left(x_T,x_S^*(x_T,W_S);W_T,W_S\right).
 $$
 
 Changing $w_{ij}$ changes the optimized value directly and also changes the settled state
@@ -1780,17 +1910,17 @@ $$
 \frac{\partial q}{\partial w_{ij}}
 =
 \left.
-\left(\frac{\partial F_S}{\partial x_S}\right)^\top
+\left(\frac{\partial F}{\partial x_S}\right)^\top
 \right|_{x_S^*}
 \frac{\partial x_S^*}{\partial w_{ij}}
 +
-\left.\frac{\partial F_S}{\partial w_{ij}}\right|_{x_S^*}.
+\left.\frac{\partial F}{\partial w_{ij}}\right|_{x_S^*}.
 $$
 
 The first term vanishes because the settled state is the unconstrained minimizer:
 
 $$
-\left.\frac{\partial F_S}{\partial x_S}\right|_{x_S^*}=0.
+\left.\frac{\partial F}{\partial x_S}\right|_{x_S^*}=0.
 $$
 
 This is the first envelope step. It leaves only the direct weight derivative:
@@ -1799,7 +1929,7 @@ $$
 \boxed{
 \frac{\partial q}{\partial w_{ij}}
 =
-\left.\frac{\partial F_S}{\partial w_{ij}}\right|_{x_S^*}
+\left.\frac{\partial F}{\partial w_{ij}}\right|_{x_S^*}
 =
 -\pi_S(\varepsilon_S^*)_i(x_S^*)_j.
 }
@@ -1817,8 +1947,9 @@ $$
 }
 $$
 
-Thus every weight moves opposite to its derivative of the settled deficit for the currently
-expressed teacher state. Collecting the scalar plasticity equations gives the familiar matrix rule
+Thus every weight moves opposite to its derivative of the settled network free energy for the
+currently expressed teacher state. Collecting the scalar plasticity equations gives the familiar
+matrix rule
 
 $$
 \boxed{
@@ -1829,7 +1960,7 @@ $$
 $$
 
 The remaining question is why, after teacher selection, this is descent on the maximum
-$\mathcal{D}_{\max}$ rather than only on one arbitrarily chosen $q$.
+$\mathcal{F}_{\max}$ rather than only on one arbitrarily chosen $q$.
 
 ---
 
@@ -1857,12 +1988,12 @@ $$
 x_S^*=x_S^*(x_T,w).
 $$
 
-The settled deficit is
+The settled network free energy is
 
 $$
 q(x_T,w)
 =
-F_S\!\left(x_S^*(x_T,w),x_T,w\right).
+F\!\left(x_T,x_S^*(x_T,w);W_T,w\right).
 $$
 
 ### First envelope step: eliminate the optimized student state
@@ -1873,17 +2004,17 @@ $$
 \frac{\partial q(x_T,w)}{\partial w}
 =
 \left.
-\left(\frac{\partial F_S}{\partial x_S}\right)^\top
+\left(\frac{\partial F}{\partial x_S}\right)^\top
 \right|_{x_S^*}
 \frac{\partial x_S^*(x_T,w)}{\partial w}
 +
-\left.\frac{\partial F_S}{\partial w}\right|_{x_S^*}.
+\left.\frac{\partial F}{\partial w}\right|_{x_S^*}.
 $$
 
 Because $x_S^*$ is the unconstrained minimizer,
 
 $$
-\left.\frac{\partial F_S}{\partial x_S}\right|_{x_S^*}=0.
+\left.\frac{\partial F}{\partial x_S}\right|_{x_S^*}=0.
 $$
 
 The indirect term through the movement of $x_S^*$ therefore vanishes:
@@ -1892,7 +2023,7 @@ $$
 \boxed{
 \frac{\partial q(x_T,w)}{\partial w}
 =
-\left.\frac{\partial F_S}{\partial w}\right|_{x_S^*}.
+\left.\frac{\partial F}{\partial w}\right|_{x_S^*}.
 }
 $$
 
@@ -1905,9 +2036,9 @@ $$
 \frac{\partial q}{\partial x_T}
 =
 \left(\frac{\partial x_S^*}{\partial x_T}\right)^\top
-\left.\frac{\partial F_S}{\partial x_S}\right|_{x_S^*}
+\left.\frac{\partial F}{\partial x_S}\right|_{x_S^*}
 +
-\left.\frac{\partial F_S}{\partial x_T}\right|_{x_S^*}.
+\left.\frac{\partial F}{\partial x_T}\right|_{x_S^*}.
 $$
 
 The first term again vanishes, so
@@ -1916,7 +2047,7 @@ $$
 \boxed{
 \frac{\partial q}{\partial x_T}
 =
-\left.\frac{\partial F_S}{\partial x_T}\right|_{x_S^*}.
+\left.\frac{\partial F}{\partial x_T}\right|_{x_S^*}.
 }
 $$
 
@@ -1927,7 +2058,7 @@ state continuously and differentiably as the weight changes. Denote that local c
 $x_T^*(w)$. Then
 
 $$
-\mathcal D_{\max}(w)
+\mathcal{F}_{\max}(w)
 =
 q(x_T^*(w),w).
 $$
@@ -1935,7 +2066,7 @@ $$
 Differentiate using the ordinary chain rule:
 
 $$
-\frac{d\mathcal D_{\max}(w)}{dw}
+\frac{d\mathcal{F}_{\max}(w)}{dw}
 =
 \left.
 \left(\frac{\partial q}{\partial x_T}\right)^\top
@@ -1980,7 +2111,7 @@ The second envelope identity is therefore
 
 $$
 \boxed{
-\frac{d\mathcal D_{\max}(w)}{dw}
+\frac{d\mathcal{F}_{\max}(w)}{dw}
 =
 \left.\frac{\partial q}{\partial w}\right|_{x_T^*(w)}.
 }
@@ -1992,12 +2123,12 @@ Writing out the complete nesting gives
 
 $$
 \boxed{
-\mathcal D_{\max}(w)
+\mathcal{F}_{\max}(w)
 =
-F_S\!\left(
-x_S^*(x_T^*(w),w),
+F\!\left(
 x_T^*(w),
-w
+x_S^*(x_T^*(w),w);
+W_T,w
 \right).
 }
 $$
@@ -2018,9 +2149,9 @@ The complete chain rule is consequently
 
 $$
 \begin{aligned}
-\frac{d\mathcal D_{\max}}{dw}
+\frac{d\mathcal{F}_{\max}}{dw}
 &=
-\left(\frac{\partial F_S}{\partial x_S}\right)^\top
+\left(\frac{\partial F}{\partial x_S}\right)^\top
 \left(
 \frac{\partial x_S^*}{\partial x_T}
 \frac{dx_T^*}{dw}
@@ -2029,14 +2160,14 @@ $$
 \right)
 \\
 &\quad+
-\left(\frac{\partial F_S}{\partial x_T}\right)^\top
+\left(\frac{\partial F}{\partial x_T}\right)^\top
 \frac{dx_T^*}{dw}
 +
-\frac{\partial F_S}{\partial w}.
+\frac{\partial F}{\partial w}.
 \end{aligned}
 $$
 
-All derivatives of $F_S$ in this expression are evaluated at
+All derivatives of $F$ in this expression are evaluated at
 
 $$
 x_T=x_T^*(w),
@@ -2047,13 +2178,13 @@ $$
 The first indirect term vanishes because
 
 $$
-\left.\frac{\partial F_S}{\partial x_S}\right|_{x_S^*}=0.
+\left.\frac{\partial F}{\partial x_S}\right|_{x_S^*}=0.
 $$
 
 For the second indirect term, the first envelope identity established
 
 $$
-\left.\frac{\partial F_S}{\partial x_T}\right|_{x_S^*}
+\left.\frac{\partial F}{\partial x_T}\right|_{x_S^*}
 =
 \frac{\partial q}{\partial x_T}.
 $$
@@ -2061,7 +2192,7 @@ $$
 The second envelope step then gives
 
 $$
-\left(\frac{\partial F_S}{\partial x_T}\right)^\top
+\left(\frac{\partial F}{\partial x_T}\right)^\top
 \frac{dx_T^*}{dw}
 =
 \left(\frac{\partial q}{\partial x_T}\right)^\top
@@ -2072,7 +2203,7 @@ $$
 
 The two indirect terms thus vanish for different reasons:
 
-1. $x_S^*$ is an unconstrained minimum, so $\partial F_S/\partial x_S=0$;
+1. $x_S^*$ is an unconstrained minimum, so $\partial F/\partial x_S=0$;
 2. $x_T^*$ is a constrained maximum, so $q$ has zero first-order change along the tangent movement
    $dx_T^*/dw$.
 
@@ -2080,20 +2211,20 @@ Only the direct weight derivative remains:
 
 $$
 \boxed{
-\frac{d\mathcal D_{\max}}{dw}
+\frac{d\mathcal{F}_{\max}}{dw}
 =
 \left.\frac{\partial q}{\partial w}\right|_{x_T^*}
 =
-\left.\frac{\partial F_S}{\partial w}\right|_{x_T^*,x_S^*}.
+\left.\frac{\partial F}{\partial w}\right|_{x_T^*,x_S^*}.
 }
 $$
 
 ### Exact treatment of the antipodal pair
 
-The cost has the exact symmetry
+The complete network free energy has the exact symmetry
 
 $$
-F_S(-x_S,-x_T;W_S)=F_S(x_S,x_T;W_S).
+F(-x_T,-x_S;W_T,W_S)=F(x_T,x_S;W_T,W_S).
 $$
 
 Because the student minimizer is unique, this implies
@@ -2129,7 +2260,7 @@ The two maximizing representatives therefore give exactly the same derivative:
 
 $$
 \boxed{
-\frac{d\mathcal D_{\max}}{dw}
+\frac{d\mathcal{F}_{\max}}{dw}
 =
 \frac{\partial q}{\partial w}(x_{T,+}^*,w)
 =
@@ -2144,7 +2275,7 @@ Thus the unavoidable sign ambiguity creates no ambiguity in the plasticity rule.
 Section 13 showed that, for $w_{ij}=(W_S)_{ij}$,
 
 $$
-\frac{\partial F_S}{\partial w_{ij}}
+\frac{\partial F}{\partial w_{ij}}
 =
 -\pi_S(\varepsilon_S)_i(x_S)_j.
 $$
@@ -2153,7 +2284,7 @@ The double-envelope identity therefore gives
 
 $$
 \boxed{
-\frac{\partial\mathcal D_{\max}}{\partial (W_S)_{ij}}
+\frac{\partial\mathcal{F}_{\max}}{\partial (W_S)_{ij}}
 =
 -\pi_S(\varepsilon_S^*)_i(x_S^*)_j.
 }
@@ -2163,16 +2294,16 @@ Only now do we assemble these $d^2$ scalar derivatives into the matrix gradient,
 entry by
 
 $$
-\bigl[\nabla_{W_S}\mathcal D_{\max}\bigr]_{ij}
+\bigl[\nabla_{W_S}\mathcal{F}_{\max}\bigr]_{ij}
 :=
-\frac{\partial\mathcal D_{\max}}{\partial (W_S)_{ij}}.
+\frac{\partial\mathcal{F}_{\max}}{\partial (W_S)_{ij}}.
 $$
 
 Hence
 
 $$
 \boxed{
-\nabla_{W_S}\mathcal D_{\max}
+\nabla_{W_S}\mathcal{F}_{\max}
 =
 -\pi_S\varepsilon_S^*x_S^{*\top}.
 }
@@ -2186,39 +2317,40 @@ $$
 =
 \eta\pi_S\varepsilon_S^*x_S^{*\top}
 =
--\eta\nabla_{W_S}\mathcal D_{\max}.
+-\eta\nabla_{W_S}\mathcal{F}_{\max}.
 }
 $$
 
-This is gradient descent on the maximal deficit. In scalar form, every synapse obeys
+This is gradient descent on the largest settled network free energy. In scalar form, every synapse
+obeys
 
 $$
 \dot w_{ij}
 =
--\eta\frac{\partial\mathcal D_{\max}}{\partial w_{ij}}.
+-\eta\frac{\partial\mathcal{F}_{\max}}{\partial w_{ij}}.
 $$
 
 Along the slow idealized weight dynamics,
 
 $$
 \begin{aligned}
-\frac{d\mathcal D_{\max}}{dt}
+\frac{d\mathcal{F}_{\max}}{dt}
 &=
 \sum_{i,j}
-\frac{\partial\mathcal D_{\max}}{\partial w_{ij}}
+\frac{\partial\mathcal{F}_{\max}}{\partial w_{ij}}
 \dot w_{ij}
 \\
 &=
 -\eta\sum_{i,j}
 \left(
-\frac{\partial\mathcal D_{\max}}{\partial w_{ij}}
+\frac{\partial\mathcal{F}_{\max}}{\partial w_{ij}}
 \right)^2
 \le0.
 \end{aligned}
 $$
 
-Thus the maximal deficit cannot increase to first order in this generic, equilibrated regime. It
-decreases strictly whenever at least one weight derivative is nonzero.
+Thus the largest settled network free energy cannot increase to first order in this generic,
+equilibrated regime. It decreases strictly whenever at least one weight derivative is nonzero.
 
 ### Limitation: genuine multidirectional ties are excluded
 
@@ -2228,7 +2360,7 @@ pair exactly, because the two signs give the same weight derivatives.
 The proof does not cover a genuine multidirectional tie, meaning that the largest eigenvalue has
 multiplicity greater than one. Distinct directions in the top eigenspace can then give different
 weight derivatives, the selected maximizing state may fail to be a single differentiable function
-of $w$, and $\mathcal D_{\max}$ may fail to have an ordinary gradient. No claim is made here that an
+of $w$, and $\mathcal{F}_{\max}$ may fail to have an ordinary gradient. No claim is made here that an
 arbitrarily selected tied direction immediately descends the numerical maximum.
 
 Small generic perturbations or noise typically split an exact eigenvalue degeneracy, but this
@@ -2257,15 +2389,15 @@ Let
 $$
 d_{ij}
 :=
-\frac{\partial\mathcal D_{\max}}{\partial(W_S)_{ij}}.
+\frac{\partial\mathcal{F}_{\max}}{\partial(W_S)_{ij}}.
 $$
 
 For small $\rho$, the first-order expansion is
 
 $$
-\mathcal D_{\max}(W_S+\rho V)
+\mathcal{F}_{\max}(W_S+\rho V)
 =
-\mathcal D_{\max}(W_S)
+\mathcal{F}_{\max}(W_S)
 +
 \rho\sum_{i,j}d_{ij}V_{ij}
 +
@@ -2304,7 +2436,8 @@ The precise defensible statement is therefore:
 
 > Once fast cortical inference and hippocampal worst-case selection have equilibrated, and away
 > from an exact multidirectional tie, among all sufficiently small plasticity events of the same
-> amplitude, cortical plasticity produces the largest first-order decrease of the maximal deficit.
+> amplitude, cortical plasticity produces the largest first-order decrease of the worst-case
+> settled network free energy.
 
 This does **not** prove:
 
@@ -2340,7 +2473,7 @@ derivatives are assembled, this update can be written as
 $$
 \dot W_S
 =
--\eta P_{\mathcal C}\nabla_{W_S}\mathcal{D}_{\max}.
+-\eta P_{\mathcal C}\nabla_{W_S}\mathcal{F}_{\max}.
 $$
 
 The projection can reduce the available descent magnitude and can couple idealized modes, but the
@@ -2402,8 +2535,9 @@ $$
 |\kappa|N_Sx_T.
 $$
 
-Inside $\ker M_T$, this term searches for cortical deficit. Outside the teacher memory space, it
-could instead amplify arbitrary surprising activity. The recurrent correction must therefore
+Inside $\ker M_T$, this term searches for the teacher-supported state with the largest settled
+network free energy. Outside the teacher memory space, it could instead amplify arbitrary
+surprising activity. The recurrent correction must therefore
 dominate normal to the memory space, and off-manifold occupancy must be checked in the full
 dynamics. In the exact hard-constrained theorem this issue is removed by projection; in the actual
 soft implementation it is an operating-regime condition rather than an identity.
@@ -2412,7 +2546,7 @@ The roles are distinct:
 
 - teacher recurrence says **which states count as valid source memories**;
 - normalization says **compare them at equal activity energy**;
-- negative coupling says **move toward the valid state with largest cortical deficit**.
+- negative coupling says **move toward the valid state with largest settled network free energy**.
 
 ---
 
@@ -2424,17 +2558,17 @@ $$
 \min_{W_S}
 \max_{x_T\in\mathbb S_T}
 \min_{x_S}
-F_S(x_S,x_T;W_S).
+F(x_T,x_S;W_T,W_S).
 $$
 
 It contains three nested computations:
 
 $$
-\underbrace{\min_{x_S}}_{\text{evaluate cortical best response}}
+\underbrace{\min_{x_S}}_{\text{settle network free energy}}
 \quad\longrightarrow\quad
-\underbrace{\max_{x_T\in\mathbb S_T}}_{\text{find current worst deficit}}
+\underbrace{\max_{x_T\in\mathbb S_T}}_{\text{find its largest manifold value}}
 \quad\longrightarrow\quad
-\underbrace{\min_{W_S}}_{\text{reduce that bound}}.
+\underbrace{\min_{W_S}}_{\text{reduce the worst-case envelope}}.
 $$
 
 The dynamical order
@@ -2445,15 +2579,17 @@ $$
 
 implements this nesting.
 
-- If the student has not settled, the interface error is a transient lag rather than the deficit
-  of the student's best reconstruction.
+- If the student has not settled, the observed free energy includes transient inference error
+  rather than the minimum attainable for that teacher state.
 - If the teacher has not searched the settled landscape, the weight update need not address the
   current maximum.
 - If the weights move too quickly, the landscape changes while the teacher is still evaluating it.
 
-The phrase "the network minimizes its largest deficit at each time" should therefore be understood
-on the **slow learning timescale**. On the faster selection timescale, the teacher intentionally
-ascends $q$ in order to locate the maximum that the weights will then reduce.
+The hierarchy minimizes $\mathcal{F}_{\max}$ on the **slow learning timescale**. On the faster
+selection timescale, the teacher intentionally ascends the settled free energy $q$ in order to
+locate the manifold maximum that the weights will then reduce. The minimax computation therefore
+contains descent in $x_S$, constrained ascent in $x_T$, and descent of the resulting envelope in
+$W_S$.
 
 ---
 
@@ -2462,16 +2598,16 @@ ascends $q$ in order to locate the maximum that the weights will then reduce.
 Because $A_S$ is positive semidefinite,
 
 $$
-\mathcal{D}_{\max}
+\mathcal{F}_{\max}
 =
 \frac{\pi_{TS}}{2}\lambda_{\max}(A_S)
 \ge0.
 $$
 
 If every teacher direction is stored by the student, then $q=0$ on $\mathbb S_T$ and
-$\mathcal{D}_{\max}=0$.
+$\mathcal{F}_{\max}=0$.
 
-Conversely, suppose $\mathcal{D}_{\max}=0$. Since every $q\ge0$ and every $q\le\mathcal{D}_{\max}$, we have
+Conversely, suppose $\mathcal{F}_{\max}=0$. Since every $q\ge0$ and every $q\le\mathcal{F}_{\max}$, we have
 
 $$
 q(x_T;W_S)=0
@@ -2482,7 +2618,7 @@ $\ker M_S$. By homogeneity, the entire teacher memory space lies in the student 
 
 $$
 \boxed{
-\mathcal{D}_{\max}=0
+\mathcal{F}_{\max}=0
 \quad\Longleftrightarrow\quad
 \mathcal U_T\subseteq\ker M_S.
 }
@@ -2499,8 +2635,8 @@ x_S^*=x_T,
 $$
 
 for every valid teacher state. Both the adversarial interface drive and the student plasticity
-signal vanish. Selection and learning therefore extinguish themselves when the worst-case deficit
-reaches its minimum.
+signal vanish. Selection and learning therefore extinguish themselves when the largest settled
+network free energy reaches its minimum value of zero.
 
 ---
 
@@ -2514,6 +2650,8 @@ $$
 \max_{\substack{x_T\in\ker M_T\\\|x_T\|=1}}
 \min_{x_S}
 \left[
+\frac{\pi_T}{2}\|M_Tx_T\|^2
++
 \frac{\pi_{TS}}2\|x_S-x_T\|^2
 +
 \frac{\pi_S}{2}\|M_Sx_S\|^2
@@ -2523,12 +2661,15 @@ $$
 
 Then:
 
-1. $\ker M_T$ defines the teacher's valid memory content.
-2. Fixed norm makes candidate states comparable at equal activity energy.
-3. The inner minimization asks for the student's best supported reconstruction.
-4. In the student's orthonormal eigenbasis, the inner problem separates into scalar costs, each
+1. The bracketed quantity is the complete network free energy $F=F_T+F_S$.
+2. $\ker M_T$ defines the teacher's valid memory content and makes $F_T=0$ throughout the
+   maximization domain.
+3. Fixed norm makes candidate states comparable at equal activity energy.
+4. The inner minimization finds the smallest network free energy attainable for one valid teacher
+   state, equivalently the student's best supported reconstruction.
+5. In the student's orthonormal eigenbasis, the inner problem separates into scalar costs, each
    with one unique minimum; reassembling them gives the unique settled student state.
-5. The settled cost is
+6. The settled network free energy is
 
    $$
    q(x_T;W_S)
@@ -2536,35 +2677,35 @@ Then:
    \frac{\pi_{TS}}2x_T^\top N_Sx_T.
    $$
 
-6. The maximum over teacher content is
+7. The largest settled network free energy over teacher content is
 
    $$
-   \mathcal{D}_{\max}
+   \mathcal{F}_{\max}
    =
    \frac{\pi_{TS}}{2}
    \lambda_{\max}(U_T^\top N_SU_T).
    $$
 
-7. $\mathcal{D}_{\max}$ uniformly bounds both settled cortical mismatch and cortical recurrent error.
-8. Every $L$-Lipschitz downstream readout inherits a bound of size
+8. $\mathcal{F}_{\max}$ uniformly bounds both settled cortical mismatch and cortical recurrent error.
+9. Every $L$-Lipschitz downstream readout inherits a bound of size
 
    $$
-   L\sqrt{\frac{2\mathcal{D}_{\max}}{\pi_{TS}}}.
+   L\sqrt{\frac{2\mathcal{F}_{\max}}{\pi_{TS}}}.
    $$
 
-9. The teacher envelope derivative is
+10. The teacher envelope derivative is
 
    $$
    \frac{\partial q}{\partial x_T}=-\pi_{TS}\varepsilon_{TS}^*.
    $$
 
-10. Teacher maximization therefore requires
+11. Teacher maximization therefore requires
 
     $$
     \kappa<0.
     $$
 
-11. Student state descent gives
+12. Student state descent gives
 
     $$
     \tau_S\dot x_S
@@ -2573,7 +2714,7 @@ Then:
     -\pi_SM_S^\top\varepsilon_S.
     $$
 
-12. For every scalar weight $w_{ij}=(W_S)_{ij}$, the first envelope step gives
+13. For every scalar weight $w_{ij}=(W_S)_{ij}$, the first envelope step gives
 
     $$
     \frac{\partial q}{\partial w_{ij}}
@@ -2581,27 +2722,28 @@ Then:
     -\pi_S(\varepsilon_S^*)_i(x_S^*)_j.
     $$
 
-13. At a simple top eigenvalue, the second envelope step gives
+14. At a simple top eigenvalue, the second envelope step gives
 
     $$
-    \frac{\partial\mathcal D_{\max}}{\partial w_{ij}}
+    \frac{\partial\mathcal{F}_{\max}}{\partial w_{ij}}
     =
     \frac{\partial q}{\partial w_{ij}}(x_T^*;W_S).
     $$
 
-14. The antipodal maximizers $x_T^*$ and $-x_T^*$ give exactly the same scalar weight derivatives.
-15. Assembling the scalar derivatives gives
+15. The antipodal maximizers $x_T^*$ and $-x_T^*$ give exactly the same scalar weight derivatives.
+16. Assembling the scalar derivatives gives
 
     $$
-    \nabla_{W_S}\mathcal D_{\max}
+    \nabla_{W_S}\mathcal{F}_{\max}
     =
     -\pi_S\varepsilon_S^*x_S^{*\top},
     $$
 
-    so the local plasticity rule is negative-gradient descent on the worst-case bound.
-16. A componentwise Cauchy–Schwarz argument proves that, among sufficiently small plasticity events
+    so the local plasticity rule is negative-gradient descent on the worst-case free-energy
+    envelope.
+17. A componentwise Cauchy–Schwarz argument proves that, among sufficiently small plasticity events
     of the same amplitude, this direction gives the greatest first-order decrease.
-17. Teacher recurrent correction, normalization and timescale separation implement the constraint
+18. Teacher recurrent correction, normalization and timescale separation implement the constraint
     and nesting approximately in the full network.
 
 The resulting architecture is
@@ -2640,7 +2782,7 @@ with zero-diagonal projection when autapses are excluded.
 
 ---
 
-## 20. Why should cortex reduce this deficit while hippocampus still stores the information?
+## 20. Why minimize the largest settled free energy while hippocampus stores the information?
 
 The computational purpose of consolidation is not merely to prevent information from existing
 nowhere. It is to remove dependence on a temporary source.
@@ -2661,11 +2803,12 @@ conditional on several events:
 - later encoding must not have made the trace inaccessible;
 - the relevant cortical systems must wait for or coordinate with the temporary store.
 
-Cortical acquisition removes these dependencies. The central quantity therefore measures not
-whether information exists somewhere, but how large the remaining dependence can be in the worst
-case.
+Cortical acquisition removes these dependencies. The largest settled network free energy therefore
+measures not whether information exists somewhere, but how large the remaining dependence can be
+in the worst case. Its reconstruction interpretation follows because only the interface and student
+self-energy terms remain on the teacher's zero-free-energy manifold.
 
-### 20.2 The largest deficit is the remaining bottleneck
+### 20.2 The largest settled free energy is the remaining bottleneck
 
 Suppose most components of a memory are cortically available but one component is not. Average
 error may already be small, yet a future computation requiring that missing component remains
@@ -2678,8 +2821,8 @@ $$
 \text{the least-transferred component sets the remaining dependency.}
 $$
 
-Reducing the largest deficit first is a form of weakest-link protection rather than a claim that
-all biological goals are literally minimax.
+Reducing the largest settled free energy first is a form of weakest-link protection rather than a
+claim that all biological goals are literally minimax.
 
 ### 20.3 Future queries are unknown
 
@@ -2707,8 +2850,8 @@ tightening available under the model's local synaptic-change geometry.
 A fast-learning source is useful because it can capture new experiences quickly. Retaining every
 detail indefinitely can create capacity pressure and interference with later encoding. Transferring
 content to a slower distributed substrate allows the fast store to continue serving future
-experience. The largest cortical deficit is the component that still prevents the corresponding
-content from becoming independent of that source.
+experience. The teacher-supported state with the largest settled network free energy is the
+component that still prevents the corresponding content from becoming independent of that source.
 
 This is a functional motivation, not a claim that the present linear model contains an explicit
 finite hippocampal-capacity variable. Adding such turnover would be a separate mechanistic
@@ -2725,7 +2868,7 @@ recurrence cannot sustain it.
 
 ### 20.7 The objective has a local circuit implementation
 
-The brain need not explicitly calculate $\mathcal{D}_{\max}$, enumerate all memories, or compare a table
+The brain need not explicitly calculate $\mathcal{F}_{\max}$, enumerate all memories, or compare a table
 of error values.
 
 In the model:
@@ -2734,7 +2877,7 @@ In the model:
 2. poorly reconstructed teacher-supported activity leaves a larger interface residual;
 3. negative feedback converts that residual into ascent within the teacher memory set;
 4. recurrent competition and normalization make the largest unresolved direction dominate;
-5. cortical plasticity reduces the exposed deficit;
+5. cortical plasticity reduces the exposed settled free energy;
 6. as that direction becomes supported, its residual disappears and another direction can dominate.
 
 The global-looking maximum is therefore realized by local dynamics, not by a homunculus selecting
@@ -2750,7 +2893,7 @@ not only a stability device.
 For a nonlinear or attractor-based teacher, the natural generalization is
 
 $$
-\mathcal{D}_{\max}
+\mathcal{F}_{\max}
 =
 \max_{x_T\in\mathcal M_T}q(x_T;W_S),
 $$
@@ -2759,7 +2902,7 @@ where $\mathcal M_T$ is the reachable set of valid teacher memories rather than 
 sphere. Salience, confidence or expected future relevance could later enter through
 
 $$
-\mathcal{D}_{\max,w}
+\mathcal{F}_{\max,w}
 =
 \max_{x_T\in\mathcal M_T}w(x_T)q(x_T;W_S).
 $$
@@ -2773,30 +2916,35 @@ direction is treated as potentially important.
 
 ### Proved analytically in the hard-constrained, timescale-separated linear model
 
-1. The student has a unique settled best response for every teacher state.
-2. $q(x_T;W_S)=0$ exactly when the student stores $x_T$.
-3. The maximal deficit is
+1. On the teacher memory sphere, $F_T=0$ and the complete network free energy satisfies $F=F_S$.
+2. The student has a unique settled best response for every teacher state.
+3. $q(x_T;W_S)=\min_{x_S}F$ is the complete network's settled free energy for one
+   teacher-supported state, and it is zero exactly when the student stores that state.
+4. The largest settled network free energy is
 
    $$
-   \mathcal{D}_{\max}
+   \mathcal{F}_{\max}
+   =
+   \max_{x_T\in\mathbb S_T}\min_{x_S}F
    =
    \frac{\pi_{TS}}{2}
    \lambda_{\max}(U_T^\top N_SU_T).
    $$
 
-4. $\mathcal{D}_{\max}$ uniformly bounds settled cortical reconstruction error and recurrent
+5. $\mathcal{F}_{\max}$ uniformly bounds settled cortical reconstruction error and recurrent
    self-inconsistency.
-5. An $L$-Lipschitz readout inherits the corresponding uniform functional-error bound.
-6. Teacher ascent on the settled deficit requires a negative interface coupling $\kappa<0$.
-7. Student state dynamics implement the inner minimization.
-8. Student plasticity descends the selected settled deficit.
-9. At a simple top discrepancy eigenvalue, student plasticity is exact gradient descent on
-   $\mathcal{D}_{\max}$.
-10. Among sufficiently small plasticity events of the same amplitude, its direction gives the
-    largest possible first-order decrease of $\mathcal{D}_{\max}$.
-11. With a zero-diagonal constraint, the projected update is the steepest feasible first-order
+6. An $L$-Lipschitz readout inherits the corresponding uniform functional-error bound.
+7. Teacher ascent on the settled network free energy requires a negative interface coupling
+   $\kappa<0$.
+8. Student state dynamics implement the inner free-energy minimization.
+9. Student plasticity descends the selected settled free energy.
+10. At a simple top discrepancy eigenvalue, student plasticity is exact gradient descent on
+   $\mathcal{F}_{\max}$.
+11. Among sufficiently small plasticity events of the same amplitude, its direction gives the
+    largest possible first-order decrease of $\mathcal{F}_{\max}$.
+12. With a zero-diagonal constraint, the projected update is the steepest feasible first-order
     descent direction.
-12. $\mathcal{D}_{\max}=0$ exactly when all teacher memory content is stored by the student.
+13. $\mathcal{F}_{\max}=0$ exactly when all teacher memory content is stored by the student.
 
 ### Assumptions or operating-regime requirements
 
@@ -2813,24 +2961,28 @@ direction is treated as potentially important.
 
 ### Claims deliberately not made
 
-1. Global minimization time among all possible learning controllers.
-2. Global convergence for arbitrary initial weights or nonlinear networks.
-3. Exact monotone decrease of $\mathcal{D}_{\max}$ during the fast teacher search phase.
-4. Immediate strict decrease of $\mathcal{D}_{\max}$ from one arbitrary update at an exact
+1. That every variable descends $F$. Student inference minimizes $F$ over $x_S$, teacher selection
+   maximizes its settled value over $x_T$, and student plasticity minimizes the resulting envelope
+   over $W_S$.
+2. Global minimization time among all possible learning controllers.
+3. Global convergence for arbitrary initial weights or nonlinear networks.
+4. Exact monotone decrease of $\mathcal{F}_{\max}$ during the fast teacher search phase.
+5. Immediate strict decrease of $\mathcal{F}_{\max}$ from one arbitrary update at an exact
    multidirectional tie.
-5. That the linear teacher sphere represents discrete named episodes; it represents their stored
+6. That the linear teacher sphere represents discrete named episodes; it represents their stored
    subspace.
-6. That every downstream function is Lipschitz with a small constant, or that a discontinuous
+7. That every downstream function is Lipschitz with a small constant, or that a discontinuous
    decision is protected without a margin.
-7. That the brain explicitly represents the scalar $\mathcal{D}_{\max}$. The claim is that local circuit
+8. That the brain explicitly represents the scalar $\mathcal{F}_{\max}$. The claim is that local circuit
    dynamics implement the corresponding nested optimization.
 
 The central result can be summarized as follows:
 
-> Consolidation reduces dependence on a temporary memory source. Measuring that dependence by the
-> largest settled cortical reconstruction deficit gives a uniform guarantee over everything the
-> source currently represents. Fast cortical inference evaluates each candidate, negative
-> cortical-to-hippocampal coupling drives the source toward the largest remaining deficit, and
-> cortical plasticity follows the locally steepest feasible direction for tightening the resulting
-> bound. Whatever valid component is needed later, its cortical reconstruction—and therefore every
-> sufficiently stable downstream readout of it—is controlled by the same worst-case certificate.
+> Consolidation minimizes the largest settled free energy of the complete network over everything
+> represented on the teacher's zero-free-energy memory manifold. Fast cortical inference minimizes
+> network free energy for each candidate state, negative cortical-to-hippocampal coupling drives the
+> teacher toward the manifold state where that settled free energy is largest, and cortical
+> plasticity follows the locally steepest feasible direction for reducing the resulting envelope.
+> Because the teacher contribution vanishes on the manifold, the same quantity uniformly controls
+> cortical reconstruction, recurrent self-consistency and every sufficiently stable downstream
+> readout.

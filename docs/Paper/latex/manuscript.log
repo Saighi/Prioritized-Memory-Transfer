@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.2)  14 AUG 2026 17:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.2)  17 AUG 2026 10:48
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -448,19 +448,19 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 {C:/Users/pauls/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
 
-LaTeX Warning: Citation `squire2015consolidation' on page 2 undefined on input line 118.
+LaTeX Warning: Citation `squire2015consolidation' on page 2 undefined on input line 117.
 
 
-LaTeX Warning: Citation `kitamura2017engrams' on page 2 undefined on input line 118.
+LaTeX Warning: Citation `kitamura2017engrams' on page 2 undefined on input line 117.
 
 
-LaTeX Warning: Citation `tononi2014price' on page 2 undefined on input line 120.
+LaTeX Warning: Citation `tononi2014price' on page 2 undefined on input line 119.
 
 
-LaTeX Warning: Citation `tononi2014sleep' on page 2 undefined on input line 120.
+LaTeX Warning: Citation `tononi2014sleep' on page 2 undefined on input line 119.
 
 
-LaTeX Warning: Citation `xie2013sleep' on page 2 undefined on input line 120.
+LaTeX Warning: Citation `xie2013sleep' on page 2 undefined on input line 119.
 
 
 
@@ -501,13 +501,13 @@ Package rerunfilecheck Info: File `manuscript.out' has not changed.
 Here is how much of TeX's memory you used:
  13149 strings out of 473899
  209239 string characters out of 5726500
- 625050 words of memory out of 5000000
+ 626050 words of memory out of 5000000
  35801 multiletter control sequences out of 15000+600000
  562267 words of font info for 52 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  69i,12n,79p,1567b,584s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm7.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on manuscript.pdf (8 pages, 245558 bytes).
+Output written on manuscript.pdf (8 pages, 245610 bytes).
 PDF statistics:
  298 PDF objects out of 1000 (max. 8388607)
  70 named destinations out of 1000 (max. 500000)
