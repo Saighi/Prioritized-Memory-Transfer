@@ -69,7 +69,7 @@ Saighi Paul\textsuperscript{1,*}
 * paul.saighi@universite-paris-saclay.fr
 \end{flushleft}
 
-% PLAN 2026-08-11: The title is provisional. Revisit after Figs 2 to 4 are stable. Alternative emphasis: recipient-driven reactivation; cortical deficits organize hippocampal reactivation; adversarial coupling implements self-terminating reactivation.
+% PLAN 2026-08-11: The title is provisional. Revisit after Figs 2 to 4 are stable. Alternative emphasis: recipient-driven reactivation; cortical deficits organize hippocampal reactivation; completion extinguishes the discrepancy-driven reactivation signal.
 % LEGACY TITLE PRESERVED IN ARCHIVE: Spontaneous memory transfer enables continual learning in adversarially coupled predictive-coding networks.
 
 %============================================================================
@@ -77,13 +77,15 @@ Saighi Paul\textsuperscript{1,*}
 %============================================================================
 \section*{Abstract}
 
-During sleep and quiet wakefulness, the brain spontaneously reactivates neural activity patterns associated with previous experience, a phenomenon known as reactivation. Reactivation is considered to support systems consolidation, the process by which the retrieval of memory content becomes progressively more dependent on neocortical rather than hippocampal circuits. Evidence indicates that reactivation events are not indiscriminate but preferentially target specific memory traces. 
+During sleep and quiet wakefulness, the brain spontaneously revisit neural activity patterns associated with previous experience, a phenomenon known as reactivation. Reactivation is considered to support systems consolidation, the process by which the retrieval of memory content becomes progressively more dependent on neocortical rather than hippocampal circuits. Evidence indicates that reactivation events are not indiscriminate but preferentially target specific memory traces. 
 
-Systems consolidation has motivated substantial modeling efforts, and existing models offer complementary accounts of spontaneous reactivation, the preferential replay of specific memory traces, and hippocampo-neocortical redistribution of memory representations. Here, we ask whether these phenomena, and their underlying neural implementation, can be jointly recovered from a single normative objective.
+Systems consolidation has motivated substantial modeling efforts, and existing models offer complementary accounts of spontaneous reactivation, the preferential replay of specific memory traces, and hippocampo-neocortical redistribution of memory representations. Here, we ask whether these phenomena, and their underlying neural implementation, can be jointly recovered from a \textbf{functionally motivated} normative objective.
 
-We model the hippocampo-neocortical complex as two coupled associative memory networks implemented within the predictive coding (PC) framework. We then define our objective as minimizing the largest neocortical reconstruction deficit over the hippocampal memory manifold. 
+We model the hippocampo-neocortical complex as two coupled associative memory networks implemented within the predictive coding (PC) framework. We then define our objective as minimizing the largest neocortical reconstruction deficit over the hippocampal memory manifold.
 
-We show that, under suitable simplifying assumptions, gradient-based optimization of this objective determines the coupling between the two networks and their intrinsic dynamics. The architecture implement targeted memory reactivation and progressively redistribute memory representations through a closed-loop dialogue between the two systems. We also show that under this dynamics, full memory content transfer between the two systems is significantly faster than for random reactivation. Moreover, the derived coupling circuitry align with biological data on the specific pathway and interactions modalities between the prefrontal cortex (PCF) and hippocampal Cornu Ammonis 1 (CA1).
+We show that, under suitable simplifying assumptions, gradient-based optimization of this objective determines the coupling between the two networks and their intrinsic dynamics. The architecture implement targeted memory reactivation and progressively redistribute memory representations through a closed-loop dialogue between the two systems. We also show that under this dynamics, full memory content transfer between the two systems is significantly faster than for random reactivation. 
+
+Moreover, the derived coupling circuitry align with biological data on the specific pathway and interactions modalities between the prefrontal cortex and hippocampal Cornu Ammonis 1.
 
 %============================================================================
 %  AUTHOR SUMMARY
@@ -97,479 +99,197 @@ We show that, under suitable simplifying assumptions, gradient-based optimizatio
 %============================================================================
 %  1. INTRODUCTION
 %============================================================================
+\newpage
 \section{Introduction}
 
-% LEGACY BRACKETED NOTE PRESERVED: [USING A CAREFULL RIGOROUS SCIENTIFIC TONE, WE NEED VERIFIED CITATIONS IN THIS PART]
-% PLAN 2026-08-11: This remains a hard requirement. Mark each sentence as primary evidence, review-level synthesis, model interpretation or prediction during the citation pass.
+%These two structures are involved in bidirectional communication during sleep and awake activity. Specific activity patterns during intrinsic activity in CA1 have been shown to reactivate the neuronal assemblies in PCF that were orignially activated during associated sensory events (REF). Conversely, KEEP THIS DESCRIPTION FOR THE CORE TEXT
 
-% Paragraph 1: existing core text retained.
-A substantial fraction of the brain's metabolic budget is devoted to intrinsic activity \cite{raichle2002budget,raichle2006dark}. Intrinsic activity can be defined as any activity which is not dedicated the processing of current sensory signal or the control of overt behaviour \cite{raichle2002budget,raichle2006dark}. This intrinsic activity is especially evident during sleep and quiet wakefulness, when interaction with the environment is reduced \textbf{yet the brain sustains highly structured spontaneous dynamics (weird flow too unformal)} \cite{steriade1993thalamocortical,diekelmann2010memory}. Morover, The brain's overall metabolic demand remains substantial throughout sleep: glucose utilization decreases of only one quarter during non-rapid-eye-movement (NREM) sleep but returns towards waking levels during rapid-eye-movement (REM) sleep \cite{buchsbaum1989sleep,maquet1990cerebral}. \textbf{Furthermore (maybe change)}, sleep and sleep-like states are widely conserved across animal lineages, with states satisfying their defining behavioural criteria described in widely separated taxa, including insects and nematodes \cite{cirelli2008essential}. The coexistence of substantial metabolic demand, broad phylogenetic conservation, and the absence of immediate behavioural outcomes has motivated a long-standing effort to identify the functions supported by this activity.
+An important fraction of the brain's metabolic budget is devoted to intrinsic activity, neuronal dynamics generated spontaneously by the brain in the absence of specific sensory input or behavioural demands \cite{raichle2002budget,raichle2006dark}. One of the best characterised events taking place during intrinsic activity is neural reactivation: the reinstantiation, during sleep or quiet rest, of activation patterns observed during waking experience (REF). For a substantial fraction of these events, activity in the hippocampus and neocortex is coordinated, giving rise to what is termed the hippocampo-cortical dialogue \cite{klinzing2019mechanisms,staresina2023coupled}.
 
-% Existing note retained: correct definition of intrinsic activity. Improve the formulation of the absence of immediate behavioural consequences.
-% PLAN 2026-08-11: Keep this opening to one paragraph. Verify whether the metabolic numbers and phylogenetic breadth support the exact wording.
+This dialogue supports systems consolidation, the process by which memory retrieval becomes progressively less dependent on the hippocampus and more dependent on neocortical circuits \cite{klinzing2019mechanisms, diekelmann2010memory, squire2015consolidation, kitamura2017engrams}. Systems consolidation is therefore often described as a form of memory transfer, whereby the neocortex progressively acquires memory content initially encoded in the hippocampus (REF).
 
-% Paragraph 2: existing core text retained.
-Among the events taking place during the brain's intrinsic activity, \textbf{one of the best characterised (too unformal)} is neural reactivation: the reinstanciation, during sleep or quiet rest, of activity patterns observed during waking experience. Observations in the rodent hippocampus showed that place cells which was co-active while an animal occupied particular locations during awake activity exhibited an increased tendency to be co-active again during subsequent sleep \cite{wilson1994reactivation}. Replay has since been reported in humans during post-task rest, including tasks with no spatial component \cite{schuck2019sequential,liu2019human}. Subsequent works established that replay is not confined to the hippocampus: reactivation of patterns observed during behavioural tasks has also been shown in the ventral striatum, prefrontal cortex and primary visual cortex \cite{pennartz2004striatum,euston2007pfc,jiwilson2007}. Hippocampal reactivation is commonly observed during sharp-wave ripples, a subset of these events being temporally coordinated with neocortical replay, during slow oscillations and thalamocortical spindles, allowing reactivation in the hippocampus and neocortex to be aligned within a common temporal scaffold \cite{klinzing2019mechanisms,staresina2023coupled}. This coordination is thought to provide windows favourable to memory processing and is commonly described as a hippocampo-cortical dialogue (REF).
+Extensive literature indicates that the reactivation events underlying systems consolidation preferentially target certain memory traces over others. Traces that are recent, that correspond to novel experiences, or that \textbf{remain weakly encoded in cortex are prioritized for reactivation (REF)}. The precise neural mechanisms inducing this prioritization remain poorly understood (REF). 
+%check for weakly encoded in the cortex
 
-% PLAN 2026-08-11: Define memory replay broadly at first use. Reserve sequential replay for ordered temporal or spatial reinstatement, which this model does not address. Replace REF and fix grammar without changing the biological progression.
+Reactivation and systems consolidation have motivated a broad range of computational models, from complementary learning systems \cite{mcclelland1995complementary} to autonomously reactivating attractor networks \cite{kali2004offline,fiebig2014autonomous,singh2022autonomous}, generative replay \cite{barry2022replay,spens2024generative}, and utility, context, or familiarity based replay scheduling \cite{mattar2018prioritized,diekmann2023replay,sun2023gocls,lindsey2024recall,zhou2026context}. These accounts differ in what drives reactivation, such as trace strength, recency, attractor competition, context, reward, or expected utility, and what  information is transferred. Here, we focus on a single candidate mechanism, grounded in a specific communication motif between the hippocampus and neocortex.
 
-% Paragraph 3: existing core text retained.
-This dialogue is often considered as supporting system consolidation, the process by which the retrieval of memory during cognitive tasks becomes progressively less dependent on the hippocampus and more dependant on the neocortical circuits \cite{klinzing2019mechanisms, diekelmann2010memory, squire2015consolidation}. Moreover, this reorganization has been associated to the maturation of memory engram in the prefrontal cortex \cite{kitamura2017engrams}. In this work, we frame system consolidation as a form of memory transfer, whereby memory content is partially or completly transfered from a subsystem to another.
+The communication motif we consider has been most clearly characterized between the prefrontal cortex (PFC) and hippocampal area CA1, and combines two directional interactions: a bottom-up drive from CA1 to PFC and a top-down suppression from PFC to CA1. \textbf{During NREM sleep, a brief synchronized burst within a CA1 neuronal assembly is associated with increased firing in functionally coupled PFC populations (REF). Conversely, when PFC populations reactivate independently, without a coincident CA1 burst, CA1 neurons that normally participate in coordinated CA1–PFC events are preferentially suppressed (REF). Together, these findings motivate an asymmetric, representation-selective dialogue: hippocampal reactivation recruits selected prefrontal populations, whereas independent prefrontal reactivation suppresses the corresponding hippocampal representation. This motif may extend beyond PFC–CA1: entorhinal projections also recruit local inhibitory circuits in CA1, providing an potential additional pathway for similar bi-directional interation (REF).}(change place maybe)
 
-Replay, and more broadly spontaneous activity during sleep, has been assigned many other functions, among which we have : Synaptic renormalisation and downscaling \cite{tononi2014price, tononi2014sleep}, the extraction of statistical regularities and generalisation of learning across episodes \cite{klinzing2019mechanisms}, and metabolite clearance \cite{xie2013sleep}. These views are not mutually exclusive and this work specifically address the memory transfer phenomenon.
+Wang, Poe, and Zochowski gave this motif a functional interpretation: cortical memory representations regulate hippocampal reactivation according to their degree of consolidation \cite{wang2008heterogeneities}. In their model, as a cortical representation forms during reactivation, it recruits hippocampal inhibitory interneurons that selectively suppress the corresponding hippocampal trace. As consolidation proceeds, each trace withdraws its own reactivation, leaving replay to the content that still lacks cortical support.
 
-% LEGACY BRACKETED NOTE PRESERVED: [Now we need to talk about how this dialogue is considered to permit system consolidation and link it with memory transfer. if it is considered to do other things mention it while acknowledging we focus on the system consolidation/memory transfer stuff here. choose your world carefully.]
-% PLAN 2026-08-11: The two retained paragraphs already implement the intended move. Tighten them into one paragraph, define memory-content transfer operationally as acquisition in recipient recurrent weights, and avoid implying that identical codes are biologically required.
+We extend this account in three ways. First, we develop the functional role of feedback inhibition in organizing memory transfer. Second, we formulate the interacting hippocampal and neocortical memories within the predictive-coding framework. Third, and most fundamentally, we show that this mechanism need not be assumed: it follows from a single biologically plausible normative objective.
 
-% LEGACY CONTINUAL-LEARNING PROSE PRESERVED BUT REMOVED FROM ACTIVE SCOPE:
-% the complementary-learning-system (CLS) framework gives memory transfer a computational role for continual learning (CL). Continual learning can be defined as the ability for a system to acquire new knowledge over time while retaining crucial information previously learned.
-% In the CLS, the Hippocampus act as a fast learning subsystem, allowing the representations proper to new experiences to be quickly stored without immediately forcing their storage as cortical representations.Then a slow distillation process,
-% Multiple hypothesis have been formulated on how this slow distillation preserve the system from catastrophic forgetting. \textbf{An increasingly popular view}, supported by recent observations (REF), is that during replay, the reactivation of new memory traces expressed by the Hippocampus are interleaved with the reactivation of older memory traces expressed by the cortex.
-% This slow distillation is considered to allow the mitigation of inteferences with old memory representations during the integration of new information.
-% LEGACY BRACKETED NOTE PRESERVED: [ok now we need to detail mechanistically how this dialogue has been supposed to allow continuous learning. Here we have to acknowledge the various theories quickly (do some search) and to say that we will focus on the hypothesis which posit that throufh interleaved replay the brain find a way to minimize a phenomenon called interferences allowing for the same cortical substrat to continuously integrate new potentially correlated memory content without them to interfer with one another. we need to explain but not in too much details, the interleaving and removale of crosstalk/interferences will be illustrated later by the network dynamics.]
-% PLAN 2026-08-11: Move this entire continual-learning line of argument to the separate project. In this paper, one Discussion paragraph may state that the two-network transfer primitive could later be embedded in a continual-learning architecture.
+In the proposed model, neocortical feedback inhibition biases reactivation away from hippocampal content already supported cortically and toward content that remains poorly represented. This dynamic steers plasticity toward the largest representational gap between the two systems. We formalize this principle within the predictive-coding framework as the minimization of the largest cortical reconstruction deficit over the hippocampal memory manifold. This normative formulation allows us to derive, rather than prescribe, the effective inhibitory coupling and the local plasticity rule that reduces the selected deficit. The resulting architecture gives rise to prioritized reactivation, redistributing memory content as consolidation proceeds, and terminating reactivation once transfer is complete.
 
-% Paragraph 4: selective reactivation evidence.
-% PLAN 2026-08-11: Write a new paragraph showing that reactivation is selective and is shaped by weak learning, novelty, recency, reward, future relevance and relationships to new learning. The point is empirical heterogeneity, not a claim that one variable is universally dominant.
+More broadly, this work contributes to the study of fast and reliable offline information transfer between artificial neural networks.
 
-% Paragraph 5: relationship to existing models and precise gap.
-% LEGACY BRACKETED NOTE PRESERVED: [Then we acknowledge that there have been proposed models of memory replay and system consolidation in bioplausible architectures/modesl in the litterature but that they tend to not explain which memory content would be prioritized for reactivation and how repeated reactivation relocates stored representations from one neuronal population to another, rather than \textbf{merely} training a downstream readout. Explain very well why it is very important to have model for both (the brain cannot just randomly pick up memories for replay it is not efficient as an exemple of justification). For this part you have to be very carefull do alot of researches and yes be diplomatic. maybe some models are more advanced that what I think. but anyway I think the core of my assertions is true.]
-% PLAN 2026-08-11: Replace the broad negative claim with a model-class comparison. Utility-based, context-driven, autonomous-attractor, generative, recall-gated and generalization-based models already explain important parts of replay. Our narrower question is whether recipient deficit can both select source content and drive recurrent recipient storage through one local closed loop.
+We deliberately adopt a simplified model in which the hippocampus and neocortex are each reduced to a single associative memory network of continuous firing-rate units rather than spiking neurons; the resulting analytical tractability is what allows the mechanism to be derived rather than assumed.
+The analysis is performed on a linear version of the network, and the results are then generalized numerically for nonlinear activation functions.
 
-% Paragraph 6: awake PFC control and proposed sleep reuse.
-% PLAN 2026-08-11: Introduce awake retrieval suppression and retrieval-induced forgetting. PFC-mediated top-down control can reduce hippocampal retrieval activity and suppress competing memories, thereby influencing which content is recalled. Then propose that related circuitry is reused during sleep: behavioral goals select what is suppressed during wake, whereas recipient competence suppresses already consolidated content offline. Connect carefully to PFC-ripple-associated suppression of CA1 activity and reactivation during NREM. Describe an effective pathway, potentially mediated by ACC, entorhinal cortex, nucleus reuniens and local hippocampal interneurons, rather than a direct inhibitory axon.
+\newpage
 
-% Paragraph 7: model substrate.
-% LEGACY BRACKETED NOTE PRESERVED:
-% [ok now we start talking about our model ! first we explain that we are introducing a model based on the predictive coding framework which aim to offer an hypothesis on how engram reallocation and memory could happen in the brain using a bioinspired network using only local plasticity rules and dynamics.
-% there is two big components to our model that are at its core. First we build on associative memory networks introduced in "Recurrent predictive coding models for associative memory employing covariance learning Mufeng Tang" which gives use the core properties for online engram reallocation by using the predictive coding framework in an associative memory task.
-% We take two of these associative memory network , one a teacher that we can map to the hippocampus which has learned new memory content and a teacher which we can map to the neocortex toward which memory content will be reallocated. and we let the dialogue operate based on an interface error term classically borowed from predictive coding.
-% the second big component is that we depart significantly from classical predictive coding framework which aime solely at minimizing reconstruction error by changing the signe of the influence of the interface error term coordinating the dialogue between the student and the teacher.
-% Here we explain well that in a classical pc network this inteface error influence motivate to find a compromise between the influence of the different neuronal population. this classical influence tend to turn the system as a pattern completion system based on attractors/line attractors, sequence reconstructions ... bref it create a system that want to converge toward familiar activity pattern mostly, with maybe wandering due to noise. as we will show this behavior is not optimal for fast and exhaustive memory transfer , and more broadly for functional structured spontaneous activity as it means that the nervous system only try to revisit familiar activity pattern (acquired during awake activity) during sleep making it hard to explain an added computational property to what is already happening during awake.
-% ok no don't go into that much details, we will keep these details for discussion ! but yeah now you know it and you can put it in the discussion to be redacted later.
-% bref so we talk about "this classical influence tend to turn the system as a pattern completion system based on attractors/line attractors, sequence reconstructions ... bref it create a system that want to converge toward familiar activity pattern mostly, with maybe wandering due to noise." and say then that by reversing the sign of the influence we strikingly (be more sober) the whole coupled system from a pattern completion system toward a system that orchestrate spontaneous activity to induce autonomous memory transfer via prioritized reactivation ! We call that sign reversal adversarial coupling.
-% Then quickly describe the behavior of the system without going into to much details.
-% the teacher network stay near its memory manifold while via the adversarial coupling the student network bias the teacher network to explore part of the manifold that surprise it the most prioritizing the reactivation of poorly learned memory content (say that better). Then the predictive coding formulation of associative memory (tang paper) leads naturally to the learning of the expressed representions of the teacher during manifold exploration from the student via online updating of the recurrent synapses dure to reconstruction errors !
-% ]
-% PLAN 2026-08-11: Retain Tang's associative-memory substrate, the two systems, local inference and local plasticity. Change the logic of the second component: do not introduce a sign reversal and then justify it. Introduce the worst-case recipient-deficit objective first; differentiating its selected-state problem derives the negative effective coupling.
 
-% LEGACY BRACKETED NOTE PRESERVED: [then talk about the fact that we propose an architecture that uses this memory transfer dynamic as the building block for continuous learning via allowing the interleaved communication of 3 neuronal populations . one aking to the hippocampus learn quickly new memories, the second and the third aking to the neocortex (without precise mapping) integrate these new memory patterns while mitigating interferences even for strong correlations. precise that this architecture is not to be seen as a precise mapping or analogue of what happen in the brain but more of a demonstration of how we can use memory transfer dynamics to allow continuous learning via mitigation of interferences .]
-% PLAN 2026-08-11: Remove from this manuscript and reserve for the separate continual-learning project.
-
-% LEGACY BRACKETED NOTE PRESERVED: [Then even if it will be deppen in the discussion say that the adversarial coupling is not out of nowhere, it is inspired by a recurrent pattern in neurobiology. corolarry discarges, subtractive top down signal (visual cortex, auditory to motor cortex put the citations) and finally recent observation on the influence of spontaneous activity in the prefrontal cortex on the activity of the hippocampus. but yeah it is mostly teasing will be mainly discussed in the discussion.]
-% PLAN 2026-08-11: Make the awake prefrontal memory-control literature the primary precedent. Corollary discharge and cross-population predictive cancellation may remain secondary analogies in Discussion if they sharpen the mechanism without diluting the memory story.
-
-% Paragraph 8: objective and contribution.
-% PLAN 2026-08-11: Close the Introduction by stating the nested objective, the derived negative coupling, recipient-relative prioritization and self-extinction. Preview the autonomous-versus-oracle-versus-random test. Mention the rectified extension in one clause. Do not preview continual learning.
-
-%============================================================================
-%  2. MODELS
-%============================================================================
-\iffalse
-% Legacy post-Introduction scaffold, preserved in the dated archive and hidden
-% from the live manuscript after the 2026-08-12 visible-scaffold rewrite.
 \section{Models}
 
-% PLAN 2026-08-11: Follow Tang et al. closely. This section defines the architecture, equations, constraints and protocols. Compact named mathematical results appear in Results, with complete proofs in S1 Appendix.
+In this section, we introduce the network architecture, beginning with its local dynamics, then the normative objective it optimizes, and finally the mathematical derivation linking the two. The model consists of two coupled associative-memory predictive-coding networks (PCNs) (REF). Taken independently, each network performs retrieval by carrying out inference on a given cue, minimizing its local free energy through changes in neuronal activity. Each network also learns by minimizing its local free energy, this time through changes in its synaptic weights (REF). The full architecture adds an asymmetric coupling between the teacher and student networks, corresponding respectively to the hippocampus and neocortex.
 
-\subsection{Two associative memory systems}
+The storage of memory content in both subnetworks occurs through the same plasticity dynamics, but under two different conditions. For the teacher, memories are stored through plasticity taking place during the interleaved clamping of neuronal activity to specific memory states. 
 
-% Existing architecture note corrected to the locked hierarchy: teacher/source below and student/recipient above.
-% The teacher T is fixed and hippocampal-like; the student S is plastic and neocortical-like. The prefrontal interpretation belongs to the effective top-down control channel and should not be equated automatically with all cortical storage.
-% PLAN: Introduce a general activation f and the memory condition f(m_p)=m_p, then state that the exact analysis below uses the identity activation. ReLU without bias and non-negative memories will be introduced as a piecewise-linear extension.
+In the student network, memory patterns are stored through the joint action of local plasticity at recurrent synapses and teacher-driven signals during intrinsic activity. These signals arise from the asymmetric teacher–student coupling derived by optimizing our normative objective.
 
-For the linear analysis, let $W_T,W_S\in\mathbb R^{d\times d}$ be the recurrent weight matrices and define $M_T=I-W_T$ and $M_S=I-W_S$. The source memory subspace is $\mathcal U_T=\ker M_T$. Candidate source states are compared at equal activity on the teacher memory sphere
+\subsection{A single predictive-coding associative memory}
+
+Tang et al. introduced the implicit covariance-learning predictive-coding network (implicit covPCN), which constitutes the basic building block of our architecture \cite{tang2023covpcn}. The implicit covPCN was developed as a more biologically plausible alternative to the explicit covPCN, whose learning rule requires non-local matrix operations and becomes numerically unstable on structured data \cite{friston2003learning,friston2005theory,bogacz2017tutorial,tang2023covpcn}. Here we present the linear version of the network which is the basis of the analytical study presented in this work.
+
+Both the teacher $T$ and the student $S$, corresponding respectively to the hippocampus and neocortex, are implicit covPCNs with dense recurrent connectivity and no self-connections. Each performs associative memory through local inference and plasticity.
+\par\vspace{\baselineskip}\noindent
+For a single network with recurrent weights $W$ and activity state $x\in\mathbb R^d$, define the prediction-error operator and the recurrent error
 
 \begin{equation}
-\mathbb S_T=\{x_T\in\mathcal U_T:\|x_T\|=1\}.
-\label{eq:teacher-sphere}
+M=I-W,
+\qquad
+\varepsilon=Mx,
+\label{eq:single-error}
 \end{equation}
 
-% PLAN: Explain that the equal-norm sphere is a normative comparison set, not a biological claim that memory states literally lie on a sphere. In simulations, source recurrence and normalization approximate this hard constraint and manifold leakage is measured.
-
-\subsection{Recipient inference and local plasticity}
-
-With interface error $\varepsilon_{TS}=x_S-x_T$ and recurrent recipient error $\varepsilon_S=M_Sx_S$, define
+and the local free energy the network minimizes,
 
 \begin{equation}
-F_S(x_S,x_T;W_S)=\frac{\pi_{TS}}2\|\varepsilon_{TS}\|^2+\frac{\pi_S}{2}\|\varepsilon_S\|^2.
-\label{eq:student-energy}
+F(x;W)=\frac{\pi}{2}\|\varepsilon\|^2=\frac{\pi}{2}\|Mx\|^2,
+\label{eq:single-energy}
 \end{equation}
 
-Recipient-state inference descends $F_S$,
+where $\pi>0$ is the precision of the recurrent prediction. The network lowers $F$ along two routes on two timescales: fast \emph{inference} changes the activity, slow \emph{plasticity} changes the weights,
 
 \begin{equation}
-\tau_S\dot x_S=-\pi_{TS}\varepsilon_{TS}-\pi_SM_S^\top\varepsilon_S,
-\label{eq:student-state}
+\tau\,\dot x=-\pi\,M^\top\varepsilon,
+\qquad
+\dot W=\eta\,\pi\,\varepsilon\,x^\top,
+\label{eq:single-dynamics}
 \end{equation}
 
-and the recurrent recipient weights follow the local rule
+with activity time constant $\tau$ and learning rate $\eta$. Retrieval is inference on a cue; storage is plasticity under presented patterns.
+
+The recurrent prediction may optionally pass through a pointwise nonlinearity $f$, giving $\varepsilon = x - Wf(x)$. We take the linear case $f=\mathrm{id}$ throughout the analysis and return to the rectified case $f=\mathrm{ReLU}$ in Section~\ref{sec:cone}.
+In addition, as introduced in the next section, the teacher activity is normalized such that $|x_T|=1$ after each integration step.
+
+% The teacher $T$ is trained through the plasticity dynamic (Eq.~\eqref{eq:single-dynamics}) taking place during the interleaved clamping of neuronal activity to specific memory states (Methods).
+% During each clamping period, a small plasticity event at the recurrent synapses shapes the memory manifold accordingly. Interleaving allows correlated memories to be stored while mitigating interference (REF).
+%The hippocampus, however, does not appear to require interleaved training to mitigate interference (REF). The orthogonalization of memory representations, particularly in the granule-cell layer of the dentate gyrus, is thought to support rapid learning of correlated memory traces (REF). This biological machinery is not part of our model and is therefore approximated through interleaved training.
+% After training of the teacher $T$, its weights $W_T$ are frozen during memory consolidation.
+
+The network is trained according to the plasticity dynamics in Eq.~\eqref{eq:single-dynamics}, either during interleaved clamping or through intrinsic activity during system consolidation (\ref{sec:results}).
+In a trained network, the stored content is the kernel of the error operator,
 
 \begin{equation}
-\dot W_S=\eta\pi_S\varepsilon_Sx_S^\top,
-\label{eq:student-learning}
+\mathcal U=\ker M=\{x:\,Mx=0\},
+\label{eq:manifold-kernel}
 \end{equation}
 
-with projection onto the zero-diagonal subspace when autapses are excluded.
+the network's memory manifold: every stored pattern satisfies $Mx=0$ and sits at zero free energy \cite{tang2023covpcn}.
 
-% LEGACY BRACKETED FORMAL NOTE PRESERVED: [Student state relaxation is exact gradient descent on $F_S$; the zero-diagonal weight update is projected gradient descent on $F_S$.]
-% PLAN 2026-08-11: Keep this as setup prose rather than a headline proposition. The new mathematical contribution begins with the settled deficit.
+As a consequence, for the linear network, $\mathcal U$ is a linear subspace. Any mixture state i.e. linear combination of stored memories, is itself a zero-energy fixed point. The memory content of the network is theirfore a flat manifold, not a set of point attractors as in classical Hopfield networks (REF).
 
-\subsection{Settled recipient deficit and worst-case consolidation}
+\subsection{Coupling the teacher and the student}
 
-For one candidate source state, define the settled recipient deficit
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.60\textwidth]{../../schematic/tikz_units/network_units.pdf}
+\caption{\textbf{Model architecture} (two units per population). Teacher $T$ (top, hippocampal) above student $S$ (bottom, cortical): value units $x$, recurrent errors $\varepsilon_T,\varepsilon_S$, and the one-to-one interface error $\varepsilon_{TS}=x_S-x_T$. Blue arrowheads and orange dot heads mark the explicit positive and negative pathway signs; the recurrent coefficients $W_{ij}$ may themselves be signed. On each recurrent crossing, $x_j\to\varepsilon_i$ carries $W_{ij}$, whereas $\varepsilon_i\to x_j$ carries $\pi(W^\top)_{ji}=\pi W_{ij}$. The teacher-side interface edge has gain $|\kappa|$, implementing the signed coupling $\kappa=-|\kappa|<0$. \textit{[Biological-motivation panels and the consolidation-process panel (Fig.~1D) are still to be drawn.]}}
+\label{fig:architecture}
+\end{figure}
+
+The plastic student $S$ has state $x_S$, weights $W_S$, and recurrent error $\varepsilon_S=M_Sx_S$ with $M_S=I-W_S$. It is coupled to the frozen teacher through a one-to-one \emph{interface error} (Fig.~\ref{fig:architecture})
 
 \begin{equation}
-q(x_T;W_S)=\min_{x_S}F_S(x_S,x_T;W_S).
-\label{eq:settled-deficit}
+\varepsilon_{TS}=x_S-x_T,
+\label{eq:interface-error}
 \end{equation}
 
-The largest unresolved recipient deficit over source-supported memory content is
+the mismatch between the student's state and the teacher state currently expressed. The joint free energy adds the interface and student-recurrent terms to the teacher's own,
 
 \begin{equation}
-\mathcal D_{\max}(W_S;W_T)=\max_{x_T\in\mathbb S_T}q(x_T;W_S).
-\label{eq:max-deficit}
+F(x_T,x_S;W_S)=
+\underbrace{\tfrac{\pi_T}{2}\|M_Tx_T\|^2}_{F_T}
++\underbrace{\tfrac{\pi_{TS}}{2}\|\varepsilon_{TS}\|^2+\tfrac{\pi_S}{2}\|\varepsilon_S\|^2}_{F_S},
+\label{eq:joint-energy}
 \end{equation}
 
-The idealized consolidation problem is therefore
+with interface precision $\pi_{TS}>0$ and student precision $\pi_S>0$. The student settles and learns by the single-network rules of Eq.~\eqref{eq:single-dynamics} applied to $F_S$,
 
 \begin{equation}
-\boxed{\min_{W_S}\max_{x_T\in\mathbb S_T}\min_{x_S}F_S(x_S,x_T;W_S).}
-\label{eq:consolidation-objective}
+\tau_S\,\dot x_S=-\pi_{TS}\,\varepsilon_{TS}-\pi_S\,M_S^\top\varepsilon_S,
+\qquad
+\dot W_S=\eta\,\pi_S\,\varepsilon_S\,x_S^\top,
+\label{eq:student-dynamics}
 \end{equation}
 
-% PLAN: Motivate the maximum in three sentences: future queries are unknown, the lifetime of source dependence is uncertain, and a maximum prevents good average reconstruction from hiding one large cortical blind spot. Do not claim the brain explicitly represents the scalar $\mathcal D_{\max}$.
-
-\subsection{Three timescales implement the nested objective}
-
-The idealized ordering
+while the teacher receives a reciprocal interface drive with a \emph{signed} coupling $\kappa$ (called $\pi_{ST}$ in the code),
 
 \begin{equation}
-\tau_S\ll\tau_T\ll1/\eta
-\label{eq:timescales}
-\end{equation}
-
-maps the inner recipient inference, intermediate source-state selection and outer recipient-weight learning onto distinct dynamical timescales.
-
-% PLAN: Define the hard projected source search on $\mathbb S_T$ for analysis and the recurrent, softly constrained source dynamics used in simulation. Keep the distinction explicit.
-
-\subsection{Rectified extension and individual memories}
-
-% PLAN: State the exact tested extension: ReLU units without bias and non-negative patterns satisfying $f(m_p)=m_p$. Within each activation cone the dynamics are exactly linear. This supports activity near individual memories but does not generate temporal or spatial replay sequences.
-
-\subsection{Discrete consolidation protocol}
-
-% PLAN: Define one bout: freeze plasticity, select a teacher state, settle the recipient, apply one identical small recipient-weight update, then repeat. Define the three strategies: autonomous prioritized source dynamics; greedy oracle maximizing the settled deficit; random teacher-memory selection with the teacher clamped and the recipient never clamped.
-
-%============================================================================
-%  3. RESULTS
-%============================================================================
-\section{Results}
-
-\subsection{The settled recipient deficit identifies the least represented source direction}
-
-Define $S_S=M_S^\top M_S$ and the recipient novelty operator
-
-\begin{equation}
-N_S=\pi_SS_S(\pi_{TS}I+\pi_SS_S)^{-1}.
-\label{eq:novelty-operator}
-\end{equation}
-
-\begin{proposition}[Settled deficit and spectral certificate]
-\label{prop:deficit}
-For every $x_T\in\mathbb S_T$, the linear recipient has the unique settled response $x_S^*=(I-N_S)x_T$ and
-\begin{equation}
-q(x_T;W_S)=\frac{\pi_{TS}}2x_T^\top N_Sx_T.
-\label{eq:deficit-quadratic}
-\end{equation}
-If the columns of $U_T$ form an orthonormal basis of $\mathcal U_T$ and $A_S=U_T^\top N_SU_T$, then
-\begin{equation}
-\mathcal D_{\max}=\frac{\pi_{TS}}2\lambda_{\max}(A_S).
-\label{eq:deficit-spectrum}
-\end{equation}
-\end{proposition}
-
-% PLAN: Give only a short interpretation here. The scalar-mode derivation, positive-semidefinite properties and Rayleigh-Ritz proof belong in S1 Appendix.
-% LEGACY BRACKETED FORMAL NOTE PRESERVED: [Fast-student steady state gives $x_S^*=(I-N_S)x_T$, hence $\varepsilon_{TS}=-N_S x_T$, with $N_S=\pi_S S_S(\pi_{TS}I+\pi_S S_S)^{-1}$; $N_S$ is symmetric PSD and $N_S u=0$ on learned directions.]
-% LEGACY BRACKETED FORMAL NOTE PRESERVED: [At the fast-student equilibrium, $F_S^{\mathrm{eq}}(x_T)=\tfrac{\pi_{TS}}{2}\,x_T^\top N_S\,x_T$: the landscape the old theorem climbed is the novelty-weighted energy of the teacher's state, a quadratic that is flat on learned directions and curved on novel ones.]
-% PLAN 2026-08-11: Merge the useful content of the two legacy notes into Proposition~\ref{prop:deficit}. Do not retain the old theorem and lemma separation.
-
-\subsection{The worst-case objective derives negative source-directed coupling}
-
-At the settled recipient state, the envelope identity gives
-
-\begin{equation}
-\nabla_{x_T}q(x_T;W_S)=\left.\nabla_{x_T}F_S(x_S,x_T;W_S)\right|_{x_S=x_S^*}=-\pi_{TS}\varepsilon_{TS}^*.
-\label{eq:teacher-envelope}
-\end{equation}
-
-Write the raw interface contribution to source dynamics as
-
-\begin{equation}
-\tau_T\dot x_T\big|_{\mathrm{interface}}=\kappa\varepsilon_{TS}.
+\tau_T\,\dot x_T\big|_{\text{interface}}=\kappa\,\varepsilon_{TS},
 \label{eq:teacher-interface}
 \end{equation}
 
-Ascent on the settled recipient deficit with source mobility $\mu_T>0$ requires
+whose sign and magnitude are left open here and fixed by the objective in the next subsection.
+
+\textit{[The load-bearing asymmetry paragraph. Unlike the teacher, the student is never clamped: the state $x_S$ that drives its plasticity in Eq.~\eqref{eq:student-dynamics} is not an imposed pattern but the settled, replayed state the coupling produces during intrinsic activity. The same plasticity rule therefore stores memory in the student under a completely different generating dynamic. This is the hook the objective resolves.]}
+
+\subsection{A normative objective fixes the coupling}
+
+\textit{[Register shift, signalled to the reader: this subsection is the contribution, and here equations and dynamics are presented together because the coupling is an output of the dynamics, not an assumption. Motivating question: what must the student be able to reconstruct, in the worst case, over everything the teacher can currently express?]}
+
+Restrict the teacher to its memory manifold, the unit sphere
 
 \begin{equation}
-\kappa\varepsilon_{TS}^*=\mu_T\nabla_{x_T}q=-\mu_T\pi_{TS}\varepsilon_{TS}^*,
-\end{equation}
-
-and therefore, for nonzero mismatch,
-
-\begin{equation}
-\boxed{\kappa=-\mu_T\pi_{TS}<0.}
-\label{eq:negative-coupling}
-\end{equation}
-
-% PLAN: This complete short derivation stays in the main paper. Explain in words that the source and recipient have complementary roles: the source exposes a deficit while the recipient reduces it. Do not introduce $\Phi$, an exact zero-sum representation or saddle terminology.
-
-\begin{theorem}[Local implementation of worst-case consolidation]
-\label{thm:minimax-transfer}
-Under a hard source-memory constraint, separated recipient-inference, source-selection and recipient-plasticity timescales, and a nonzero component in the leading discrepancy eigenspace, projected source dynamics driven by Eq.~\ref{eq:negative-coupling} ascend the settled recipient deficit and select its maximizing source-supported direction. At a simple leading eigenvalue of $A_S$, the subsequent local recipient-weight update is gradient descent on $\mathcal D_{\max}$ and gives the steepest feasible first-order decrease for a fixed sufficiently small update norm.
-\end{theorem}
-
-% PLAN: Verify the exact theorem statement against the mathematical source of record before prose lock. Keep the source-search and weight-descent phases distinct. Source ascent exposes the maximum; recipient plasticity reduces it.
-% LEGACY BRACKETED FORMAL NOTE PRESERVED: [Fast student state, frozen student weights. Isolating the student's contribution to the teacher's sleep dynamics, the teacher performs exact gradient ascent on the student's settled variational free energy at every point, hence locally steepest ascent of the student's surprise. Caveats: local ascent, not the global summit; the push rescales but does not seed an empty direction, so noise seeds it.]
-% PLAN 2026-08-11: Replace the old “ascent on surprise” headline with Theorem~\ref{thm:minimax-transfer}. The envelope identity remains, but it now serves the normative worst-case derivation.
-
-\subsection{Learning makes reactivation self-extinguishing}
-
-\begin{corollary}[Completion and self-extinction]
-\label{cor:self-extinction}
-In the linear hard-constrained model,
-\begin{equation}
-\mathcal D_{\max}=0\quad\Longleftrightarrow\quad\mathcal U_T\subseteq\ker M_S.
-\label{eq:completion}
-\end{equation}
-At completion, $x_S^*=x_T$, $\varepsilon_{TS}^*=0$ and $\varepsilon_S^*=0$ for every valid source state. Both the source-selection drive and the recipient-plasticity signal therefore vanish.
-\end{corollary}
-
-% LEGACY BRACKETED FORMAL NOTE PRESERVED: [Axis by axis in the student's eigenframe, $\dot c_k=(|\pi_{ST}|/\tau_T)n_k c_k$: learned directions frozen, novel directions amplified in proportion to their novelty $n_k$; the push on each direction extinguishes as the student learns it.]
-% PLAN 2026-08-11: Retain the useful modal intuition in the prose or S1 Appendix, using $\kappa$ and teacher-restricted $A_S$. Do not make the old per-axis remark a separate formal result.
-
-\subsection{Autonomous reactivation transfers a three-memory manifold}
-
-\figplaceholder{Fig~2. An interpretable three-memory demonstration: source memories and memory manifold in three dimensions, source and settled recipient trajectories, a compact reconstruction or weight heat map, and the decline of $\mathcal D_{\max}$ across consolidation bouts.}
-
-% PLAN: This is the first empirical result. Explain the behavior visually before presenting broad parameter sweeps. State clearly that the linear model transfers a subspace and can reactivate mixtures of stored patterns.
-
-\subsection{Recipient deficits organize reactivation priority}
-
-\figplaceholder{Fig~3. Direction-by-bout reactivation occupancy, teacher-restricted novelty spectrum, and naive versus partially familiar versus fully familiar recipient conditions.}
-
-% PLAN: Show that source occupancy follows the largest current recipient deficit, moves to another direction after learning, and disappears when the recipient supports the complete source manifold. Interpret familiarity as recipient-relative.
-
-\subsection{Prioritized reactivation approaches an oracle and outperforms random selection}
-
-\figplaceholder{Fig~4. Autonomous prioritized selection, greedy oracle selection and random teacher-memory selection under one discrete protocol. Primary measure: $\mathcal D_{\max}$ versus identical plasticity events. Secondary measures: cumulative weight-change norm, novelty-spectrum evolution, events to fixed thresholds and final transfer quality.}
-
-% PLAN: Freeze plasticity during selection and settling. Apply one identical recipient update per bout. Never clamp the recipient. Report uncertainty over seeds and audit that all three strategies share initial networks, candidate states, update size and stopping criteria.
-
-\subsection{Transfer is reliable across the tested memory geometries and dynamical regimes}
-
-% PLAN: Summarize only the most informative robustness panels in the main text. Move rank, dimension, correlation, partial familiarity, noise, timescale and manifold-leakage sweeps to Supporting Information. Use “reliable across tested regimes,” not a global convergence claim.
-
-\subsection{Rectification extends prioritized reactivation toward individual memories}
-
-\figplaceholder{Fig~5. ReLU without bias and non-negative memories: early source trajectories near individual stored memories, later loss of attraction as those memories are learned, time-resolved nearest-memory distance, cone confinement and final transfer quality.}
-
-\begin{remark}[Scope of the linear and rectified models]
-\label{rem:scope}
-The linear analysis concerns transfer of a source memory subspace rather than named episodes. The rectified extension can confine activity to non-negative memory cones and produce reactivation near individual stored memories, but neither model generates temporally or spatially ordered replay sequences.
-\end{remark}
-
-% LEGACY BRACKETED FORMAL NOTE PRESERVED: [Linearity $\Rightarrow$ transfer of a subspace, or effective rank, rather than named patterns. Discrete reactivation of individual memories requires an added nonlinearity; the generation of temporally ordered replay sequences lies outside the scope of the present model.]
-% PLAN 2026-08-11: The active scope remark updates this legacy note with the tested rectified condition.
-
-%============================================================================
-%  REMOVED LEGACY RESULT BLOCKS
-%============================================================================
-
-% LEGACY BRACKETED FORMAL NOTE PRESERVED: [We keep the reversed precision well below the teacher's self-precision (half the measured stability threshold throughout); the teacher's self-pull then dominates normal to the manifold, and we verify numerically that the teacher's off-manifold occupancy remains negligible during sleep. This sets the precision-weighting regime: strong enough to move the teacher along novel memory directions, weak enough that the self-pull wins off the manifold.]
-% PLAN 2026-08-11: Replace “reversed precision” with coupling gain and report the actual constraint implementation and measured leakage in Materials and methods. The hard sphere belongs to the theorem; the soft recurrent constraint belongs to simulation.
-
-% REMOVED SADDLE MATERIAL, PRESERVED AS A COMMENT ONLY:
-% LEGACY BRACKETED FORMAL NOTE PRESERVED: [The physical functional $\Phi=F_T-F_S$ generates the sleep dynamics on the teacher sphere, with the model's mobilities and projected $W_S$ ascent, iff $\pi_{ST}=-\pi_{TS}$. The teacher descends $\Phi$; the student ascends $\Phi$: a minimax on one potential.]
-% PLAN 2026-08-11: Do not reintroduce this proposition, its exact-zero-sum remark or the corresponding figure. The current nested minimax is the worst-case recipient-deficit objective in Eq.~\ref{eq:consolidation-objective}, not the removed joint potential.
-
-% LEGACY OUT-OF-SCOPE RESULT: Merging memories by interleaving.
-% LEGACY FIGURE PLACEHOLDER: Interleaved rehearsal merges two teachers; the crosstalk sawtooth decays to zero.
-% PLAN 2026-08-11: Move to the separate continual-learning project.
-
-% LEGACY OUT-OF-SCOPE RESULT: Continual learning without catastrophic forgetting.
-% LEGACY FIGURE PLACEHOLDER: Retention across a streamed sequence versus a buffer-only control that catastrophically forgets.
-% PLAN 2026-08-11: Move to the separate continual-learning project.
-
-%============================================================================
-%  4. DISCUSSION
-%============================================================================
-\section{Discussion}
-
-\subsection{Summary}
-
-% PLAN: One paragraph. Reactivation is a closed-loop teaching process: recipient deficit selects source content; the selected content drives recipient learning; learning removes the signal that selected it.
-
-\subsection{Relationship to other models}
-
-% PLAN: Compare Mattar and Daw; Zhou, Kahana and Schapiro; Fiebig and Lansner; Singh, Norman and Schapiro; Spens and Burgess; Lindsey and Litwin-Kumar; and Go-CLS. Organize the comparison by the variable controlling reactivation, whether selection is autonomous, what is transferred, and whether recipient feedback is mechanistically explicit.
-% PLAN: Do not claim overall superiority. State that this model is narrower and analytically transparent. Its distinctive contribution is the bridge between a normative recipient-deficit criterion and a local two-network implementation.
-% PLAN: Distinguish source reliability from recipient familiarity. A future combined priority $P(m)\propto r_T(m)q_S(m)$ may reconcile reliable source traces with declining reactivation after cortical consolidation, but it is not part of the present tested model.
-
-\subsection{Relationship to experimental data}
-
-% PLAN: Awake evidence first. PFC control suppresses unwanted or competing hippocampal retrieval and helps determine which memory enters recall. Then the sleep bridge: PFC ripples are associated with transient top-down suppression of CA1 activity and assembly reactivation during NREM. The proposed reuse is that behavioral goals provide the control signal during wake, whereas recipient competence provides it during consolidation.
-% PLAN: Make falsifiable predictions: cortical similarity should suppress matching hippocampal reactivation after controlling for source strength, recency, salience and reward; disrupting top-down suppression should increase redundant reactivation and reduce efficiency; priority should return if a cortical representation is degraded or outdated.
-% PLAN: State the anatomical caveat. $\kappa<0$ is an effective cross-system influence that may be implemented through ACC, entorhinal cortex, nucleus reuniens and local hippocampal inhibition. It is not a claim of a direct inhibitory PFC-to-hippocampus projection.
-
-\subsection{Limitations and future directions}
-
-% PLAN: Linear subspaces rather than named episodes; restricted rectified extension; no sequence replay; hard constraint and timescale separation; simple leading eigenvalue for differentiable weight descent; transformed hippocampal and cortical codes; omitted source reliability, context, reward, emotion and neuromodulation.
-% PLAN: Mention continual learning once as a possible downstream application of the transfer primitive. Do not present its architecture or results.
-
-%============================================================================
-%  5. CONCLUSION
-%============================================================================
-\section{Conclusion}
-
-% PLAN: Two or three sentences. Close on the normative and biological message, not on continual learning: cortical dependence can itself organize which hippocampal content is reactivated, and learning makes this control signal self-terminating.
-
-%============================================================================
-%  MATERIALS AND METHODS
-%============================================================================
-\section{Materials and methods}
-
-\subsection{Memory construction and network dynamics}
-
-% PLAN: Specify pattern generation, weight construction, activation, normalization, integration scheme, timescales, coupling gain, learning rate and no-autapse projection.
-
-\subsection{Source-manifold constraint and diagnostics}
-
-% PLAN: Distinguish the hard analytical sphere from the soft simulated recurrence. Define manifold leakage, terminal occupancy and settling criteria.
-
-\subsection{Prioritized, oracle and random consolidation protocols}
-
-% PLAN: Give executable pseudocode or an algorithm box. Fix identical initializations, candidate memory set, recipient settling, plasticity step, stopping rule and seed analysis.
-
-\subsection{Outcome measures}
-
-% PLAN: Define $N_S$, $A_S$, $\mathcal D_{\max}$, reconstruction error, recurrent consistency, cumulative Frobenius norm of weight changes, events to threshold, reactivation occupancy and nearest-memory distance.
-
-\subsection{Rectified-network protocol}
-
-% PLAN: State ReLU without bias, non-negative patterns, the condition $f(m_p)=m_p$, the within-cone linear description and the time-resolved analysis.
-
-%============================================================================
-%  SUPPORTING INFORMATION
-%============================================================================
-\section*{Supporting information}
-
-% S1 Appendix: complete proofs of Proposition~\ref{prop:deficit}, Theorem~\ref{thm:minimax-transfer} and Corollary~\ref{cor:self-extinction}; assumptions; degeneracy and subgradient caveats; reconstruction and Lipschitz-readout bounds; projected power iteration; two weight-envelope steps; steepest feasible projected descent.
-% S1 Fig: positive, zero and negative source-coupling ablation.
-% S2 Fig: rank, dimension, correlation and recipient-familiarity sweeps.
-% S3 Fig: timescale separation, noise and source-manifold leakage.
-% S4 Fig: oracle and random-baseline implementation checks.
-% S5 Fig: rectified-network robustness and time-resolved individual-memory selectivity.
-
-%============================================================================
-%  REFERENCES
-%============================================================================
-\bibliographystyle{bibstyle}
-\bibliography{references}
-
-\end{document}
-\fi
-
-\section{Models}
-
-\textit{[Define the two predictive-coding associative memories, local recipient inference and plasticity, the recipient deficit, the worst-case consolidation objective, the three timescales, and the three selection protocols. Keep this section compact and equation-led; put full derivations in S1 Appendix.]}
-
-\subsection{Two predictive-coding associative memory systems}
-
-\textit{[Introduce a fixed teacher or source $T$, interpreted as a hippocampal-like fast memory, and a plastic student or recipient $S$, interpreted as a neocortical-like slower memory. Both are covariance-learning predictive-coding associative memories based on Tang et al. The teacher is below the student. The PFC comparison concerns an effective top-down control interface, not the entire cortical storage system.]}
-
-\begin{equation}
-M_T=I-W_T,
-\qquad
-M_S=I-W_S,
-\qquad
-\mathcal U_T=\ker M_T.
-\label{eq:memory-operators}
-\end{equation}
-
-\begin{equation}
-\mathbb S_T=\{x_T\in\mathcal U_T:\|x_T\|=1\}.
+\mathbb S_T=\{x_T\in\ker M_T:\|x_T\|=1\},
 \label{eq:teacher-sphere}
 \end{equation}
 
-\textit{[Explain that $\mathbb S_T$ is a mathematical comparison domain. Teacher recurrence and normalization approximate this hard constraint in simulations, and manifold leakage is measured.]}
-
-\subsection{Recipient inference and local plasticity}
-
-With $\varepsilon_{TS}=x_S-x_T$ and $\varepsilon_S=M_Sx_S$,
-
-\begin{equation}
-F_S(x_S,x_T;W_S)
-=
-\frac{\pi_{TS}}2\|\varepsilon_{TS}\|^2
-+
-\frac{\pi_S}{2}\|\varepsilon_S\|^2,
-\label{eq:student-energy}
-\end{equation}
-
-\begin{equation}
-\tau_S\dot x_S
-=
--\pi_{TS}\varepsilon_{TS}-\pi_SM_S^\top\varepsilon_S,
-\qquad
-\dot W_S
-=
-\eta\pi_S\varepsilon_Sx_S^\top.
-\label{eq:recipient-dynamics}
-\end{equation}
-
-\textit{[State briefly that this is recipient-state descent and local recurrent-error plasticity. It is setup inherited from the predictive-coding associative-memory substrate, not the main result.]}
-
-\subsection{Recipient deficit and worst-case consolidation}
+on which $F_T=0$, so the joint free energy reduces to $F_S$. For a given teacher state, define the \emph{settled recipient deficit} and its worst case over the manifold,
 
 \begin{equation}
 q(x_T;W_S)=\min_{x_S}F_S(x_S,x_T;W_S),
 \qquad
-\mathcal D_{\max}(W_S;W_T)=\max_{x_T\in\mathbb S_T}q(x_T;W_S).
-\label{eq:max-deficit}
+\mathcal D_{\max}(W_S;W_T)=\max_{x_T\in\mathbb S_T}q(x_T;W_S),
+\label{eq:deficit}
 \end{equation}
 
+where $q$ measures how much of the teacher state the settled cortex fails to reconstruct. Consolidation is descent of the student's weights on this worst case,
+
 \begin{equation}
-\boxed{
-\min_{W_S}
-\max_{x_T\in\mathbb S_T}
-\min_{x_S}
-F_S(x_S,x_T;W_S)
-}.
-\label{eq:consolidation-objective}
+\boxed{\;\min_{W_S}\ \max_{x_T\in\mathbb S_T}\ \min_{x_S}\ F_S(x_S,x_T;W_S)\;}.
+\label{eq:objective}
 \end{equation}
 
-\textit{[Motivate the maximum rather than an average: future memory demands and source availability are uncertain, and mean performance can hide a large recipient blind spot. The claim is that local dynamics implement the associated nested computation, not that the brain explicitly represents $\mathcal D_{\max}$.]}
+\textit{[Motivate the maximum over the mean: uncertain future memory demand and source availability, and the fact that good average reconstruction can hide a large cortical blind spot. Stress that the network implements this nested computation through its dynamics and does not represent $\mathcal D_{\max}$ explicitly.]}
 
-\subsection{Timescales, selection controls, and rectification}
+The three nested operations are realized by a separation of timescales,
 
 \begin{equation}
-\tau_S\ll\tau_T\ll1/\eta:
+\tau_S\ll\tau_T\ll 1/\eta:
 \qquad
-\min_{x_S}
-\longrightarrow
-\max_{x_T\in\mathbb S_T}
-\longrightarrow
-\min_{W_S}.
-\label{eq:timescale-computation}
+\min_{x_S}\ \longrightarrow\ \max_{x_T\in\mathbb S_T}\ \longrightarrow\ \min_{W_S}.
+\label{eq:timescales}
 \end{equation}
 
-\textit{[Define a consolidation bout: freeze recipient plasticity; select a teacher state; let the recipient settle; apply one identical small recipient update; repeat. The recipient is never clamped. Compare autonomous teacher dynamics, a greedy oracle that maximizes $q$, and random teacher-memory clamping. Use matched networks, memories, update magnitudes, settling criteria, stopping rules, and seeds.]}
+\textit{[Replay enters here, for the first time in the paper. The middle operation, the teacher ascending $q$ over its manifold, is physically replay: the teacher explores its stored states to expose the direction the cortex reconstructs least well. Replay is not a mechanism added on top of the model, it is the realization of the $\max$ step. Say this plainly, as it is the conceptual crux of the section.]}
 
-\textit{[Introduce a general activation $f$ with $f(m_p)=m_p$. Identity gives the analyzed linear model. ReLU without bias with non-negative patterns gives the tested piecewise-linear extension. It can constrain reactivation toward individual memories but does not create ordered replay sequences.]}
+The coupling and the update then follow in a few steps; full statements and proofs are in \textbf{S1~Appendix}.
 
-\figplaceholder{Fig~1. Biological motivation and model architecture. Panel A: awake prefrontal control suppresses unwanted or competing hippocampal retrieval. Panel B: proposed reuse during NREM, where recipient competence suppresses already consolidated content. Panel C: the two associative memories, local errors, coupling $\kappa$, plasticity, and three timescales. Panel D: recipient deficit $\rightarrow$ teacher selection $\rightarrow$ recipient learning $\rightarrow$ self-extinction.}
+\begin{enumerate}
+\item \emph{The settled deficit is a novelty measure.} At the student minimum the interface error is $\varepsilon_{TS}^\ast=-N_S\,x_T$, where $N_S$ projects onto the subspace the student does not yet represent, so $q(x_T)$ grows with the unrepresented component of $x_T$ (Proposition~\ref{prop:deficit}).
+\item \emph{Ascending the deficit forces a negative coupling.} Since $\partial q/\partial x_T=-\pi_{TS}\,\varepsilon_{TS}^\ast$, for the teacher's interface drive $\kappa\,\varepsilon_{TS}$ to climb $q$ one needs $\kappa=-\mu_T\,\pi_{TS}<0$: the reversed, drive-to-disagree precision of offline replay (Theorem~\ref{thm:minimax-transfer}).
+\item \emph{The local update descends the worst case.} Evaluated on the replay-settled state, $\dot W_S=\eta\,\pi_S\,\varepsilon_S\,x_S^\top$ is gradient descent on $\mathcal D_{\max}$ along the selected direction, and gives the largest first-order decrease among updates of equal amplitude (S1~Appendix).
+\item \emph{Correlation amplifies the local advantage.} For two correlated memories whose common component is already stored, replay of their normalized residual reduces $\mathcal D_{\max}$ locally at $2/(1-\chi)$ times the rate produced by replay of either named memory (Corollary~\ref{cor:correlated-local}).
+\item \emph{The learning signal vanishes at completion.} Once a direction is stored, $\varepsilon_{TS}^\ast$ along it vanishes and removes the signal that selected it; $\mathcal D_{\max}=0$ exactly when the student stores every teacher direction (Corollary~\ref{cor:self-extinction}). This equivalence characterizes completion but does not prove that arbitrary weight trajectories reach it.
+\end{enumerate}
+
+\textit{[The math-versus-simulation caveat, stated honestly. The derivation idealizes a settle-then-update sequence justified by the timescale separation of Eq.~\eqref{eq:timescales}; the simulation applies no discrete steps and instead learns continuously along the coupling-driven trajectory. The two agree while off-manifold leakage stays small (quantified in Methods and S3~Fig).]}
+
+\textit{[Activation note: the results are derived for the linear network (identity $f$, $f(m_p)=m_p$) and extended numerically to a rectified network (ReLU without bias, non-negative patterns), which confines reactivation toward individual memories but does not create ordered replay sequences.]}
+
+\figplaceholder{Fig~1D. Consolidation process (new diagram, to draw). The bout loop over three timescales: settle the student ($\min_{x_S}$) $\rightarrow$ teacher replay selects the worst-reconstructed direction ($\max_{x_T}$) $\rightarrow$ one small local student update ($\min_{W_S}$) $\rightarrow$ the selected deficit self-extinguishes. Optional Panels~A,B: awake prefrontal control of hippocampal retrieval and its proposed reuse during NREM.}
 
 \section{Results}
 
@@ -628,6 +348,38 @@ If $U_T$ is an orthonormal basis of $\mathcal U_T$ and $A_S=U_T^\top N_SU_T$, th
 Under hard teacher-memory constraint, separated recipient-inference, teacher-selection and recipient-plasticity timescales, and a nonzero initial component in the leading discrepancy eigenspace, projected teacher dynamics ascend the settled recipient deficit and approach its maximizing eigenspace. At a simple leading eigenvalue, the subsequent local recipient update descends $\mathcal D_{\max}$ and gives the steepest feasible first-order decrease among sufficiently small updates of equal norm.
 \end{theorem}
 
+\begin{corollary}[Correlation-dependent local advantage]
+\label{cor:correlated-local}
+Let two correlated unit memories span the teacher memory space and satisfy
+\begin{equation}
+m_+=cu+sv,
+\qquad
+m_-=cu-sv,
+\qquad
+c^2=\frac{1+\chi}{2},
+\qquad
+s^2=\frac{1-\chi}{2},
+\end{equation}
+where $u,v$ are orthonormal and $0\leq\chi<1$. Suppose that the recipient already stores the common component but not the residual, $M_Su=0$ and $M_Sv\neq0$, and consider unconstrained, exactly settled, infinitesimal plasticity. The worst-deficit selector then replays $v$. For replay of either named memory,
+\begin{equation}
+\dot{\mathcal D}_{\max}^{\mathrm{named}}
+=
+\frac{1-\chi}{2}
+\dot{\mathcal D}_{\max}^{\mathrm{priority}},
+\end{equation}
+where both derivatives are negative. Hence the ratio of positive instantaneous reduction rates is
+\begin{equation}
+\boxed{
+\frac{-\dot{\mathcal D}_{\max}^{\mathrm{priority}}}
+{-\dot{\mathcal D}_{\max}^{\mathrm{named}}}
+=
+\frac{2}{1-\chi}.
+}
+\label{eq:local-correlation-speedup}
+\end{equation}
+The factor compares local derivatives at the current weights. It is not a ratio of complete transfer times and does not imply global convergence. The exact expression is not claimed after zero-diagonal weight projection.
+\end{corollary}
+
 \subsection{Learning removes the signal that selected a memory}
 
 \begin{corollary}[Completion and self-extinction]
@@ -640,13 +392,15 @@ Under hard teacher-memory constraint, separated recipient-inference, teacher-sel
 At completion, $x_S^*=x_T$, $\varepsilon_{TS}^*=0$, and $\varepsilon_S^*=0$ for every valid teacher state. Both teacher selection and recipient plasticity vanish.
 \end{corollary}
 
+This corollary characterizes the completed state and the disappearance of its local learning signals. It does not establish that the weight dynamics reach that state from arbitrary initial conditions.
+
 \textit{[Connect this to the biological claim: learning removes the discrepancy that generated priority, without a separate decay variable.]}
 
 \subsection{Autonomous reactivation transfers a three-memory manifold}
 
 \textit{[Open with an elegant three-memory system in three dimensions. Explain the behavior before spectra, sweeps, or efficiency comparisons. In the linear condition, state explicitly that the network transfers a subspace and may express memory mixtures.]}
 
-\figplaceholder{Fig~2. Autonomous transfer in a three-memory system. Panel A: teacher memories and manifold in three dimensions. Panel B: teacher and settled recipient trajectories across bouts. Panel C: recipient reconstruction or recurrent-weight heat map. Panel D: $\mathcal D_{\max}$, interface error, and recipient recurrent error until transfer self-extinguishes.}
+\figplaceholder{Fig~2. Autonomous transfer in a three-memory system. Panel A: teacher memories and manifold in three dimensions. Panel B: teacher and settled recipient trajectories across bouts. Panel C: recipient reconstruction or recurrent-weight heat map. Panel D: $\mathcal D_{\max}$, interface error, and recipient recurrent error until the simulated transfer reaches tolerance and the learning signals decay.}
 
 \subsection{Recipient deficits organize priority and recipient-relative familiarity}
 
@@ -660,14 +414,14 @@ At completion, $x_S^*=x_T$, $\varepsilon_{TS}^*=0$, and $\varepsilon_S^*=0$ for 
 
 \figplaceholder{Fig~4. Waking learning strength and subsequent reactivation. Panel A: exposure protocol. Panel B: hippocampal and cortical reconstruction errors before sleep. Panel C: memory-specific reactivation occupancy during subsequent offline consolidation.}
 
-\subsection{Autonomous prioritization approaches an oracle and outperforms random reactivation}
+\subsection{Autonomous prioritization produces faster transfer than random reactivation in simulations}
 
-\textit{[Primary efficiency test. Under the common discrete protocol, determine whether autonomous selection approaches the greedy oracle while reducing the worst-case deficit more efficiently than random teacher-memory selection.]}
+\textit{[Primary empirical efficiency test. Under the common discrete protocol, determine whether autonomous selection approaches the greedy oracle while reducing the worst-case deficit more efficiently than random teacher-memory selection. Sweep memory correlation and compare the residual-phase initial rate with Eq.~\eqref{eq:local-correlation-speedup} in the unconstrained condition. Treat events to threshold and final transfer quality as simulation results, not consequences of a global timing theorem.]}
 
-\figplaceholder{Fig~5. Prioritized versus oracle versus random transfer. Panel A: $\mathcal D_{\max}$ versus identical plasticity events. Panel B: $\mathcal D_{\max}$ versus cumulative recipient-weight change. Panel C: novelty-spectrum evolution. Panel D: events to fixed thresholds and autonomous-to-oracle selection gap. Panel E: final transfer quality with matched-seed uncertainty.}
+\figplaceholder{Fig~5. Prioritized versus oracle versus random transfer. Panel A: $\mathcal D_{\max}$ versus identical plasticity events. Panel B: residual-phase first-order reduction versus memory correlation, with the unconstrained prediction $2/(1-\chi)$. Panel C: $\mathcal D_{\max}$ versus cumulative recipient-weight change. Panel D: events to fixed thresholds and autonomous-to-oracle selection gap. Panel E: final transfer quality with matched-seed uncertainty.}
 
 \subsection{Robustness and rectification}
-
+\label{sec:cone}
 \textit{[Main text: summarize reliability across tested memory ranks, dimensions, correlations, partial familiarity, timescale separations, noise levels, and teacher-manifold leakage. Supporting Information: full sweeps. Use “reliable across tested regimes,” not a global convergence claim.]}
 
 \textit{[For ReLU without bias and non-negative stored patterns, show early trajectories near individual memories, later weakening as they are learned, time-resolved nearest-memory distance, cone confinement, and honest final-transfer quality.]}
@@ -675,6 +429,10 @@ At completion, $x_S^*=x_T$, $\varepsilon_{TS}^*=0$, and $\varepsilon_S^*=0$ for 
 \figplaceholder{Fig~6. Rectified dynamics and individual-memory reactivation. Panel A: linear signed-mixture geometry versus non-negative ReLU cone. Panel B: early and late trajectories. Panel C: time-resolved nearest-memory distance. Panel D: cone confinement. Panel E: transfer quality and self-extinction relative to the linear network.}
 
 \section{Discussion}
+
+%neuro-anatomy of top down suppression from prefrontal cortex appear to designate two pathways having complementary job, one inducing normalization improving signal to noise ratio and the other one (the one we care about) inducing speficic deactivation of top down targets.
+
+However, CA1–PFC representational coordination was weaker and less faithful to the waking experience during sleep than during awake ripples. The authors interpreted sleep reactivation as more integrative and less like precise reinstatement. CLEAR LIMITATION DUE TO THE FACT THAT WE USES SIMPLE ASSOCIATIVE MEMORY NETWORKS
 
 \subsection{Summary}
 \textit{[One paragraph: recipient deficit selects teacher content; selected content trains the recipient; learning removes the selecting signal. Prioritization, reduced reactivation of consolidated content, and self-extinction follow from the same objective.]}
@@ -686,10 +444,10 @@ At completion, $x_S^*=x_T$, $\varepsilon_{TS}^*=0$, and $\varepsilon_S^*=0$ for 
 \textit{[Lead with awake retrieval suppression and retrieval-induced forgetting. During wake, PFC control can suppress unwanted or competing hippocampal retrieval. Propose that related effective circuitry is reused offline: behavioral goals select during wake, whereas recipient competence selects during consolidation. Link to NREM PFC-associated suppression of CA1 activity and reactivation as evidence for a suppressive motif, not proof that PFC computes $\mathcal D_{\max}$.]}
 
 \subsection{Experimental predictions, limitations, and future directions}
-\textit{[Predictions: cortical similarity suppresses matching hippocampal reactivation after controls for source strength, recency, salience, and reward; disrupting top-down suppression increases redundant reactivation and reduces efficiency; priority returns after cortical degradation. Limitations: linear subspaces; restricted ReLU extension; no ordered replay; idealized constraints and timescales; degeneracy; transformed codes; omitted source reliability, context, reward, emotion, salience, and neuromodulation. Continual learning is a separate downstream project.]}
+\textit{[Predictions: cortical similarity suppresses matching hippocampal reactivation after controls for source strength, recency, salience, and reward; disrupting top-down suppression increases redundant reactivation and reduces efficiency; priority returns after cortical degradation. Limitations: linear subspaces; restricted ReLU extension; no ordered replay; idealized constraints and timescales; degeneracy; transformed codes; omitted source reliability, context, reward, emotion, salience, and neuromodulation. State explicitly that the analytic efficiency claim is local, that the exact $2/(1-\chi)$ factor assumes unconstrained weights and an already stored common component, and that faster complete transfer is supported numerically rather than by a global convergence or hitting-time theorem. Continual learning is a separate downstream project.]}
 
 \section{Conclusion}
-\textit{[Two or three sentences. Close on the biological and mathematical message: cortical dependence can organize hippocampal reactivation; the negative effective interaction follows from maximizing recipient deficit; and learning makes prioritization self-terminating.]}
+\textit{[Two or three sentences. Close on the biological and mathematical message: cortical dependence can organize hippocampal reactivation; the negative effective interaction follows from maximizing recipient deficit; and the discrepancy-driven prioritization signal vanishes at complete transfer.]}
 
 \section{Materials and methods}
 
@@ -708,7 +466,7 @@ At completion, $x_S^*=x_T$, $\varepsilon_{TS}^*=0$, and $\varepsilon_S^*=0$ for 
 \section*{Supporting information}
 
 \begin{itemize}
-\item \textbf{S1 Appendix.} Full proofs of Proposition~\ref{prop:deficit}, Theorem~\ref{thm:minimax-transfer}, and Corollary~\ref{cor:self-extinction}; projected power iteration; envelope steps; antipodal maximizers; and feasible projected descent.
+\item \textbf{S1 Appendix.} Full proofs of Proposition~\ref{prop:deficit}, Theorem~\ref{thm:minimax-transfer}, Corollary~\ref{cor:correlated-local}, and Corollary~\ref{cor:self-extinction}; projected power iteration; envelope steps; antipodal maximizers; feasible projected descent; and the local correlated-memory rate comparison.
 \item \textbf{S1 Fig.} Positive, zero, and negative teacher-side coupling ablation.
 \item \textbf{S2 Fig.} Rank, dimension, correlation, and recipient-familiarity sweeps.
 \item \textbf{S3 Fig.} Timescale separation, noise, seed dependence, and teacher-manifold leakage.

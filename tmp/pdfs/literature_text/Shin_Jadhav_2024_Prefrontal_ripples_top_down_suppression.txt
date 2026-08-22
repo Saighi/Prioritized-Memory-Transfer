@@ -1,0 +1,2434 @@
+
+
+===== PAGE 1 =====
+Article
+Prefrontal cortical ripples mediate top-down
+suppression of hippocampal reactivation during
+sleep memory consolidation
+Graphical abstract
+Highlights
+d Independent and coordinated ripple events across CA1 and
+PFC in NREM sleep
+d Suppression of hippocampal reactivation during
+independent PFC ripples
+d Hippocampal suppression is inversely related to coordinated
+ripple reactivation
+d Serial organization of slow oscillations, spindles, and cross-
+regional ripples
+Authors
+Justin D. Shin, Shantanu P. Jadhav
+Correspondence
+shantanu@brandeis.edu
+In brief
+Shin and Jadhav report that independent
+prefrontal cortex (PFC) ripples
+predominantly suppress CA1 activity in
+NREM sleep when temporally dissociated
+from hippocampal sharp-wave ripples
+(SWRs). These suppressed CA1
+representations are strongly reactivated
+during coordinated CA1-PFC ripples,
+which are serially organized with slow
+oscillations and spindles.
+Event probability
+SO peak
+SO trough
+PFC ripples
+CA1 ripplesSpindles
+Temporal organization of sleep oscillations
+Top-down suppression of CA1 activity
+Independent and coordinated ripples in PFC and CA1
+Independent PFC Independent CA1Coordinated
+Ind. PFC
+Coord. MI EXC
+INH
+Ind. PFC MI
+Coord. 
+Firing rate
+Units
+CA1 reactivation
+Quartile
+4
+3
+2
+1
+Coord.
+ripple
+Ind. PFC 
+ripple
+PFC CA1
+Independent PFC ripple
+Assemblies Units
+Assemblies
+NREM Sleep
+De novo learning
+High-density electrophysiology
+Dorsal CA1
+Prefrontal cortex
+% Correct
+Time
+W-Track 
+alternation task
+Ripples
+Shin & Jadhav, 2024, Current Biology 34, 2801–2811
+July 8, 2024 ª 2024 Elsevier Inc. All rights are reserved, including those for text
+and data mining, AI training, and similar technologies.
+https://doi.org/10.1016/j.cub.2024.05.018 ll
+
+
+===== PAGE 2 =====
+Article
+Prefrontal cortical ripples mediate top-down
+suppression of hippocampal reactivation
+during sleep memory consolidation
+Justin D. Shin 1 and Shantanu P. Jadhav 1,2,3,*
+1Neuroscience Program, Department of Psychology, and Volen National Center for Complex Systems, Brandeis University, 415 South Street,
+Waltham, MA 02453, USA
+2X (formerly Twitter): @JadhavLab
+3Lead contact
+*Correspondence: shantanu@brandeis.edu
+https://doi.org/10.1016/j.cub.2024.05.018
+SUMMARY
+Consolidation of initially encoded hippocampal representations in the neocortex through reactivation is
+crucial for long-term memory formation and is facilitated by the coordination of hippocampal sharp-wave rip-
+ples (SWRs) with cortical slow and spindle oscillations during non-REM sleep. Recent evidence suggests that
+high-frequency cortical ripples can also coordinate with hippocampal SWRs in support of consolidation;
+however, the contribution of cortical ripples to reactivation remains unclear. We used high-density, contin-
+uous recordings in the hippocampus (area CA1) and prefrontal cortex (PFC) over the course of spatial
+learning and show that independent PFC ripples dissociated from SWRs are prevalent in NREM sleep and
+predominantly suppress hippocampal activity. PFC ripples paradoxically mediate top-down suppression
+of hippocampal reactivation rather than coordination, and this suppression is stronger for assemblies that
+are reactivated during coordinated CA1-PFC ripples for consolidation of recent experiences. Further, we
+show non-canonical, serial coordination of independent cortical ripples with slow and spindle oscillations,
+which are known signatures of memory consolidation. These results establish a role for prefrontal cortical
+ripples in top-down regulation of behaviorally relevant hippocampal representations during consolidation.
+INTRODUCTION
+Systems memory consolidation is the process through which
+newly formed hippocampal memories are integrated in cortical
+networks for long-term storage, and models of memory consol-
+idation, such as the standard systems theory of consolidation
+and multiple trace theory, posit a predominantly unidirectional
+interaction between the hippocampus and cortical regions
+for consolidation.
+1–3 This consolidation process is facilitated
+through the coordination of patterns of activity that span a range
+of timescales and oscillatory frequencies and has been exten-
+sively studied in the context of the hippocampal-prefrontal
+cortical network. The most prominent of these activity patterns
+are hippocampal sharp-wave ripples (SWRs), a phenomenon
+critical for memory consolidation.
+4 These high-frequency bursts
+during non-REM (non-rapid eye movement [NREM]) sleep reac-
+tivate hippocampal representations of previous experiences, for
+example, in the form of sequential reactivation of spatial repre-
+sentations, engage the prefrontal cortex (PFC), and are associ-
+ated with brain-wide changes in activity hypothesized to support
+the integration of mnemonic representations in distributed
+cortical circuits.
+5–8 Recently, high-frequency ripple bursts have
+been reported in the neocortex, including in the PFC, which syn-
+chronize local cortical activity and can potentially be coupled to
+hippocampal SWRs.
+9,10 This coupling of ripples can serve to
+support consolidation through coordinated reactivation; howev-
+er, whether and how PFC ripples reciprocally engage hippocam-
+pal activity—and especially hippocampal reactivation—in sup-
+port of consolidation is unclear.
+RESULTS
+Independent and coordinated ripple events across CA1
+and PFC
+Here, we simultaneously recorded populations of CA1 (n = 3,316)
+and PFC ( n = 2,474) neurons ( Figures S1 A and S1B show
+example histology) from animals ( n = 8 rats) in NREM sleep
+(mean = 13.24 ± 0.83 min per epoch; Figure S1 C; Table S1 )
+throughout the course of learning a spatial alternation task that
+requires hippocampal-prefrontal interactions.
+11,12 Activity was
+monitored across multiple run and sleep sessions during
+learning. We detected cortical ripples in the PFC as high-fre-
+quency events (150–250 Hz), as previously described. 9,10
+Because these events could occur either in an isolated manner
+or in temporal proximity to hippocampal ripples, we classiﬁed
+them as either temporally coupled to hippocampal SWRs (i.e.,
+coordinated ripples) or independent ( Figures 1 A–1D). We thus
+separated ripples, based on the interregional overlap of these
+events, as independent PFC ripples (71.2% of events), indepen-
+dent CA1 SWRs (termed independent SWRs; 78.7% of events),
+Current Biology 34, 2801–2811, July 8, 2024 ª 2024 Elsevier Inc. 2801
+All rights are reserved, including those for text and data mining, AI training, and similar technologies.
+ll
+
+===== PAGE 3 =====
+and coordinated CA1-PFC ripples (CA1, 21.3% of events; PFC,
+28.8% of events; Figure S1 ). Intriguingly, independent PFC rip-
+ples and independent CA1 SWR events were more prevalent
+than coupled CA1-PFC ripple events in NREM sleep (Figure S1E;
+independent PFC ripple rate: 0.46 ± 0.02 Hz; independent CA1
+ripple rate: 0.67 ± 0.02 Hz; coordinated ripple rate: 0.16 ±
+0.01 Hz). We hypothesized that these two kinds of events, inde-
+pendent and coordinated, may subserve different mnemonic
+processes within the hippocampal-prefrontal network and,
+indeed, found key differences. First, coordinated events were
+longer in duration and had higher cell participation ( Figures
+S2A and S2C), consistent with previous reports that long-dura-
+tion events may be important for performing behavioral tasks
+with high memory demand.
+13 In contrast to CA1 SWRs, the
+rate of independent PFC ripples increased over time from pre-
+exploration sleep periods in animals that learned the task and
+was correlated with task performance in the subsequent behav-
+ioral session ( Figures 1E, S1F, and S1J–S1M). The rate of coor-
+dinated CA1-PFC ripples also increased with learning and was
+correlated with the increase in overall PFC ripple rate, suggesting
+that the PFC plays a role in driving the increase in coupling during
+later sleep epochs ( Figures 1 F and S1I). Finally, coordinated
+CA1-PFC ripples were also associated with higher spindle power
+(Figure 1 G), indicating enhanced cross-frequency coupling be-
+tween the hippocampus and PFC during coordination, which is
+critical for memory consolidation.
+14–16
+PFC ripples predominantly suppress hippocampal
+activity during NREM sleep
+Previous reports have shown that hippocampal SWRs are asso-
+ciated with bidirectional modulation of PFC neurons and PFC re-
+activation of recent experiences.
+12,17–19 Here, we examined the
+effect of independent PFC ripples on CA1 neuronal activity and
+the inﬂuence of cortical ripples on reactivation. Interestingly,
+a large majority of CA1 cells, both putative pyramidal cells
+(inhibited neuron [INH], n = 365; excited neuron [EXC], n = 140)
+and interneurons (INH, n = 105; EXC, n = 23; classiﬁcation shown
+in Figures S2F–S2M), were suppressed during independent PFC
+ripples, while PFC activity was enhanced by the local ripples
+(INH, n = 99; EXC, n = 927; Figures 2A and 2B). In addition, sup-
+pression in CA1 during PFC ripples peaked prior to PFC excita-
+tion (Figure 2C), indicating attenuation of CA1 activity through a
+cortical-hippocampal-cortical loop that may enhance informa-
+tion transfer within the neocortex.
+20,21 Additionally, we observed
+a relationship between hippocampal suppression and the fre-
+quency of independent PFC ripple events, potentially indicative
+of a gradient of hippocampal-cortical engagement, as previously
+suggested
+22 (Figure 2D). This neuronal activity suppression was
+dependent on the ripples examined ( Figures 2 A and S3), either
+local ripples in CA1/PFC or coordinated ripples in CA1-PFC
+(Figures 3 D and S3A), with coordinated ripples predominantly
+driving excitation in both regions in contrast to independent
+cortical ripples, indicating that these temporally distinct events
+differ in their contribution to mnemonic processes.
+PFC ripple modulation reveals distinct populations of
+CA1 neurons
+Further examination of the inhibited and excited CA1 pyramidal
+neurons during run sessions revealed representational differ-
+ences (Figures 3A and 3B). INH cells had higher theta ﬁring rates,
+had wider and more numerous ﬁelds, and had greater stability
+between sessions, whereas EXC cells were more strongly locked
+to the hippocampal theta oscillation ( Figures 3B and S3G). Dur-
+ing NREM sleep, EXC and INH cells had similar baseline ﬁring
+rates but had distinct intra-SWR ﬁring dynamics. EXC cells
+were generally active earlier in SWR events (spike latency plot
+in Figure 3 C) and INH cells were more strongly SWR excited
+(ﬁring rate gain and burst probability plots in Figure 3C). Impor-
+tantly, the degree of CA1 modulation by PFC ripples was also
+predictive of intra-CA1-SWR dynamics ( Figure 3 C, right) and
+1
+1.2
+1.4
+1.6
+1.8Spindle power (z)
+***
+Coord.Ind.
+100 ms40 µV
+PFC ripple
+Tetrode #
+1
+2
+3
+4
+5
+285
+101
+36
+13
+4
+2
+Frequency (Hz)
+Power
+-500 0 500
+Time from PFC ripple (ms)
+Min Max
+CA1 LFP
+CA1 Ripple
+PFC Ripple
+PFC LFP
+Time (s)
+PFC Cells CA1 Cells
+1
+70
+1
+93
+24 68 1 0
+Independent CA1 ripple
+Independent PFC ripple
+Coordinated ripple
+CA1
+PFC
+0
+Sleep session
+-1.5
+-1
+-0.5
+0
+0.5
+1
+1.5
+Ripple rate (z)PFC
+CA1
+1 3 5 97
+*
+ns
+0
+0.2
+0.4
+0.6
+0.8
+1 *
+r value
+PFCCA1
+-1.5
+-1
+-0.5
+0
+0.5
+1
+1.5
+2
+024-2-4
+Lag (s)
+Cross correlation (z)
+Independent
+Figure 1. Independent and coordinated ripple events in CA1 and PFC
+(A) Example CA1 and PFC raster plot illustrating the occurrence of independent CA1 and PFC ripples and coordinated events. Events indicated by the arr ow-
+heads are expanded on the right to show local ﬁeld potential (LFP) and single unit activity.
+(B) PFC-ripple-triggered spectrogram combined across all animals ( n = 8 rats) and epochs ( n = 72 epochs; n = 37,335 ripples). Note the associated spindle band
+activity (12–16 Hz) during these events.
+(C) Example PFC ripple event shown across 5 tetrodes. Detected ripple event is highlighted in red.
+(D) Cross-correlation between all ripple events in CA1 and PFC. Red dashed lines indicate the 95% conﬁdence intervals for jittered data.
+(E) Independent ripple rate over the 9 sleep epochs (left, PFC: F = 2.44, * p = 0.03; CA1: F = 1.18, p = 0.34, main effect of time, repeated measures ANOVA).
+(F) The correlations between overall and coordinated ripple rate over time for CA1 and PFC events suggest PFC-driven coupling (PFC, r = 0.91 ± 0.03; CA1 ,
+r = 0.45 ± 0.18, * p = 0.01).
+(G) Peak spindle power during independent vs. coordinated PFC ripple events (independent = 1.42 ± 0.01, coordinated = 1.66 ± 0.01, *** p = 2.11 3 10
+/C0 66).
+See also Figures S1 and S2 and Table S1.
+ll
+2802 Current Biology 34, 2801–2811, July 8, 2024
+Article
+
+===== PAGE 4 =====
+was negatively correlated with modulation during coordinated
+CA1-PFC ripples ( Figures 3 D and 3E), indicating a role for PFC
+ripples in inﬂuencing the content of hippocampal activity during
+coordinated ripples. In particular, the suppression of those CA1
+INH cells by PFC ripples that are strongly recruited during coor-
+dinated CA1-PFC ripples suggests that independent PFC ripples
+primarily suppress hippocampal reactivation of recent experi-
+ences during spatial learning, contrary to current models of sys-
+tems consolidation. Further, a similar relationship of suppression
+was also found in the population of putative CA1 interneurons,
+demonstrating a broad top-down inﬂuence of PFC ripples on
+CA1 activity ( Figures S3 B–S3D). Thus, PFC ripples delineate
+transient intervals where hippocampal activity is largely sup-
+pressed, potentially modifying circuit dynamics for effective in-
+formation processing or transfer.
+PFC ripples mediate top-down suppression of CA1
+reactivation
+We then examined population activity in CA1 and PFC during
+these ripple events using assembly analysis to explicitly look at
+reactivation during ripples ( Figures 4 A and 4C). Corroborating
+the single unit results, assemblies within a region (CA1 n = 585,
+PFC n = 320) were robustly reactivated during their respective
+local ripple events ( Figures 4 B, 4D, S4B, and S4C) and were
+strongly co-active during coordinated CA1-PFC ripple events,
+as expected for a memory consolidation process ( Figures S4 D
+and S4G). CA1 EXC cells had higher weights and contribution
+to reactivation strength than INH cells ( Figures 4 D and S4H),
+possibly owing to the stronger theta phase locking within this
+population during run sessions ( Figures 3 B and S3G). Assem-
+blies in CA1 and PFC exhibited gradients of reactivation
+strengths across events ( Figures S4 I and S4J) and, similar to
+activity suppression, the degree of reactivation strength in CA1
+was negatively correlated across independent PFC ripples and
+coordinated CA1 SWRs ( Figure 4E), conﬁrming that assemblies
+that are strongly reactivated during coordinated CA1-PFC rip-
+ples are highly suppressed by independent PFC ripples. This
+CA1 suppression was also strongest during the later sleep ses-
+sions when the PFC ripple rate peaked ( Figures 1 E and S4E).
+Interestingly, the degree of suppression of CA1 assemblies dur-
+ing independent PFC ripples was related to assembly reinstate-
+ment in subsequent behavioral sessions ( Figure 4G), suggesting
+a role for this top-down suppression in modifying subsequent
+CA1 coactivity patterns expressed during behavior. In addition,
+both reactivation strength and within-area coactivity in PFC
+and CA1 differed across ripple events, and population activity
+in PFC and CA1 was able to distinguish between independent
+and coordinated ripples in each respective area, conﬁrming their
+distinct activity proﬁles and reactivation signatures ( Figures 4 F,
+4H, and S4F). We observed similar relationships for joint CA1-
+PFC reactivation strength. Joint CA1-PFC coactivity differed be-
+tween independent and coordinated SWRs ( Figures S5 A–S5D)
+and also showed a negative relationship between reactivation
+strength during coordinated ripples vs. independent PFC ripples
+(Figures 4I–4K). These results indicate that independent and co-
+ordinated ripples underlie different modes of information ex-
+change between CA1 and PFC and, further, that the stronger
+the assembly reactivation in CA1 during coordinated CA1-PFC
+ripples, the stronger the suppression during PFC ripples.
+The content of CA1 SWRs is dependent on cross-
+regional, high-frequency coordination
+Because it has been previously demonstrated that hippocampal
+reactivation and replay are separable components of the dy-
+namic hippocampal code,
+23 we examined how association
+with PFC ripples may impact CA1 replay. We found that replay
+events associated with coordinated ripples were less sequential
+in structure, having higher normalized jump distances and lower
+Time from PFC ripple onset (ms)
+PFC cell #
+1026
+-1
+0
+1
+2 n=927
+n=99
+PFC
+-500 0 500 Firing rate (z)
+-2
+-1
+0
+1
+CA1-PYR
+-500 0 500
+505
+n=140
+n=365
+-1
+0
+1
+2
+Mean PSTH (z)
+-500 0 500
+PFC
+EXC
+INH
+EXC
+INH
+-2.5
+-2
+-1.5
+-1
+-0.5
+0
+0.5
+1
+Firing rate (z)
+Interneuron
+Pyramidal
+INH modulation
+-500 0 500
+Time from ripple (ms)
+***
+0
+0.05
+0.1
+0.15
+0.2
+0.25
+-500 0 500
+Fraction of units
+Peak time (ms)
+***
+CA1-INH
+PFC-EXC
+0 ms
+40 ms
+-2
+-1
+0
+1
+2
+-500 0 500
+Min
+Max
+n=23
+n=105
+128
+EXC
+INHCA1-INT CA1
+-2
+-1
+0
+1
+Time from PFC
+ripple onset (ms)
+-0.75
+-0.7
+-0.65
+-0.6
+-0.55
+-0.5
+-0.45
+-0.62
+-0.6
+-0.58
+-0.56
+-0.54
+-0.52
+-0.5
+-0.48
+CA1-PYR modulation index (INH)
+Frequency
+Amplitude
+r = -0.04
+r = 0.13*
+Quartile
+-0.7
+-0.66
+-0.62
+-0.58
+-0.54
+-0.5 Length
+r = -0.01
+1 234
+Figure 2. Predominant suppression of CA1 activity during independent PFC ripples
+(A) Independent PFC-ripple-triggered modulation of PFC neurons (left), CA1 pyramidal neurons (middle), and CA1 interneurons (right). (Right) Ove rall modulation
+in each area showing neurons excited or suppressed during ripples, with excitation predominantly in the PFC and suppression predominantly in CA1 (py ramidal
+and interneurons). Gray lines indicate individual animals.
+(B) The degree of suppression was higher in INH interneurons as compared with pyramidal cells (±200 around ripple onset; *** p = 1.37 3 10
+/C0 9).
+(C) Timing of peak suppression for CA1 INH cells (pyramidal and interneurons) and PFC EXC cells (comparison of peak timing distributions, *** p = 4.90 3 10/C0 46).
+(D) Relationship between CA1 INH modulation and PFC ripple frequency, amplitude, and length (MI vs. frequency, r = 0.13, *p = 0.018; MI vs. amplitude, r = /C0 0.04,
+p = 0.41; MI vs. length, r = /C0 0.01, p = 0.90).
+See also Figures S2 and S3.
+ll
+Current Biology 34, 2801–2811, July 8, 2024 2803
+Article
+
+===== PAGE 5 =====
+weighted correlations than independent-SWR-associated replay
+(Figures 5A, 5B, and S5E–S5G). Sequential unit spiking was also
+more consistent, as measured by rank-order correlation, 24 and
+had higher dimensionality during independent SWRs, further
+highlighting the inﬂuence of the PFC on SWR content ( Figures
+5C and 5D). Coordinated SWR replay exhibited a larger degree
+of sequence degradation when place-cell templates are shufﬂed
+as compared with independent SWR and awake replay ( Fig-
+ure 5 E), possibly due to a decrease in overall reactivation
+strength and coactivity during these events ( Figures 4 F and
+S4F). Furthermore, PFC-ripple-modulated CA1 cells had a
+higher per-cell contribution (PCC) to replay than non-modulated
+cells (Figure 5F, top). Although both modulated and non-modu-
+lated cells contributed more strongly to coordinated SWR replay,
+which is expected due to the greater sequence degradation
+observed in these events, modulated cells had higher PCC dif-
+ferences ( Figure 5 F, bottom). This overall higher contribution of
+modulated cells to coordinated SWR replay, and the differences
+observed between independent and coordinated events, further
+suggests a role for PFC in shaping the content of hippocampal
+reactivation and replay during sleep.
+Sleep oscillations exhibit distinct sequential coupling
+for cortical ripples
+In addition to the recent observation of temporal coupling of
+hippocampal-cortical ripples contributing to memory consolida-
+tion, the coordination of hippocampal SWRs with cortical slow
+oscillations (SOs) and spindles has been established to be
+important for consolidation.
+14,25,26 To this end, we investigated
+the incidence of ripple events in the context of these oscillations
+that span multiple timescales. Independent and coordinated
+CA1 SWRs exhibited differential coupling with spindles and
+SOs, with only coordinated CA1-PFC ripples associated with
+cortical spindles and not independent CA1 SWRs, and different
+timing proﬁles of the two types of ripple events with SOs
+(Figures 6 A, S6A, and S6B). Population activity in CA1 and
+PFC also had unique responses surrounding independent vs.
+coordinated events ( Figures S6 C and S6D). Additionally, CA1
+replay events, speciﬁcally during coordinated CA1-PFC ripples,
+were enriched during ‘‘up-states’’ of the SO ( Figures 6 B, 6C,
+and S6F). These results, along with the ﬁnding that coordinated
+CA1-PFC ripples were associated with a higher cortical spindle
+power (Figure 1G), led us to hypothesize distinct temporal orga-
+nization of independent and coordinated ripple events with SOs
+and spindles.
+We observed an overall higher prevalence of coordinated
+events where PFC ripples precede CA1 SWRs ( Figure S6 J),
+which is consistent with PFC ripples potentially driving ripple co-
+ordination (Figure 1F), and therefore focused on these events for
+the subsequent analyses to investigate sequential coupling of
+events in CA1 and PFC. We quantiﬁed the onset of PFC spindles,
+ripples, and CA1 SWRs relative to the trough (up-state) of SOs
+and calculated the fold change probability of each event around
+SOs. We found a sequential organization of these oscillatory
+events that suggests a thalamocortical-hippocampal direction-
+ality, with spindles preceding coordinated PFC-CA1 ripple
+events ( Figures 6 D and 6E) as well as independent PFC ripples
+(Figure S6 H). This temporal relationship with spindles was not
+present for independent CA1 SWRs ( Figure S6 H) and differed
+for coordinated events where CA1 SWRs preceded PFC ripples
+(Figure S6 I). The embedding of PFC ripple events between
+spindles and CA1 SWRs ( Figures 6 E and 6F) would allow for
+the coordination of PFC and CA1 assembly reactivation.
+Indeed, PFC and CA1 reactivation was temporally organized
+CA1-EXC CA1-INH CA1-EXC CA1-INH
+Pre-run Sleep
+Coordinated MI
+-5 10 15
+Independent PFC MI
+-4
+0
+4
+8
+12
+16
+0 5
+PFC cells
+r = 0.76***
+r = 0.76***
+Exc
+Inh
+10
+20
+30
+40
+50
+0
+2
+4
+6
+8
+0
+0.1
+0.2
+0.3
+0
+0.2
+0.4
+0.6
+0.8
+1
+# Place fields
+Field width (cm)PPC
+Stability (r)
+Modulation Index
+-0.8
+-0.4
+0
+0.4
+0.8
+-0.8
+-0.4
+0
+0.4
+0.8
+Bursting quartile
+Spike latency quartile
+1234
+1234
+r = 0.29ns
+r = -0.79***
+r = -0.21ns
+r = 0.54***
+0
+0.04
+0.08
+0.12
+0.16
+0.04
+0.08
+0.12
+0.16
+0
+1
+2
+3
+4
+0
+2
+4
+6
+8
+0.2
+Burst probabilitySpike latency (s)
+NREM firing rate (Hz)FR gain
+-2 -1.5 -1 -0.5 0 0.5 11 . 5
+-5
+0
+5
+10
+r = -0.82***
+r = -0.03ns
+Exc
+Inh
+CA1 cells
+** ***
+*** ***
+ns ***
+*** ***
+0
+1
+2
+3
+4
+5
+6
+Theta firing rate (Hz)
+***
+0
+1
+2
+3
+4
+5
+Spatial info 
+(bits/spk)
+ns
+Normalized position
+10 10
+CA1-EXC
+CA1-INH
+CA1-Non mod
+Peak
+Min
+Max
+CA1 cell
+1
+39
+Independent PFC MI
+-1
+0
+1
+2PFC cell #
+985 Firing rate (z)
+n=804
+n=181
+-500 0 500
+Time from ripple onset (ms)
+PFC
+Min
+Max
+-1
+0
+1CA1 cell #
+-500 0 500
+1194
+n=1141
+n=53
+EXC
+INH
+EXC
+INH
+CA1-PYR2
+Coordinated ripples
+Figure 3. Properties of PFC-ripple-modulated CA1 pyramidal neurons
+(A) Example ﬁring maps for CA1 EXC, INH, and non-modulated cells during one trajectory.
+(B) Differences in spatial properties for CA1 EXC and INH pyramidal cells during the run session preceding the sleep epoch in which the cells were modul ated
+(theta ﬁring rate, EXC = 1.20 ± 0.10 Hz, INH = 2.05 ± 0.10 Hz, *** p = 2.08 3 10/C0 6; number of ﬁelds, EXC = 3.3 ± 0.17, INH = 3.99 ± 0.11, ** p = 0.002; ﬁeld width,
+EXC = 21.67 ± 0.91 cm, INH = 26.56 ± 0.61 cm, *** p = 1.1 3 10/C0 4; spatial information (bits/spike), EXC = 1.52 ± 0.12 bits, INH = 1.49 ± 0.06 bits, p = 0.83; stability,
+EXC = 0.54 ± 0.03, INH = 0.72 ± 0.01, *** p = 9.01 3 10/C0 7; pairwise phase consistency, EXC = 0.10 ± 0.01, INH = 0.05 ± 0.004, *** p = 3.31 3 10/C0 10).
+(C) (Left) Mean NREM ﬁring rate (FR) and intra-SWR ﬁring dynamics for CA1 EXC and INH cells during coordinated ripples (NREM ﬁring rate, EXC = 1.07 ± 0.11Hz,
+INH = 0.81 ± 0.05 Hz, p = 0.18; FR gain, EXC = 2.02 ± 0.16, INH = 4.07 ± 0.10, *** p = 2.88 3 10/C0 27; burst probability, EXC = 0.031 ± 0.006, INH = 0.075 ± 0.005,
+***p = 6.38 3 10/C0 5; spike latency, EXC = 0.080 ± 0.006, INH = 0.099 ± 0.001, *** p = 1.61 3 10/C0 5). (Right) Relationship between SWR bursting incidence (top, EXC:
+r = 0.29, p = 0.08, INH: r = /C0 0.79, ***p = 5.20 3 10/C0 69) or spike latency for CA1 EXC and INH cells (bottom, EXC: r = /C0 0.21, p = 0.21, INH: r = 0.54, *** p = 9.51 3
+10/C0 25) with modulation index (MI) during independent PFC ripple events.
+(D) Modulation of PFC and CA1 neurons during coordinated ripples, aligned to ripple onset in the opposing-area.
+(E) Relationship between MI during coordinated ripples and independent PFC ripples (top, CA1, EXC: r = 0.03, p = 0.82; INH: r = /C0 0.82, *** p = 6.84 3 10
+/C0 80;
+bottom, PFC, EXC: r = 0.76, ***p = 1.34 3 10/C0 92; INH: r = 0.76, ***p = 1.51 3 10/C0 10). Note the negative relationship for CA1 INH cells, indicating that the stronger the
+recruitment during coordinated ripples, the more inhibited the cells are during independent PFC ripples.
+See also Figure S3.
+ll
+2804 Current Biology 34, 2801–2811, July 8, 2024
+Article
+
+===== PAGE 6 =====
+surrounding SO troughs in a manner that is consistent with cor-
+tico-hippocampal directionality ( Figure 6 G). In addition, the
+strength of the up-state-aligned reactivation in CA1 assemblies
+was related to the degree of suppression during independent
+PFC ripples (Figure 6H), suggesting a role of PFC ripples in prior-
+itizing certain CA1 memory traces for long-term storage or modi-
+ﬁcation. Additionally, differences in coordinated events (PFC
+leading vs. lagging), such as the timing and content of CA1
+and PFC reactivation (Figures S6K and S6L), suggests a bidirec-
+tional coordinated ripple-mediated interaction with distinct roles
+in consolidation.
+DISCUSSION
+Memory consolidation is a dynamic and multidimensional pro-
+cess that is dependent on the interaction between multiple brain
+systems, and previous studies have shown that enhanced cross-
+frequency coupling between the hippocampus and PFC en-
+hances performance on memory-related tasks.
+14,27 Notably,
+the suppression of CA1 reactivation by independent PFC ripples
+is unexpected based on current models of systems consolida-
+tion,
+1–3 and how activity suppression may contribute to consol-
+idation in the context of interregional communication is unclear.
+1
+65
+0
+5
+10
+15
+1
+70
+0
+10
+20
+30
+40
+PFC assembly
+CA1 assembly
+Cell#Cell#
+02 4 6 81 0
+Reactivation Strength (AU)
+02 4 6 81 0
+Time (s)
+-0.4
+-0.2
+0
+0.2
+0.4
+1
+67
+-0.4
+-0.2
+0
+0.2
+0.4
+1
+85
+Assembly weight
+Assembly weight
+Reactivation Strength (AU)
+Time (s)
+-1
+0
+1
+2
+3
+4
+5
+CA1 R-strength (z)
+-0.5
+0
+0.5
+1
+1.5
+2
+2.5PFC R-strength (z)
+Time from ripple onset (s)
+-2 -1 0 1 2
+-2 -1 0 1 2
+Cell#Cell#
+-1
+0.4
+0
+PFC 
+ripple
+CA1 
+ripple
+-0.4
+0.4
+0
+-2
+0
+3
+-1
+0
+2
+PFC
+CA1
+Time from ripple onset (s)
+0.1
+0.11
+0.12
+0.13
+0.14
+EXCINH
+|Assembly weight|
+Coordinated ripples
+-2 -1.5 -1 -0.5
+-0.5
+0
+0.5
+1
+1.5
+2
+2.5
+3
+0 0.5
+r = -0.71***
+CA1 assemblies
+-0.5 0 0.5 1 1.5 2 2.5
+-1.5
+-1
+-0.5
+0
+0.5
+1
+1.5
+2
+2.5
+3
+Independent PFC ripples
+r = 0.53***
+PFC assemblies
+0
+0
+0.08
+0.09
+0.1
+0.11
+0.12|Assembly weight|
+***
+EXCINH
+0.5
+0.52
+0.54
+0.56
+0.58
+0.6
+Prediction accuracy
+PFC
+PFC-shuffle
+CA1
+CA1-shuffle
+***
+***
+-2
+-1
+0
+1
+2
+3
+-1
+0
+1
+2
+3
+CA1
+R-strength (z)
+Ind.
+Coord.Ind.-CA1
+Ind.
+Coord.
+Ind.-PFC
+R-strength (z)
+PFC
+********
+*********
+Independent
+Independent
+PFC 
+ripple
+CA1 
+ripple
+ns
+-0.5-2
+-1.5
+-1
+-0.5
+0
+0.5
+1
+-0.4
+-1.5
+-1
+-0.5
+0
+0.5
+1
+1.5
+2
+2.5
+r = 0.15**
+r = -0.02
+Independent PFC ripples
+Reinstatement
+-0.2 0 0.2
+-0.3 -0.1 0.1 0.3
+CA1 assemblies
+PFC assemblies
+-0.6
+-0.4
+-0.2
+0
+0.2
+0.4
+0.6
+-1.5 -1 -0.5 0.5 1.5-2
+-1.5
+-1
+-0.5
+0
+0.5
+1
+1.5
+2
+2.5
+ CA1-PFC
+reactivation strength (z)
+Coordinated
+CA1-PFC
+PFC 
+Independent
+Bottom 50%
+0 1
+Independent PFC ripples
+Coordinated ripples
+-2 -1 0 12-2 0 2
+-2 0 2
+Time from 
+ripple onset (s)
+r = -0.25***
+Coord.
+Ind. PFC
+Time from ripple onset (s)
+Sorted by independent PFC ripple aligned activity
+Figure 4. Assembly reactivation during inde-
+pendent and coordinated ripple events
+(A) (Left) Example PFC raster plot during NREM sleep
+with the reactivation strength of an assembly over-
+laid. (Right) Neuron weights for the plotted assembly
+on the left, with member cells highlighted in blue.
+(B) (Left) Independent PFC- and CA1-ripple-triggered
+PFC reactivation strength with inset highlighting
+cross-regional modulation. (Right) Example PFC as-
+sembly aligned to CA1 and PFC ripple events (top)
+and the absolute weights of EXC and INH PFC cells
+(bottom; modulation during independent CA1 SWRs,
+EXC = 0.137 ± 0.003, INH = 0.131 ± 0.003, p = 0.37).
+(C and D) Same as in (A) and (B) but for CA1
+(modulation during independent PFC ripples,
+EXC = 0.112 ± 0.004, INH = 0.087 ± 0.001, *** p =
+8.04 3 10
+/C0 7).
+(E) Relationship between Z scored assembly re-
+activation strength during independent PFC ripples
+and coordinated ripples (PFC: r = 0.53, *** p = 1.28 3
+10
+/C0 23; CA1: r = /C0 0.71, *** p = 4.25 3 10/C0 87). Note
+that PFC reactivation strength is correlated across
+events, whereas CA1 assemblies that are highly
+suppressed during independent PFC ripples are
+strongly reactivated during coordinated ripples.
+(F) Reactivation strength during within-area
+independent and coordinated ripples and during
+opposing-area independent events (PFC: indepen-
+dent PFC = 0.71 ± 0.03, coordinated PFC = 0.96 ±
+0.04, independent CA1 = 0.13 ± 0.02, ** p = 0.0023,
+***p = 3.21 3 10
+/C0 33, *** p = 2.12 3 10/C0 53 for inde-
+pendent PFC vs. coordinated PFC, independent
+PFC vs. independent CA1, and coordinated PFC vs.
+independent CA1, respectively; CA1: independent
+CA1 = 1.67 ± 0.03, coordinated CA1 = 1.11 ± 0.03,
+independent PFC = /C0 0.51 ± 0.02, *** p = 2.44 3
+10
+/C0 18, ***p = 7.45 3 10/C0 239, ***p = 1.14 3 10/C0 128 for
+independent CA1 vs. coordinated CA1, independent
+CA1 vs. independent PFC, and coordinated CA1 vs.
+independent PFC, respectively; Kruskal-Wallis test,
+Bonferroni corrected for multiple comparison).
+(G) Relationship between independent PFC ripple
+reactivation and reinstatement of assemblies in the
+subsequent run epoch (PFC: r = /C0 0.002, p = 0.76,
+n = 257; CA1: r = 0.15, ** p = 0.0031, n = 382).
+(H) Prediction of intra-area ripple type (independent or coordinated) using spike count data (PFC: data = 0.6 ± 0.001, shufﬂe = 0.5 ± 4.64 3 10
+/C0 5, ***p = 3.39 3
+10/C0 50; CA1: data = 0.55 ± 0.005, shufﬂe = 0.50 ± 1.37 3 10/C0 4, ***p = 1.28 3 10/C0 26).
+(I) All CA1-PFC joint assemblies sorted by independent-PFC-ripple-aligned reactivation strength. Assemblies must have at least one member cell in each area to
+be included in analysis. Note that the high degree of CA1-PFC assembly suppression during independent PFC ripples is associated with strong reactiva tion
+during CA1-PFC coordinated ripples (red arrowheads).
+(J) The bottom 50% of assemblies sorted by independent-PFC-ripple-aligned reactivation strength.
+(K) CA1-PFC reactivation strengths during independent PFC ripples were negatively correlated with reactivation during CA1-PFC coordinated event s, similar to
+what is seen in CA1 assemblies (r = /C0 0.25, *** p = 3.69 3 10
+/C0 4).
+See also Figures S4 and S5.
+ll
+Current Biology 34, 2801–2811, July 8, 2024 2805
+Article
+
+===== PAGE 7 =====
+This novel, suppressive signature may have implications for un-
+derstanding the time course over which circuit modiﬁcations are
+implemented to support memory consolidation. The relatively
+rapid rise and fall of PFC ripple occurrence over the time period
+of sleep indicates that the strongest effects of these PFC-ripple-
+mediated modulatory processes are transient and restricted to
+initial novel learning. This neurophysiological phenomenon is sit-
+uated in an ideal temporal window to index or tag certain hippo-
+campal memory traces based on previously stored, generalized
+representations in distributed cortical circuits.
+28,29 Thus, the
+robust, broad suppression observed here may be an important
+early-onset, top-down process that converges on the hippo-
+campus concurrently with the entorhinal cortex information
+streams.
+30 The present results are in line with recent ﬁndings
+that suggest the presence of parallel processing circuits consti-
+tuting both bottom-up and top-down information streams that
+coincide for effective memory formation and retrieval.
+31 Indeed,
+initial learning is associated with the activation and rapid stabili-
+zation of PFC representations,12,32 potentially recruiting a subset
+of experience-salient ensembles to dynamically inﬂuence
+ongoing learning-related plasticity in the hippocampus and
+the content of what information to consolidate through the
+coordination of cortical up-states, thalamocortical spindles,
+and ripples during NREM sleep.
+Our ﬁnding that independent and coordinated events across
+the hippocampal-prefrontal circuit elicit differential responses
+suggests separate roles in systems memory consolidation.
+Although coordinated ripple events across hippocampal-
+neocortical circuits are thought to support memory consolida-
+tion through the coordinated reactivation of behaviorally relevant
+representations,
+9,19 the roles of independent events in CA1 and
+PFC are unclear. One possibility is that independent CA1 SWRs
+(independent meaning uncoupled from PFC ripple activity, spe-
+ciﬁcally) preferentially engage other brain areas to support
+different aspects of consolidation, depending on the nature of
+the experience. Indeed, there are widespread, bidirectional
+changes in activity surrounding SWRs
+5,33 that could reﬂect
+distinct processes if examined on an event-by-event basis.
+Future studies investigating multiple regions of interest simulta-
+neously will allow for the discretization of events spanning a
+wide range of brain areas and may reveal a multiplex hierarchy
+within which speciﬁc components can be selectively engaged
+depending on mnemonic demands.
+34 Notably, the ability to
+distinguish SWR events based on long-range interregional
+Jump distance
+0
+0.5
+1
+|Weighted correlation|
+0
+0.5
+1Independent
+Coordinated
+10.2 0.4 0.6 0.80 10.2 0.4 0.6 0.80
+Cumulative proportion
+******
+0.1
+0.5
+1
+0.1
+0.5
+1
+JD
+WC
+0
+4
+8
+12
+PCC
+(Coord - Ind)
+0
+20
+40
+60PCC
+***
+***
+Mod.
+Nonmod.
+CA1 units
+Normalized rank
+0.32
+0.33
+0.34
+0.35
+0.36
+SWR rank correlation (r)
+0.2 0.8
+***
+0.4 0.6 Ind.
+Coord.
+114
+Early Late
+0 1
+Rank
+SWRs
+0.2
+0.21
+0.22
+0.23
+0.24Dimensionality
+Ind.
+Coord.
+***
+0.3
+0.4
+0.5
+0.6
+0.7
+Sequence score (rZshuf)
+Ind.
+Coord.Wake
+***
+***
+***
+221 227 231416374455
+100 ms
+Independent Coordinated
+CA1 units
+Figure 5. Differences in content between independent and coordinated SWR replay events
+(A) Example CA1 rasters during independent (black) and coordinated (red) SWR events. Only signiﬁcant replay events are shown.
+(B) Jump distance and absolute weighted correlation for signiﬁcant CA1 replay events decoded during independent CA1 SWRs and coordinated ripples (j ump
+distance: independent = 0.468 ± 0.003, coordinated = 0.505 ± 0.005, *** p = 2.73 3 10/C0 11; weighted correlation: independent = 0.620 ± 0.002, coordinated =
+0.585 ± 0.003, *** p = 1.10 3 10/C0 17).
+(C) Rank-order correlation analysis. Example rank-order matrix and template from an example sleep epoch (left). Templates were generated separate ly for in-
+dependent and coordinated ripple events. The order of unit spiking (both pyramidal cells and interneurons included) was more consistent for indepen dent SWR
+events as compared with coordinated SWRs (independent = 0.356 ± 0.002, coordinated = 0.344 ± 0.004, *** p = 3.34 3 10/C0 5, Wilcoxon rank sum).
+(D) Population dimensionality was higher during independent SWRs as compared with coordinated SWRs (independent = 0.239 ± 0.002, coordinated = 0.22 2±
+0.002, ***p = 4.37 3 10/C0 15, Wilcoxon rank sum).
+(E) Sequence degradation (rZ shuf) of independent, coordinated, and awake replay events after shufﬂing individual cells’ linearized ﬁring ﬁelds (independent =
+0.585 ± 0.004, coordinated = 0.475 ± 0.005, wake = 0.662 ± 0.004, *** p = 7.34 3 10/C0 79, ***p = 5.70 3 10/C0 42, ***p = 2.40 3 10/C0 169 for independent vs. coordinated,
+independent vs. wake, and coordinated vs. wake, respectively; Kruskal-Wallis test, Bonferroni corrected for multiple comparison).
+(F) Per-cell contribution (PCC) to all signiﬁcant replay events for CA1 modulated vs. non-modulated cells (top, modulated = 55.04 ± 1.28, non-modulated = 46.65 ±
+1.02, ***p = 2.39 3 10/C0 7) and the difference in PCC (coordinated minus independent) to independent and coordinated events (bottom, modulated = 10.44 ± 0.57,
+non-modulated = 8.17 ± 0.55, *** p = 9.88 3 10/C0 4).
+See also Figure S5.
+ll
+2806 Current Biology 34, 2801–2811, July 8, 2024
+Article
+
+===== PAGE 8 =====
+coordination affords the opportunity to study this widespread
+hippocampal phenomenon in greater detail and may be able to
+reconcile how SWR diversity may play a role in different aspects
+of cognition.35–38
+The broad suppression that spans multiple cell types in CA1
+during PFC ripples indicates that these cortical ripples have a
+unique contribution to the consolidation of recently acquired
+memories. The robust and predictive nature of this suppression
+suggests that PFC may have a role in modulating or biasing the
+content of hippocampal reactivation to inﬂuence what informa-
+tion to consolidate within the hippocampus and, in turn, the
+neocortex. Furthermore, modulation during PFC ripples may
+indicate a mechanism through which the E-I (excitation-inhibi-
+tion) balance within the CA1 circuit is modiﬁed to maintain or
+restore a speciﬁc level of criticality
+39,40 or to control the excit-
+atory drive in the population of CA1 pyramidal cells, 41 thus
+increasing the signal to noise ratio for more robust information
+transfer.
+42 Concurrently, CA1 suppression may also be a mech-
+anism through which memory interference in the PFC is attenu-
+ated to allow for restricted cortical-ripple-mediated information
+transfer and plasticity throughout the neocortex to support
+memory integration through synchrony for semantic mem-
+ories.
+20,21,43 Indeed, previous studies have demonstrated that
+cortical areas are synchronized through ripple oscillations after
+learning and may be involved in binding neural activity across
+the cortex. 22,44 Notably, cortical high-frequency oscillations
+can be separated into slow and fast events and show preferential
+interaction with either hippocampal or cortical areas, respec-
+tively.
+22 Given our ﬁnding of a relationship between CA1 sup-
+pression and PFC ripple frequency, effective consolidation
+may be dependent on a gradient of hippocampal-cortical
+communication mediated by high-frequency coupling. Similarly,
+spindle-uncoupled SWRs suppress activity in the mediodorsal
+thalamus, and the degree of suppression is correlated with
+SWR amplitude.
+45 These results, along with our ﬁndings, sug-
+gest the presence of multiple suppressive circuit mechanism in
+the thalamocortical-hippocampal pathway for potentially modu-
+larly reducing interference. We hypothesize that PFC ripples may
+be associated with consolidation within cortical networks while
+suppressing hippocampal reactivation, and elucidation of the
+brain-wide processes associated with this suppression will
+require monitoring multiple cortical areas. However, it is impor-
+tant to note—given that the suppression of CA1 initiates prior
+to PFC reactivation during independent PFC ripple events—
+that there are likely other brain regions contributing to this pro-
+cess. Importantly, previous studies have shown that deep and
+superﬁcial CA1 pyramidal neurons segregate into two molecu-
+larly deﬁned populations that have distinct cortical targets and
+-400-200 0 200 400
+Time from trough (ms)
+-4
+-3
+-2
+-1
+0
+1
+2
+3
+Amplitude (z)
+SO
+Other
+Down
+Up
+-250 0 250
+-1
+-0.5
+0
+0.5
+1
+1.5
+2
+Event probability
+(fold change)
+PFC ripples
+PFC spindles
+CA1 ripples
+Mean SO
+Event onsets
+Time from trough (ms)
+0 0.2 0.4 0.6 0.8 1
+PFC LFP
+CA1 LFP
+PFC CellsCA1 Cells
+Up state
+Time (s)
+PFC ripple
+PFC spindle
+CA1 ripple
+-250 0 250
+-0.6
+-0.4
+-0.2
+0
+0.2
+0.4
+0.6
+0.8
+PFC
+CA1
+Reactivation strength (z)
+Event peak onset
+Time from trough (ms)
+0
+0.1
+0.2
+0.3
+0.4
+SO-Up
+SO-Down
+Replay probability
+Coordinated
+5
+10
+htgnerts
+noitavitcaeR
+0
+0.5
+1
+250-250 0
+***
+***
+Time from trough (ms)
+Cumulative proportion
+All event onsets
+Event timings
+***
+***
+***
+***
+***
+***
+-0.9
+-0.8
+-0.7
+-0.6
+-0.5
+-0.4
+-0.3CA1 suppression
+1 23 4
+Peri-SO reactivation
+quartile
+r = -0.40***
+r = -0.01ns
+Data
+Shuffle
+Probability
+(normalized)
+0 1
+0
+180
+360SO phase
+Peak
+Trough
+-0.4
+0
+0.4
+0.8
+1.2
+1.6
+Cross correlation (z)
+Coordinated Independent
+-0.4
+0
+0.4
+0.8
+1.2
+-4 -2 0
+Lag (s)
+24
+SO-Down
+SO-Up
+0
+0.06
+0.12
+0.18
+Independent
+ns***
+-4 -2 0 24
+SWR-PFC spindle SWR-PFC SO
+-1 1
+-0.4
+0
+0.4
+0.8
+1.2
+-0.4
+0
+0.4
+0.8
+1.2
+0
+Q1
+Q4
+Time from trough (s)
+Q1
+Q4
+Reactivation strength (z)
+Min
+Max
+-1 1 0
+Figure 6. Serially coupled spindles, ripples, and slow oscillations
+(A) Cross-correlation between independent or coordinated CA1 SWRs with PFC spindles and SOs (trough time). Note that only coordinated CA1-PFC ripples tend
+to be associated with spindle oscillations. Furthermore, the timing of SWRs relative to SOs is different between these events, with coordinated ripp les occurring
+primarily at the trough and independent SWRs preceding SO troughs.
+(B) Average waveforms for SOs and other, lower-amplitude slow waves extracted from PFC LFPs.
+(C) Probability of coordinated- and independent-ripple-associated CA1 replay during up and down states (coordinated: up = 0.19 ± 0.02, down = 0.11 ± 0 .01,
+***p = 2.30 3 10
+/C0 4; independent: up = 0.09 ± 0.01, down = 0.08 ± 0.01, p = 0.18).
+(D) Raster showing the reactivation strengths of example CA1 and PFC assemblies in relation to LFP events. Note the sequential organization of events with PFC
+leading CA1.
+(E) Event probability fold change of spindles and ripples aligned to SO troughs (spindles, *** p = 2.84 3 10
+/C0 14; PFC ripples, ***p = 1.66 3 10/C0 7; CA1 ripples, ***p =
+3.86 3 10/C0 5, t test vs. 0), showing the spindle-PFC ripple-CA1 ripple timing.
+(F) (Left) Cumulative proportion of event timings within ±250 ms of SO troughs (spindles vs. PFC ripples, *** p = 2.41 3 10/C0 16, PFC ripples vs. CA1 ripples, *** p =
+4.62 3 10/C0 13), and (right) preferred SO phase for each event type (spindles vs. PFC ripples, U 2 = 2.63, ***p = 5.73 3 10/C0 23, PFC ripples vs. CA1 ripples, U 2 = 2.54,
+***p = 3.61 3 10/C0 22, Watson’s U 2 test). Gray shaded area indicates repeated data for visualization.
+(G) SO-trough-aligned CA1 and PFC reactivation strength during SO-associated coordinated events where PFC ripples precede CA1 SWRs (PFC vs. shufﬂe ,
+***p = 4.91 3 10/C0 19; CA1 vs. shufﬂe, *** p = 2.12 3 10/C0 39; PFC vs. CA1 timing, *** p = 7.96 3 10/C0 5).
+(H) (Left) Relationship between independent PFC-ripple-associated CA1 suppression and SO up-state CA1 reactivation strength (data: r = /C0 0.40, ***p = 3.01 3
+10/C0 21, shufﬂe: r = /C0 0.01, p = 0.86), again showing a negative relationship. (Middle) SO-trough-aligned reactivation strength for CA1 assemblies. (Right) Z scored
+SO-trough-aligned CA1 reactivation strength plotted for the ﬁrst and fourth quartiles.
+See also Figure S6.
+ll
+Current Biology 34, 2801–2811, July 8, 2024 2807
+Article
+
+===== PAGE 9 =====
+differentially engage SWRs and the theta oscillation. 37 The inte-
+gration of our results thus raises the question of whether speciﬁc
+hippocampal-cortical subcircuits uniquely contribute to the dy-
+namics surrounding the suppressive phenomenon that we report
+here. Future studies investigating this bidirectional modulation of
+CA1 in the context of the laminar distribution of cells (deep vs.
+superﬁcial), their projection proﬁles to different cortical targets,
+such as the PFC and entorhinal cortex, and the state of plasticity
+(plastic vs. rigid) will yield a clearer picture of the multimodal dy-
+namics present in the hippocampus.
+37,46,47
+The ﬁnding that highly suppressed CA1 assemblies are
+strongly reactivated during coordinated ripples events, coupled
+with spindles and SOs—a salient signature of consolidation—
+also suggests a mechanism through which PFC prioritizes spe-
+ciﬁc CA1 assemblies for consolidation based on future utility or
+generalizability through a cortical-hippocampal-directed pro-
+cess.
+15,16,48,49 In contrast, previous studies have demonstrated
+a temporal interaction between the PFC and the hippocampus,
+where SWRs precede spindles to potentially tag neocortical
+traces for subsequent consolidation during spindles.
+50 Although
+we did not ﬁnd evidence for strong coupling between spindles
+and independent SWRs, other hippocampal subregions, such
+as the ventral CA1, may preferentially interact with cortical re-
+gions in a hippocampal-leading manner to support neocortical
+tagging.
+51 Because SWRs in the dorsal and ventral CA1 are
+largely asynchronous during NREM sleep, 52 we predict that
+there exist sub-stages of memory consolidation mediated by
+bidirectional interactions between the PFC and distinct CA1 cir-
+cuits. In the context of memory reconsolidation, suppression
+may be involved in preventing destabilization of certain salient
+CA1 memory traces.
+53 Many studies of reconsolidation utilize
+experimental paradigms that are performed over the course of
+multiple days. It has been argued that speciﬁc changes in hippo-
+campal dynamics potentially linked to consolidation, namely
+representational drift,
+54 are a function of experience55,56; howev-
+er, our longitudinal study design, wherein animals are exposed to
+multiple behavioral sessions in a day, can maintain a speciﬁc
+level of lability in CA1 that is consistent with circuit dynamics un-
+derlying reconsolidation. Given the persistent reactivation that
+occurs in CA1 subsequent to novel experience,
+57 PFC-mediated
+suppression may be a mechanism through which CA1 activity
+is normalized to a level that is optimal for the induction of tran-
+scriptional processes that underlie memory maintenance or
+integration.
+53
+Previous human fMRI studies have reported hippocampal
+suppression primarily during retrieval stopping, which is typically
+investigated in contexts where intrusive memories are proac-
+tively suppressed.
+58,59 Our ﬁnding that coordinated-SWR-asso-
+ciated replay events have lower dimensionality and sequential
+structure raises the alternative possibility that the PFC may be
+involved in a process that prevents certain neural patterns from
+being consolidated through disruption of hippocampal sequen-
+tial activity. SWRs are thought to facilitate retrieval through the
+reactivation of hippocampal ensembles, but the mechanisms
+through which these activity patterns are distinguished based
+on utility for consolidation are unclear. There must be a way for
+the brain to separate activity that is elicited by actual experience
+from novel, unrelated activity patterns that are a result of inter-
+nally generated mechanisms to maintain a faithful rendering of
+reality.
+8,60 Although these coordinated-SWR-associated replay
+events quantitatively represent sequences of behaviorally rele-
+vant activity, the up- and downstream brain areas conveying
+and receiving information, respectively, may play roles in deter-
+mining the nature of the top-down inﬂuence of the PFC on hippo-
+campal sequential activity.
+34 This type of reality monitoring is
+crucial for the purported role of SWRs in imagination, 8 and
+further elucidation of the mechanisms underlying this process
+may lead to a deeper understanding of how it goes awry in
+neurological disorders such as schizophrenia.
+60
+Overall, our results uncover a previously unknown PFC-ripple-
+mediated phenomenon with a distinct suppressive reactivation
+role that is suggestive of a modulatory process involved in modi-
+fying hippocampal representations and biasing hippocampal re-
+activation in sleep for effective future behavior. Given the proce-
+dural complexity of the integration of learned, novel experiences,
+the elucidation of the brain-wide neurophysiological phenomena
+that contribute to these processes at speciﬁc time points in
+different brain states and contexts is essential for understanding
+how interregional communication supports learning and may un-
+cover a broader role for activity suppression in memory forma-
+tion, consolidation, and retrieval.
+STAR+METHODS
+Detailed methods are provided in the online version of this paper and include
+the following:
+d KEY RESOURCES TABLE
+d RESOURCES AVAILABILITY
+B Lead contact
+B Materials Availability
+B Data and Code Availability
+d EXPERIMENTAL MODEL AND SUBJECT DETAILS
+d METHOD DETAILS
+B Behavior
+B Surgical implant and electrophysiology
+B Histological veriﬁcation of recording sites
+B Spike sorting
+B Sleep state identiﬁcation
+B LFP event detection
+B Ripple rates and ripple rate correlation
+B Event cross-correlation
+B Ripple aligned modulation
+B Spectral analysis
+B Ripple triggered spindle power
+B Theta phase-locking
+B Single unit properties
+B Single unit SWR activity
+B Event aligned multi-unit activity
+B Ripple coactivity
+B Assembly detection
+B Assembly reactivation strength
+B Assembly coactivation rate
+B Ripple triggered assembly strength
+B Assembly reinstatement
+B Replay analysis
+B Replay signiﬁcance (Monte Carlo method)
+B Replay Signiﬁcance (Weighted Correlation vs. shufﬂe)
+B Per cell contribution (PCC) analysis
+B Rank-order correlation
+B Population dimensionality during SWRs
+B Ripple type prediction
+B Replay probability during SOs
+B Peri-SO event probability
+ll
+2808 Current Biology 34, 2801–2811, July 8, 2024
+Article
+
+===== PAGE 10 =====
+B Peri-SO CA1 and PFC reactivation strength
+d QUANTIFICATION AND STATISTICAL ANALYSIS
+SUPPLEMENTAL INFORMATION
+Supplemental information can be found online at https://doi.org/10.1016/j.
+cub.2024.05.018.
+ACKNOWLEDGMENTS
+This work was supported by the National Institutes of Health (R01MH112661
+to S.P.J. and 2T32NS007292-36 to J.D.S.). We thank Edward L. Rivera for
+assistance with ventral CA1 data collection. The graphical abstract contains
+illustrations from BioRender.com and SciDraw.io (Wenbo Tang).
+AUTHOR CONTRIBUTIONS
+J.D.S. and S.P.J. conceived the study. J.D.S. performed the experiments.
+J.D.S. processed and analyzed the data. J.D.S. wrote the initial manuscript.
+J.D.S. and S.P.J. reviewed and edited the manuscript. S.P.J. provided super-
+vision and funding for all aspects of the study.
+DECLARATION OF INTERESTS
+The authors declare no competing interests.
+Received: February 13, 2024
+Revised: April 17, 2024
+Accepted: May 9, 2024
+Published: June 6, 2024
+REFERENCES
+1. Buzsa´ ki, G. (1989). Two-stage model of memory trace formation: a role for
+"noisy" brain states. Neuroscience 31, 551–570. https://doi.org/10.1016/
+0306-4522(89)90423-5.
+2. Squire, L.R., and Alvarez, P. (1995). Retrograde amnesia and memory
+consolidation: a neurobiological perspective. Curr. Opin. Neurobiol. 5,
+169–177. https://doi.org/10.1016/0959-4388(95)80023-9.
+3. Nadel, L., and Moscovitch, M. (1997). Memory consolidation, retrograde
+amnesia and the hippocampal complex. Curr. Opin. Neurobiol. 7,
+217–227. https://doi.org/10.1016/s0959-4388(97)80010-4.
+4. Girardeau, G., and Zugaro, M. (2011). Hippocampal ripples and memory
+consolidation. Curr. Opin. Neurobiol. 21, 452–459. https://doi.org/10.
+1016/j.conb.2011.02.005.
+5. Logothetis, N.K., Eschenko, O., Murayama, Y., Augath, M., Steudel, T.,
+Evrard, H.C., Besserve, M., and Oeltermann, A. (2012). Hippocampal-
+cortical interaction during periods of subcortical silence. Nature 491,
+547–553. https://doi.org/10.1038/nature11618.
+6. Buzsa´ ki, G. (2015). Hippocampal sharp wave-ripple: A cognitive
+biomarker for episodic memory and planning. Hippocampus 25, 1073–
+1188. https://doi.org/10.1002/hipo.22488.
+7. Shin, J.D., and Jadhav, S.P. (2016). Multiple modes of hippocampal-pre-
+frontal interactions in memory-guided behavior. Curr. Opin. Neurobiol. 40,
+161–169. https://doi.org/10.1016/j.conb.2016.07.015.
+8. Joo, H.R., and Frank, L.M. (2018). The hippocampal sharp wave-ripple in
+memory retrieval for immediate use and consolidation. Nat. Rev. Neurosci.
+19, 744–757. https://doi.org/10.1038/s41583-018-0077-1.
+9. Khodagholy, D., Gelinas, J.N., and Buzsa´ ki, G. (2017). Learning-enhanced
+coupling between ripple oscillations in association cortices and
+hippocampus. Science 358, 369–372. https://doi.org/10.1126/science.
+aan6203.
+10. Vaz, A.P., Inati, S.K., Brunel, N., and Zaghloul, K.A. (2019). Coupled ripple
+oscillations between the medial temporal lobe and neocortex retrieve hu-
+man memory. Science 363, 975–978. https://doi.org/10.1126/science.
+aau8956.
+11. Maharjan, D.M., Dai, Y.Y., Glantz, E.H., and Jadhav, S.P. (2018).
+Disruption of dorsal hippocampal - prefrontal interactions using chemoge-
+netic inactivation impairs spatial learning. Neurobiol. Learn. Mem. 155,
+351–360. https://doi.org/10.1016/j.nlm.2018.08.023.
+12. Shin, J.D., Tang, W., and Jadhav, S.P. (2019). Dynamics of Awake
+Hippocampal-Prefrontal Replay for Spatial Learning and Memory-
+Guided Decision Making. Neuron 104, 1110–1125.e7. https://doi.org/10.
+1016/j.neuron.2019.09.012.
+13. Ferna´ ndez-Ruiz, A., Oliva, A., Fermino de Oliveira, E., Rocha-Almeida, F.,
+Tingley, D., and Buzsa ´ ki, G. (2019). Long-duration hippocampal sharp
+wave ripples improve memory. Science 364, 1082–1086. https://doi.org/
+10.1126/science.aax0758.
+14. Maingret, N., Girardeau, G., Todorova, R., Goutierre, M., and Zugaro, M.
+(2016). Hippocampo-cortical coupling mediates memory consolidation dur-
+ing sleep. Nat. Neurosci. 19,9 5 9 – 9 6 4 .https://doi.org/10.1038/nn.4304.
+15. Latchoumane, C.V., Ngo, H.V.V., Born, J., and Shin, H.S. (2017). Thalamic
+Spindles Promote Memory Formation during Sleep through Triple Phase-
+Locking of Cortical, Thalamic, and Hippocampal Rhythms. Neuron 95,
+424–435.e6. https://doi.org/10.1016/j.neuron.2017.06.025.
+16. Staresina, B.P., Niediek, J., Borger, V., Surges, R., and Mormann, F.
+(2023). How coupled slow oscillations, spindles and ripples coordinate
+neuronal processing and communication during human sleep. Nat.
+Neurosci. 26, 1429–1437. https://doi.org/10.1038/s41593-023-01381-w.
+17. Jadhav, S.P., Rothschild, G., Roumis, D.K., and Frank, L.M. (2016).
+Coordinated Excitation and Inhibition of Prefrontal Ensembles during
+Awake Hippocampal Sharp-Wave Ripple Events. Neuron 90, 113–127.
+https://doi.org/10.1016/j.neuron.2016.02.010.
+18. Wang, D.V., and Ikemoto, S. (2016). Coordinated Interaction between
+Hippocampal Sharp-Wave Ripples and Anterior Cingulate Unit Activity.
+J. Neurosci. 36, 10663–10672. https://doi.org/10.1523/JNEUROSCI.
+1042-16.2016.
+19. Tang, W., Shin, J.D., Frank, L.M., and Jadhav, S.P. (2017). Hippocampal-
+Prefrontal Reactivation during Learning Is Stronger in Awake Compared
+with Sleep States. J. Neurosci. 37, 11789–11805. https://doi.org/10.
+1523/JNEUROSCI.2291-17.2017.
+20. Arnulfo, G., Wang, S.H., Myrov, V., Toselli, B., Hirvonen, J., Fato, M.M.,
+Nobili, L., Cardinale, F., Rubino, A., Zhigalov, A., et al. (2020). Long-range
+phase synchronization of high-frequency oscillations in human cortex.
+Nat. Commun. 11, 5363. https://doi.org/10.1038/s41467-020-18975-8.
+21. Dickey, C.W., Verzhbinsky, I.A., Jiang, X., Rosen, B.Q., Kajfez, S.,
+Stedelin, B., Shih, J.J., Ben-Haim, S., Raslan, A.M., Eskandar, E.N.,
+et al. (2022). Widespread ripples synchronize human cortical activity dur-
+ing sleep, waking, and memory recall. Proc. Natl. Acad. Sci. USA 119,
+e2107797119. https://doi.org/10.1073/pnas.2107797119.
+22. Aleman-Zapata, A., Morris, R.G.M., and Genzel, L. (2022). Sleep depriva-
+tion and hippocampal ripple disruption after one-session learning elimi-
+nate memory expression the next day. Proc. Natl. Acad. Sci. USA 119,
+e2123424119. https://doi.org/10.1073/pnas.2123424119.
+23. Liu, C., Todorova, R., Tang, W., Oliva, A., and Fernandez-Ruiz, A. (2023).
+Associative and predictive hippocampal codes support memory-guided be-
+haviors. Science 382, eadi8237. https://doi.org/10.1126/science.adi8237.
+24. Stark, E., Roux, L., Eichler, R., and Buzsa ´ ki, G. (2015). Local generation
+of multineuronal spike sequences in the hippocampal CA1 region. Proc.
+Natl. Acad. Sci. USA 112, 10521–10526. https://doi.org/10.1073/pnas.
+1508785112.
+25. Klinzing, J.G., Niethard, N., and Born, J. (2019). Mechanisms of systems
+memory consolidation during sleep. Nat. Neurosci. 22, 1598–1610.
+https://doi.org/10.1038/s41593-019-0467-3.
+26. Todorova, R., and Zugaro, M. (2020). Hippocampal ripples as a mode of
+communication with cortical and subcortical areas. Hippocampus 30,
+39–49. https://doi.org/10.1002/hipo.22997.
+27. Geva-Sagiv, M., Mankin, E.A., Eliashiv, D., Epstein, S., Cherry, N.,
+Kalender, G., Tchemodanov, N., Nir, Y., and Fried, I. (2023). Augmenting
+hippocampal-prefrontal neuronal synchrony during sleep enhances
+ll
+Current Biology 34, 2801–2811, July 8, 2024 2809
+Article
+
+===== PAGE 11 =====
+memory consolidation in humans. Nat. Neurosci. 26, 1100–1110. https://
+doi.org/10.1038/s41593-023-01324-5.
+28. Bernardi, S., Benna, M.K., Rigotti, M., Munuera, J., Fusi, S., and Salzman,
+C.D. (2020). The Geometry of Abstraction in the Hippocampus and
+Prefrontal Cortex. Cell 183, 954–967.e21.
+29. Tang, W., Shin, J.D., and Jadhav, S.P. (2023). Geometric transformation of
+cognitive maps for generalization across hippocampal-prefrontal circuits.
+Cell Rep. 42, 112246. https://doi.org/10.1016/j.celrep.2023.112246.
+30. Moser, E.I., and Moser, M.B. (2013). Grid cells and neural coding in high-
+end cortices. Neuron 80, 765–774. https://doi.org/10.1016/j.neuron.2013.
+09.043.
+31. Yadav, N., Toader, A., and Rajasethupathy, P. (2024). Beyond hippocam-
+pus: Thalamic and prefrontal contributions to an evolving memory. Neuron
+112, 1045–1059. https://doi.org/10.1016/j.neuron.2023.12.021.
+32. DeNardo, L.A., Liu, C.D., Allen, W.E., Adams, E.L., Friedmann, D., Fu, L.,
+Guenthner, C.J., Tessier-Lavigne, M., and Luo, L. (2019). Temporal evolu-
+tion of cortical ensembles promoting remote memory retrieval. Nat.
+Neurosci. 22, 460–469. https://doi.org/10.1038/s41593-018-0318-7.
+33. Karimi Abadchi, J., Nazari-Ahangarkolaee, M., Gattas, S., Bermudez-
+Contreras, E., Luczak, A., McNaughton, B.L., and Mohajerani, M.H.
+(2020). Spatiotemporal patterns of neocortical activity around hippocam-
+pal sharp-wave ripples. eLife 9, e51972. https://doi.org/10.7554/eLife.
+51972.
+34. Buzsa´ ki, G., and Tingley, D. (2018). Space and Time: The Hippocampus as
+a Sequence Generator. Trends Cogn. Sci. 22, 853–869. https://doi.org/10.
+1016/j.tics.2018.07.006.
+35. Reichinnek, S., Ku ¨ nsting, T., Draguhn, A., and Both, M. (2010). Field
+potential signature of distinct multicellular activity patterns in the mouse
+hippocampus. J. Neurosci. 30, 15441–15449. https://doi.org/10.1523/
+JNEUROSCI.2535-10.2010.
+36. Ramirez-Villegas, J.F., Logothetis, N.K., and Besserve, M. (2015).
+Diversity of sharp-wave-ripple LFP signatures reveals differentiated
+brain-wide dynamical events. Proc. Natl. Acad. Sci. USA 112, E6379–
+E6387. https://doi.org/10.1073/pnas.1518257112.
+37. de la Prida, L.M. (2020). Potential factors inﬂuencing replay across CA1
+during sharp-wave ripples. Philos. Trans. R. Soc. Lond. B Biol. Sci. 375,
+20190236. https://doi.org/10.1098/rstb.2019.0236.
+38. Nitzan, N., Swanson, R., Schmitz, D., and Buzsa ´ ki, G. (2022). Brain-wide
+interactions during hippocampal sharp wave ripples. Proc. Natl. Acad.
+Sci. USA 119, e2200931119.
+39. O’Byrne, J., and Jerbi, K. (2022). How critical is brain criticality? Trends
+Neurosci. 45, 820–837. https://doi.org/10.1016/j.tins.2022.08.007.
+40. Xu, Y., Schneider, A., Wessel, R., and Hengen, K.B. (2024). Sleep restores
+an optimal computational regime in cortical networks. Nat. Neurosci. 27,
+328–338. https://doi.org/10.1038/s41593-023-01536-9.
+41. Hahn, T.T.G., Sakmann, B., and Mehta, M.R. (2007). Differential responses
+of hippocampal subﬁelds to cortical up-down states. Proc. Natl. Acad. Sci.
+USA 104, 5169–5174.
+https://doi.org/10.1073/pnas.0700222104.
+42. Malik, R., Li, Y., Schamiloglu, S., and Sohal, V.S. (2022). Top-down control
+of hippocampal signal-to-noise by prefrontal long-range inhibition. Cell
+185, 1602–1617.e17. https://doi.org/10.1016/j.cell.2022.04.001.
+43. Navarro Lobato, I., Aleman-Zapata, A., Samanta, A., Bogers, M.,
+Narayanan, S., Rayan, A., Alonso, A., van der Meij, J., Khamassi, M.,
+Khan, Z.U., and Genzel, L. (2023). Increased cortical plasticity leads to
+memory interference and enhanced hippocampal-cortical interactions.
+eLife 12, e84911. https://doi.org/10.7554/eLife.84911.
+44. Verzhbinsky, I.A., Rubin, D.B., Kajfez, S., Bu, Y., Kelemen, J.N.,
+Kapitonava, A., Williams, Z.M., Hochberg, L.R., Cash, S.S., and Halgren,
+E. (2024). Co-occurring ripple oscillations facilitate neuronal interactions
+between cortical locations in humans. Proc. Natl. Acad. Sci. USA 121,
+e2312204121. https://doi.org/10.1073/pnas.2312204121.
+45. Yang, M., Logothetis, N.K., and Eschenko, O. (2019). Occurrence of
+Hippocampal Ripples is Associated with Activity Suppression in the
+Mediodorsal Thalamic Nucleus. J. Neurosci. 39, 434–444. https://doi.
+org/10.1523/JNEUROSCI.2107-18.2018.
+46. Grosmark, A.D., and Buzsa´ ki, G. (2016). Diversity in neural ﬁring dynamics
+supports both rigid and learned hippocampal sequences. Science 351,
+1440–1443. https://doi.org/10.1126/science.aad1935.
+47. Sharif, F., Tayebi, B., Buzsa ´ ki, G., Royer, S., and Fernandez-Ruiz, A.
+(2021). Subcircuits of Deep and Superﬁcial CA1 Place Cells Support
+Efﬁcient Spatial Coding across Heterogeneous Environments. Neuron
+109, 363–376.e6.
+48. Sun, W., Advani, M., Spruston, N., Saxe, A., and Fitzgerald, J.E. (2023).
+Organizing memories for generalization in complementary learning sys-
+tems. Nat. Neurosci. 26, 1438–1448. https://doi.org/10.1038/s41593-
+023-01382-9.
+49. Helfrich, R.F., Lendner, J.D., Mander, B.A., Guillen, H., Paff, M.,
+Mnatsakanyan, L., Vadera, S., Walker, M.P., Lin, J.J., and Knight, R.T.
+(2019). Bidirectional prefrontal-hippocampal dynamics organize informa-
+tion transfer during sleep in humans. Nat. Commun. 10, 3572. https://
+doi.org/10.1038/s41467-019-11444-x.
+50. Peyrache, A., and Seibt, J. (2020). A mechanism for learning with sleep
+spindles. Philos. Trans. R. Soc. Lond. B Biol. Sci. 375, 20190230.
+https://doi.org/10.1098/rstb.2019.0230.
+51. Peyrache, A., Battaglia, F.P., and Destexhe, A. (2011). Inhibition recruit-
+ment in prefrontal cortex during sleep spindles and gating of hippocampal
+inputs. Proc. Natl. Acad. Sci. USA 108, 17207–17212. https://doi.org/10.
+1073/pnas.1103612108.
+52. Sosa, M., Joo, H.R., and Frank, L.M. (2020). Dorsal and Ventral
+Hippocampal Sharp-Wave Ripples Activate Distinct Nucleus Accumbens
+Networks. Neuron 105,7 2 5 – 7 4 1 . e 8 .https://doi.org/10.1016/j.neuron.
+2019.11.022.
+53. Alberini, C.M. (2011). The role of reconsolidation and the dynamic process
+of long-term memory formation and storage. Front. Behav. Neurosci. 5,
+12. https://doi.org/10.3389/fnbeh.2011.00012.
+54. Driscoll, L.N., Duncker, L., and Harvey, C.D. (2022). Representational drift:
+Emerging theories for continual learning and experimental future direc-
+tions. Curr. Opin. Neurobiol. 76, 102609. https://doi.org/10.1016/j.conb.
+2022.102609.
+55. Geva, N., Deitch, D., Rubin, A., and Ziv, Y. (2023). Time and experience
+differentially affect distinct aspects of hippocampal representational drift.
+Neuron 111, 2357–2366.e5. https://doi.org/10.1016/j.neuron.2023.05.005.
+56. Khatib, D., Ratzon, A., Sellevoll, M., Barak, O., Morris, G., and Derdikman,
+D. (2023). Active experience, not time, determines within-day representa-
+tional drift in dorsal CA1. Neuron 111, 2348–2356.e5. https://doi.org/10.
+1016/j.neuron.2023.05.014.
+57. Giri, B., Miyawaki, H., Mizuseki, K., Cheng, S., and Diba, K. (2019).
+Hippocampal Reactivation Extends for Several Hours Following
+Novel Experience. J. Neurosci. 39, 866–875. https://doi.org/10.1523/
+JNEUROSCI.1950-18.2018.
+58. Anderson, M.C., and Hanslmayr, S. (2014). Neural mechanisms of moti-
+vated forgetting. Trends Cogn. Sci. 18, 279–292. https://doi.org/10.
+1016/j.tics.2014.03.002.
+59. Meyer, A.K., and Benoit, R.G. (2022). Suppression weakens unwanted
+memories via a sustained reduction of neural reactivation. eLife 11,
+e71309. https://doi.org/10.7554/eLife.71309.
+60. Simons, J.S., Garrison, J.R., and Johnson, M.K. (2017). Brain Mechanisms
+of Reality Monitoring. Trends Cogn. Sci. 21, 462–473. https://doi.org/10.
+1016/j.tics.2017.03.012.
+61. Zarzoso, V., and Comon, P. (2010). Robust independent component anal-
+ysis by iterative maximization of the kurtosis contrast with algebraic
+optimal step size. IEEE Trans. Neural Netw. 21, 248–261. https://doi.org/
+10.1109/TNN.2009.2035920.
+62. Ru¨ bel, O., Tritt, A., Ly, R., Dichter, B.K., Ghosh, S., Niu, L., Baker, P.,
+Soltesz, I., Ng, L., Svoboda, K., et al. (2022). The Neurodata Without
+Borders ecosystem for neurophysiological data science. eLife 11,
+e78362. https://doi.org/10.7554/eLife.78362.
+ll
+2810 Current Biology 34, 2801–2811, July 8, 2024
+Article
+
+===== PAGE 12 =====
+63. Shin, J.D., Tang, W., and Jadhav, S.P. (2023). Protocol for geometric
+transformation of cognitive maps for generalization across hippocam-
+pal-prefrontal circuits. Star Protoc. 4, 102513. https://doi.org/10.1016/j.
+xpro.2023.102513.
+64. Schmitzer-Torbert, N., Jackson, J., Henze, D., Harris, K., and Redish, A.D.
+(2005). Quantitative measures of cluster quality for use in extracellular re-
+cordings. Neuroscience 131, 1–11. https://doi.org/10.1016/j.neurosci-
+ence.2004.09.066.
+65. Harris, K.D., Hirase, H., Leinekugel, X., Henze, D.A., and Buzsa ´ ki, G.
+(2001). Temporal interaction between single spikes and complex spike
+bursts in hippocampal pyramidal cells. Neuron 32, 141–149. https://doi.
+org/10.1016/s0896-6273(01)00447-0.
+66. Mizuseki, K., Diba, K., Pastalkova, E., and Buzsa ´ ki, G. (2011).
+Hippocampal CA1 pyramidal cells form functionally distinct sublayers.
+Nat. Neurosci. 14, 1174–1181. https://doi.org/10.1038/nn.2894.
+67. Sullivan, D., Csicsvari, J., Mizuseki, K., Montgomery, S., Diba, K., and
+Buzsa´ ki, G. (2011). Relationships between hippocampal sharp waves, rip-
+ples, and fast gamma oscillation: inﬂuence of dentate and entorhinal
+cortical activity. J. Neurosci. 31, 8605–8616. https://doi.org/10.1523/
+JNEUROSCI.0294-11.2011.
+68. Kim, J., Gulati, T., and Ganguly, K. (2019). Competing Roles of Slow
+Oscillations and Delta Waves in Memory Consolidation versus
+Forgetting. Cell 179, 514–526.e13. https://doi.org/10.1016/j.cell.2019.
+08.040.
+69. Siapas, A.G., Lubenov, E.V., and Wilson, M.A. (2005). Prefrontal phase
+locking to hippocampal theta oscillations. Neuron 46, 141–151. https://
+doi.org/10.1016/j.neuron.2005.02.028.
+70. Lubenov, E.V., and Siapas, A.G. (2009). Hippocampal theta oscillations
+are travelling waves. Nature 459, 534–539. https://doi.org/10.1038/
+nature08010.
+71. Vinck, M., van Wingerden, M., Womelsdorf, T., Fries, P., and Pennartz,
+C.M.A. (2010). The pairwise phase consistency: a bias-free measure of
+rhythmic neuronal synchronization. Neuroimage 51, 112–122. https://
+doi.org/10.1016/j.neuroimage.2010.01.073.
+72. Cheng, S., and Frank, L.M. (2008). New experiences enhance coordinated
+neural activity in the hippocampus. Neuron 57, 303–313. https://doi.org/
+10.1016/j.neuron.2007.11.035.
+73. van de Ven, G.M., Trouche, S., McNamara, C.G., Allen, K., and Dupret, D.
+(2016). Hippocampal Ofﬂine Reactivation Consolidates Recently Formed
+Cell Assembly Patterns during Sharp Wave-Ripples. Neuron 92,
+968–974. https://doi.org/10.1016/j.neuron.2016.10.020.
+74. Peyrache, A., Khamassi, M., Benchenane, K., Wiener, S.I., and Battaglia,
+F.P. (2009). Replay of rule-learning related neural patterns in the prefrontal
+cortex during sleep. Nat. Neurosci. 12, 919–926. https://doi.org/10.1038/
+nn.2337.
+75. Davidson, T.J., Kloosterman, F., and Wilson, M.A. (2009). Hippocampal
+replay of extended experience. Neuron 63, 497–507. https://doi.org/10.
+1016/j.neuron.2009.07.027.
+76. Karlsson, M.P., and Frank, L.M. (2009). Awake replay of remote experi-
+ences in the hippocampus. Nat. Neurosci. 12, 913–918.
+https://doi.org/
+10.1038/nn.2344.
+77. Farooq, U., and Dragoi, G. (2019). Emergence of preconﬁgured and plastic
+time-compressed sequences in early postnatal development. Science
+363, 168–173. https://doi.org/10.1126/science.aav0502.
+78. Valero, M., Viney, T.J., Machold, R., Mederos, S., Zutshi, I., Schuman, B.,
+Senzai, Y., Rudy, B., and Buzsa´ ki, G. (2021). Sleep down state-active ID2/
+Nkx2.1 interneurons in the neocortex. Nat. Neurosci. 24, 401–411. https://
+doi.org/10.1038/s41593-021-00797-6.
+ll
+Current Biology 34, 2801–2811, July 8, 2024 2811
+Article
+
+===== PAGE 13 =====
+STAR+METHODS
+KEY RESOURCES TABLE
+RESOURCES AVAILABILITY
+Lead contact
+Further information and requests for resources and reagents should be directed to and will be fulﬁlled by the lead contact, Shantanu
+P. Jadhav ( shantanu@brandeis.edu).
+Materials Availability
+This study did not generate any new unique reagents.
+Data and Code Availability
+d Data underlying these results are available in the NWB (Neurodata Without Borders 62) format on DANDI Archive (DANDI ID#:
+000978).
+d Custom MATLAB code used for analyses in this study is available on GitHub at (http://github.com/JadhavLab/PrefrontalRipples).
+d Any additional information required to reanalyze the data reported in this paper is available from the lead contact upon request.
+EXPERIMENTAL MODEL AND SUBJECT DETAILS
+All experimental procedures were approved by the Institutional Animal Care and Use Committee at Brandeis University and
+conformed to US National Institutes of Health guidelines. Twelve adult male Long-Evans rats (450-600 g, 4-6 months; RRID:
+RGD_2308852) were used in this study. Animals were individually housed and kept on a 12-hr regular light/dark cycle.
+REAGENT or RESOURCE SOURCE IDENTIFIER
+Chemicals
+Cresyl Violet Acros Organics Cat#: AC229630050
+Formaldehyde Fisher Cat#: 50-00-0,67561,7732-18-5
+Isoﬂurane Patterson Veterinary Cat#: 07-806-3204
+Ketamine Patterson Veterinary Cat#: 07-803-6637
+Xylazine Patterson Veterinary Cat#: 07-808-1947
+Atropine Patterson Veterinary Cat#: 07-869-6061
+Bupivacaine Patterson Veterinary Cat#: 07-890-4881
+Euthasol Patterson Veterinary Cat#: 07-805-9296
+Sucrose Sigma-Aldrich Cat#: S8501-5KG
+Deposited Data
+Electrophysiology and behavior data This paper DANDI: 000978
+Experimental Models: Organisms/Strains
+Rat: Long Evans Charles River Cat#: Crl:LE 006; RRID: RGD_2308852
+Software and Algorithms
+MATLAB 2022a Mathworks, MA RRID: SCR_001622
+Trodes SpikeGadgets http://www.spikegadgets.com
+Matclust Mattias P. Karlsson https://www.mathworks.com/matlabcentral/ﬁleexchange/
+39663-matclust, V1.7
+Chronux Partha Mitra http://chronux.org/, V2.12
+RobustICA61 Vicente Zarazoso, Pierre Comon https://webusers.i3s.unice.fr//C24 zarzoso/robustica.html
+Other
+Electrophysiology data acquisition system SpikeGadgets http://www.spikegadgets.com
+12.7 mm NiCr tetrode wire Sandvik Cat#: PX000004
+ll
+e1 Current Biology 34, 2801–2811.e1–e9, July 8, 2024
+Article
+
+===== PAGE 14 =====
+METHOD DETAILS
+Behavior
+Eleven out of the twelve animals were trained on a novel W-maze in a single day, as previously described. 63 Brieﬂy, during the exper-
+imental day, all animals ran eight 15-20 minute behavioral sessions on a W-maze interleaved with nine 20-30 minute rest sessions in a
+sleep box. Reward (evaporated milk) was automatically delivered at each of the 3 reward wells upon completion of a correct trajec-
+tory. At the end of a behavioral session, animals were transferred to an opaque sleep box to rest.
+Surgical implant and electrophysiology
+Surgical implantation procedures were as previously described.63 Animals (n = 12) were implanted with a microdrive array containing
+30-64 independently moveable tetrodes targeting right dorsal hippocampal region CA1 (-3.6 mm AP and 2.2 mm ML) and right PFC
+(+3.0 mm AP and 0.7 mm ML) (Figures S1A and S1B). For 64 tetrode recordings (n = 1 animal), CA1 and PFC were targeted bilaterally.
+In one animal, ventral CA1 (-5.6 mm AP and 4.0 mm ML angled 12
+/C14 mediolaterally) was targeted in addition to dorsal CA1 and PFC.
+On the days following surgery, hippocampal tetrodes were gradually advanced to the desired depths using characteristic EEG pat-
+terns (sharp wave polarity, theta modulation) and neural ﬁring patterns as previously described.
+63 A CA1 tetrode in corpus callosum
+served as hippocampal reference, and another tetrode in overlying cortical regions with no spiking signal served as prefrontal refer-
+ence. A ground (GND) screw installed in the skull overlying cerebellum also served as a reference. All spiking activity and ripple-
+ﬁltered LFPs (150-250 Hz; CA1 and PFC; see below) were recorded relative to the local reference tetrode. For detection of slower
+frequency components (i.e., theta, spindle, and slow oscillations), LFP was recorded with respect to the GND screw. Electrodes
+were not moved at least 4 hours before and during the recording day.
+Data were collected using a SpikeGadgets data acquisition system (SpikeGadgets LLC). Spike data were sampled at 30 kHz and
+bandpass ﬁltered between 600 Hz and 6 kHz. LFPs were sampled at 1.5 kHz and bandpass ﬁltered between 0.1 Hz and 400 Hz. The
+animal’s position and running speed were recorded with an overhead color CCD camera (30 fps) and tracked by color LEDs afﬁxed to
+the headstage.
+Note that only the 8 animals that successfully learned the task were used for analysis, with the exception of Figures S1 J–S1M
+and S3H–S3K.
+Histological veriﬁcation of recording sites
+At the completion of each experiment, electrolytic lesions were made by sending current (30uA) down 3 electrodes per tetrode for 3-4
+seconds each. 24 hours later, animals were sacriﬁced by intraperitoneal injection of Euthasol and subsequent intracardial perfusion
+with 0.9% saline followed by 4% formaldehyde. The skull, with the attached drive, was submerged in 4% formaldehyde for 24 hours
+before tetrode retraction and brain extraction. Brains were stored in a 4% formaldehyde and 30% sucrose solution for at least 1 week
+before slicing with a freezing microtome (Leica) at 50uM. Slices were Nissl stained and imaged at 4x on a brightﬁeld microscope
+(Keyence) and stitched together to generate composite images for lesion localization.
+Spike sorting
+Single units were sorted using a custom manual clustering program (MatClust, M. P. Karlsson) and were distinguished based on
+spike width, peak and trough amplitude, and principal components. Cluster quality was measured using isolation distance,
+64 and
+only well isolated neurons were included for analysis.
+Putative CA1 pyramidal cells (43.25 ± 3.06 pyramidal units per epoch) and interneurons were further separated by burst probability,
+mean ﬁring rate, and trough-to-peak ( Figures S2F–S2M). Burst probability was deﬁned as the proportion of spikes within an epoch
+that occurred within 6 ms of each other. 65 All well isolated PFC units were included for analysis (34.36 ± 2.08 units per epoch).
+Sleep state identiﬁcation
+To detect bouts of NREM and REM sleep, animals’ head speed and CA1 LFPs were used as previously described. 19,66 During sleep
+box sessions, times of awake activity and immobility were deﬁned as periods where head speed was greater or less than 4 cm/s,
+respectively. Candidate NREM sleep bouts were identiﬁed as periods where head speed remained <4 cm/s after an immobility period
+of at least 60 s. NREM and REM sleep were further identiﬁed and separated by using a theta to delta ratio metric. Brieﬂy, CA1 LFP
+(referenced to GND) for each tetrode was bandpass ﬁltered (8-12 Hz for theta; 1-4 Hz for delta) and averaged, and the ratio of theta to
+delta power was calculated. Periods that exceeded a set threshold (mean + 1 SD) for >10 s were categorized as REM bouts within
+candidate NREM bouts ( Figure S1C).
+LFP event detection
+CA1 and PFC ripple detection: Ripple events were detected during immobility periods (<4 cm/s) as previously described.
+19 Tetrodes
+with recorded cells in CA1 and PFC were used as electrodes for ripple detection. Each LFP from candidate electrodes were band-
+pass ﬁltered in the ripple band (150-250 Hz), and the envelope power was calculated using a Hilbert transform and subsequently
+smoothed with a gaussian kernel (4 ms). Ripple events were detected as contiguous periods where the ripple power exceeded 3
+SD of the mean on at least one tetrode. Events were further reﬁned as periods around the detected event that remained above
+the mean (start and end times). The amplitude of each ripple event was reported as the number SDs above the mean.
+12 To estimate
+ll
+Current Biology 34, 2801–2811.e1–e9, July 8, 2024 e2
+Article
+
+===== PAGE 15 =====
+the frequency of each ripple event, the power in each frequency bin was calculated around each ripple event (±500 ms) using multi-
+taper time-frequency analysis (Chronux toolbox; http://chronux.org/) and was z-scored relative to a baseline spectrogram. The fre-
+quency of each event was deﬁned as the frequency with the highest power in the ripple band (100-250 Hz) between the start and end
+time of each event.67 Furthermore, ripple events in CA1 and PFC were designated as independent or coordinated based on whether
+cross-region event times (start to end intervals) overlapped. The coordinated events were further subset into leading or lagging
+events depending on the identity of the leading ripple. Only events where there was a clear temporal relationship were used (i.e.
+the start and end times of the leading event preceded the start and end times of the lagging event, respectively). Additionally, in
+PFC, isolated ripples were extracted as all events that were temporally isolated from both spindles and SOs by R500 ms.
+PFC spindle detection: Spindle detection was performed using the same PFC tetrodes used for ripple detection. Similar to ripple
+detection, LFP from PFC tetrodes were bandpass ﬁltered in the spindle band (12-16 Hz), and the envelope power was calculated
+using a Hilbert transform. Contiguous periods that exceeded 3 SD of the mean on at least one tetrode were considered spindle
+events. Events were further reﬁned as periods around the detected event that remained above the mean (start and end times).
+PFC slow wave detection: To extract slow waves from PFC LFP, tetrodes that were used to detect PFC ripple events were aver-
+aged together and ﬁltered through two independent ﬁlters as previously described.
+68 Brieﬂy, the averaged LFP was ﬁltered with a
+high pass Butterworth ﬁlter (0.1 Hz cutoff, 2 nd order) followed by a low pass ﬁlter (4 Hz cutoff, 5 th order). To separate SOs from other,
+lower amplitude slow waves (i.e. possibly delta oscillations), the following process was employed. Here, we are considering SOs as
+high amplitude waves in the 0.1-4 Hz range. First all zero crossings were identiﬁed and each segment that included an up state be-
+tween two down states was extracted for further processing. For each epoch, a positive (>85 percentile of peaks) and negative
+threshold (<40 percentile of troughs) was set for down and up states, respectively. A wave was considered a SO if both the ﬁrst
+peak was higher than the positive threshold and the trough was lower than the negative threshold. Slow waves were classiﬁed as
+low amplitude (other) if the trough was lower than the negative threshold but the ﬁrst peak did not surpass the positive threshold.
+Furthermore, only events where the time from ﬁrst peak to trough was 150-500 ms were included. To visualize the separation of
+SOs and other slow waves, K-Means clustering was performed on the mean peak and trough values from each epoch ( Figure S6E).
+All of the above events were further subset by periods of NREM sleep for subsequent analysis. For consistency, the same elec-
+trodes were used for detection of events across all epochs.
+Ripple rates and ripple rate correlation
+Ripple rates were calculated for each animal and epoch in sessions where the total duration of NREM sleep was >30 seconds. This
+yielded a rate vector for each animal, which was z-scored to account for the differences in ripple rate across animals.
+In addition, to examine how changes in either CA1 or PFC ripple rate may drive changes in the occurrence of coordinated events
+in NREM sleep, the Pearson correlation was taken between the ripple rate vector calculated from all events and the rate vector for
+coordinated events. Within area (CA1
+all-CA1coord or PFCall-PFCcoord) r values were computed for each animal and compared.
+To investigate changes in ripple rate within a sleep session (relative rate change), NREM sleep was split into two halves, 1st and 2nd,
+by dividing the total duration by 2. The ripple rates were calculated for each half, and the relative rate change was calculated as
+follows:
+% rate change =
+/C18
+rate2nd /C0 rate1st
+rate1st
+/C19
+x100
+Only epochs with a total NREM duration exceeding 120 seconds (60 s per rate calculation) were included for analysis.
+Event cross-correlation
+To examine whether independent and coordinated events are differentially coupled with spindle and SOs, the cross-correlation be-
+tween event onset time vectors was calculated for each event pair (max time lag 4 seconds, 100 ms time bins) and smoothed with a
+Gaussian kernel (300 ms). For each comparison, ripple times were used as the reference vector. Thus, positive and negative lag
+values indicate that the compared LFP event tended to occur before and after ripple events, respectively.
+To calculate 95% conﬁdence intervals, both CA1 and PFC ripple times were jittered using the following steps. First, initial jitter
+values were resampled from the distribution of inter-event intervals separately for CA1 and PFC. Then, these values were randomly
+assigned negative or positive values to deﬁne the direction of the jitter. Finally, a value between 1 and 5 seconds was added to the
+direction of the jitter before calculating the cross-correlation. This process was repeated 1000 times for each epoch, and the 95
+th and
+5th percentiles were calculated. This time jitter was chosen instead of a circular shufﬂe since only ripple times during NREM sleep
+were used for this calculation. A random circular shufﬂe would have likely shifted ripple times into periods not deﬁned as NREM,
+yielding inaccurate results.
+Ripple aligned modulation
+Single unit ripple modulation in CA1 or PFC was calculated as previously described. 17 This analysis was restricted to neurons that
+ﬁred >50 spikes cumulatively across all peri-ripple windows (±2 s). For each candidate neuron, an averaged ripple-triggered (CA1 or
+PFC ripple) time histogram (ripple-PSTH) was calculated. For comparison, 1000 shufﬂed ripple-PSTHs were generated by circularly
+shifting the spikes around each ripple event by a random amount. To determine whether a neuron was signiﬁcantly modulated, the
+squared difference between the real ripple-PSTH and the shufﬂed data in the 0-200 ms window after ripple onset was calculated. In
+ll
+e3 Current Biology 34, 2801–2811.e1–e9, July 8, 2024
+Article
+
+===== PAGE 16 =====
+the case of CA1 modulation during independent PFC ripples, a larger window spanning ±200 ms around ripple onsets was used due
+to the observed CA1 population response aligned to PFC ripples ( Figure S6D). If this real value exceeded 95% of the shufﬂed values,
+the neuron was categorized as signiﬁcantly modulated. Furthermore, excited (EXC) and inhibited (INH) neurons were separated
+based on whether the modulation in ripple response window (either /C0 200 to 200 or 0 to 200 ms) was positive (EXC) or negative
+(INH). Modulation index (MI) for each cell was calculated as the mean response in the background window ( /C0 600 to /C0 200 ms prior
+to event onset) subtracted from the mean response in the response window.
+To investigate the relationship between modulation of CA1 INH neurons and features of independent PFC ripple events (frequency,
+amplitude, and length), the following procedure was implemented. Ripple events in each epoch were split into frequency, amplitude,
+or length quartiles, and single unit ripple modulation was calculated as above. Then, the Pearson correlation coefﬁcient was calcu-
+lated between modulation index and quartile.
+Spectral analysis
+Wavelet spectral analyses were utilized to calculate the ripple aligned power spectra in PFC (2–350 Hz, Morlet wavelets). For each
+epoch, the PFC tetrode with the greatest number of detected PFC ripples was used. The power at each level of the wavelet transform
+was calculated around each ripple event (±500 ms) and was z-scored relative to a baseline spectrogram calculated for the entire
+epoch. For each animal, spectrograms from all sleep epochs were averaged ( Figure S1D).
+Ripple triggered spindle power
+To determine whether there was a difference in spindle power during independent vs coordinated events, the envelope magnitude for
+each PFC spindle detection tetrode was z-scored and the maximum envelope power during each ripple event was calculated and
+averaged across electrodes.
+Theta phase-locking
+Theta phase-locking during active behavior on the W-Track was quantiﬁed using previously developed methods.
+69 The CA1 refer-
+ence tetrode located in corpus callosum was ﬁltered in the 6-12 Hz range and was used to extract phase information, since theta
+phase has been reported to be consistent at different depths above the CA1 pyramidal layer.70 Spikes were restricted to theta periods
+where the animals’ speed was >5 cm/s, and spikes were assigned a phase between 0-360 /C14 . Only neurons with at least 100 spikes
+during theta periods were included in this analysis. The Rayleigh test was used to determine whether the phase distribution of each
+cell deviated from circular uniformity (p < 0.05 criterion). Subsequently, for each theta modulated cell, phase locking strength
+was measured using two separate methods, the circular concentration parameter, kappa ( k), and pairwise phase consistency
+(PPC).71 k was estimated by ﬁtting the phase distributions to a von Mises distribution, and PPC was calculated by taking the dot prod-
+uct of the angular difference between each pair of phase values then averaging. To test for phase preference differences, the distri-
+butions were compared using a nonparametric Watson’s U 2 test.
+Single unit properties
+Linearized spatial maps during active behavior on the W-Track were calculated during periods of high mobility (>5 cm/s; all SWR
+times excluded) at positional bins where occupancy was >20 ms. 17 Brieﬂy, each rat’s 2D position was projected onto a linearized
+skeleton of the W-Track and was classiﬁed as belonging to one of the four possible trajectories. Then, the linearized spatial maps
+were calculated by dividing the binned spike count by the occupancy in each 2 cm positional bin and smoothed with a Gaussian
+kernel (4 cm).
+For each epoch, mean theta ﬁring rate was calculated by dividing the number of spikes that occurred during mobility periods
+(>5 cm/s) by the total duration of mobility. Similarly, NREM ﬁring rate was calculated by dividing the number of spikes during
+NREM (excluding SWR times) by the total duration.
+To calculate the number of place ﬁelds for each CA1 neuron, 5,000 null linearized ﬁring rate vectors were generated by randomly
+sampling each cell’s spikes using the smoothed occupancy as the probability density function. The resulting spike vector (concat-
+enated across all four trajectories) was smoothed with a Gaussian kernel (4 cm) and divided by the smoothed occupancy. Each bin
+that exceeded the 99th percentile of the null distribution was determined as having selective ﬁring within that bin. To be considered a
+place ﬁeld, at least 5 consecutive bins (10 cm) exceeding the 99 th percentile was required.46 Field width was calculated as the mean
+width across all place ﬁelds for each cell.
+Spatial information, I (bits/spike), was calculated using the following formula:
+Ispike =
+XN
+i = 1
+pi
+li
+l log2
+li
+l
+where i = 1; .; N represents the spatial bin, p is the occupancy probability of bin i, and l is the mean ﬁring rate of the neuron.
+To calculate the ﬁeld stability of modulated CA1 neurons, the Pearson correlation of the concatenated linearized ﬁring ﬁelds was
+taken between the two W-Track epochs ﬂanking the sleep epoch during which the cells were modulated.
+ll
+Current Biology 34, 2801–2811.e1–e9, July 8, 2024 e4
+Article
+
+===== PAGE 17 =====
+Single unit SWR activity
+The ﬁring rate gain of each neuron was calculated by dividing the ﬁring rate during CA1 SWR events by the mean rate across all NREM
+bouts in an epoch. Additionally, to exclude the contribution of SWR ﬁring to the baseline NREM ﬁring rate, the mean rate was calcu-
+lated by excluding spiking activity across all SWR events during NREM sleep. To determine SWR burst probability for each cell, the
+number of SWRs where burst spikes were detected (at least 2 spikes <6 ms apart) was divided by the total number of SWR events in
+which that cell was active. Similarly, SWR spike latency was estimated by taking the average latency to ﬁrst spike during each SWR
+event the cell was active. For quartile analysis, cells were sorted by modulation index and split into 4 equal groups. The corresponding
+SWR spiking metrics were then averaged and plotted for each group. To determine whether there was a relationship between the
+modulation indices and burst probability or spike latency, the Pearson correlation coefﬁcient was calculated.
+Event aligned multi-unit activity
+To characterize population activity aligned to LFP events, spike trains of each neuron were binned into 5 ms time windows. Activity
+was aligned to PFC spindles, SOs, ripples, and CA1 ripples. The event aligned multi-unit activity was then normalized by the mean
+population ﬁring rate during NREM sleep.
+For vCA1 recordings, multiunit activity was extracted as all events >70 mV on vCA1 tetrodes.
+Ripple coactivity
+To quantify ripple coactivity during independent and coordinated events, a pairwise coactivity z-score was calculated as previously
+described.
+72 Brieﬂy, this coactivity measure estimates how likely two cells will ﬁre together during ripple events and is normalized by
+the incidence of spiking independent of the other cell:
+Zcoactivitya;b =
+nab /C0 nanb
+Nﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+nanbðN /C0 naÞðN /C0 nbÞ
+/C14/C0
+N2ðN /C0 1Þ
+/C1q
+where N is the number of ripple events, na and nb are the number of events where cell a and cell b were active, respectively, and nab is
+the number of events where both cells were active. Epochs where there were >20 independent and coordinated events were included
+in the analysis.
+Assembly detection
+To detect cell assemblies in CA1 and PFC populations, a previously described method was used.73,74 Signiﬁcant co-ﬁring patterns in
+CA1 or PFC were detected using a method based on principal and independent component analyses. For each W-Track epoch, the
+spike trains of each neuron were binned into 20 ms time windows (excluding CA1 ripple times) and Z-scored to eliminate any biases
+due to differences in ﬁring rates. Principal component analysis was then applied to the Z-scored spike matrix (Z). The resulting eigen-
+value decomposition of the correlation matrix (C) was given by:
+X
+n
+i = 1
+li pi pT
+i = C
+Where pi is the ith principal component of C and li is the corresponding eigenvalue. Note that C = 1
+n ZZT is the correlation matrix of Z.
+To determine the number of signiﬁcant coactivity patterns in the data, the Marcenko-Pastur law was used to calculate a threshold
+eigenvalue l
+max , which was given by lmax = ð1+
+ﬃﬃﬃﬃﬃﬃﬃﬃ ﬃ
+n=B
+p
+Þ2, where n is the number of recorded units and B is the total number of
+bins. Note that an eigenvalue exceeding lmax indicates that the corresponding cell assembly explains more correlation than expected
+if the activity of neurons was independent of each other. The number of eigenvalues above lmax , NA, represents the number of sig-
+niﬁcant patterns found in the data. These principal components were then projected back onto the original z-scored spike data:
+ZPROJ = PT
+SIGNZ
+where PSIGN is the nXNA matrix with NA columns. Independent component analysis (ICA, RobustICA)61 was then used to identify pat-
+terns that were maximally independent from each other. ICA was applied to the matrix ZPROJ to ﬁnd an NAXNA unmixing matrix, W,
+which was used to obtain the weights of each cell in each assembly.
+V = PSIGNW
+Since the sign of the output of ICA is arbitrary, the signs of the weight vector were set such that the highest absolute weight was set
+to positive. Cells with weights greater than the mean + 2SD were considered member cells. Furthermore, ﬁeld similarity for member
+vs non-member cell pairs was calculated by taking the Pearson’s correlation between the concatenated linearized ﬁring ﬁelds
+(Figure S4A).
+In addition to the assembly weights, a contribution metric, I, was calculated to assess the relative inﬂuence of EXC and INH cells on
+assembly reactivation during sleep. To quantify the contribution of a cell, c, the reactivation strength of each assembly, k, was
+ll
+e5 Current Biology 34, 2801–2811.e1–e9, July 8, 2024
+Article
+
+===== PAGE 18 =====
+recalculated after omitting the spike train of that cell, R/C0 c
+k , to yield two separate reactivation strength vectors, R/C0 c
+k and Rk . The contri-
+bution was then calculated by:
+Ic
+k = 1
+2
+/C18
+1 /C0 R/C0 c
+k
+Rk
+/C19
+where ½ is a normalization factor such that the sum of the contributions equals 1. 74
+Assembly reactivation strength
+To assess the reactivation of these detected assemblies during sleep sessions, the expression strength of each pattern over time was
+given by:
+Rk ðtÞ = zðtÞT Pk zðtÞ
+Rk ðtÞ is the reactivation strength of assembly k at time t, zðtÞ is the z-scored ﬁring rate vector for all neurons at time t, and Pk is the
+projection matrix for assembly k, constructed by taking the outer product of its weight vector vk . Additionally, the diagonal of the pro-
+jection matrix was set to zero to reduce the inﬂuence of highly active neurons. Thus, only patterns of coactivity are detected as pe-
+riods of high reactivation strength. For CA1-PFC assembly analysis, within region correlations in the projection matrices were also set
+to 0 to measure only the coactivity between areas. Also, only CA1-PFC assemblies that had at least one member cell in each area
+were included for analysis. Only sleep sessions with a preceding run session to use as a template were included for reactivation anal-
+ysis (sleep sessions 2-9).
+Assembly coactivation rate
+To investigate CA1-PFC assembly coactivity during independent and coordinated CA1 ripple events, a coactivation rate was calcu-
+lated by ﬁrst deﬁning discreet periods of high reactivation ( R > 5). For each ripple event, the number of CA1 and PFC assemblies that
+were active was calculated separately for each area. The events were then subset to include events where both CA1 and PFC as-
+semblies were active. The minimum number of active assemblies across areas was used as the number of coactivation events (i.e.,
+CA1-2, PFC-3 would be 2 coactivation events). The total number of events across all ripples was divided by the cumulative ripple time
+to obtain a coactivation rate per epoch.
+Ripple triggered assembly strength
+The reactivation strength of each assembly aligned to ripple onsets was determined by calculating the mean in a ±8 s window across
+all ripple triggered events. The mean was then z-scored, and the average assembly strength within the peak bins (±200 ms) was
+calculated to obtain a single reactivation strength value for each assembly. Using this method to calculate overall reactivation
+strength yielded a gradient of strengths as expected ( Figures S4I and S4J). For epoch grouped analysis, epochs 2-4, 5-6, and 7-9
+were used for early, middle, and late sleep sessions, respectively.
+Assembly reinstatement
+To assess assembly reinstatement from one W-track session to another, the above assembly reactivation analysis was performed,
+but instead, cell identity was matched across three consecutive epochs (run-sleep-run) to measure the same assembly over time.
+The epochs were matched such that each W-track session acted as the template epoch, except for the 8
+th W-track session. Rein-
+statement was deﬁned as the difference in the average expression strength during the two compared exposures (2nd exposure minus
+1st exposure).73
+Replay analysis
+Bayesian decoding for replay analysis was performed as previously described.
+75 Only sleep sessions with a preceding run session to
+use as a template were included for replay analysis (sleep sessions 2-9). A memoryless (uniform prior probability) Bayesian decoder
+was built for each of the four trajectory types to estimate the probability of animals’ position given the observed spikes (Bayesian
+reconstruction; or posterior probability matrix):
+PðX; trjspikesÞ = PðspikesjX; trÞPðX; trÞ
+PðspikesÞ
+where X is the set of all linear positions on the track for different trajectory types ( tr ˛ (center-to-right, right-to-center, center-to-left,
+left-to-center)), and we assumed a uniform prior probability over X and tr. Assuming that all N place cells active during a candidate
+event ﬁred independently and followed a Poisson process:
+PðspikesjX; trÞ = PN
+i = 1Pðspikesi jX; trÞ = PN
+i = 1
+ðtfi ðX; trÞÞspikesi e/C0 tfi ðX;trÞ
+spikesi !
+ll
+Current Biology 34, 2801–2811.e1–e9, July 8, 2024 e6
+Article
+
+===== PAGE 19 =====
+where t is the duration of the time window (15 ms), fi(X,tr) is the expected ﬁring rate of the ith cell as a function of sampled location X
+and trial type tr, and spikesi is the number of spikes of the ith cell in a given time window. Therefore, the posterior probability matrix
+can be derived as follows:
+PðX; trjspikesÞ = C
+/C16
+PN
+i = 1fi ðX; trÞspikesi
+/C17
+e
+/C0 t
+PN
+i = 1
+fi ðX;trÞ
+where C is a normalization constant.
+We identiﬁed replay during SWRs based on the Bayesian decoder described above. First, candidate events were deﬁned as the
+SWR events longer than 50 ms during which R 5 place cells ﬁred. Each candidate event was then divided into 15-ms non-overlap-
+ping bins, and the posterior probability matrix was computed based on the Bayes’ rule. To determine replay signiﬁcance, we em-
+ployed the two following shufﬂe-based methods.
+Replay signiﬁcance (Monte Carlo method)
+In this ﬁrst method, the p-value was calculated based on the Monte Carlo shufﬂe. 76 First, we drew 10,000 random samples from the
+posterior probability matrix for each decoded bin and assigned the sampled locations to that bin. Linear regression was then per-
+formed on the bin number versus the location points. The resulting R-squared was compared with 1,500 regressions, in which
+the time bins were shufﬂed). A candidate event with p < 0.05 based on the time shufﬂe was considered as a replay event.
+Since the shufﬂing procedure measured how well the decoded positions along SWR time matched a behavioral trajectory, we
+considered the trajectory with the lowest p-value from the shufﬂing procedure as the replay trajectory, and its R-squared was re-
+ported as replay quality ( Figure S5F).
+Replay Signiﬁcance (Weighted Correlation vs. shufﬂe)
+Additionally, a sequence score was computed for each candidate replay event as the correlation between position and time,
+weighted by the posterior probability.
+46,77 A weighted mean was calculated for each event by:
+mðpos; PrÞ =
+PM
+i = 1
+PN
+j = 1
+Prij posj
+PM
+i = 1
+PN
+j = 1
+Prij
+The weighted covariance by:
+covðpos; bin; PrÞ =
+PM
+i = 1
+PN
+j = 1
+Prij ðposj /C0 mðposjPrÞÞðbini /C0 mðbinjPrÞÞ
+PM
+i = 1
+PN
+j = 1
+Prij
+Where posj is the jth spatial bin, bini is the ith time bin, M is the number of time bins, N is the number of spatial bins, and Prij is the
+posterior probability for the spatial bin in that time bin.
+Finally, the weighted correlation was given by:
+rðpos; bin; PrÞ = covðpos; binjPrÞﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ ﬃ
+covðpos; posjPrÞðcovðbin; binjPrÞÞ
+p
+Subsequently, 1,000 shufﬂed spatial template matrices were constructed by circularly shifting each cell’s template independently.
+The entire Bayesian decoding process was performed using these shufﬂed templates to yield a null distribution of weighted corre-
+lation values for each candidate replay event. An event with p < 0.05 based on the spatial template shufﬂe was considered as a sig-
+niﬁcant replay event. Additionally, for each event, a sequence score ( rZ) was calculated by:
+rZ =
+jrðobservedÞj /C0 jrðnullÞj
+S:D:ðjrðnullÞjÞ
+Where S.D. is the standard deviation of the null distribution. Note that the rZ value does not signify directionality of the replay event.
+Jump distance for each signiﬁcant event was reported as the distance between the maximum decoded probability of two adjacent
+time bins. Each pair of time bins yielded a distance value unless there were bins with no spiking activity. The maximum of these values
+was taken and normalized by dividing by the length of the corresponding trajectory.
+Per cell contribution (PCC) analysis
+PCC was calculated for each cell to assess the inﬂuence of a cell’s participation in a replay event. 46 For each candidate replay
+event, each cell’s place representation was circularly shufﬂed separately such that only one cell’s spatial representation was
+ll
+e7 Current Biology 34, 2801–2811.e1–e9, July 8, 2024
+Article
+
+===== PAGE 20 =====
+shufﬂed at a time. Each cell’s representation was shufﬂed 1000 times to calculate an rZcellshuffle value as above. Then, PCC was
+given by:
+PCCe;c = ½ðrZeðobservedÞ/C0 rZe;cðcellshufflecÞ/C138 x#Participantse
+Where ‘#Participantse’ is the number of cells active during event e. The average PCC was calculated for cells that were active in >10
+signiﬁcant replay events per epoch. For the calculation of PCC difference between coordinated and independent events, the cell was
+required to be active in >5 events of each type per epoch.
+Rank-order correlation
+To evaluate the consistency with which populations of neurons in CA1 ﬁred in sequence, we calculated the rank-order correlation
+between each event and its template as previously described. 24,78 For each SWR event with >5 cells active, the spiking activity
+(both pyramidal cells and interneurons included) was reduced to each unit’s ﬁrst spike time, chronologically ordered, and normalized
+from 0 to 1. Then, a cross-validated template-based method was used to calculate sequence similarity between each event and its
+template. For each event, a template was created by averaging the normalized rank of each cell across all events excluding the event
+in question. The rank correlation was reported as the Pearson correlation coefﬁcient between the event and template. Templates
+were constructed separately for independent and coordinated events, utilizing only events of one type.
+Population dimensionality during SWRs
+To investigate the dimensionality of population activity during independent and coordinated SWR events, principal component anal-
+ysis (PCA) was performed on separate spiking activity matrices. Sessions with >20 units (pyramidal and interneurons) were included
+for analysis. Since independent events outnumbered coordinated events, we only included sessions where there were >100 events of
+each type. Then, we randomly resampled each activity matrix 100 times (50 samples at a time) and applied PCA to each matrix to
+obtain the variance explained by each component (n components = n cells). We considered the population dimensionality to be
+the proportion of components required to explain >90% of the variance.
+Ripple type prediction
+Ripple type (independent or coordinated) in CA1 and PFC was predicted by ﬁtting a linear model (MATLAB, ﬁtclinear) to the areas’
+spike count data. Since the independent events largely outnumbered the coordinated events, the event counts were equalized prior
+to training by randomly excluding a subset of independent events. The binary decoders were built using 10-fold cross validation, and
+prediction accuracy was assessed by comparing performance against models constructed with randomly permuted spike matrices
+(n = 1000). To account for the dropped events, this entire process was repeated 10 times for each animal and epoch. This method was
+also used to predict different coordinated events (CA1 or PFC leads), but instead, both CA1 and PFC spiking activity was used.
+Replay probability during SOs
+To calculate the probability of CA1 replay events during the down or up state of SOs, the occurrence of replay start times of each
+signiﬁcant event (independent, coordinated, or all) was determined and divided by the total number of replay events in NREM sleep
+for each epoch.
+Peri-SO event probability
+To investigate the sequential occurrence of LFP events during NREM sleep, the fold change occurrence around SO troughs was
+calculated for PFC spindles, ripples, and CA1 ripples. Event start times were separately binned in 20 ms time bins in a response
+window ±2 seconds (resp) centered around SO troughs (up states). The event probability in each bin was then calculated, smoothed
+with a 60 ms Gaussian kernel, and compared to the mean probability across all bins in the background window /C0 3t o /C0 2 seconds
+(bck) around SO trough. The fold change in each bin was then calculated by:
+foldchange =
+ðPresp /C0 Pbck Þ
+Pbck
+Since this approach results in a single fold change vector, we utilized a resampling method to determine whether the resultant
+peaks were not due to chance. The occurrence matrix was randomly sampled (100 samples at a time), and the probability fold change
+was calculated as above with the corresponding background bins. This process was repeated 50 times to obtain a distribution of
+values in each time bin. Then, the bin in which the peak fold change occurred was compared to 0 with a t-test.
+To compare the timing of events aligned to SO troughs, the distributions of all event times within ±250 ms of SO troughs were
+compared. To further validate this timing result, distributions of the times of peak fold change occurrences around SO troughs
+were compared by calculating event fold change separately for each epoch and animal.
+To investigate the SO phase preference of spindles and ripples, phase information for each discreet SO event (upstate and down-
+state) was extracted. Each LFP event (event onset) that occurred within the start/end interval of SOs was assigned a phase. Then, a
+ll
+Current Biology 34, 2801–2811.e1–e9, July 8, 2024 e8
+Article
+
+===== PAGE 21 =====
+circular von Mises probability density function was computed based on parameters (preferred direction and concentration param-
+eter) estimated from the distribution of phase angles. To test for phase preference differences for spindles and ripples, the distribu-
+tions were compared with Watson’s U2 test.
+Peri-SO CA1 and PFC reactivation strength
+To investigate the temporal dynamics of CA1 and PFC reactivation during these events, we looked at CA1 lagging events surrounding
+SO troughs. Reactivation strength of each assembly was aligned to SO troughs where there was a CA1 lagging ripple event
+within ±250 ms of a SO trough. As a comparison, each assembly was circularly shufﬂed, and the peak reactivation bin of the real
+data was compared to the same bin of the shufﬂed data. In addition, to compare the relative reactivation times of CA1 and PFC as-
+semblies, the peak of the mean reactivation strength for each was taken in the 0-200 ms time window surrounding SO troughs, and
+the timing distributions were compared. The same process was performed for CA1 leading events, but in this case, timing differences
+were assessed using a ±100 ms window around SO troughs. The windows were determined by examining the reactivation proﬁles
+surrounding SO troughs.
+To compare CA1 assembly suppression during independent PFC ripples to CA1 reactivation during SO-associated coordinated
+events where CA1 ripples lag, the suppression strength of each assembly in a ±200 ms window around PFC ripples was calculated
+as in ‘‘ Ripple triggered assembly strength .’’ Then, the mean reactivation strength in a 0-200 ms window around SO troughs was
+compared to the suppression during PFC ripples for each assembly.
+QUANTIFICATION AND STATISTICAL ANALYSIS
+All statistical analyses were performed with MATLAB (MathWorks, Natick, MA; R2022a) functions or custom scripts. No speciﬁc anal-
+ysis was performed to predetermine sample size, but the number used in this study is similar to or larger than typically used. Nonpara-
+metric, two-tailed statistical tests (Wilcoxon rank-sum and signed-rank, for unpaired and paired data, respectively) were used
+throughout the paper unless noted. P < 0.05 was considered the cutoff for statistical signiﬁcance. Boxplots show the median (center
+line), interquartile range (box), and the furthest points not considered outliers (whiskers). Although not displayed in some cases, out-
+liers were included in all statistical analyses. Unless otherwise noted, values and errors in the text denote means ± SEM. p-values in
+the text are reported as follows: p > 0.05, *p < 0.05, **p < 0.01, ***p < 0.001.
+ll
+e9 Current Biology 34, 2801–2811.e1–e9, July 8, 2024
+Article

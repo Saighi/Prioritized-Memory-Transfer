@@ -1,0 +1,853 @@
+
+
+===== PAGE 1 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 1 / 20
+ 
+ OPEN ACCESS
+Citation: Andrianova L, Banks PJ, Booth CA, 
+Brady ES, Margetts-Smith G, Kohli S, et al. 
+(2025) Hippocampal pyramidal cells of the CA1 
+region are not a major target of the thalamic 
+nucleus reuniens. PLoS Biol 23(10): e3003419. 
+https://doi.org/10.1371/journal.pbio.3003419
+Academic Editor: Jozsef Csicsvari, Institute of 
+Science and Technology Austria, AUSTRIA
+Received: January 12, 2025
+Accepted: September 16, 2025
+Published: October 13, 2025
+Peer Review History: PLOS recognizes the 
+benefits of transparency in the peer review 
+process; therefore, we enable the publication 
+of all of the content of peer review and 
+author responses alongside final, published 
+articles. The editorial history of this article is 
+available here: https://doi.org/10.1371/journal.
+pbio.3003419
+Copyright: This is an open access article, free 
+of all copyright, and may be freely reproduced, 
+distributed, transmitted, modified, built upon, 
+or otherwise used by anyone for any lawful 
+purpose. The work is made available under 
+RESEARCH ARTICLE
+Hippocampal pyramidal cells of the CA1 region 
+are not a major target of the thalamic nucleus 
+reuniens
+Lilya Andrianova 1,2,3, Paul J. Banks4, Clair A. Booth4, Erica S. Brady 3, 
+Gabriella Margetts-Smith 3, Shivali Kohli 3, Jonathan Cavanagh 2, Zafar I. Bashir4, 
+Chris J. McBain 5, Michael T. Craig 1,3,5*
+1 School of Psychology & Neuroscience, College of Medical, Veterinary and Life Sciences, University 
+of Glasgow, Glasgow, United Kingdom, 2 School of Infection & Immunity, College of Medical, Veterinary 
+and Life Sciences, University of Glasgow, Glasgow, United Kingdom, 3 Institute of Biomedical and 
+Clinical Science, University of Exeter Medical School, Exeter, United Kingdom, 4 School of Physiology, 
+Pharmacology and Neuroscience, University of Bristol, Bristol, United Kingdom, 5 Program in 
+Developmental Neurobiology, Eunice Kennedy Shriver National Institute of Child Health and Human 
+Development, National Institutes of Health, Bethesda, Maryland, United States of America 
+* mick.craig@glasgow.ac.uk
+Abstract 
+The prefrontal—hippocampal—entorhinal system is perhaps the most widely-studied 
+circuit in cognitive and systems neuroscience, due to its role in supporting cognitive 
+functions such as working memory and decision-making. Disrupted communication 
+within this circuit is a key feature of disorders such as schizophrenia and dementia. 
+Nucleus reuniens (NRe) is a midline thalamic nucleus that sits at the nexus of this 
+circuit, linking these regions together. As there are no direct projections from prefrontal 
+cortex to hippocampus (HPC), the accepted model is that the NRe mediates prefrontal 
+drive of hippocampal activity, although these connections are poorly defined at the cel-
+lular and synaptic level. Using ex vivo optogenetics and electrophysiology in both mice 
+and rats, alongside monosynaptic circuit-tracing, we sought to test the mechanisms 
+through which NRe could drive hippocampal activity. Unexpectedly, we found no evi-
+dence that pyramidal cells in CA1 receive input from NRe, with midline thalamic input 
+to HPC proper appearing selective for GABAergic interneurons. In other regions tar-
+geted by NRe, we found that pyramidal cells in prosubiculum and subiculum received 
+synaptic inputs from NRe that were at least an order of magnitude weaker than those 
+in prefrontal or entorhinal cortices. We conclude that, contrary to widely-held assump-
+tions in the field, hippocampal pyramidal cells are not a major target of NRe.
+Introduction
+Numerous aspects of cognition, such as memory [1] and decision-making [2], require 
+the communication of information between prefrontal cortex (PFC), hippocampus 
+(HPC), and entorhinal cortex (EC). The thalamic nucleus reuniens (NRe) sits at the 
+
+
+===== PAGE 2 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 2 / 20
+nexus of this circuit and is implicated in conditions such a schizophrenia and epilepsy 
+[3]. This circuit includes both direct connections between the cortical and hippo-
+campal regions, as well as indirect routes via the thalamus, making interpretation 
+of the function of any individual component particularly challenging. Synchronous 
+oscillations occur between the PFC and HPC at theta frequency during decision- 
+making [4,5], between the EC and PFC at theta frequency during associative learning 
+[6], and between the EC and HPC at theta and gamma frequencies during spatial 
+learning [7]. There is, however, an anatomical anomaly within this circuitry: despite 
+the functional importance of harmonized activity, the PFC does not project directly to 
+HPC [see 8 for our recent confirmation]. The accepted view of this circuit is that the 
+NRe directly mediates communication between PFC and HPC [e.g., 9, 10], which 
+implicates the NRe in cognitive functions such as working memory [11,12], and lead-
+ing many to believe that the main function of the NRe is to mediate prefrontal control 
+over the HPC. However, NRe inactivation or lesion studies often fail to provide strong 
+evidence for a role in spatial memory acquisition [13].
+Anatomically, the NRe forms reciprocal connections with the PFC and subicu-
+lum, while uniquely for the thalamus, it also sends direct efferents to CA1; these 
+efferents terminate alongside EC axons in stratum lacunosum-moleculare (SL-M) 
+[14,15]. Hippocampal return projections to the NRe arise entirely from the subicu-
+lum, with neither dorsal nor ventral CA1 (vCA1) forming monosynaptic connections 
+with neurons in NRe [16]. The NRe sends projections to the EC [17], but these are 
+effectively not reciprocated [18] with perhaps only 2% of superficial the EC neurons 
+projecting to NRe [16]. Functionally, although electrical stimulation in the NRe fails to 
+elicit spiking in the CA1 pyramidal layer in vivo [19], it has been widely assumed that 
+the NRe targets CA1 pyramidal cells [11]. This assumption is reasonable as we are 
+unaware of any cortical region in which thalamic inputs do not target pyramidal cells. 
+Surprisingly, despite the NRe’s important role in goal-directed spatial navigation [20] 
+and working memory [21], the NRe projections to CA1 have remained poorly defined. 
+We previously reported that both NRe and entorhinal fibers terminate in SL-M of CA1 
+where they target neurogliaform cells [22]. Optogenetic stimulation of the NRe inputs 
+to these neurogliaform cells elicits monosynaptic EPSCs that are defined by large 
+NMDA receptor-mediated components.
+Here, we sought to determine the nature of NRe inputs onto CA1 pyramidal cells. 
+We hypothesized that a similarly large NMDA-R mediated component in pyramidal 
+cells to what we observed in neurogliaform cells could underlie observation that 
+NRe-fEPSPs are greatly increased in CA1 during EC input coactivation [23]. How-
+ever, we found no evidence of direct monosynaptic projections from the NRe to CA1 
+pyramidal cells, and only evidence of weak inputs to pyramidal cells in other areas of 
+the hippocampal formation.
+Results
+NRe projections to hippocampal formation
+We carried out stereotaxic injection of AAVs to express the light-sensitive channelrho-
+dopsin2 variants Chronos or Chrimson [24] into the NRe and prepared ex vivo brain 
+the Creative Commons CC0 public domain 
+dedication.
+Data availability statement: All data are con-
+tained in the paper and Supporting information 
+files, and the R code required for analysis (S6 
+Fig) has been included as a supplementary file.
+Funding: This work was supported by 
+Biotechnology and Biological Sciences 
+Research Council (www.ukri.org/councils/
+bbsrc/) grant BB/P001475/1 (awarded to 
+M.T.C.) and an NIH intramural award (awarded 
+to C.J.M.). This work was also supported by a 
+Wellcome Trust (https://wellcome.org/) Joint 
+Investigator Award 206401/Z/17/Z (awarded 
+to Z.I.B.), and Biotechnology and Biological 
+Sciences Research Council (www.ukri.org/
+councils/bbsrc/) grants BB/X000915/1 and 
+BB/L001896/1 (awarded to Z.I.B. and P.J.B.). 
+Salary support from S.K. was provided by 
+Alzheimer’s Research UK (www.alzheimersre-
+searchuk.org/) Interdisciplinary research grant 
+ARUK-IRG2017B-4 (M.T.C.). G.M.S. and E.S.B. 
+were both GW4 BioMed doctoral training 
+program students funded by the Medical 
+Research Council (www.ukri.org/councils/mrc/) 
+grant MR/N0137941/1. This work was also 
+supported by the Inger and George Simpson 
+Biological Psychiatry Scholarships (Endowment 
+to University of Glasgow; awarded to J.C.). 
+The funders had no role in study design, data 
+collection and analysis, decision to publish, or 
+preparation of the manuscript.
+Competing interests: The authors have 
+declared that no competing interests exist.
+Abbreviations: ABC, avidin–biotinylated HRP 
+complex; ACC, anterior cingulate cortex; ACUC, 
+animal care and use committee; AP, anterior- 
+posterior; dCA1, dorsal CA1; EC, entorhinal 
+cortex; EPSC, excitatory post-synaptic current; 
+HPC, hippocampus; IL, infralimbic cortex; MO, 
+medial orbital cotex; NGF , neurogliaform cell; 
+NMDA-R, N-methyl-D-aspartate receptor; NRe, 
+nucleus reuniens; PB, phosphate buffer; PFC, 
+prefrontal cortex; PL, prelimbic cortex; RMP, 
+resting membrane potential; SL-M, stratum 
+lacunosum-moleculare; vCA1, ventral CA1.
+
+
+===== PAGE 3 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 3 / 20
+slices in either coronal or horizontal planes to carry out patch-clamp recordings targeting primarily PFC and dorsal HPC, 
+or EC and ventral HPC, respectively (example distribution of NRe axons in HPC shown in S1 Fig). We subdivided the 
+HPC into CA1, prosubiculum, and subiculum, using the Lorente de Nó boundaries [25]. We denoted the boundary of CA1 
+to be where the dense, ordered nature of stratum pyramidale ended, with prosubiculum continuing in an area with a slight 
+laminar-like organization in the superficial region (see Fig 2 and particularly figure 11 of the Lorente De Nó paper), with 
+subiculum beginning when no obvious laminar structure was apparent through DIC optics. The boundaries that we used 
+correspond well with those reported more recently [26], and are shown in Figs 1A (ventral HPC) and 2A (dorsal HPC).
+As the NRe sends a substantially denser projection to ventral over dorsal HPC [14], we first carried out patch-clamp 
+recordings in vCA1. We found that optogenetic activation of NRe axons in CA1 failed to elicit post-synaptic EPSCs in 
+vCA1 pyramidal cells (Figs 1B and 3A). We observed the same result in dorsal CA1 (dCA1) (Figs 2B and 3A). In each 
+slice tested, we only recorded a pyramidal cell as nonresponsive when we could evoke a post-synaptic response in 
+neurogliaform cells (NGFs) that, with their high NRe input probability, acted as positive controls (Figs 1D–1F for vCA1 
+and 2C–2E for dCA1; summary data Fig 3A). We found that there was no difference in the magnitude of NRe-EPSC on 
+neurogliaform cells when evoked using either Chronos or Chrimson (S2 Fig). Additionally, we found no differences in NRe 
+input probability or synaptic strength between dorsal and ventral HPC, nor did we observe differences in NRe-EPSC mag-
+nitude between MGE- and CGE-derived neurogliaform cells (S3 Fig).
+Unlike CA1, we found that NRe projections to other parts of the HPC (prosubiculum and subiculum; Figs 1G–1K 
+for vCA1 and 2F–2H for dCA1) did indeed target principal cells although the synaptic strength of these inputs was low 
+(−13.32 ± 2.7 pA for subiculum; summary data in Fig 3), suggesting that NRe projections to hippocampal principal cells 
+are either absent (CA1) or subthreshold (prosubiculum and subiculum Fig 3), and unlikely to elicit firing. NRe projections 
+to CA1 neurogliaform cells had a comparable magnitude of the AMPA-receptor-mediated component of the EPSC (Fig 
+3C), but the higher input resistance of inhibitory interneurons combined with the larger NMDA–AMPA ratio (Fig 3E) would 
+suggest that NRe could drive neurogliaform cells to spike, perhaps during periods of ongoing network activity.
+NRe projections to nonhippocampal areas
+We also investigated the connectivity of the NRe to the cortical target regions, prefrontal (Fig 4) and entorhinal cortices 
+(Fig 5). Similarly to the hippocampal region, the nonresponding cells were only taken into account if the same slice con-
+tained a positive control. Directly comparing NRe-evoked EPSC responses in cortical and hippocampal neurons, we found 
+that principal cells in the MEC and PFC pyramidal cells displayed significantly larger AMPA receptor-mediated EPSCs 
+than subiculum pyramidal cells or CA1 NGFs (Fig 3A, 3B, and 3D). These data would suggest that, from a functional per-
+spective, the EC and PFC, and not the HPC, may be the principal targets of thalamic NRe.
+When looking at the PFC overall, the majority of the pyramidal cells were responsive to optogenetic stimulation of NRe 
+axons (Figs 3A and 4A). We saw a similar result in the medial EC (Figs 3A and 5A). We saw no difference in NRe-EPSC 
+amplitude in the PFC when comparing NRe input between medial orbital, infralimbic, prelimbic, and anterior cingulate 
+areas (Fig 4B–4D). While there are at least two main principal cell subtypes in the EC [27–29], we did not parse EC neu-
+rons further into stellate or pyramidal cells, so we cannot comment on whether the large variability in NR-EPSC magnitude 
+observed (Fig 5D) corresponded to different subtypes of neuron. Nevertheless, these data confirm that NRe forms strong 
+synaptic inputs onto principal neurons in both prefrontal and entorhinal areas.
+To exclude the possibility that a lack of electrophysiological response from NRe axons onto CA1 pyramidal cells was 
+unique to mouse, we undertook an independent replication of this finding in a different laboratory using rats. We found 
+that 0/9 dCA1 pyramidal cells and 0/17 vCA1 pyramidal cells in rat HPC displayed post-synaptic responses in response to 
+optogenetic stimulation of NRe axons, but that more than half of all interneurons in SL-M did indeed receive a response 
+(S4 Fig). Importantly, PFC pyramidal neurons from the same preparations responded robustly to NRe input with similar 
+currents to those seen in mouse [30].
+
+
+===== PAGE 4 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 4 / 20
+Fig 1. Prosubiculum pyramidal cells, unlike those in ventral CA1, do receive an input from nucleus reuniens. Schematic representation of 
+boundaries between dorsal CA1, prosubiculum, and subiculum in horizontal orientation. A, CA1/prosubiculum boundary denoted as region where 
+additional pyramidal cell layers arise ‘below’ the tightly-packed layer that is a continuation of CA1 stratum pyramidale, after Lorento de No (1934). B, No 
+response recorded from dCA1 pyramidal cell. C, Post hoc recovery of a nonresponsive pyramidal cell in dCA1. D, Representative response trace from 
+a ventral NGF. E, AMPA and NMDA receptor-mediated components of a responsive ventral NGF cell. F, A post hoc recovery from a ventral NGF cell. G, 
+Example trace from responsive pyramidal cell in dorsal subiculum. H, AMPA and NMDA receptor-mediated components of a responsive pyramidal cell 
+from subiculum. I, Post hoc recovery of a responsive pyramidal neuron in prosubiculum. J, Example trace from a responsive pyramidal cell in dorsal 
+prosubiculum. K, AMPA and NMDA receptor-mediated components of a responsive pyramidal cell from prosubiculum. Scale bar 100 μm.
+https://doi.org/10.1371/journal.pbio.3003419.g001
+
+
+===== PAGE 5 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 5 / 20
+Monosynaptic retrograde tracing from CA1 pyramidal cells
+Although our patch-clamp electrophysiological recordings failed to find evidence of somatic EPSCs mediated by NRe 
+inputs in CA1 pyramidal cells, given that NRe ESPCs in neurogliaform cells and subiculum pyramidal cells have a small 
+magnitude (Fig 3), we could not exclude the possibility that inputs were present but undetectable due to dendritic filtering 
+of the NRe inputs arriving in the distal region of apical dendrites, despite having found no evidence of silent NMDA-R only 
+synapses. Consequently, we carried out rabies-assisted monosynaptic circuit-tracing in Emx1-cre mice that conditionally 
+expressed the avian TVA receptor only in pyramidal cells (see Materials and methods and Fig 6). In our experimental 
+approach, as TVA was expressed genetically in pyramidal cells, it was possible for rabies viruses to locally transduce 
+pyramidal cells in CA1. However, we used a pseudotyped glycoprotein-deficit SAD B19 version of the rabies virus that is 
+unable to replicate and spread from transduced neurons to express mCherry. Prior to rabies injection, we used an AAV 
+helper virus to express GFP and the rabies glycoprotein (see Materials and methods and S5 Fig). Thus, in our experiment, 
+Fig 2. Prosubiculum pyramidal cells, unlike those in dorsal CA1 (dCA1), do receive an input from nucleus reuniens. A, Schematic representa-
+tion of boundaries between dCA1, prosubiculum, and subiculum in coronal orientation. B, Example trace from a nonresponsive pyramidal neuron from 
+dCA1 C, Post hoc recoveries of two neurogliaform cells and a nonresponding CA1 pyramidal cell. D, A representative trace from a responsive dorsal 
+NGF. E, AMPA and NMDA receptor-mediated components of a responsive NGF from dCA1. F, Post hoc recoveries of two pyramidal cells, the nonre-
+sponding CA1 pyramidal cell (labeled by arrowhead) and responding pyramidal cell in the prosubiculum (labeled with rounded arrowhead) as well as a 
+dorsal NGF. G, Example trace from a responsive pyramidal neuron from dorsal prosubiculum. H, AMPA and NMDA components of a responsive pyrami-
+dal neuron from dorsal prosubiculum. Scale bar 100 μm.
+https://doi.org/10.1371/journal.pbio.3003419.g002
+
+
+===== PAGE 6 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 6 / 20
+Fig 3. Summary data for all different cell types in the hippocampal formation and cortical areas. A, Nucleus reuniens (NRe) input probability 
+for cells patched in hippocampus: dorsal NGFs (81.3%) and ventral NGFs (76.5%), dorsal (0%) and ventral (0%) CA1 pyramidal cells, prosubiculum 
+(66.7%), subiculum (46.6%), and undetermined prosubiculum/subiculum (60%) pyramidal neurons, prefrontal cortex (84.5%), and entorhinal cortex (EC) 
+(76.7%). B, AMPA currents vary across different NRe target regions, with average AMPA currents being −142 ± 19 pA for PFC pyramidal cells, −9.1 ± 1.2 
+pA for NGFs, −12 ± 2.3 pA for pyramidal cells in subiculum, and −551 ± 190 pA for principal cells in the EC. Note logarithmic scale. Kruskal–Wallis test 
+(with Dunn’s multiple comparison test) showed significant differences between CA1 NGFs vs. EC (p < 0.0001), CA1 NGFs vs. PFC (p < 0.0001), EC vs. 
+Subiculum (p = 0.0014), and Subiculum vs. PFC (p < 0.0001). C, AMPA currents across different regions with the average being −9.88 ± 1.3 pA (dCA1 
+NGFs), −14.33 ± 3.7pA (vCA1 NGFs), −13.32 ± 2.7 pA (Subiculum pyramidal cells), −5.06 ± 0.8 pA (Prosubiculum pyramidal cells), no significant differ-
+ence found using a one-way ANOVA with Tukey’s multiple comparisons test. D, NMDA/AMPA ratios of responding cells in different regions, average 
+ratios were 1.1 ± 0.26 (dCA1 NGFs), 3.8 ± 1.7(vCA1 NGFs), 0.47 ± 0.18 (Subiculum pyramidal cells), 0.55 ± 0.17 (Prosubiculum pyramidal cells). Using a 
+Kruskal–Wallis test with Dunn’s multiple comparisons test significant different were found for NGFs vs. Subiculum pyramidal cells (p = 0.0047), EC princi-
+pal vs. NGFs (p = 0.0003), and PFC pyramidal cells vs. NGFs (p < 0.0001). E, Kruskal–Wallis test with Dunn’s test for multiple comparisons, vNGFs cells 
+have a significantly higher NMDA/AMPA ration when compared to subiculum and prosubiculum pyramidal neurons (p = 0.0206 and p = 0.0074, respec-
+tively). N = cell. These data can be found in the S1 Data.
+https://doi.org/10.1371/journal.pbio.3003419.g003
+
+
+===== PAGE 7 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 7 / 20
+double-labeled GFP and mCherry cells in CA1 or the subiculum are starter cells from which the rabies virus could retro-
+gradely spread a single synapse, while mCherry-only cells in CA1 could be either presynaptic neurons or transduced with 
+the pseudotyped vector. mCherry-only cells in other brain regions would be those presynaptic to CA1 pyramidal cells. 
+Some data from this tracing experiment have previously been published elsewhere [8].
+We failed to find evidence of monosynaptic NRe inputs to pyramidal cells in either dorsal (Fig 6A and 6E; n = 6 mice) 
+or ventral (Fig 6F and 6I, n = 4) CA1 but, as expected, we saw consistent retrograde labeling in entorhinal cortices, 
+medial and lateral septa and subiculum (we previously published some of this dataset in [8], confirming prior findings 
+from Sun and colleagues [31]). We only observed retrograde labeling of NRe neurons when injections into ventral hippo-
+campal formation included starter cells in both vCA1 and ventral prosubiculum/ subiculum (Fig 6J–6L; n = 3; all mice had 
+retrogradely- labeled cells in NRe). The boundaries between the CA1, prosubiculum, and subiculum regions in ventral 
+HPC in horizontal plane are shown in Fig 6M. Quantification of double-labeled starter cells, estimated overall number of 
+starter cells as well as viral spread data is shown in Fig 6N–6P, and reproduced from our previous work [8]. To exclude the 
+possibility that Emx1 is not ubiquitously expressed throughout the HPC, we carried out a secondary analysis of RNAseq 
+datasets publicly available from [32] and found that Emx1 is indeed expressed throughout CA1 (S6 Fig).
+Discussion
+Anatomical studies of NRe connectivity have led many to believe that the main function of the NRe is to mediate prefron-
+tal control over the HPC [e.g., 11]. However, our findings challenge this core assumption. We found that the magnitude 
+of synaptic currents driven by NRe axons is at least an order of magnitude greater in the EC and PFC than in either CA1 
+Fig 4. Nucleus reuniens (NRe)-EPSCs are consistent across all subdivisions of the prefrontal cortex (PFC). A, A representative post hoc recov-
+ery of a pyramidal neuron in shallow layers of PFC (i, scale bar 100-μm), optogenetic response trace (ii), AMPA and NMDA currents (iii). B, AMPA-R 
+mediated NRe-EPSC did not vary significant between deep (layer 2 to 3) and shallow (layer 5 to 6) pyramidal cells in PFC (shallow vs. deep: 155 ± 25 pA 
+(n = 43) vs. 114 ± 30 pA (n = 22); p = 0.232, Mann–Whitney test). C, AMPA-R mediated NRe-EPSC did not vary between different subdivisions of PFC (MO 
+vs. IL vs. PL vs. ACC: 282 ± 74 pA (n = 4) vs. 165 ± 42 pA (n = 17) vs. 98 ± 20 pA (n = 28) vs. 147 ± 56 pA (n = 9 cells); p = 0.46, one-way ANOVA). D, Paired 
+pulse ratio of AMPA-R mediated NRe-EPSC did not vary between different subdivisions of PFC (MO vs. IL vs. PL vs. ACC: 1.1 ± 0.02 vs. 1.0 ± 0.08 vs. 
+0.98 ± 0.06 vs. 1.1 ± 0.06; p = 0.15, one-way ANOVA). N = cells. These data can be found in the S1 Data.
+https://doi.org/10.1371/journal.pbio.3003419.g004
+
+
+===== PAGE 8 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 8 / 20
+or subiculum. Furthermore, we have found that pyramidal cells in CA1 appear not to receive monosynaptic inputs from 
+the NRe (determined using both anterograde optogenetic circuit-mapping and monosynaptic retrograde rabies tracing). It 
+appears that the NRe preferentially targets inhibitory interneurons in CA1 and pyramidal cells in prosubiculum.
+Do CA1 pyramidal cells receive input from NRe?
+Our data cannot entirely exclude the possibility of a monosynaptic projection from NRe to CA1 pyramidal cells, but if 
+the connection does exist then it must be very sparse. Unlike the HPC proper, we found that pyramidal cells in both 
+Fig 5. Nucleus reuniens (NRe)-EPSCs are consistent across shallow and deep layers of entorhinal cortex. A, Post hoc recovery of layer 5 mEC 
+pyramidal neuron (i) and optogenetic response trace (ii). B, Post hoc recovery of layer 2 mEC stellate cell (i) and optogenetic response trace (ii). C, Post 
+hoc recovery of layer 2 mEC pyramidal neuron (i) and lack of response to optogenetic stimulus (ii). D, Input probability of mEC neurons. E, AMPA-R 
+mediated NRe-EPSCs are not significantly different in shallow vs. deep layers of mEC. F, NMDA/AMPA ratios in responsive neurons in shallow and deep 
+layers of mEC are not significantly different. G, Paired pulse ratio in responsive neurons in shallow and deep layers of mEC is not significantly different. 
+These data can be found in the S1 Data.
+https://doi.org/10.1371/journal.pbio.3003419.g005
+
+
+===== PAGE 9 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 9 / 20
+Fig 6. Monosynaptic retrograde tracing from hippocampus proper shows no cells originating from nucleus reuniens (NRe), unless the starter 
+cells are present in subiculum region. A, Injection site for dorsal CA1 and viral spreads for the helper virus (green cells). B and D, Injection site of a 
+dCA1 injection: green cells contain helper virus and red cells are pseudotyped rabies virus positive and starter cells (yellow) shown closer on the inset, 
+
+
+===== PAGE 10 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 10 / 20
+prosubiculum and subiculum do indeed receive an input from NRe. The lack of input to pyramidal cells in our study was 
+very specific to CA1; pyramidal cells in prosubiculum, identified using Lorente de Nó anatomical definitions [25], did 
+receive direct input from NRe. While some regard the prosubiculum as the distal region of CA1, recent transcriptomic 
+studies confirm that it is genetically distinct from both CA1 and subiculum [33], and our findings support this. The regions 
+that we recorded from in the prosubiculum were clearly outwith the boundaries of CA1, where the dense organization 
+of neurons in stratum pyramidale ended. No pyramidal neuron recorded within the more highly-ordered CA1 responded 
+to optogenetic stimulation of thalamic axons, while we always used neurogliaform cells as positive controls. It has been 
+shown that the NRe selectively innervates the pyramidal cells in the ventral subiculum that target the nucleus accumbens 
+and lateral habenula, whilst avoiding those that target the PFC [34].
+When we first reported these findings as a preprint in late 2021 [35], the results appeared controversial. Indeed, while a 
+recent publication reported a direct monosynaptic projection from the NRe to dCA1 pyramidal cells [36], the key recordings 
+in that study appear to have been in the subiculum and/or prosubiculum areas of the HPC rather than adjacent CA1 (see 
+Fig 1 of this study—the only figure showing recording location). However, other published studies would provide support for 
+our findings. An ultrastructural study reported that synapses from thalamic axons in CA1 make significantly fewer contacts 
+per dendrite than those from entorhinal axons [37], supporting our electrophysiological data and the hypothesis that NRe 
+input to HPC serves to modulate, rather than drive, hippocampal activity, perhaps via inhibitory tone in SL-M. This ultra-
+structural study found projections from NRe onto spiny dendrites and thus concluded that these contacts were onto CA1 
+pyramidal cells since GABAergic interneurons are typically considered aspiny. However, recent work has demonstrated 
+the existence of a population of spiny parvalbumin-expressing interneurons in CA1 that have dendrites in SL-M [38], which 
+may have been the target of these NRe neurons. Another recent study reported close proximity of NRe axons onto PSD95- 
+expressing dendritic spines in CA1, again concluding that these projections were onto pyramidal cells [39]. Again, while 
+PSD95 is typically considered a marker of glutamatergic neurons, PSD95 has long been known to also exist on GABAergic 
+neurons, particularly Erb4-expressing parvalbumin cells, as found by ourselves and others [e.g., 40–42].
+A recent article from Leprince and colleagues [43] confirmed our main finding using a combination of in vivo and ex vivo 
+approaches: they found that EC inputs strongly drive CA1 network activity in early postnatal circuitry and that, while NRe 
+stimulation could drive network activity in CA1, this is almost entirely through inhibitory mechanisms. Indeed, this study 
+reported that only 2 out of 26 CA1 pyramidal cells received input from the NRe and it is unclear whether this connection 
+persists into adulthood, with the authors speculating that it may be a transitory circuit in development that helps ‘wire’ 
+the developing brain. This phenomenon has been widely observed in cortico-thalamic circuits, so this hypothesis is not 
+without precedent (reviewed by [44]). Another recent in vivo study found that optogenetic inhibition of NRe projections to 
+CA1 increases pyramidal cell activity [45], providing strong evidence to support our view of NRe’s principal overall effect 
+on hippocampal activity is one of inhibition and not excitation, even if some sparse monosynaptic projections to pyramidal 
+cells persist into adulthood.
+shown by arrowheads. C and E, No cells found in any thalamic section containing NRe. E, Injection site for ventral CA1 (vCA1) and viral spreads for the 
+helper virus (green cells). F and H, Injection site of a vCA1 injection: green cells contain helper virus and red cells are pseudotyped rabies virus positive 
+and starter cells (yellow) shown closer on the inset, shown by arrowheads. G and I, No cells found in any thalamic section containing NRe. J, Injection 
+site for vCA1 & subiculum and viral spreads for the helper virus (green cells). K, Injection site of a vCA1 injection with virus spreading to subiculum: 
+green cells contain helper virus and red cells are pseudotyped rabies virus positive and starter cells (yellow) shown closer on the inset, shown by arrow-
+heads. L, Cells and fibers seen in NRe as well as the fornix. M, A post hoc recovery of pyramidal cell in prosubiculum and neurogliaform cell in SL-M 
+layer of CA1 in horizontal slice orientation; boundary between CA1 and prosubiculum can be determined by reduction in SR layer thickness and reduc-
+tion in canonical cell density in SP layer and the boundary between prosubiculum and subiculum is where SR layer almost disappears. N, Cell density 
+showing number of cells containing the pseudo-typed rabies virus in dorsal and vCA1 regions. O, Estimated number of starter cells, calculated from cell 
+density and viral spread. P, Viral spread distance in dorsal and vCA1 regions. For more details on retrograde monosynaptic tracing experiment data see 
+[8]. These data can be found in the S1 Data.
+https://doi.org/10.1371/journal.pbio.3003419.g006
+
+
+===== PAGE 11 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 11 / 20
+While our electrophysiology data in both mouse and rat would suggest that there are no direct projections from the 
+NRe to CA1, it is possible that sparse, weak synapses could exist but, due to dendritic filtering, produce no detectable 
+response from a somatic whole-cell patch-clamp recording. We thus carried out rabies tracing using pseudotyped SAD 
+B19 viruses with injections made into both dorsal and vCA1 and also the dorsal subiculum to trace inputs specifically from 
+CA1 pyramidal cells. We failed to find evidence of a direct monosynaptic projection from the NRe to CA1 pyramidal cells 
+in either dorsal or vCA1. The possibility remains that the rabies virus will not retrogradely label all axon types with the 
+same efficiency, producing a false negative. However, our control data revealed retrograde labeling of NRe neurons when 
+the injection site included the ventral subiculum, and we also found retrogradely-labeled glutamatergic neurons in regions 
+such as the EC. While our data cannot entirely exclude the existence of a sparse projection from the NRe to CA1 pyrami-
+dal cells, if these projections do exist then they are likely to be of little functional significance.
+Circuit implications of the reuniens to HPC projection
+In vivo electrophysiological studies looking at hippocampal LFPs found that only direct EC stimulation could drive a 
+population spike in the HPC, while NRe activation primarily evoked an LFP in SL-M [19,23], with the latter paper from this 
+group arguing that low frequency stimulation of the NRe likely promotes EC—HPC communication. These papers found 
+that stimulation of both EC and NRe leads to a supralinear summation of LFP amplitude in CA1, leading the authors to 
+reasonably conclude that both regions drive excitation within CA1.
+This work and other studies have now shown that the influence of the NRe over CA1 is predominantly to inhibit hip-
+pocampal activity by targeting inhibitory interneurons. Neurogliaform cells, with a predominantly NMDA receptor-driven 
+NRe-EPSC ([22] and the present study), will likely have a much stronger influence when HPC is already active. Given that 
+the EC projects to both DG and CA1, and that NRe evokes strong post-synaptic responses in EC neurons, we hypothe-
+size that much of the effect of NRe activation on increasing the magnitude of LFP in CA1 is in fact an effect of feedforward 
+excitation from the EC. There is one report in the literature of midline thalamic stimulation inducing population spikes in 
+CA1 [46], but again, this could be due to feed-forward excitation from the EC.
+The NRe projection to CA1, targeting neurogliaform cells, could serve to inhibit distal dendrites of selected CA1 pyrami-
+dal cell ensembles and increase the fidelity of EC—HPC communication. Another recent study, using in vivo juxtacellular 
+recording in mice, found that neurogliaform cells in CA1 can decouple pyramidal cells from entorhinal-driven gamma oscil-
+lations without altering the firing rates of pyramidal cells [47]. Given that the NRe projections to CA1 are highly selective 
+for neurogliaform cells ([22,43] and the present study), we have previously suggested that the NRe recruitment of neurog-
+liaform cells allows NRe to re-route information flow through the HPC, switching between memory encoding and memory 
+retrieval [48].
+Neurogliaform cells have a wide axonal arbor and broadly inhibit pyramidal cell dendrites though a combination of GABAA 
+and GABAB receptor-mediated mechanisms acting via volume transmission [49], making them well placed to disengage 
+CA1 pyramidal cells from ongoing entorhinal inputs arriving in SL-M alongside those from NRe. We proposed previously 
+that the reuniens to CA1 neurogliaform projection may allow specific ensembles of pyramidal cells to be ‘disconnected’ from 
+EC, creating a more permissive environment for them to be driven by CA3 inputs via Schaffer collaterals in stratum radiatum 
+[48]. Lesions to the NRe have been shown to impair consolidation, but not acquisition, of spatial memory in the Morris Water 
+Maze in rats [50], so neurogliaform cells could play a key role in memory consolidation by supressing nonrelevant activity 
+during systems consolidation. Others have shown that the NRe is essential for reconsolidation of an extinct fear memory 
+[51–54]. Again, the NRe projection to neurogliaform cells in CA1 could play a key role in this by increasing the signal-to-noise 
+ratio of the reactivated memory by suppressing ensembles active during similar but different episodic memories. This would 
+be consistent with other reports of the NRe being essential for the formation of long-term (but not short-term) recognition 
+memories [55]. Neurogliaform cells have been shown to evoke a longer-lasting inhibitory current compared with other cell 
+types such as fast-spiking basket cells [56] and acting through volume transmission [49] could make their actions too broad 
+
+
+===== PAGE 12 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 12 / 20
+or slow for selecting specific ensembles, although more recent work using juxtacellular recordings in CA1 suggest that neu-
+rogliaform cell can selectively modulate network dynamics without broadly suppressing activity [47].
+The PFC projections to the HPC are important for impulse control [57], and lesions of the NRe inhibit this function [58]. 
+A recent suggestion for the function of the prefrontal—reuniens—hippocampal circuit is that it actively suppress ongoing 
+memory retrieval [59], and our study provides a mechanism through which this could occur. Indeed, the large NMDA:AMPA 
+ratio of NRe-EPSCs in neurogliaform cells that we reported here and previously [22] suggest that the inhibitory influence 
+evoked via NRe activation is much more likely to be effective in the context of ongoing network activity. Recent behavioral 
+data suggest the requirement for the NRe in spatial memory retrieval or “online” spatial processing, but not for off-line con-
+solidation or long-term storage [60]. Given that the largest NRe-mediated EPSCs were present in entorhinal and prefrontal 
+cortices, it could be that the NRe suppresses hippocampal activation to facilitate prefrontal—entorhinal communication 
+during associative memory consolidation [6]. Alternatively, an inhibitory influence of the NRe over the HPC has been pro-
+posed as the mechanism through which the PFC can prevent retrieval, e.g., during extinction of fear memory [61].
+Given the large NMDA receptor-mediated component of NRe-EPSCs onto neurogliaform cells, one is tempted to sug-
+gest that the role of NRe could be to increase Ca2+ in NGF dendrites to activate a NO-dependent suppression of inhibition 
+[62] that could serve to enhance entorhinal-to-CA1 communication. Future behavioral experiments are required to test 
+the function of NRe to CA1 projections, perhaps by using retrograde viruses to allow specific targeting only of those NRe 
+neurons that project directly to CA1.
+Concluding remarks
+We have found that, unique to all hippocampal or cortical regions, pyramidal cells in hippocampal region CA1 do not 
+receive monosynaptic input from the thalamus. Even in parts of the hippocampal formation where principal cells do receive 
+direct input from the NRe, the amplitude of the evoked currents is small and likely to be modulatory in nature. These sur-
+prise findings suggest that feedforward inhibition driven by neurogliaform cells may be main mechanism through which the 
+NRe influences hippocampal function. The apparently stronger innervation of both PFC and EC pyramidal cells by the NRe 
+raises interesting questions about the flow of information through NRe (hitherto presumed to be the relaying prefrontal con-
+trol over HPC). The existence of distinct, parallel streams of information through reuniens remains a possibility, and future 
+research at the circuit and synaptic level should focus on NRe’s innervation of prefrontal and entorhinal regions.
+Materials and methods
+Ethics statement
+Initial mouse pilot experiments (data included in Figs 1 and 3) were conducted in accordance with the Guide for the 
+Care and Use of Laboratory Animals of the US National Institutes of Health (Eighth Edition) and animal protocols (ASP# 
+14-045) approved by the animal care and use committee (ACUC) at the National Institute of Child Health and Human 
+Development. All remaining mouse work was conducted in accordance with the UK Animals (Scientific Procedures) Act 
+1986 after local ethical review by the Animal Welfare and Ethical Review Board at the University of Exeter under project 
+licence PAC082CD3. All rat procedures were performed in accordance with United Kingdom Animals Scientific Proce-
+dures Act (1986) and associated guidelines under project licence number PP7058522 and were approved by the Univer-
+sity of Bristol Ethical Review Committee. All efforts were made to minimize any suffering and the number of animals used.
+Animals
+We used Nkx2-1-cre [63]:RCE or Nkx2-1-cre:Ai9 and Htr3a-GFP [64] mice to target interneurons of MGE or CGE origin, 
+respectively, in electrophysiological experiments. Nkx2-1-cre mice were obtained from Jackson laboratories (C57BL/6J-
+Tg(Nkx2-1-cre)2Sand/J, stock number 008661) and Htr3a-GFP mice (Tg(Htr3a-EGFP)DH30Gsat) were cryo-recovered 
+from MMRRC (NC, USA) and back-crossed onto C57BL/6J mice (Charles River, UK). We used Emx1-cre mice [65] 
+
+
+===== PAGE 13 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 13 / 20
+crossed with floxed TVA mice [66] to allow specific targeting of pyramidal cells for monosynaptic rabies tracing. Emx1-cre 
+mice were obtained from Jackson laboratories (B6.129S2-Emx1tm1(cre)Krj, stock number 005628) and floxed TVA mice (LSL-
+R26Tva-lacZ) were kindly provided by Prof Dieter Saur (Technical University of Munich, Germany). All animals were main-
+tained on a 12 h constant light/dark cycle and had access to food and water ad libitum and were group-housed wherever 
+possible. We used standard enrichment that included cardboard tubes, wooden chew blocks, and nesting material.
+All rat experiments were carried out in naïve male Lister Hooded rats (Envigo, UK) weighing 300–450 g at the start of 
+the experiments. Animals were housed in groups of 2–4, under a 12 h light/dark cycle (light phase, 8.00 PM to 8.00 AM) 
+with ad libitum access to food and water. Sacrifice for ex vivo slices occurred 2–3 h into the dark cycle.
+Drugs and chemicals
+CGP55845 (Catalogue # 1248), DNQX (Catalogue # 2312/10), D-AP5 (Catalogue # 0106/1), and picrotoxin (Catalogue # 
+1128) were purchased from Tocris Bioscience, and all other chemicals were purchased from Sigma-Aldrich unless other-
+wise stated.
+Stereotaxic injections for electrophysiology experiments: mice
+For optogenetic experiments, we used Nkx2-1-cre:Ai9, Nkx2-1-cre:RCE, or Htr3a-GFP mice of both sexes, totaling at 65 
+mice, with the age at the time of stereotaxic injection ranging from 2 to 7 months. Mice of both sexes were used for stereo-
+taxic surgery. Mean weight of the mouse prior to stereotaxic surgery was 26 g (ranging from 17.5 to 49.5 g). Two different 
+viruses were used for stereotaxic surgeries: AAV8-hSyn-Chrimson-TdTom (UNC Viral Vector Core, USA, contributed by 
+Ed Boyden; titer 6.3 × 1012 viral particles/ml). AAV8-hSyn-Chronos-GFP (UNC Viral Vector Core, USA. contributed by Ed 
+Boyden; titer 3.1 × 1013 viral particles/ml).
+For the surgery, the mice were anesthetized with 5% isoflurane and anesthesia was maintained with use of 1.5 to 2.5% 
+isoflurane (flow rate of ~2 L min−1 O2). The mice were placed on a heated pad (37 °C) for the duration of the surgery and 
+given 0.1 mg/kg of buprenorphine (buprenorphine hydrochloride, Henry Schein) subcutaneously at the start of surgery as 
+an adjunct analgesic, plus carprofen 1 mg/kg (Rimadyl, Henry Schein) was given at a dose of 5 mg/kg subcutaneously 
+post-surgery and on subsequent days, as required. To target NRe, we used the following coordinates: A/P −0.8 mm, M/L 
+0.0 mm, D/V 3.8 mm from pia, and with 300 nl of virus (infused at 100 nl min−1). After the surgery, the mice were allowed at 
+least a 3-week recovery period to allow sufficient time for the expression of the viral construct. For whole-cell patch clamp-
+ing experiments, AAV8-hSyn-Chronos-GFP or AAV8-hSyn-Chrimson-TdTom were used for Nkx2.1-cre:Ai9 or Htr3a-GFP 
+mice, respectively, although a small number of Htr3a-GFP mice received AAV8-hSyn-Chronos-GFP to allow direct com-
+parison of EPSC amplitude in the same population of neurons.
+Stereotaxic injections for electrophysiology experiments: rats
+Each rat was anesthetized with isoflurane (4% induction, 2.5%–3.5% maintenance) and secured in a stereotaxic frame 
+with the incisor bar set 3.3 mm below the interaural line. Eye drops (0.1% sodium hyaluronate; Hycosan, UK) were applied 
+and body temperature was maintained at 37 °C using a homeothermic heat blanket (Harvard Apparatus, USA). The 
+scalp was further anesthetized using topical lidocaine (5% m/m; TEVA; UK) and disinfected with chlorhexidine, cut, and 
+retracted. Bilateral craniotomies were made using a burr at the following coordinates with respect to Bregma: anterior- 
+posterior (AP)—2.0 mm, mediolateral (ML) ± 1.4 mm. Virus was injected bilaterally into NRe via a 33-gauge 12° beveled 
+needle (Esslab) attached to a 5 μl Hamilton syringe which was mounted at a 10° angle in the ML plane to avoid the sinus, 
+with the eyelet of the needle facing medially. The needle was lowered 7.5 mm below the surface of the skull measured 
+from the burr hole and 100 nl of virus was delivered via each burr hole at a rate of 200 nl min−1, with the needle left in situ 
+for 10 min after each injection. AAV9-CaMKii-hChR2(E123T/T159C)-mCherry (Addgene 35512; 3.3 × 1013 genome copies/
+ml) obtained from University of Pennsylvania Vector Core.
+
+
+===== PAGE 14 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 14 / 20
+Monosynaptic retrograde tracing
+For anatomical experiments we used the monosynaptic rabies tracing method that has been previously reported by others 
+[31]. Two mouse lines (Emx1-cre and floxed TVA) were crossed together in order to ensure that the modified rabies virus 
+only targets the pyramidal cells, with Emx1-cre mice used as controls to ensure the rabies virus did not transduce neurons in 
+the absence of TVA. A total of 22 mice of both sexes were used, with 2 mice being excluded from the analysis due to failed 
+injections. The age of the mice used ranged from 2 to 6 months, with pre-surgical weights from 18.9 to 40.6 g (mean age 
+3.5 months, mean weight 24.6 g). To highlight the efferent projections from NRe to HPC, we elected to inject into dorsal and 
+vCA1 using the following coordinates: dCA1 was targeted at A/P −2 mm (relative to Bregma), M/L −1.5 mm and D/V 1.35 mm 
+(from pia) and vCA1 at A/P −2.8 mm (relative to Bregma), M/L −2.4 mm and D/V 4.2 mm (from pia). The stereotaxic injec-
+tions of AAV8-FLEX-H2B-GFP-2A-oG (Provided by John Naughton at Salk Institute Viral Vector Core, USA, titer 3.93 × 1012 
+viral particles/ml), followed by injection EnvA G-deleted Rabies-mCherry (Provided by John Naughton at Salk Institute Viral 
+Vector Core, titer 6.13 × 108 viral particles/ml; or from Viral Vector Core facility of the Kavli Institute for Systems Neuroscience, 
+NTNU, Norway, titer 2.6 × 1010 viral particles/ml) 2 weeks after the initial viral injection were performed in the right hemisphere 
+only. The mice were maintained for 2 weeks to provide optimal time for expression, and were killed by transcardial perfusion/
+fixation with 4% paraformaldehyde (Cat number P6148 Sigma-Aldrich, UK) in 0.1 M phosphate buffer (PB).
+Following the transcardial perfusion, the brains were dissected out and post-fixed for 24 h in 4% PFA solution, after 
+which they were cryoprotected using the 30% sucrose in PBS solution (Catalogue # P4417). Once cryoprotected, the 
+brains were sliced at 50 μm using the freezing microtome (Leica, SM2010 R). Selected slices (1 in 5 serially, increasing 
+to 1 in 3 between −0.5 and −1.8 Bregma to ensure thorough representation of NRe of the thalamus across the AP axes) 
+were mounted using the Hard Set mounting medium with DAPI (Vectashield, Vector Lab, Catalogue # H-1500-10) and 
+the fluorescent fibers were visualized with CoolLED on Nikon Eclipse E800, using 4× objective. Representative photos of 
+projection patterns can be found in Figs 1 and S1.
+Slice preparation and electrophysiology
+Mice of age 2 months and above were used for stereotaxic surgeries. A minimum of 3 weeks recovery period following the 
+stereotaxic surgery was allowed. Mice were anesthetised with isoflurane and the brain was rapidly dissected out in room 
+temperature NMDG cutting solution, containing (in mM): 135 NMDG (Catalogue # M2004), 20 Choline bicarbonate (Cat-
+alogue # C7519), 10 glucose (Catalogue # G7021), 1.5 MgCl2 (Catalogue # M9297), 1.2 KH2PO4 (Catalogue # P0662), 1 
+KCl (Catalogue # P5405), 0.5 CaCl2 (Catalogue # C5670), and saturated with 95% O2 and 5% CO2 (pH 7.3–7.4). Coronal 
+or horizontal slices (400 μm) were cut to target PFC and dCA1 versus vCA1, subiculum, and EC, respectively, using a 
+VT-1200S vibratome (Leica Microsystems, Germany). Afterwards, the slices were transferred into a chamber containing 
+recording aCSF, composed of (in mM): 130 NaCl (Catalogue # S5886), 24 NaHCO3 (Catalogue # S6014), 3.5 KCl, 1.25 
+NaH2PO4, 2.5 CaCl2, 1.5 MgCl2, and 10 glucose, saturated with 95% O2 and 5% CO2 (pH 7.4) and placed in a water bath 
+at 37 °C for 30 min, following which they were kept at room temperature until recording.
+For rat experiments, after a minimum of 10 days following viral injection, animals were anesthetized with 4% isoflurane 
+and decapitated. Brains were rapidly removed and placed into ice-cold sucrose solution (in mM: 189 sucrose, 26 NaHCO3, 
+10 d-glucose, 5 MgSO4, 3 KCl, 1.25 NaH2PO4, and 0.2 CaCl2) bubbled with 95% O2/5% CO2. Dorsal hippocampal record-
+ings were made from parasagittal or coronal slices and ventral HPC from horizontal slices, cut at 350 μm thickness using 
+a vibratome (7000smz-2, Camden Instruments), before incubation at 34 °C for 1-h after dissection in a slice holding 
+chamber filled with artificial cerebrospinal fluid (aCSF , in mM: 124 NaCl, 26 NaHCO3, 10 d-glucose, 3 KCl, 2 CaCl2, 1.25 
+NaH2PO4, and 1 MgSO4). Slices were subsequently stored at room temperature until use.
+For recordings, individual mouse brain slices were attached onto 0.1% poly-l-lysine (Sigma-Aldrich, Catalogue # 
+P8920) coated glass-slides and placed into the upright microscope and visualized using infrared differential interference 
+contrast microscopy (Olympus BX51 or Scientifica SliceScope). CoolLED pE-4000 system was used to visualize the fibers 
+
+
+===== PAGE 15 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 15 / 20
+as well as interneurons, and to provide optogenetic stimulation. The slices were submerged in recording aCSF, warmed to 
+32–34 °C, and the rate of perfusion was kept at 5 ml/min. The recording electrodes were typically 3–5 MΩ size and were 
+pulled from borosilicate glass (World Precision Instruments). The intracellular solution used had the following composition 
+(in mM): 135 Cs-methanesulfonate (Catalogue # C1426), 8 NaCl, 10 HEPES (Catalogue # H3375), 0.5 EGTA (Catalogue 
+# E3889), 4 MgATP (Catalogue # A9187), 0.3 Na-GTP Catalogue # (G8877), 5 QX314 (Catalogue # 552233), plus 2 mg/
+ml biocytin (VWR International, UK), and at pH 7.25 adjusted with CsOH and 285 mOsm.
+For rat electrophysiological recordings, slices at were placed in a submerged recording chamber and perfused with 34 °C 
+aCSF at ~2 ml min−1 . A stimulating electrode (FH-Co, CBABAP50, USA) was placed in SL-M. Recordings were made from 
+neurons in stratum pyramidale or lacunosum-moleculare, targetted under infra-red illumination with an upright microscope and 
+whole-cell patch clamped using 2–6 MΩ boroscillicate glass electrodes (GC150-10F, Harvard Apparatus) filled with potassium 
+gluconate internal (in mM: 120 k-gluconate, 40 HEPES, 10 KCl, 2 NaCl, 2 MgATP, 1 MgCl, 0.3 NaGTP, 0.2 EGTA and either 
+0.1 Alexa-594 hydrazide or 2.7 biocytin, pH 7.25, and 285 mOsm). Recordings were obtained using a Molecular Devices 
+Multiclamp 700B, filtered at 4 kHz and digitized at a sample frequency ≥20 kHz with WinLTP2.30 [67] or pClamp10 software. 
+Resting membrane potential (RMP) was recorded immediately after entering the whole-cell configuration, thereafter neurons 
+were kept at −70 mV by injection of constant current. Intrinsic membrane properties were recorded by injection of square-
+wave hyperpolarising and depolarizing currents. Optogenetic stimulation was applied with a 470 nm LED (M470L3, Thorlabs) 
+triggered by 2 ms TTL pulses sent to an LEDD1B driver (Thorlabs) via a 40× immersion objective (Olympus or Nikon). In all 
+experiments transduction of NRe was confirmed by recording of photosensitive cells in hippocampal and/or medial PFC slices 
+[30]. Cell morphology was confirmed using either fluorescent visualization of Alexa594 signal, or post-hoc biocytin staining.
+For mouse optogenetic experiments, a train stimulation with 5 pulses of 470 nm or 660 nm was used to excite the Chro-
+nos or Chrimson opsins, respectively. The presence or absence of responses was recorded in voltage clamp mode. Cells 
+that were found to have a response to a train stimulation were then switched onto repeated single pulse protocol (ISI of 
+10 s), and the AMPA response was recorded at a holding potential of −70 mV. GABA-R antagonists were bath applied from 
+the start in HPC and subiculum, but not in EC or PFC due to epileptiform activity being observed upon NRe stimulation with 
+GABA-R antagonists present. The extracellular GABAA and GABAB receptor antagonists used were picrotoxin (100 µM) and 
+CGP55845 (1 µM). 10 µm of DNQX was added to abolish the AMPA current at −70 mV, after which the cell was switched to 
++40 mV to record the NMDA current. To confirm the identity of NMDA current, D-AP 5 (100 µM) was added at the end of the 
+recording. Whole-cell patch-clamp recordings were made using a Multiclamp 700A or 700B amplifier (Molecular Devices, 
+Sunnyvale, CA, USA). Signals were filtered at 3 kHz and digitized at 10 kHz using a Digidata 1322A or 1440A and pClamp 
+9.2 or 10.2 (Molecular Devices, USA). Recordings were not corrected for a liquid junction potential. The recordings were then 
+imported into IgorPro (Wavemetrics, OR) using Neuromatic (Thinkrandom, UK) for further analysis.
+Total number and age range of mice (on experimental day) used for whole-cell patch clamping data was: 28 mice of 
+both sexes aged 4–7 months old for hippocampal formation (Figs 1 and 2), 15 mice of both sexes aged 4–7 months old 
+for EC (Fig 5) and 21 mice of both sexes aged 4–8 months old for PFC (Fig 4).
+Post hoc morphological recovery
+Mouse tissue slices were post-fixed in 4% PFA solution for an hour after patch clamping recordings and then transferred 
+to PBS (Melford, UK). Slices were washed thrice in 0.1 M PBS solution, followed by three washes in PBS with 0.5% Triton 
+X (Sigma, UK). Two blocking steps were used: 100 mM of Glycine (Sigma, UK) incubation for 20 min, and then 1-h long 
+incubation with blocking buffer with 5% goat serum (VectorLabs, UK) at room temperature. Incubation with streptavidin 
+(1:500 dilution, VectorLabs, UK) was done for 2 h at RT in a carrier solution consisting of 5% goat serum and PBS. Finally, 
+the slices were washed in PBS and transferred to 30% sucrose (Thermofisher, UK) until cryoprotected. Then slices were 
+re-sectioned at 100-μm thickness using SM2010R freezing microtome (Leica, UK) at −20 °C and mounted onto glass-
+slides and HardSet mounting medium with DAPI was used (VectorLabs, UK).
+
+
+===== PAGE 16 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 16 / 20
+For rat experiments, following recording, slices were fixed in 4% paraformaldehyde overnight and subsequently stored 
+in 0.1 M PB until staining. Slices were washed 6 × 10 min in PB, then incubated in 3% H2O2 in PB for 30 min to block 
+endogenous peroxidase activity, then washed again as above before incubation in 1% (vol/vol) avidin–biotinylated HRP 
+complex (ABC) in PB containing 0.1% (vol/vol) Triton X-100 at RT for 3 h. Slices were then washed as above before incu-
+bation in DAB solution (1× gold + 1× silver tablet in 15 mL distilled water) for 5–10 min until staining of neuronal structures 
+was visible. The reaction was stopped by transferring slices to cold PB, followed by further washing as above. Slices were 
+mounted, cover slipped using Mowiol mounting media, and allowed to dry overnight before imaging.
+Data analysis
+For quality control, cells with changes in input resistance of over 20% throughout the course of the experiment were 
+excluded from the data analysis. The AMPA receptor-mediated EPSC was determined as the maximal EPSC peak at −70 
+mV and NMDA receptor-mediated EPSC as the highest peak at +40 mV. GraphPad Prism (GraphPad, CA) was used for 
+statistical analysis. Data were tested for normality using the D’Agostino and Pearson test and subsequently analyzed by 
+parametric or nonparametric tests as appropriate. Unless otherwise stated, all values are mean ± SEM. RNAseq data from 
+[32] were downloaded from NCBI Gene Expression Omnibus [68], accession GSE67403) and analyzed in R Statistical 
+Software v4.3.1 [69] and RStudio v 2023.6.1.524 [70], using the tidyverse [71] and ggplot2 packages [72].
+For rat experiments, traces from intrinsic electrophysiological experiments were imported into MATLAB and analyzed 
+using custom written code. Synaptic responses were analyzed using MATLAB or WinLTP software [67].
+Supporting information
+S1 Fig.  NRe axon distribution in coronal and horizontal sections. A, coronal section, showing injection site, B, more 
+caudal section, showing the fibers in dorsal hippocampus, localized to S-LM. C and D, show hatched areas from B, on 
+a higher magnification. E, horizontal slice, showing dense projections from nucleus reuniens in ventral prefrontal cortex, 
+ventral CA1 and subiculum (F) and entorhinal cortex (G).
+(TIFF)
+S2 Fig.  No difference in NRe-EPSC between Chronos and Chrimson, in CGE-derived neurogliaform cells in 
+CA1. A, representative image of Chronos-GFP NRe fibers (green) in a Htr3a-GFP mouse. B, representative image of 
+Chrimson-TdTom NRe fibers (red) in a Htr3a-GFP mouse. C, representative traces for NRe-EPSCs (AMPA-mediated) in 
+CA1 CGE-derived neurogliaform cells from NRe axons transduced with either AAV8-hSyn-Chronos-GFP (upper trace) or 
+AAV8-hSyn-Chrimson-TdTom (lower trace). D, no significant difference in median peak AMPA-mediated NRe-EPSC cur-
+rent between fibers expressing Chronos or Chrimson (Chronos versus Chrimson: 10.8 (IQR: 4.0–13.7, n = 8) versus 11.2 
+(IQR: 7.3–21.2, n = 17); p = 0.4143, Mann–Whitney test). These data can be found in the S1 Data.
+(TIFF)
+S3 Fig.  Comparison of NRe input to MGE vs. CGE-born neurogliaform cells, and between dCA1 and vCA1. Rep-
+resentative images of A, CGE-derived NGF in vCA1 (arrow); B, MGE-derived NGF in vCA1; C, putative CGE-derived 
+NGF in dCA1 (TdTom −ve in Nkx2.1-cre:Ai9 mouse); D, MGE-derived in dCA1 (arrow). E, AMPA-R mediated NRe did not 
+vary significantly between NGFs of different embryonic origin (CGE vs. MGE vs. indeterminate origin: 9.12 ± 1.25 pA vs. 
+13.0 ± 3.2pA vs. 8.94 ± 2.23pA; p = 0.34, Kruskal–Wallis test). Similarly, F, NRe-EPSC paired pulse ratio did not vary by 
+embryonic origin (CGE vs. mGE vs. indeterminate origin: 1.27 ± 0.11 vs. 1.03 ± 0.14 vs. 0.88 ± 0.09; p = 0.39, Kruskal–Wal-
+lis test). G, mean AMPA NRe-EPSC did not significantly differ between dCA1 and vCA1 NGFs, pooled across embryonic 
+origin (dCA1 vs. vCA1, 9.88 ± 1.3 pA vs. 14.3 ± 3.7pA; p = 0.6504, Mann–Whitney test). H, probability of NRe input in neu-
+rogliaform cells in dorsal and ventral CA1 was 76.5% and 81.3%, respectively. These data can be found in the S1 Data.
+(TIFF)
+
+
+===== PAGE 17 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 17 / 20
+S4 Fig.  Optogenetic activation of NRe axons in rat hippocampus (HPC) evokes a post-synaptic response in GAB-
+Aergic interneurons but not pyramidal cells in either dorsal or ventral CA1 (vCA1). A, post hoc recovery of CA1 
+neurons in dorsal HPC of rat. B, lack of EPSP for pyramidal cell shown in A in response to optogenetic stimulation (top), 
+plus response to depolarizing and hyperpolarising current steps (bottom). C, total connection probabilities for CA1 pyrami-
+dal cells and GABAergic neurons in SL-M, with positive responses in gray and null responses in black. Data from 21 rats. 
+D, example EPSP from an SLM-interneuron (purple) and a pyramidal cell (black) recorded from vCA1.
+(TIFF)
+S5 Fig.  Control injections for retrograde monosynaptic tracing. A, representative example of injection site for ret-
+rograde labeling viruses in Emx1-cre:TVA mouse. Both green (transduced by the helper AAV virus) and red (transduced 
+by the pseudotyped rabies virus) cells can be seen. B, in a control mouse (Emx1-cre) without TVA, the pseudotyped 
+rabies virus was unable to enter CA1 pyramidal cells (n = 6 mice). Scale bar represents 100 μm. C–E, schematic images 
+showing spread of viral representative spreads of virus for injections in the dCA1 (C), vCA1 (D), and vSub (E) regions. 
+Each figure is a composite of 4 injections, with the darker color indicating more mice. F and G, representative example of 
+injection on low (F) and high (G) magnification of injections that spread between vCA1, prosubiculum, and vSub. H and I, 
+retrogradely- labeled neurons were present in NRe only in mice with starter cells located in prosubiculum and subiculum, 
+confirming our observations from anterograde optogenetics experiments (Fig 1).
+(TIFF)
+S6 Fig.  Emx1 is expressed throughout the hippocampus (HPC). Secondary analysis of Cembrowksi and colleagues, 
+2016, https://doi.org/10.1016/j.neuron.2015.12.013) revealed that Emx1 expression is ubiquitous throughout HPC, albeit 
+at (nonsignificantly) lower levels in ventral CA1 compared with dorsal or intermediate CA1. These data can be found in the 
+S1 Data and the code generating the plots and associated analysis can be found in S1 Code.
+(TIFF)
+S1 Data.  Numerical data for figures in the manuscript. 
+(XLSX)
+S1 Code.  The code generating the plots and associated analysis. 
+(R)
+Acknowledgments
+We are grateful to Prof John Aggleton (University of Cardiff) for advice and discussions on anatomy. We gratefully 
+acknowledge the support of the Inger and George Simpson Biological Psychiatry Scholarships.
+Author contributions
+Conceptualization: Lilya Andrianova, Zafar I. Bashir, Michael T. Craig.
+Data curation: Lilya Andrianova, Paul J. Banks, Michael T. Craig.
+Formal analysis: Lilya Andrianova, Paul J. Banks, Clair A. Booth, Michael T. Craig.
+Funding acquisition: Paul J. Banks, Jonathan Cavanagh, Zafar I. Bashir, Chris J. McBain, Michael T. Craig.
+Investigation: Lilya Andrianova, Paul J. Banks, Clair A. Booth, Erica S. Brady, Gabriella Margetts-Smith, Shivali Kohli, 
+Michael T. Craig.
+Methodology: Lilya Andrianova, Clair A. Booth, Michael T. Craig.
+Project administration: Lilya Andrianova, Zafar I. Bashir, Michael T. Craig.
+Software: Michael T. Craig.
+
+
+===== PAGE 18 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 18 / 20
+Supervision: Zafar I. Bashir, Chris J. McBain, Michael T. Craig.
+Visualization: Lilya Andrianova, Paul J. Banks, Clair A. Booth, Michael T. Craig.
+Writing – original draft: Lilya Andrianova, Paul J. Banks, Michael T. Craig.
+Writing – review & editing: Lilya Andrianova, Paul J. Banks, Clair A. Booth, Erica S. Brady, Gabriella Margetts-Smith, 
+Shivali Kohli, Jonathan Cavanagh, Zafar I. Bashir, Chris J. McBain, Michael T. Craig.
+References
+ 1. Preston AR, Eichenbaum H. Interplay of hippocampus and prefrontal cortex in memory. Curr Biol. 2013;23(17):R764-73. https://doi.org/10.1016/j.
+cub.2013.05.041 PMID: 24028960
+ 2. Euston DR, Gruber AJ, McNaughton BL. The role of medial prefrontal cortex in memory and decision making. Neuron. 2012;76: 1057–70. https://
+doi.org/10.1016/j.neuron.2012.12.002
+ 3. Dolleman-van der Weel MJ, Witter MP. The thalamic midline nucleus reuniens: potential relevance for schizophrenia and epilepsy. Neurosci Biobe-
+hav Rev. 2020;119:422–39. https://doi.org/10.1016/j.neubiorev.2020.09.033 PMID: 33031816
+ 4. Jones MW, Wilson MA. Theta rhythms coordinate hippocampal-prefrontal interactions in a spatial memory task. PLoS Biol. 2005;3(12):e402. 
+https://doi.org/10.1371/journal.pbio.0030402 PMID: 16279838
+ 5. Tang W, Shin JD, Jadhav SP. Multiple time-scales of decision-making in the hippocampus and prefrontal cortex. Elife. 2021;10:e66227. https://doi.
+org/10.7554/eLife.66227 PMID: 33683201
+ 6. Takehara-Nishiuchi K, Maal-Bared G, Morrissey MD. Increased entorhinal-prefrontal theta synchronization parallels decreased entorhinal- 
+hippocampal theta synchronization during learning and consolidation of associative memory. Front Behav Neurosci. 2012;5:90. https://doi.
+org/10.3389/fnbeh.2011.00090 PMID: 22319482
+ 7. Hartley T, Lever C, Burgess N, O’Keefe J. Space in the brain: how the hippocampal formation supports spatial cognition. Philos Trans R Soc Lond 
+B Biol Sci. 2013;369(1635):20120510. https://doi.org/10.1098/rstb.2012.0510 PMID: 24366125
+ 8. Andrianova L, Yanakieva S, Margetts-Smith G, Kohli S, Brady ES, Aggleton JP, et al. No evidence from complementary data sources of a direct 
+glutamatergic projection from the mouse anterior cingulate area to the hippocampal formation. Elife. 2023;12:e77364. https://doi.org/10.7554/
+eLife.77364 PMID: 37545394
+ 9. Mathiasen ML, O’Mara SM, Aggleton JP. The anterior thalamic nuclei and nucleus reuniens: so similar but so different. Neurosci Biobehav Rev. 
+2020;119:268–80. https://doi.org/10.1016/j.neubiorev.2020.10.006 PMID: 33069688
+ 10. Griffin AL. Role of the thalamic nucleus reuniens in mediating interactions between the hippocampus and medial prefrontal cortex during spatial 
+working memory. Front Syst Neurosci. 2015;9:29. https://doi.org/10.3389/fnsys.2015.00029 PMID: 25805977
+ 11. Dolleman-van der Weel MJ, Griffin AL, Ito HT, Shapiro ML, Witter MP, Vertes RP, et al. The nucleus reuniens of the thalamus sits at the nexus 
+of a hippocampus and medial prefrontal cortex circuit enabling memory and behavior. Learn Mem. 2019;26(7):191–205. https://doi.org/10.1101/
+lm.048389.118 PMID: 31209114
+ 12. Vertes RP, Hoover WB, Szigeti-Buck K, Leranth C. Nucleus reuniens of the midline thalamus: link between the medial prefrontal cortex and the 
+hippocampus. Brain Res Bull. 2007;71(6):601–9. https://doi.org/10.1016/j.brainresbull.2006.12.002 PMID: 17292803
+ 13. Dolleman-van der Weel MJ, Morris RGM, Witter MP. Neurotoxic lesions of the thalamic reuniens or mediodorsal nucleus in rats affect non- 
+mnemonic aspects of watermaze learning. Brain Struct Funct. 2009;213: 329–42. https://doi.org/10.1007/s00429-008-0200-6
+ 14. Herkenham M. The connections of the nucleus reuniens thalami: evidence for a direct thalamo-hippocampal pathway in the rat. J Comp Neurol. 
+1978;177(4):589–610. https://doi.org/10.1002/cne.901770405 PMID: 624792
+ 15. Wouterlood FG, Saldana E, Witter MP. Projection from the nucleus reuniens thalami to the hippocampal region: light and electron microscopic trac-
+ing study in the rat with the anterograde tracer Phaseolus vulgaris‐leucoagglutinin. J Comp Neurol. 1990;296(2):179–203. https://doi.org/10.1002/
+cne.902960202
+ 16. Schlecht M, Jayachandran M, Rasch GE, Allen TA. Dual projecting cells linking thalamic and cortical communication routes between the medial 
+prefrontal cortex and hippocampus. Neurobiol Learn Mem. 2022;188:107586. https://doi.org/10.1016/j.nlm.2022.107586 PMID: 35045320
+ 17. Wouterlood FG. Innervation of entorhinal principal cells by neurons of the nucleus reuniens thalami. Anterograde PHA‐L tracing com-
+bined with retrograde fluorescent tracing and intracellular injection with lucifer yellow in the rat. Eur J Neurosci. 1991;3: 641–7. https://doi.
+org/10.1111/j.1460-9568.1991.tb00850.x
+ 18. McKenna JT, Vertes RP. Afferent projections to nucleus reuniens of the thalamus. J Comp Neurol. 2004;480(2):115–42. https://doi.org/10.1002/
+cne.20342 PMID: 15514932
+ 19. Dolleman-Van der Weel MJ, Lopes da Silva FH, Witter MP. Nucleus reuniens thalami modulates activity in hippocampal field CA1 through excit-
+atory and inhibitory mechanisms. J Neurosci. 1997;17(14):5640–50. https://doi.org/10.1523/JNEUROSCI.17-14-05640.1997 PMID: 9204945
+ 20. Ito HT, Zhang S-J, Witter MP, Moser EI, Moser M-B. A prefrontal-thalamo-hippocampal circuit for goal-directed spatial navigation. Nature. 
+2015;522(7554):50–5. https://doi.org/10.1038/nature14396 PMID: 26017312
+
+
+===== PAGE 19 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 19 / 20
+ 21. Duan AR, Varela C, Zhang Y, Shen Y, Xiong L, Wilson MA, et al. Delta frequency optogenetic stimulation of the thalamic nucleus reuniens is 
+sufficient to produce working memory deficits: relevance to schizophrenia. Biol Psychiatry. 2015;77(12):1098–107. https://doi.org/10.1016/j.bio-
+psych.2015.01.020 PMID: 25891221
+ 22. Chittajallu R, Wester JC, Craig MT, Barksdale E, Yuan XQ, Akgül G, et al. Afferent specific role of NMDA receptors for the circuit integration of 
+hippocampal neurogliaform cells. Nat Commun. 2017;8(1):152. https://doi.org/10.1038/s41467-017-00218-y PMID: 28751664
+ 23. Dolleman-van der Weel MJ, Lopes da Silva FH, Witter MP. Interaction of nucleus reuniens and entorhinal cortex projections in hippocampal field 
+CA1 of the rat. Brain Struct Funct. 2017;222(5):2421–38. https://doi.org/10.1007/s00429-016-1350-6 PMID: 28008472
+ 24. Klapoetke NC, Murata Y, Kim SS, Pulver SR, Birdsey-Benson A, Cho YK, et al. Independent optical excitation of distinct neural populations. Nat 
+Methods. 2014;11(3):338–46. https://doi.org/10.1038/nmeth.2836 PMID: 24509633
+ 25. Lorente De Nó R. Studies on the structure of the cerebral cortex II. Continuation of the study of the ammonic system. J Psychol Neurol. 
+1934;46:113–77.
+ 26. Ding S-L. Comparative anatomy of the prosubiculum, subiculum, presubiculum, postsubiculum, and parasubiculum in human, monkey, and rodent. 
+J Comp Neurol. 2013;521(18):4145–62. https://doi.org/10.1002/cne.23416 PMID: 23839777
+ 27. Canto CB, Witter MP. Cellular properties of principal neurons in the rat entorhinal cortex. II. The medial entorhinal cortex. Hippocampus. 
+2012;22(6):1277–99. https://doi.org/10.1002/hipo.20993 PMID: 22161956
+ 28. Canto CB, Witter MP. Cellular properties of principal neurons in the rat entorhinal cortex. I. The lateral entorhinal cortex. Hippocampus. 2012;22: 
+1256–76. https://doi.org/10.1002/hipo.20997
+ 29. Pastoll H, Garden DL, Papastathopoulos I, Sürmeli G, Nolan MF. Inter- and intra-animal variation in the integrative properties of stellate cells in the 
+medial entorhinal cortex. Elife. 2020;9:e52258. https://doi.org/10.7554/eLife.52258 PMID: 32039761
+ 30. Banks PJ, Warburton EC, Bashir ZI. Plasticity in prefrontal cortex induced by coordinated synaptic transmission arising from reuniens/rhomboid 
+nuclei and hippocampus. Cereb Cortex Commun. 2021;2(2):tgab029. https://doi.org/10.1093/texcom/tgab029 PMID: 34296174
+ 31. Sun Y, Nguyen AQ, Nguyen JP, Le L, Saur D, Choi J, et al. Cell-type-specific circuit connectivity of hippocampal CA1 revealed through Cre- 
+dependent rabies tracing. Cell Rep. 2014;7(1):269–80. https://doi.org/10.1016/j.celrep.2014.02.030 PMID: 24656815
+ 32. Cembrowski MS, Bachman JL, Wang L, Sugino K, Shields BC, Spruston N. Spatial gene-expression gradients underlie prominent heterogeneity of 
+CA1 pyramidal neurons. Neuron. 2016;89(2):351–68. https://doi.org/10.1016/j.neuron.2015.12.013 PMID: 26777276
+ 33. Ding S-L, Yao Z, Hirokawa KE, Nguyen TN, Graybuck LT, Fong O, et al. Distinct transcriptomic cell types and neural circuits of the subiculum and 
+prosubiculum along the dorsal-ventral axis. Cell Rep. 2020;31(7):107648. https://doi.org/10.1016/j.celrep.2020.107648 PMID: 32433957
+ 34. Wee RWS, MacAskill AF. Biased connectivity of brain-wide inputs to ventral subiculum output neurons. Cell Rep. 2020;30(11):3644-3654.e6. 
+https://doi.org/10.1016/j.celrep.2020.02.093 PMID: 32187537
+ 35. Andrianova L, Banks PJ, Booth CA, Brady ES, Margetts-Smith G, Kohli S, et al. Thalamic nucleus reuniens preferentially targets inhibitory inter-
+neurons over pyramidal cells in hippocampal CA1 region. Cold Spring Harbor Laboratory. 2021. https://doi.org/10.1101/2021.09.30.462517
+ 36. Goswamee P, Leggett E, McQuiston AR. Nucleus Reuniens afferents in hippocampus modulate CA1 network function via monosynaptic excitation 
+and polysynaptic inhibition. Front Cell Neurosci. 2021;15:660897. https://doi.org/10.3389/fncel.2021.660897 PMID: 34712120
+ 37. Bloss EB, Cembrowski MS, Karsh B, Colonell J, Fetter RD, Spruston N. Single excitatory axons form clustered synapses onto CA1 pyramidal cell 
+dendrites. Nat Neurosci. 2018;21(3):353–63. https://doi.org/10.1038/s41593-018-0084-6
+ 38. Foggetti A, Baccini G, Arnold P, Schiffelholz T, Wulff P. Spiny and non-spiny parvalbumin-positive hippocampal interneurons show different plastic 
+properties. Cell Rep. 2019;27(13):3725-3732.e5. https://doi.org/10.1016/j.celrep.2019.05.098 PMID: 31242406
+ 39. Ziółkowska M, Sotoudeh N, Cały A, Puchalska M, Pagano R, Śliwińska MA, et al. Projections from thalamic nucleus reuniens to hippocampal CA1 
+area participate in context fear extinction by affecting extinction-induced molecular remodeling of excitatory synapses. Elife. 2025;13:RP101736. 
+https://doi.org/10.7554/eLife.101736 PMID: 39846718
+ 40. Zhang W, Vazquez L, Apperson M, Kennedy MB. Citron binds to PSD-95 at glutamatergic synapses on inhibitory neurons in the hippocampus. J 
+Neurosci. 1999;19(1):96–108. https://doi.org/10.1523/JNEUROSCI.19-01-00096.1999 PMID: 9870942
+ 41. Graf ER, Zhang X, Jin S-X, Linhoff MW, Craig AM. Neurexins induce differentiation of GABA and glutamate postsynaptic specializations via neuroli-
+gins. Cell. 2004;119(7):1013–26. https://doi.org/10.1016/j.cell.2004.11.035 PMID: 15620359
+ 42. Pelkey KA, Barksdale E, Craig MT, Yuan X, Sukumaran M, Vargish GA, et al. Pentraxins coordinate excitatory synapse maturation and circuit 
+integration of parvalbumin interneurons. Neuron. 2015;85: 1257–72. https://doi.org/10.1016/j.neuron.2015.02.020
+ 43. Leprince E, Dard RF, Mortet S, Filippi C, Giorgi-Kurz M, Bourboulou R, et al. Extrinsic control of the early postnatal CA1 hippocampal circuits. 
+Neuron. 2023;111(6):888-902.e8. https://doi.org/10.1016/j.neuron.2022.12.013 PMID: 36608692
+ 44. Molnár Z, Luhmann HJ, Kanold PO. Transient cortical circuits match spontaneous and sensory-driven activity during development. Science. 
+2020;370(6514):eabb2153. https://doi.org/10.1126/science.abb2153 PMID: 33060328
+ 45. Torromino G, Loffredo V, Cavezza D, Sonsini G, Esposito F, Crevenna AH, et al. Thalamo-hippocampal pathway regulates incidental memory load 
+in mice. Cold Spring Harbor Laboratory. 2021. https://doi.org/10.1101/2021.08.07.453742
+ 46. Bertram EH, Zhang DX. Thalamic excitation of hippocampal CA1 neurons: a comparison with the effects of CA3 stimulation. Neuroscience. 
+1999;92: 15–26. https://doi.org/10.1016/s0306-4522(98)00712-x
+
+
+===== PAGE 20 =====
+PLOS Biology | https://doi.org/10.1371/journal.pbio.3003419 October 13, 2025 20 / 20
+ 47. Sakalar E, Klausberger T, Lasztóczi B. Neurogliaform cells dynamically decouple neuronal synchrony between brain areas. Science. 
+2022;377(6603):324–8. https://doi.org/10.1126/science.abo3355 PMID: 35857593
+ 48. Craig MT, Witton J. A cellular switchboard in memory circuits. Science. 2022;377(6603):262–3. https://doi.org/10.1126/science.add2681 PMID: 
+35857601
+ 49. Oláh S, Füle M, Komlósi G, Varga C, Báldi R, Barzó P, et al. Regulation of cortical microcircuits by unitary GABA-mediated volume transmission. 
+Nature. 2009;461(7268):1278–81. https://doi.org/10.1038/nature08503 PMID: 19865171
+ 50. Loureiro M, Cholvin T, Lopez J, Merienne N, Latreche A, Cosquer B, et al. The ventral midline thalamus (reuniens and rhomboid nuclei) contrib-
+utes to the persistence of spatial memory in rats. J Neurosci. 2012;32(29):9947–59. https://doi.org/10.1523/JNEUROSCI.0410-12.2012 PMID: 
+22815509
+ 51. Sierra RO, Pedraza LK, Zanona QK, Santana F, Boos FZ, Crestani AP, et al. Reconsolidation-induced rescue of a remote fear memory blocked 
+by an early cortical inhibition: involvement of the anterior cingulate cortex and the mediation by the thalamic nucleus reuniens. Hippocampus. 
+2017;27(5):596–607. https://doi.org/10.1002/hipo.22715 PMID: 28176459
+ 52. Troyner F, Bicca MA, Bertoglio LJ. Nucleus reuniens of the thalamus controls fear memory intensity, specificity and long-term maintenance during 
+consolidation. Hippocampus. 2018;28(8):602–16. https://doi.org/10.1002/hipo.22964 PMID: 29747244
+ 53. Troyner F, Bertoglio LJ. Nucleus reuniens of the thalamus controls fear memory reconsolidation. Neurobiol Learn Mem. 2021;177:107343. https://
+doi.org/10.1016/j.nlm.2020.107343
+ 54. Troyner F, Bertoglio LJ. Thalamic nucleus reuniens regulates fear memory destabilization upon retrieval. Neurobiol Learn Mem. 2020;175:107313. 
+https://doi.org/10.1016/j.nlm.2020.107313 PMID: 32956808
+ 55. Barker GRI, Warburton EC. A critical role for the nucleus reuniens in long-term, but not short-term associative recognition memory formation. J 
+Neurosci. 2018;38(13):3208–17. https://doi.org/10.1523/JNEUROSCI.1802-17.2017 PMID: 29449430
+ 56. Szabadics J, Tamás G, Soltesz I. Different transmitter transients underlie presynaptic cell type specificity of GABAA,slow and GABAA,fast. Proc Natl 
+Acad Sci U S A. 2007;104(37):14831–6. https://doi.org/10.1073/pnas.0707204104 PMID: 17785408
+ 57. Chudasama Y, Doobay VM, Liu Y. Hippocampal-prefrontal cortical circuit mediates inhibitory response control in the rat. J Neurosci. 
+2012;32(32):10915–24. https://doi.org/10.1523/JNEUROSCI.1463-12.2012 PMID: 22875926
+ 58. Prasad JA, Macgregor EM, Chudasama Y. Lesions of the thalamic reuniens cause impulsive but not compulsive responses. Brain Struct Funct. 
+2013;218(1):85–96. https://doi.org/10.1007/s00429-012-0378-5 PMID: 22270811
+ 59. Anderson MC, Bunce JG, Barbas H. Prefrontal-hippocampal pathways underlying inhibitory control over memory. Neurobiol Learn Mem. 2016;134 
+Pt A(Pt A):145–61. https://doi.org/10.1016/j.nlm.2015.11.008 PMID: 26642918
+ 60. Mei H, Logothetis NK, Eschenko O. The activity of thalamic nucleus reuniens is critical for memory retrieval, but not essential for the early phase of 
+“off-line” consolidation. Learn Mem. 2018;25(3):129–37. https://doi.org/10.1101/lm.047134.117 PMID: 29449457
+ 61. Anderson MC, Floresco SB. Prefrontal-hippocampal interactions supporting the extinction of emotional memories: the retrieval stopping model. 
+Neuropsychopharmacology. 2022;47(1):180–95. https://doi.org/10.1038/s41386-021-01131-1 PMID: 34446831
+ 62. Li G, Stewart R, Canepari M, Capogna M. Firing of hippocampal neurogliaform cells induces suppression of synaptic inhibition. J Neurosci. 
+2014;34: 1280–92. https://doi.org/10.1523/jneurosci.3046-13.2014
+ 63. Xu Q, Tam M, Anderson SA. Fate mapping Nkx2.1-lineage cells in the mouse telencephalon. J Comp Neurol. 2008;506(1):16–29. https://doi.
+org/10.1002/cne.21529 PMID: 17990269
+ 64. Gong S, Zheng C, Doughty ML, Losos K, Didkovsky N, Schambra UB, et al. A gene expression atlas of the central nervous system based on bac-
+terial artificial chromosomes. Nature. 2003;425(6961):917–25. https://doi.org/10.1038/nature02033 PMID: 14586460
+ 65. Guo H, Hong S, Jin X-L, Chen R-S, Avasthi PP, Tu Y-T, et al. Specificity and efficiency of Cre-mediated recombination in Emx1–Cre knock-in mice. 
+Biochem Bioph Res Co. 2000;273: 661–5. https://doi.org/10.1006/bbrc.2000.2870
+ 66. Seidler B, Schmidt A, Mayr U, Nakhai H, Schmid RM, Schneider G, et al. A Cre-loxP-based mouse model for conditional somatic gene expres-
+sion and knockdown in vivo by using avian retroviral vectors. Proc Natl Acad Sci U S A. 2008;105(29):10137–42. https://doi.org/10.1073/
+pnas.0800487105 PMID: 18621715
+ 67. Anderson WW, Collingridge GL. Capabilities of the WinLTP data acquisition program extending beyond basic LTP experimental functions. J Neuro-
+sci Methods. 2007;162(1–2):346–56. https://doi.org/10.1016/j.jneumeth.2006.12.018 PMID: 17306885
+ 68. Edgar R, Domrachev M, Lash AE. Gene Expression Omnibus: NCBI gene expression and hybridization array data repository. Nucleic Acids Res. 
+2002;30: 207–10. https://doi.org/10.1093/nar/30.1.207
+ 69. Team RC. R: a language and environment for statistical computing; 2021. Available from: https://www.R-project.org/
+ 70. team P. RStudio: integrated development environment for R. Available from: http://www.posit.co/
+ 71. Wickham H, Averick M, Bryan J, Chang W, McGowan L, François R, et al. Welcome to the tidyverse. JOSS. 2019;4(43):1686. https://doi.
+org/10.21105/joss.01686
+ 72. Wickham H. Getting Started with ggplot2. Use R!. Springer International Publishing; 2016. p. 11–31. https://doi.org/10.1007/978-3-319-24277-4_2

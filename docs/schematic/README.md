@@ -16,7 +16,9 @@ Three figures, same pipeline:
 - **`tikz_units/`** — unit level, **2 units per population** (Tang et al. 2023 Fig. 1 style):
   shows the strictly **one-to-one interface** (`x_T,i ↔ ε_TS,i ↔ x_S,i`, no crossing) and
   the **lateral cross-communication inside each population** (zero-diagonal recurrent
-  weights ⇒ units talk only through the crossing `W_{12}`/`W_{21}` reciprocal pairs).
+  weights ⇒ units talk only through crossing reciprocal pairs).  Each pair is labelled
+  in both directions: `W_{ij}` for `x_j -> epsilon_i` and
+  `pi (W^T)_{ji} = pi W_{ij}` for `epsilon_i -> x_j`.
   Adds Tang's sign convention: arrowhead = excitatory, dot = inhibitory — so the signed
   interface drive is visible: sleep `π_ST<0` terminates in a dot, wake `π_ST>0` in an arrow.
 

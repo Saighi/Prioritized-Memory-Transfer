@@ -1,0 +1,977 @@
+
+
+===== PAGE 1 =====
+Coordinated Excitation and Inhibition of Prefrontal Ensembles 
+During Awake Hippocampal Sharp-Wave Ripple Events
+Shantanu P. Jadhav1,2,*, Gideon Rothschild2,*, Demetris K. Roumis2, and Loren M. Frank2,3
+1Neuroscience Program, Department of Psychology and Volen National Center for Complex 
+Systems, Brandeis University, Waltham, U.S.A. (Present address)
+2Department of Physiology and Center for Integrative Neuroscience, University of California, San 
+Francisco, U.S.A
+3Howard Hughes Medical Institute
+SUMMARY
+Interactions between the hippocampus and prefrontal cortex (PFC) are critical for learning and 
+memory. Hippocampal activity during awake sharp wave ripple (SWR) events is important for 
+spatial learning, and hippocampal SWR activity often represents past or potential future 
+experiences. Whether or how this reactivation engages the PFC, and how reactivation might 
+interact with ongoing patterns of PFC activity remains unclear. We recorded hippocampal CA1 
+and PFC activity in animals learning spatial tasks and found that many PFC cells showed spiking 
+modulation during SWRs. Unlike in CA1, SWR-related activity in PFC comprised both excitation 
+and inhibition of distinct populations. Within individual SWRs, excitation activated PFC cells with 
+representations related to the concurrently reactivated hippocampal representation, while 
+inhibition suppressed PFC cells with unrelated representations. Thus, awake SWRs mark times of 
+strong coordination between hippocampus and PFC that reflects structured reactivation of 
+representations related to ongoing experience.
+INTRODUCTION
+The hippocampus and medial prefrontal cortex (PFC) play critical roles in storing accounts 
+of experience and retrieving memories to guide future decisions. The hippocampus is 
+necessary for rapid acquisition of memories for new experiences and retrieval of stored 
+Correspondence: shantanu@brandeis.edu (S.P.J.), loren@phy.ucsf.edu (L.M.F.).*These authors contributed equally to this work
+SUPPLEMENTAL INFORMATION
+Supplemental Information includes Supplemental Experimental Procedures, seven figures, and three tables and can be found with this 
+article online.
+AUTHOR CONTRIBUTIONS
+S.P.J., G.R. and L.M.F. designed the experiments. S.P.J. performed the W-track experiments, and G.R. performed the auditory-cue 
+guided spatial task experiments. S.P.J., G.R., and D.K.R. analyzed the data. L.M.F. supervised all aspects of the data collection and 
+analysis. All authors wrote the paper.
+Publisher's Disclaimer: This is a PDF file of an unedited manuscript that has been accepted for publication. As a service to our 
+customers we are providing this early version of the manuscript. The manuscript will undergo copyediting, typesetting, and review of 
+the resulting proof before it is published in its final citable form. Please note that during the production process errors may be 
+discovered which could affect the content, and all legal disclaimers that apply to the journal pertain.
+HHS Public Access
+Author manuscript
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Published in final edited form as:
+Neuron. 2016 April 6; 90(1): 113–127. doi:10.1016/j.neuron.2016.02.010.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 2 =====
+memories during behavior (Squire, 1992; Eichenbaum and Cohen, 2001; Dudai, 2004). The 
+PFC is important for long-term memory storage, memory retrieval, working memory, and 
+decision-making (Hasegawa, 2000; Miller and Cohen, 2001; Sakai, 2003; Wiltgen et al., 
+2004; Jung et al., 2008; Tse et al., 2011). Moreover, functional disconnection of the 
+hippocampus and PFC causes impairment in some spatial memory tasks (Floresco et al., 
+1997; Wang and Cai, 2006, 2008). Together, these findings implicate a set of memory 
+functions that rely on both the hippocampus and PFC, but the specific nature of the activity 
+in and communication between these regions that supports memory processes remains 
+unclear.
+In the context of memory retrieval, hippocampal – PFC interaction must occur in the awake 
+state and would be expected to reactivate patterns of activity related to behavioral 
+experiences across both structures (Carr et al., 2011; Yu and Frank, 2015). Hippocampal 
+sharp-wave ripple (SWR) events have emerged as a potential mediator of this interaction. 
+During exploration, movement along a spatial trajectory drives the firing of a specific 
+sequence of hippocampal place cells (Skaggs et al., 1996; Dragoi and Buzsaki, 2006). 
+Subsequently, during periods of slow movement and awake immobility, bursts of activity in 
+hippocampal output area CA1 occur in the context of SWRs (Buzsaki, 2015). These bursts 
+often “replay” sequences from behavior (Kudrimoti et al., 1999; Foster and Wilson, 2006; 
+Diba and Buzsaki, 2007; Davidson et al., 2009; Karlsson and Frank, 2009; Gupta et al., 
+2010; Pfeiffer and Foster, 2013), suggesting that these sequences could support awake 
+memory processes (Carr et al., 2011). Consistent with that possibility, selective disruption of 
+awake SWRs is sufficient to cause a specific learning and memory-guided decision-making 
+deficit (Jadhav et al., 2012).
+Do hippocampal SWRs mark the time of coordinated memory reactivation across 
+hippocampus and PFC? This question remains to be answered, but there are a number of 
+results that point to the possibility of such coordination. There are multiple anatomical 
+pathways, including both direct and indirect projections (Amaral and Witter, 1995), that 
+could mediate information flow between the structures. These pathways support memory 
+encoding (Spellman et al., 2015), modulation of hippocampal spatial firing patterns outside 
+of SWRs (Ito et al., 2015), and likely support the observed phase-locking of PFC neurons to 
+the hippocampal theta rhythm seen during movement (Hyman et al., 2005; Jones and 
+Wilson, 2005; Siapas et al., 2005; Benchenane et al., 2010; Gordon, 2011).
+Further, while the potential influence of SWRs on PFC during waking behavior has not been 
+examined, previous studies that focused on sleep demonstrated that increases in firing rates 
+of some PFC neurons are seen at the time of SWRs (Wierzynski et al., 2009). Additionally, 
+PFC neurons can reactivate behaviorally-related patterns during sleep (Euston et al., 2007; 
+Peyrache et al., 2009), and this reactivation can coincide with hippocampal SWRs (Peyrache 
+et al., 2009).
+At the same time, the possibility of coordinated awake reactivation across hippocampus and 
+PFC raises another question: how does such activity co-exist with ongoing representations of 
+current experience? During the waking state, PFC neurons are known to encode information 
+about task events (Euston et al., 2012), and a subset of PFC neurons are most active during 
+Jadhav et al. Page 2
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 3 =====
+delays and following receipt of reward (Jung et al., 1998). These are times when SWRs are 
+prominent (Singer and Frank, 2009; Buzsaki, 2015) and it is not clear whether or how SWR-
+related memory replay and these PFC representations interact.
+To determine whether SWRs mark times of coherent memory reactivation across structures 
+and to understand how memory reactivation interacts with ongoing PFC activity, we 
+recorded hippocampal and PFC activity while animals learned spatial tasks. We found 
+coordinated reactivation of activity patterns related to ongoing experience in hippocampal–
+PFC ensembles during awake SWRs. These findings indicate that awake SWRs are a 
+potential substrate for memory processes.
+RESULTS
+Excitation and Inhibition of PFC Neurons During Awake Hippocampal SWRs
+We used multi-site multi-tetrode drives to simultaneously record the activity of neurons in 
+hippocampus and prefrontal cortex of rats learning either a W-track spatial alternation task 
+(Jadhav et al., 2012), or an auditory cue guided spatial task (n = 3 animals each, Figure 1, 
+see Experimental Procedures). In the W-track alternation task (Figure 1A), animals learned 
+to visit the two outer arms of the W-maze in an alternating sequence, interleaved with visits 
+to the center arm. All animals performed above chance by the 3rd day of training, and 
+performed >80% by the 8th and final day of training. In the auditory cue-guided spatial task 
+(Figure 1B), animals learned to go to one outer arm of a Y-shaped track when a sound was 
+played, and to go to the other outer arm in the absence of sound. Similar to the W-track, 
+correct performance meant that visits to the outer arms were interleaved with visits to the 
+center arm. Animals performed above chance by the 4th day of training, and performed 
+>75% by the 7th day of training.
+Tetrodes were targeted to the prelimbic and infralimbic regions of medial prefrontal cortex 
+(PFC) and to the dorsal CA1 region of the hippocampus (Figure 1C). A small fraction also 
+targeted intermediate CA1 region in animals performing the W-track task (see Experimental 
+Procedures; Figure S1). We recorded a total of 630 CA1 neurons and 353 PFC neurons in 6 
+animals over multiple days of behavior in the two tasks. We excluded a small number of 
+fast-spiking, narrow-waveform cells, as well as cells with fewer than 50 spikes within SWR 
+aligned windows (see Experimental Procedures), resulting in a total of 536 CA1 and 312 
+PFC putative excitatory neurons (see Table S1 for distribution of cells recorded across 
+animals).
+There are distinct patterns of hippocampal activity seen during exploration, when the theta 
+rhythm is prominent, and during awake stillness, when memory replay during SWRs occurs 
+(Buzsaki et al., 1983; Buzsaki, 1989). We therefore divided our data into two mutually 
+exclusive sets of times based on movement speeds and power in the ripple band (150–250 
+Hz). Figure 2 illustrates these patterns of activity in an animal traversing a trajectory on a W-
+track. During the traversal, sequences of place cells representing locations are active and 
+theta oscillations are visible (Figure 2A–C). When the animal stops to consume reward at 
+the end of the trajectory, a dramatic shift in network state occurs, and SWR oscillations 
+Jadhav et al. Page 3
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 4 =====
+(150–250 Hz) become prevalent (Figure 2A, 2D). As expected (Singer and Frank, 2009), 
+SWRs occurred primarily at reward locations in both the behavioral tasks (Figure S2).
+Overall, 35% (109/312) of PFC neurons were significantly SWR-modulated (see Table S2 
+for distribution of SWR-modulated cells across animals). Previous studies of PFC SWR 
+activity during sleep reported that a large majority of modulated neurons were excited during 
+sleep SWRs (Siapas and Wilson, 1998; Wierzynski et al., 2009). We were therefore 
+surprised to see approximately equal numbers of excited and inhibited responses during 
+awake SWRs (Figure 3A–3C; SWR-excited: 57/312, 18%; SWR-inhibited: 52/312 cells, 
+17%). Both populations showed transient responses to SWRs, with average firing rates 
+returning to baseline values within ~300 ms of SWR onset. As similar proportions of SWR-
+excited and SWR-inhibited neurons were seen in the context of each of the two tasks (Figure 
+3C, Table S2), we combined data from the two tasks for the rest of the analyses, although 
+analyses applied to the two tasks separately, and with exclusion of intermediate CA1 cells, 
+yielded consistent results (not shown).
+We then examined the timing of CA1 and PFC responses during SWRs. Overall, CA1 
+activity tended to precede PFC activity during SWRs, as in previous reports (Siapas and 
+Wilson, 1998; Peyrache et al., 2009; Wierzynski et al., 2009). We computed the mean 
+normalized SWR-aligned PSTHs for CA1 (n = 429), SWR-excited (n = 57), and SWR-
+inhibited (n = 52) PFC neuron populations (Figure 3D). The time of the peak CA1 
+population activity preceded both the peak of the SWR-excited and the trough of the SWR-
+inhibited PFC population activity (Figure 3D, 3E, mean ± sem time of peak for CA1, SWR-
+excited PFC and SWR-inhibited PFC cells = 54 ± 2 ms; 100 ± 9 ms; and 84 ± 10 ms, 
+respectively; CA1 vs. PFC excited, p< 10−11; CA1 vs. PFC inhibited, p< 10−6; PFC excited 
+vs. PFC inhibited, p > 0.1, rank-sum tests). Similarly, the time of SWR-modulation onset, 
+measured as the time of firing rate increase/decrease to one standard deviation above/below 
+the mean, was also significantly later for PFC than CA1 cells (Figure 3E Right, CA1 vs. 
+PFC excited, p< 10−9; CA1 vs. PFC inhibited, p< 10−7; PFC excited vs. PFC inhibited, p > 
+0.1, rank-sum test). Finally, we also computed, for all SWR modulated CA1 and PFC 
+neurons, the cross-covariance for all CA1-PFC pairs. We then separately averaged cross-
+covariances for pairs with an SWR-excited (n = 393 CA1-PFC pairs) or an SWR-inhibited 
+PFC neuron (n = 320 CA1-PFC pairs). The peak (SWR-excited) or trough (SWR-inhibited) 
+of the mean cross-covariance occurred at a time > 0 ms (Figure 3F; peak for excited cells: 13 
+± 7 ms; trough for inhibited cells: 20 ± 7 ms).
+SWR Modulation is Related to Theta Phase Locking of PFC Neurons
+If SWR-related activity reflects the reactivation of specific PFC neurons that were coupled 
+to the hippocampus during exploration, SWR-modulated PFC neurons would also tend to be 
+modulated by the hippocampal theta rhythm. We first assessed theta phase locking by using 
+a circular distribution to fit the theta-phase aligned PFC responses (Siapas et al., 2005) and 
+used that fit to measure the circular concentration parameter (κ) (Experimental Procedures). 
+Similar to previous reports (Jones and Wilson, 2005; Siapas et al., 2005), we found that 60% 
+of PFC neurons (189 of 312, see Experimental Procedures) were significantly locked to 
+theta. Also, as previously reported (Jones and Wilson, 2005; Siapas et al., 2005), CA1 
+Jadhav et al. Page 4
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 5 =====
+neurons preferred the falling phase of theta while PFC neurons were most often phase-
+locked to the trough of theta (Figure 4A).
+We next examined the relationship between SWR modulation and theta phase-locking in the 
+PFC population. We found that the majority of significantly SWR-modulated neurons were 
+also significantly phase-locked to hippocampal theta (Table S3). This included 44/57 SWR-
+excited neurons (77%) and 37/52 inhibited neurons (71%). There was no difference in the 
+fraction of phase-locked cells in the excited and inhibited neuron populations (p > 0.4), but 
+both had a higher fraction of phase locked cells than seen for SWR-unmodulated neurons 
+(108/203 neurons: 53%; z-proportion tests between unmodulated and SWR excited: p < 
+10−3; SWR inhibited: p = 0.01).
+There was a parallel difference in the consistency of the theta phases at which different 
+populations of PFC neurons tended to fire (Figure 4A). The circular concentration parameter 
+(κ) for theta-modulated cells was larger in both the SWR-excited and SWR-inhibited 
+populations, as compared to SWR-unmodulated neurons (Figure 4B, SWR-excited, SWR-
+inhibited and SWR-unmodulated κ = 0.2 ± 0.02, 0.25 ± 0.04 and 0.12 ± 0.01 respectively; 
+p’s < 0.01 for SWR unmodulated vs. SWR-excited and SWR-inhibited; p > 0.1 for excited 
+vs. inhibited; rank-sum tests). The converse analysis also showed that PFC neurons that were 
+significantly theta modulated (n = 189) were also significantly more strongly SWR-
+modulated than neurons that were not theta modulated (n = 123) (Figure 4C, SWR 
+modulation index: 5.2 ± 0.8 and 2.5 ± 0.4 respectively; p < 0.01, rank-sum test). Thus, 
+SWR-modulation and theta phase-locking are related, suggesting a link between modulation 
+during active movement and modulation during SWRs at the single-neuron level.
+Finally, we also noted a difference in the uniformity of the distributions of theta-phase 
+coupling across neuron types. SWR-excited neurons had a significantly narrower preferred 
+phase distribution than both SWR-inhibited and SWR-unmodulated neurons (kuiper test for 
+circular distribution, SWR-excited vs. SWR-inhibited, n = 57 vs. 52 neurons, p > 0.1; SWR-
+excited vs. SWR-unmodulated, n = 57 vs. 203 neurons, p = 0.005). In contrast, SWR-
+inhibited and SWR-unmodulated neurons did not differ in their concentration of preferred 
+phases (n = 52 vs. 203 neurons, p > 0.1, kuiper test). Consistent with previous reports 
+(Siapas et al., 2005; Sigurdsson et al., 2010), we also found that all PFC cells phase-locked 
+optimally to hippocampal theta of the past (delay ~15 ms), as determined by systematically 
+shifting the time of theta (data not shown).
+SWR-Excited and Inhibited PFC Neurons Comprise Distinct Functional Populations
+The differences in the theta modulation of SWR-excited, SWR-inhibited and SWR-
+unmodulated PFC cells suggest that SWR engagement could be a marker for functionally 
+distinct populations. To further explore that possibility we asked if there were any 
+differences in behavioral coding properties across populations (see Figure 5A for examples 
+of spatial firing patterns). These analyses revealed clear distinctions between SWR-
+modulated and SWR–unmodulated cells, as well as distinctions between SWR-excited and 
+SWR-inhibited cells.
+Jadhav et al. Page 5
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 6 =====
+We first compared mean firing rates during movement as a measure of overall engagement in 
+the task. Interestingly, both SWR-excited and SWR-inhibited cells had significantly higher 
+mean rates than SWR-unmodulated cells (Figure 5B; n = 57, 52 and 203 cells respectively 
+for excited, inhibited and unmodulated cells; mean ± s.e.m. = 4.2 ± 0.5, 3.2 ± 0.4, 2.1 ± 0.2 
+Hz respectively; p < 0.01 for excited vs. unmodulated and p < 10−4 inhibited vs. 
+unmodulated, excited vs. inhibited p > 0.1, rank-sum test). SWR-excited, SWR-inhibited 
+and SWR-unmodulated cells also differed in patterns of spatially-related firing. As 
+previously reported (Baeg et al., 2003), PFC neurons as a whole were active across larger 
+fractions of the environment than their CA1 counterparts, but SWR-excited neurons had 
+significantly higher levels of coverage than both the SWR-inhibited and the SWR-
+unmodulated neurons (Figure 5C; coverages: excited: 0.70 ± 0.05; inhibited: 0.54 ± 0.05; 
+unmodulated: 0.50 ± 0.02; p < 0.01 excited vs. inhibited, p < 10−4 excited vs. unmodulated, 
+p > 0.1 for inhibited vs. unmodulated; rank-sum test; see also Figure S3 for other measures 
+of spatial activity).
+SWR-excited and SWR-inhibited cells showed distinct patterns of movement speed 
+preferences as well, with SWR excited cells showing a significantly higher firing rate-speed 
+correlation than SWR inhibited cells (Figure 5D, 5E; p < 0.01 for excited vs. inhibited, rank-
+sum test). Further, the median of SWR-inhibited cells’ speed correlations was significantly 
+less than zero, indicating that these cells tended to fire most when animals were moving 
+slowly (shuffle test, n = 1000, p < 0.01). In contrast, SWR-unmodulated cells showed a 
+wider distribution of speed-spiking correlations that did not differ from the excited or 
+inhibited populations (p’s > 0.05). This suggests that SWR-inhibited cells were more active 
+during periods of immobility when SWRs are prominent, as compared to high-speed 
+movement. Indeed, we found that firing rates of SWR-inhibited cells just prior to SWRs 
+were higher than those during high-speed movement. In contrast, SWR-excited cells showed 
+the opposite pattern with a preference for movement times (Figure 5F, n = 57 vs. n = 52, 
+rank-sum test, p < 0.001). Finally, we asked whether the cells differed in their tendency to 
+reflect an important task event, the receipt of reward. PFC SWR-inhibited cells also showed 
+a greater tendency to increase firing rates following reward than SWR-excited cells (Figure 
+S3).
+These differences also manifested as distinct patterns of co-firing within and between SWR-
+excited and SWR-inhibited PFC populations. We computed the cross-covariance between 
+pairs of SWR-modulated neurons, restricted to movement times. We found a large and 
+highly significant difference between the groups: SWR-excited cells tended to fire in close 
+temporal proximity to other SWR-excited cells, SWR-inhibited cells tended to fire in 
+proximity to other SWR-inhibited cells, but SWR-excited and SWR-inhibited cells tended 
+not to fire together. This was evident both when we examined the population cross-
+covariance for pairs from each category (Figure 5G, Left) as well as the maximum zero lag 
+cross covariance (Figure 5G, Right, n = 42 excited-excited pairs, n=36 inhibited-inhibited 
+pairs, n = 73 excited-inhibited pairs, n = 369 unmodulated-unmodulated pairs; cross-
+covariance for excited-inhibited pairs was significantly lower than the other pair categories, 
+p’s< 0.001, rank-sum test). Taken together, these results indicate that SWR-excited and 
+SWR-inhibited neurons form distinct functional ensembles that are engaged preferentially 
+during movement and stillness, respectively.
+Jadhav et al. Page 6
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 7 =====
+Structured Reactivation of CA1-PFC Pairs during SWRs
+These findings demonstrate that awake SWRs represent a prominent mode of hippocampal-
+prefrontal interaction where SWRs engage functionally distinct populations in PFC. 
+Previous studies have shown that individual SWRs frequently contain replay events where 
+specific sets of hippocampal neurons are active (Kudrimoti et al., 1999; Foster and Wilson, 
+2006; Diba and Buzsaki, 2007; Karlsson and Frank, 2009; Gupta et al., 2010; Pfeiffer and 
+Foster, 2013). This is also apparent in correlated firing of CA1 neuron pairs, where pairs that 
+are significantly correlated during theta oscillations in behavior also show enhanced 
+correlations during SWR reactivation (O’Neill et al., 2008 ). If awake SWRs define a period 
+where there is structured information flow between CA1 and PFC, we would expect that 
+SWR-modulated PFC neurons would also be engaged differentially depending on which 
+hippocampal neurons are active during each SWR.
+As a first test of this hypothesis, we examined the structure of pairwise interactions between 
+hippocampal and PFC neurons, using raw spike count correlations during SWRs. We 
+measured the firing rates of hippocampal and SWR-modulated PFC neurons in a 0–200 ms 
+window beginning at SWR onset, and then asked whether there were “SWR-correlated” 
+CA1 and PFC pairs, defined as pairs of neurons where the CA1 firing rate across SWRs was 
+significantly correlated with the associated PFC SWR firing rates.
+We found that 16% of CA1-PFC neuron pairs were significantly SWR-correlated (n = 116 / 
+713 CA1-PFC pairs, p < 0.05 criterion for individual pairs; the 116 pairs comprised 94 
+unique SWR-modulated PFC cells and 53 unique CA1 cells). This was significantly more 
+pairs than the ~5% we observed after shuffling the rates across SWRs (p < 10−8, Z-test for 
+proportions; see Experimental Procedures). There were similar proportions of significantly 
+SWR-correlated pairs for both SWR-excited and SWR-inhibited PFC neurons (18%, n = 
+72/393 pairs for SWR-excited PFC neurons; 14%, 44/320 pairs for SWR-inhibited PFC 
+neurons; histograms in Figure S4). Interestingly, these included both positive and negative 
+correlations with both SWR-excited and SWR-inhibited PFC populations (Figure 6A, 6B 
+Top). Thus, spiking activity of neuronal pairs across CA1 and PFC during SWRs is often 
+strongly correlated.
+If these patterns of positive and negative correlations reflect the reactivation of behaviorally 
+related spiking patterns, we would expect that CA1–PFC pairs that fired together during 
+theta periods (corresponding to active behavior) would show positive SWR correlations, 
+while pairs that did not would show negative correlations. We therefore calculated theta-
+period correlations between CA1-PFC neuron pairs as the peak of the standardized Z-scored 
+cross-covariance during movement (Figure 6A, 6B Bottom) (Siapas et al., 2005).
+This analysis revealed a significant relationship between theta cross-covariance and SWR-
+correlations (r = 0.39, n = 713 pairs, p < 10−4, regression test), for both the SWR-excited and 
+SWR-inhibited populations (Figure 6C; SWR-excited neurons: r = 0.39, n = 393 pairs, p < 
+10−4; SWR-inhibited neurons: r = 0.39, n = 320 pairs, p < 10−4, regression test). The SWR-
+excited and SWR-inhibited populations showed a similar degree of correlation (shuffle test, 
+n = 1000, p > 0.1). The identification of CA1-PFC pairs with strong SWR and theta 
+correlations also allowed us to ask whether CA1 spiking tended to lead PFC spiking during 
+Jadhav et al. Page 7
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 8 =====
+behavior as it did during SWRs. We examined the subset of CA1-PFC pairs with significant 
+and positive SWR correlations, which also tended to have high theta cross-covariances, and 
+found that the peaks of these cross-covariances reflected an overall tendency for CA1 to lead 
+PFC (Figure S4).
+We next examined whether these results could be extended beyond pairwise interactions. We 
+used a generalized linear model (GLM) with a log link function to predict SWR-related 
+spiking of single PFC neurons from the activity of the simultaneously recorded CA1 
+ensembles. The GLM model confirmed the presence of functional links between CA1 and 
+PFC ensembles (Figure 6D). Interestingly, the same CA1 neuron could be positively 
+predictive of the spiking of one PFC neuron and negatively predictive of the activity of 
+another. Conversely, a PFC neuron could be positively predicted by one CA1 neuron and 
+negatively predicted by a different CA1 neuron. These findings demonstrate highly specific 
+patterns of interaction across structures.
+Using cross validation to ensure that our models did not over fit the data, we found that that 
+prediction performance was better than chance for SWR-modulated PFC cells (n = 77) and 
+increased with the size of the CA1 ensemble (Figure 6E, striped bars; n = 30, 20, 27 PFC 
+cells, 1-way ANOV A, main effect of cell count group: p< 10−4). PFC SWR-modulated cells 
+were better predicted than SWR-unmodulated cells but predictions of SWR-excited and 
+SWR-inhibited cells did not differ from one another (2-way ANOV A, modulated n = 77 vs. 
+unmodulated n = 102: p < 10−4; SWR-excited n = 40; SWR-inhibited n = 37: p = 0.29; main 
+effect of cell count groups: p’s< 10 −7). Lastly, since we found that pairwise CA1-PFC 
+correlations during behavior were related to SWR firing rate correlations, we asked whether 
+the spiking of PFC neurons during SWRs could be predicted using a model constructed on 
+activity during movement rather than during SWRs (Figure 6E, white bars). We found that 
+theta-derived models could in many cases predict PFC SWR-firing and the accuracy of this 
+prediction also increased with the size of the CA1 ensemble. This prediction was 
+significantly better for SWR-modulated cells than unmodulated cells (2-way ANOV A, 
+SWR-modulated vs. unmodulated, p = 0.02, cell count group, p< 10−7). It is important to 
+note, however, that this analysis does not demonstrate a causal directionality from 
+movement-related experience to SWRs. Indeed, using SWR-derived models to predict theta 
+activity also yielded above-chance predictions, although the quality of these predictions was 
+significantly lower than using theta-trained models to predict SWR activity (2-way ANOV A: 
+model type X cell count interaction: p < 0.01). Finally, as expected, reversing the direction 
+of prediction also revealed that PFC activity could significantly predict SWR-associated 
+CA1 spiking (Figure S4). Overall, these findings demonstrate that there is close coordination 
+between CA1 and PFC activity during SWRs that is similar to activity patterns seen during 
+movement.
+Reactivation in the CA1-PFC Network Reflects Spatially Related Ensembles
+The reactivation of CA1-PFC pairs during SWRs, consisting of both positive and negative 
+correlations, is similar to that reported previously between CA1 neuronal pairs during sleep 
+(O’Neill et al., 2008 ). In that case, the pattern of CA1 pair correlations was related to the 
+spatial overlap of the neurons’ place fields. We therefore asked if the same was true for 
+Jadhav et al. Page 8
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 9 =====
+CA1-PFC correlations, and looked at the relationship between spatial firing patterns of CA1 
+and PFC neuron pairs. While PFC neurons tend to be active across wide swaths of the 
+environment, they nevertheless show some degree of selectivity across different trajectories 
+(Baeg et al., 2003; Hyman et al., 2005; Jones and Wilson, 2005) (Figure 5), likely as a result 
+of task-related firing patterns that develop with experience (Jung et al., 1998; Baeg et al., 
+2003).
+We found that the similarity between the spatial response profiles of the CA1 and PFC 
+neurons, quantified as a spatial correlation, was related to their SWR correlation for both 
+SWR-inhibited and SWR-excited neurons (See example in Figure 7A, 7B; population results 
+in Figure 7C; SWR-excited neurons: r = 0.2, n = 393 pairs, p < 10−3; SWR-inhibited 
+neurons: r = 0.36, n = 320 pairs, p < 10−4, regression test). Across the population, SWR-
+correlated pairs had significantly higher spatial correlations than SWR-uncorrelated pairs, 
+and SWR-anticorrelated pairs had negative and significantly lower spatial correlations than 
+SWR-uncorrelated pairs (SWR-excited: n = 72 pairs, SWR-inhibited n = 44 pairs, p’s < 
+10−4, rank-sum tests). Interestingly, the relationship between spatial correlation and SWR 
+correlation was significantly stronger for SWR-inhibited neurons than SWR-excited neurons 
+(shuffle test, n = 1000, p < 0.01). This higher correlation was likely the result of the higher 
+spatial specificity of SWR-inhibited neurons as compared to SWR-excited neurons: when 
+we subsampled to choose SWR-excited and inhibited neurons with matched spatial 
+selectivity, both groups showed a similarly strong relationship between spatial and SWR-
+correlations (Figure S5). Finally, we also examined the content of hippocampal replay events 
+as it related to PFC spiking. Here we were limited by the small number of datasets in which 
+both sufficient CA1 ensembles and a sufficient number of SWR-modulated PFC cells were 
+identified. Nonetheless, analysis of this small set of replay events revealed patterns of joint 
+activity consistent with coordinated replay across structures (Figure S6).
+Task Related CA1-PFC Correlations are Not Present in Preceding Rest Periods
+These findings indicate that there is structured activity across hippocampus and PFC during 
+behavior and during awake SWRs, and raise the question of whether this is the result of 
+behavioral experience or simply a reflection of pre-existing connections. We therefore 
+compared CA1-PFC behavioral correlations seen during the behavioral task to those in pre-
+task periods in a rest box (pre-rest sessions). We focused on data from the W-track task to 
+exclude sessions where sound was played during rest in the Y-track task, although the results 
+were the same when we combined data from both tracks (Figure S7).
+Comparing the SWR response correlations between CA1-PFC pairs revealed that there was 
+no detectable relationship between awake SWR correlations and SWR correlations in pre-
+rest periods (Figure 8A). Thus, the structure of SWR correlations is specific to the 
+behavioral experience. Similarly, we saw no relationship between pre-task SWR correlations 
+and either movement-related correlations (Figure 8B) or spatial correlations (Figure 8C). 
+Moreover, GLMs trained on SWR activity in the awake state (CA1 ensemble activity 
+predicting PFC spiking) were unable to predict PFC spiking in SWRs during pre-rest periods 
+(shuffle test, n = 1000, p > 0.5), and performed significantly worse than prediction of PFC 
+spiking in SWRs during behavior (Figure 8D). These results indicate that the observed CA1-
+Jadhav et al. Page 9
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 10 =====
+PFC coordination during awake SWRs is specific to task performance and is not detectable 
+before each day’s experience.
+DISCUSSION
+Our results establish awake SWRs as a prominent network activity pattern mediating 
+hippocampal-PFC interactions during behavior. We found coherent reactivation of 
+behaviorally concordant information across hippocampal-PFC networks during awake 
+SWRs. We also show that this reactivation includes not only the expected excitation of some 
+PFC cells, but also inhibition of other PFC cells. Moreover, these SWR-excited and SWR-
+inhibited populations had distinct spatial and temporal firing properties, where SWR-excited 
+cells were more active during movement while SWR-inhibited cells were more active 
+around the times of SWRs during stillness and following reward. Finally, we found that the 
+coordinated firing was specific to the task epoch, and was not detectable in the preceding 
+rest period.
+Awake SWRs are of particular interest because they have been causally linked to memory: 
+interrupting awake SWRs is sufficient to impair learning and performance in a situation 
+where animals needed to link multiple experiences across time and make decisions based on 
+those experiences (Jadhav et al., 2012). Examination of hippocampal activity during awake 
+SWRs has revealed that these events can contain sequential spiking that recapitulates 
+patterns seen during both recent (Foster and Wilson, 2006; Diba and Buzsaki, 2007; 
+Davidson et al., 2009) and more remote past experiences (Karlsson and Frank, 2009; Gupta 
+et al., 2010). Further, the intensity of hippocampal reactivation during awake SWRs can be 
+predictive of whether an upcoming decision will be correct or incorrect (Singer et al., 2013), 
+and the content of awake replay events can be predictive of upcoming choices in certain task 
+contexts (Pfeiffer and Foster, 2013). While the specific role that SWR activity plays in 
+memory retrieval and decision-making processes remains unclear, one possibility is that it 
+contributes to deliberation by transmitting sequences corresponding to either specific past 
+experiences (Carr et al., 2011) or possible future options to other brain areas (Yu and Frank, 
+2015). The PFC is known to play a central role in these retrieval and decision-making 
+processes (Hasegawa, 2000; Miller and Cohen, 2001; Sakai, 2003; Wiltgen et al., 2004; Jung 
+et al., 2008; Tse et al., 2011).
+Our findings provide support for the possibility that awake SWR-related activity in the PFC 
+supports computations related to the specific content of the corresponding SWR-related 
+hippocampal activity (Yu and Frank, 2015). We found that the spiking activity of a 
+substantial fraction of PFC neurons is modulated during awake hippocampal SWRs. Further, 
+correlations between CA1-PFC pairs during awake SWRs reflected pairwise correlations 
+during active exploration, measured by the theta-period correlation structure as well as 
+correlation of spatial receptive fields. Neuron pairs in the CA1-PFC network that were more 
+correlated during reactivation tended to represent overlapping spatial locations, whereas 
+those that were anti-correlated or uncorrelated during reactivation represented non-
+overlapping locations. At the population level, we found specific patterns of simultaneous 
+positive and negative correlations, implying that specific groups of CA1 and PFC neurons 
+are co-active during SWRs. These patterns reflect structure seen in the theta state, since a 
+Jadhav et al. Page 10
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 11 =====
+GLM model built using theta-associated spiking patterns was able to significantly predict 
+activity during SWRs. Further, spiking from either CA1 or PFC could be used to predict 
+activity in the other, indicating the presence of coherent functional ensembles across the two 
+regions. Therefore, our findings imply very precise coordinated activity in the CA1-PFC 
+network during SWRs, which is well suited to support memory processes.
+We also found a bias towards CA1 leading PFC directionality during both SWRs and theta, 
+as in previous studies (Siapas and Wilson, 1998; Peyrache et al., 2009; Wierzynski et al., 
+2009)(Jones and Wilson, 2005; Siapas et al., 2005; Sigurdsson et al., 2010). This bias is 
+consistent with recent reports that ventral hippocampal CA1 inputs to PFC are important for 
+spatial representations and information encoding in a working memory task (Spellman et al., 
+2015). At the same time, there is clear evidence of PFC influence on CA1 during behavior in 
+the context of coding for past and future location (Ito et al., 2015), indicating bidirectional 
+information flow between these structures during behavior. Importantly, this information 
+flow does not imply monosynaptic connectivity. In our case, a large majority of our 
+hippocampal recordings were in dorsal CA1 (~ 88%), which has only an anatomically minor 
+projection to PFC (Cenquizca and Swanson, 2007). Instead, the observed coordinated 
+reactivation likely depend on indirect connectivity and/or the interconnectivity between 
+dorsal areas of the hippocampus and intermediate and ventral hippocampus (Witter and 
+Amaral, 2004), from which strong direct projections to PFC arise (Cenquizca and Swanson, 
+2007).
+Surprisingly, we also found that PFC reactivation involves cell-specific excitation and 
+inhibition. This observation is consistent with a recent report showing excitatory and 
+inhibitory responses of neurons in the VTA during hippocampal SWRs (Gomperts et al., 
+2015), and taken together these findings suggest the possibility of widespread activation and 
+inhibition of neurons outside the hippocampus during SWRs. While we and others have 
+hypothesized that awake SWR-related activity could drive the activity of specific 
+populations of neurons in the context of memory retrieval, memory consolidation and 
+decision-making (O’Neill et al., 2010 ; Carr et al., 2011; Yu and Frank, 2015), the possibility 
+of structured inhibition of PFC activity has not, to our knowledge, been proposed. Moreover, 
+we found that SWR-excited and SWR-inhibited PFC populations comprised of functionally 
+distinct groups: SWR-excited cells had more spatially diffuse firing and tended to be active 
+at higher movement speeds, while SWR-inhibited cells had more spatially concentrated 
+firing and tended to be active at the lower movement speeds where SWRs are more common 
+(O’Neill et al., 2006 ; Cheng and Frank, 2008; Karlsson and Frank, 2009; Carr et al., 2011). 
+SWR-inhibited cells were also more selective for reward. Further, cell pairs with one SWR-
+excited and one SWR-inhibited PFC neuron were rarely coactive in a one second window, 
+while pairs comprising like-modulated cells were often strongly coactive during movement.
+The content-specific inhibition of many PFC cells during SWRs suggest that upon the 
+initiation of an SWR, the representation in PFC related to the current state can be suppressed 
+and replaced with a representation of recent active behavior consistent with the 
+representation reactivated in CA1. SWR-inhibited PFC cells are most strongly suppressed 
+when the spatial content of a hippocampal reactivation event is inconsistent with the 
+movement-related activity of the PFC cell. In contrast, when the spatial content of the 
+Jadhav et al. Page 11
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 12 =====
+reactivation is behaviorally consistent, the inhibition is reduced, indicating that the cell could 
+continue to signal strongly to downstream neurons. Thus, SWR-related inhibition of PFC is 
+well suited to suppress ongoing PFC activity that is inconsistent with the content of the 
+replayed information coming from the hippocampus.
+Finally, our results also complement previous studies of hippocampal and cortical 
+reactivation during sleep. Sleep SWRs have been linked to memory consolidation (Born and 
+Wilhelm, 2012) and reactivation during SWRs has been shown to occur within PFC during 
+sleep (Peyrache et al., 2009), but whether this reactivation reflects the specific content of 
+simultaneous hippocampal reactivation events has not been examined. Similarly, reports of 
+‘reverberation’ of prior activity across multiple structures during offline periods after 
+behavior (Hoffman and McNaughton, 2002; Ribeiro et al., 2004) did not examine activity in 
+the hippocampus. That said, in one study that looked for episodes of concurrent reactivation 
+between hippocampus and visual cortex during slow wave sleep, a small number of coherent 
+reactivation events were seen (Ji and Wilson, 2007). Our results show that during awake 
+SWRs, coherent reactivation is common, and that it engages both excitation and inhibition in 
+the PFC. This establishes SWRs as a network state that is well suited to support awake 
+memory processes, complementing the role of sleep SWRs in memory consolidation.
+EXPERIMENTAL PROCEDURES
+An overview of experimental procedures is presented below. See Supplemental 
+Experimental Procedures for more details.
+Animals and Experimental Overview
+Six male Long Evans rats weighing 450–550 grams were used in this study. All procedures 
+were approved by the Institutional Animal Care and Use Committee at the University of 
+California, San Francisco and conformed to National Institutes of Health guidelines. (Jadhav 
+et al., 2012). Animals were pre-trained to seek liquid food rewards on a raised linear track 
+(Jadhav et al., 2012). Following the conclusion of the experiments, we made micro-lesions 
+through each electrode tip to mark recording locations
+Behavioral Tasks
+Rats (n = 3 per task) learned either a W-track or a Y-track auditory cue-guided spatial task 
+across 8–12 days, in multiple run sessions per day with interleaving rest sessions. Data were 
+pooled across all sessions within a day. For the W-track task (2 sessions per day), rats were 
+rewarded upon returning to the center well after visits to either side well, and starting from 
+the center well, when the opposite side well from the previous side trajectory was chosen. In 
+the Y-track auditory-cue guided spatial task, following a reward in the home well, in ~75% 
+of trials the rat were rewarded upon arriving at the end of the “silent arm”. In a pseudo-
+random ~25% of trials, 5 seconds after poking in the home well, a specific sound was 
+emitted from a speaker, in which case rats were rewarded in the “sound arm”.
+Jadhav et al. Page 12
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 13 =====
+Surgical Implantation and Electrophysiology
+Surgical implantation procedures were as previously described (Jadhav et al., 2012). 
+Animals were implanted with a microdrive array with 21 independently moveable tetrodes at 
+the following coordinates: W-track: right dorsal hippocampal region CA1 (−3.6 mm AP and 
+2.2 mm ML), right PFC (+3.0 mm AP and 0.7 mm ML, 5 degree angle in one animal), and 
+intermediate CA1 (−6.3 mm AP and 5.5 mm ML, in two animals); Y-track task: left dorsal 
+CA1 (−3.6 mm AP and −2.2 mm ML), left PFC (+3.0 mm AP and −1 mm ML); left primary 
+auditory cortex (−4.8mm AP and −5.5 mm ML, 25 degrees laterally from midline). Figure 
+S1 shows the recording locations for all electrodes in all animals, and distribution of cells 
+across animals is shown in Table S1. Only data from hippocampal and prefrontal recordings 
+are reported here.
+Data were collected using the NSpike data acquisition system (Karlsson and Frank, 2009; 
+Jadhav et al., 2012) (L.M.F. and J. MacArthur, Harvard Instrumentation Design Laboratory). 
+We recorded continuous local field potentials (LFP, filtered 0.5–400 Hz and sampled at 1.5 
+kHz) from all tetrodes. Spike data were sampled at 30 kHz, digitally filtered between 300 or 
+600 Hz and 6 kHz and threshold crossing events were saved to disk (40 samples at 30 kHz). 
+An infrared light emitting diode array with a large and a small cluster of diodes was attached 
+to the preamps during recording. Behavior sessions were recorded with an overhead 
+monochrome CCD camera (30 fps) and the animal’s position and speed were detected online 
+using the infrared diodes.
+Data Analysis
+Data analysis was performed using custom routines in Matlab (MathWorks, Natick, MA). 
+We used non-parametric tests for statistical comparisons throughout the manuscript unless 
+otherwise noted. All values reported are mean ± sem unless otherwise noted.
+SWR Detection and Modulation
+SWRs were detected using LFPs filtered in the 150–250 Hz range on multiple CA1 tetrodes 
+as previously described (Karlsson and Frank, 2009). We limited our analysis to putative PFC 
+and CA1 excitatory neurons with sufficient number of spikes. We developed an SWR-
+modulation metric (see Supplemental Experimental Procedures) which was based on 
+comparing the response in the 0–200 ms window after SWR onset to shuffled data. PFC 
+SWR-modulated neurons were categorized as SWR-excited or SWR-inhibited by comparing 
+the rate in the 0–200 ms window after SWR onset with the rate in a pre-SWR background 
+window −500 to −100 ms window before SWR onset. Timing and cross-covariance of the 
+SWR-response was calculated using the SWR-aligned rasters.
+Theta Phase Locking
+Theta phase-locking was calculated using the methods developed in previous reports (Siapas 
+et al., 2005). Theta oscillations were filtered in the 6–12 Hz range in the LFP down-sampled 
+to 150 Hz. We used a CA1 tetrode located in corpus callosum to measure theta phase 
+(Lubenov and Siapas, 2009). Theta periods were assigned based on a speed criterion of >5 
+cm/sec and no SWRs detected on any of the CA1 tetrodes with a 3 s.d. criterion.
+Jadhav et al. Page 13
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 14 =====
+Spatial Properties
+Spatial firing properties of neurons were computed using occupancy-normalized linearized 
+firing rates of neurons (Figure 5, S3, 7). Spatial coverage of neurons was defined as the 
+fraction of area above 25% of the peak firing rate of the neuron across all 4 trajectories got 
+neurons with a peak spatial firing rate > 3 Hz. Spatial correlations between neurons were 
+also calculated using the linearized firing rates.
+SWR Correlations and Theta Cross-covariance
+SWR correlations between pairs of CA1-PFC neurons were measured as the correlation 
+coefficient between the magnitudes of the spiking responses of the two neurons in the 0–200 
+ms aligned to SWR onset. Standardized cross-covariance during theta (Figure 5 and 6) was 
+calculated as in previous reports (Siapas et al., 2005). Only theta periods that were at-least 1 
+second long were included in the analysis.
+GLM
+For each SWR modulated PFC neuron, we trained a generalized linear model (GLM) with a 
+log link function to predict SWR-related spiking of that PFC neuron from the activity of the 
+simultaneously recorded CA1 ensemble. To determine predictive significance, we used a 
+cross-validation approach, training on 90% of the SWR-responses and predicting the 
+remainder.
+Supplementary Material
+Refer to Web version on PubMed Central for supplementary material.
+Acknowledgments
+This work was supported by NIH Grants R00 MH100284 and a Sloan research fellowship (S.P.J.), RO1 MH090188 
+(L.M.F.), and EMBO and ELSC postdoctoral fellowships (G.R.). We thank Irene Grossrubatscher for assistance 
+with histology, Ryan Young for assistance with analysis, and Brett Mensh for feedback on the manuscript.
+References
+Amaral, DG.; Witter, MP. Hippocampal Formation. In: Paxinos, C., editor. The Rat Nervous System. 
+Academic Press; 1995. p. 443-493.
+Baeg EH, Kim YB, Huh K, Mook-Jung I, Kim HT, Jung MW. Dynamics of population code for 
+working memory in the prefrontal cortex. Neuron. 2003; 40:177–188. [PubMed: 14527442] 
+Benchenane K, Peyrache A, Khamassi M, Tierney PL, Gioanni Y , Battaglia FP, Wiener SI. Coherent 
+theta oscillations and reorganization of spike timing in the hippocampal-prefrontal network upon 
+learning. Neuron. 2010; 66:921–936. [PubMed: 20620877] 
+Born J, Wilhelm I. System consolidation of memory during sleep. Psychological research. 2012; 
+76:192–203. [PubMed: 21541757] 
+Buzsaki G. Two-stage model of memory trace formation: a role for “noisy” brain states. Neuroscience. 
+1989; 31:551–570. [PubMed: 2687720] 
+Buzsaki G. Hippocampal sharp wave-ripple: A cognitive biomarker for episodic memory and planning. 
+Hippocampus. 2015
+Buzsaki G, Leung LW, Vanderwolf CH. Cellular bases of hippocampal EEG in the behaving rat. Brain 
+Res. 1983; 287:139–171. [PubMed: 6357356] 
+Jadhav et al. Page 14
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 15 =====
+Carr MF, Jadhav SP, Frank LM. Hippocampal replay in the awake state: a potential substrate for 
+memory consolidation and retrieval. Nat Neurosci. 2011; 14:147–153. [PubMed: 21270783] 
+Cenquizca LA, Swanson LW. Spatial organization of direct hippocampal field CA1 axonal projections 
+to the rest of the cerebral cortex. Brain Res Rev. 2007; 56:1–26. [PubMed: 17559940] 
+Cheng S, Frank LM. New experiences enhance coordinated neural activity in the hippocampus. 
+Neuron. 2008; 57:303–313. [PubMed: 18215626] 
+Davidson TJ, Kloosterman F, Wilson MA. Hippocampal replay of extended experience. Neuron. 2009; 
+63:497–507. [PubMed: 19709631] 
+Diba K, Buzsaki G. Forward and reverse hippocampal place-cell sequences during ripples. Nat 
+Neurosci. 2007; 10:1241–1242. [PubMed: 17828259] 
+Dragoi G, Buzsaki G. Temporal encoding of place sequences by hippocampal cell assemblies. Neuron. 
+2006; 50:145–157. [PubMed: 16600862] 
+Dudai Y . The neurobiology of consolidations, or, how stable is the engram? Annu Rev Psychol. 2004; 
+55:51–86. [PubMed: 14744210] 
+Eichenbaum, H.; Cohen, NJ. From Conditioning to Conscious Recollection. New York: Oxford 
+University Press; 2001. 
+Euston DR, Gruber AJ, McNaughton BL. The role of medial prefrontal cortex in memory and decision 
+making. Neuron. 2012; 76:1057–1070. [PubMed: 23259943] 
+Euston DR, Tatsuno M, McNaughton BL. Fast-forward playback of recent memory sequences in 
+prefrontal cortex during sleep. Science. 2007; 318:1147–1150. [PubMed: 18006749] 
+Floresco SB, Seamans JK, Phillips AG. Selective roles for hippocampal, prefrontal cortical, and 
+ventral striatal circuits in radial-arm maze tasks with or without a delay. J Neurosci. 1997; 
+17:1880–1890. [PubMed: 9030646] 
+Foster DJ, Wilson MA. Reverse replay of behavioural sequences in hippocampal place cells during the 
+awake state. Nature. 2006; 440:680–683. [PubMed: 16474382] 
+Gomperts SN, Kloosterman F, Wilson MA. VTA neurons coordinate with the hippocampal reactivation 
+of spatial experience. eLife. 2015; 4
+Gordon JA. Oscillations and hippocampal-prefrontal synchrony. Curr Opin Neurobiol. 2011; 21:486–
+491. [PubMed: 21470846] 
+Gupta AS, van der Meer MA, Touretzky DS, Redish AD. Hippocampal replay is not a simple function 
+of experience. Neuron. 2010; 65:695–705. [PubMed: 20223204] 
+Hasegawa I. Neural mechanisms of memory retrieval: role of the prefrontal cortex. Rev Neurosci. 
+2000; 11:113–125. [PubMed: 10718149] 
+Hoffman KL, McNaughton BL. Coordinated reactivation of distributed memory traces in primate 
+neocortex. Science. 2002; 297:2070–2073. [PubMed: 12242447] 
+Hyman JM, Zilli EA, Paley AM, Hasselmo ME. Medial prefrontal cortex cells show dynamic 
+modulation with the hippocampal theta rhythm dependent on behavior. Hippocampus. 2005; 
+15:739–749. [PubMed: 16015622] 
+Ito HT, Zhang SJ, Witter MP, Moser EI, Moser MB. A prefrontal-thalamo-hippocampal circuit for 
+goal-directed spatial navigation. Nature. 2015; 522:50–55. [PubMed: 26017312] 
+Jadhav SP, Kemere C, German PW, Frank LM. Awake hippocampal sharp-wave ripples support spatial 
+memory. Science. 2012; 336:1454–1458. [PubMed: 22555434] 
+Ji D, Wilson MA. Coordinated memory replay in the visual cortex and hippocampus during sleep. Nat 
+Neurosci. 2007; 10:100–107. [PubMed: 17173043] 
+Jones MW, Wilson MA. Theta rhythms coordinate hippocampal-prefrontal interactions in a spatial 
+memory task. PLoS Biol. 2005; 3:e402. [PubMed: 16279838] 
+Jung MW, Baeg EH, Kim MJ, Kim YB, Kim JJ. Plasticity and memory in the prefrontal cortex. Rev 
+Neurosci. 2008; 19:29–46. [PubMed: 18561819] 
+Jung MW, Qin Y , McNaughton BL, Barnes CA. Firing characteristics of deep layer neurons in 
+prefrontal cortex in rats performing spatial working memory tasks. Cereb Cortex. 1998; 8:437–
+450. [PubMed: 9722087] 
+Karlsson MP, Frank LM. Awake replay of remote experiences in the hippocampus. Nat Neurosci. 
+2009; 12:913–918. [PubMed: 19525943] 
+Jadhav et al. Page 15
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 16 =====
+Kudrimoti HS, Barnes CA, McNaughton BL. Reactivation of hippocampal cell assemblies: effects of 
+behavioral state, experience, and EEG dynamics. Journal of Neuroscience. 1999; 19:4090–4101. 
+[PubMed: 10234037] 
+Lubenov EV , Siapas AG. Hippocampal theta oscillations are travelling waves. Nature. 2009; 459:534–
+539. [PubMed: 19489117] 
+Miller EK, Cohen JD. An integrative theory of prefrontal cortex function. Annu Rev Neurosci. 2001; 
+24:167–202. [PubMed: 11283309] 
+O’Neill J, Pleydell-Bouverie B, Dupret D, Csicsvari J. Play it again: reactivation of waking experience 
+and memory. Trends Neurosci. 2010; 33:220–229. [PubMed: 20207025] 
+O’Neill J, Senior T, Csicsvari J. Place-selective firing of CA1 pyramidal cells during sharp wave/ripple 
+network patterns in exploratory behavior. Neuron. 2006; 49:143–155. [PubMed: 16387646] 
+O’Neill J, Senior TJ, Allen K, Huxter JR, Csicsvari J. Reactivation of experience-dependent cell 
+assembly patterns in the hippocampus. Nat Neurosci. 2008; 11:209–215. [PubMed: 18193040] 
+Peyrache A, Khamassi M, Benchenane K, Wiener SI, Battaglia FP. Replay of rule-learning related 
+neural patterns in the prefrontal cortex during sleep. Nat Neurosci. 2009; 12:919–926. [PubMed: 
+19483687] 
+Pfeiffer BE, Foster DJ. Hippocampal place-cell sequences depict future paths to remembered goals. 
+Nature. 2013; 497:74–79. [PubMed: 23594744] 
+Ribeiro S, Gervasoni D, Soares ES, Zhou Y , Lin SC, Pantoja J, Lavine M, Nicolelis MA. Long-lasting 
+novelty-induced neuronal reverberation during slow-wave sleep in multiple forebrain areas. PLoS 
+Biol. 2004; 2:E24. [PubMed: 14737198] 
+Sakai K. Reactivation of memory: role of medial temporal lobe and prefrontal cortex. Rev Neurosci. 
+2003; 14:241–252. [PubMed: 14513867] 
+Siapas AG, Lubenov EV , Wilson MA. Prefrontal phase locking to hippocampal theta oscillations. 
+Neuron. 2005; 46:141–151. [PubMed: 15820700] 
+Siapas AG, Wilson MA. Coordinated interactions between hippocampal ripples and cortical spindles 
+during slow-wave sleep. Neuron. 1998; 21:1123–1128. [PubMed: 9856467] 
+Sigurdsson T, Stark KL, Karayiorgou M, Gogos JA, Gordon JA. Impaired hippocampal-prefrontal 
+synchrony in a genetic mouse model of schizophrenia. Nature. 2010; 464:763–767. [PubMed: 
+20360742] 
+Singer AC, Carr MF, Karlsson MP, Frank LM. Hippocampal SWR Activity Predicts Correct Decisions 
+during the Initial Learning of an Alternation Task. Neuron. 2013; 77:1163–1173. [PubMed: 
+23522050] 
+Singer AC, Frank LM. Rewarded outcomes enhance reactivation of experience in the hippocampus. 
+Neuron. 2009; 64:910–921. [PubMed: 20064396] 
+Skaggs WE, McNaughton BL, Wilson MA, Barnes CA. Theta phase precession in hippocampal 
+neuronal populations and the compression of temporal sequences. Hippocampus. 1996; 6:149–
+172. [PubMed: 8797016] 
+Spellman T, Rigotti M, Ahmari SE, Fusi S, Gogos JA, Gordon JA. Hippocampal-prefrontal input 
+supports spatial encoding in working memory. Nature. 2015; 522:309–314. [PubMed: 26053122] 
+Squire LR. Memory and the hippocampus: a synthesis from findings with rats, monkeys, and humans 
+[published erratum appears in Psychol Rev 1992 Jul;99(3):582]. Psychol Rev. 1992; 99:195–231. 
+[PubMed: 1594723] 
+Tse D, Takeuchi T, Kakeyama M, Kajii Y , Okuno H, Tohyama C, Bito H, Morris RG. Schema-
+dependent gene activation and memory encoding in neocortex. Science. 2011; 333:891–895. 
+[PubMed: 21737703] 
+Wang GW, Cai JX. Disconnection of the hippocampal-prefrontal cortical circuits impairs spatial 
+working memory performance in rats. Behav Brain Res. 2006; 175:329–336. [PubMed: 17045348] 
+Wang GW, Cai JX. Reversible disconnection of the hippocampal-prelimbic cortical circuit impairs 
+spatial learning but not passive avoidance learning in rats. Neurobiol Learn Mem. 2008; 90:365–
+373. [PubMed: 18614383] 
+Wierzynski CM, Lubenov EV , Gu M, Siapas AG. State-dependent spike-timing relationships between 
+hippocampal and prefrontal circuits during sleep. Neuron. 2009; 61:587–596. [PubMed: 
+19249278] 
+Jadhav et al. Page 16
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 17 =====
+Wiltgen BJ, Brown RA, Talton LE, Silva AJ. New circuits for old memories: the role of the neocortex 
+in consolidation. Neuron. 2004; 44:101–108. [PubMed: 15450163] 
+Witter, MP.; Amaral, DG. Hippocampal formation. In: Paxinos, G., editor. The rat nervous system. San 
+Diego, CA: Elsevier Academic Press; 2004. p. 635-704.
+Yu JY , Frank LM. Hippocampal-cortical interaction in decision making. Neurobiol Learn Mem. 2015; 
+117C:34–41. [PubMed: 24530374] 
+Jadhav et al. Page 17
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 18 =====
+Figure 1. Behavior Paradigms and Recording Locations
+(A) W-track. Animals had to learn to alternate between the three arms of the W-track for 
+reward.
+(B) Y-track. In each trial initiated by poking in the home well, animals had to learn to visit 
+the “silent well” when no sound was presented (75% of trials) and the “sound well” when 
+the target sound was presented (25% of trials).
+(C) Histology illustrating recording locations. Nissl stained coronal sections showing 
+electrode tracks and lesion location. (C1) W-track: dorsal CA1, (C2) W-track: intermediate 
+CA1, (C3) Y track: dorsal CA1, (C4) W-track: medial PFC, (C5) Y track medial PFC. Scale 
+bars are 1 mm.
+See also Figure S1 and Table S1.
+Jadhav et al. Page 18
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 19 =====
+Figure 2. Two Distinct Network Activity Patterns in the Hippocampus During Behavior
+(A) Spike and local field potential (LFP) activity in CA1 region of the hippocampus (green) 
+and PFC (black) as an animal approaches a reward well in the W-track spatial alternation 
+task. From top to bottom, the plot shows respectively: broadband LFP (1–400 Hz) in CA1, 
+ripple band filtered LFP (150–250 Hz) in CA1, raster plot with spikes from 18 CA1 place 
+cells, broadband LFP in PFC, raster plot with spikes from 7 PFC neurons, and animal speed. 
+Linear distance of the animal from the reward well is overlaid on the CA1 raster (grey line). 
+The threshold speed, 4 cm/s, used to detect SWRs is indicated on the speed plot. Vertical 
+gray rectangle backgrounds denote SWRs detected in CA1 LFP. Scale bars are 2 sec 
+(horizontal), and 10 cm/s (vertical). (B) Shaded area over CA1 LFP from (A) on an 
+expanded time scale. Theta filtered LFP (6–12 Hz) is shown overlaid with the broadband 
+LFP. Scale bar = 250 ms.
+Jadhav et al. Page 19
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 20 =====
+(C) Position of the animal on the W-track as it approaches the center reward well and stops 
+to consume reward. Scale bar = 20 cm.
+(D) Time period marked by lines from (A) shown on an expanded time scale, illustrating 
+activity in CA1 and PFC when the animal is stationary at the reward well. Note that one of 
+the PFC neurons shows increased spiking during a subset of the hippocampal SWRs 
+(marked by arrows). Scale bar = 500 ms.
+See also Figure S2.
+Jadhav et al. Page 20
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 21 =====
+Figure 3. Modulation of PFC Neuronal Spiking During Awake Hippocampal SWRs
+(A) SWR-aligned rasters of example neurons (top), and corresponding average firing rates 
+(bottom). Neurons in columns 1 and 2 showed strong excitation during SWRs (SWR-
+excited). Neurons in columns 3 and 4 were SWR-inhibited, and the neuron in column 5 was 
+SWR-unmodulated (p’s < 10 −3 for modulated neurons; p = 0.4 for unmodulated neuron.
+(B) SWR-triggered mean firing of all PFC units. Each row shows the z-scored mean SWR-
+triggered firing of one neuron. Neurons are ordered by their firing amplitude in a 0–200 ms 
+window after SWR onset. Arrows mark the location of example neurons shown in (A).
+(C) Left, Population PSTHs for CA1, PFC SWR-excited and PFC SWR-inhibited cell 
+populations sorted by the timing of the peak or trough in the SWR-modulated PSTH. 
+Middle, Same plots for neurons recorded only on the W-track. Right, Same plots for neurons 
+recorded only on the Y-track.
+(D) Population-averaged SWR-triggered PSTHs for CA1, PFC SWR-excited and SWR-
+inhibited populations. Shaded areas are s.e.m.
+(E) Left Distribution of the time of the peak of the SWR response for the populations in (D). 
+Right Distribution of the onset rise / fall time of the SWR response for the populations in 
+(D). Both SWR-excited and SWR-inhibited PFC populations had significantly later peaks/
+troughs and longer time to rise compared to the CA1 population (p’s < 0.001, rank-sum 
+test).
+(F) Mean standardized cross-covariance during SWRs for CA1 vs. SWR-excited pairs (n = 
+393), and CA1 vs. SWR-inhibited pairs (n = 320). Insets show area around peaks.
+Jadhav et al. Page 21
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 22 =====
+See also Table S2.
+Jadhav et al. Page 22
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 23 =====
+Figure 4. Phase Locking of PFC Neurons to Hippocampal Theta
+(A) Left Normalized firing rates as a function of CA1 theta phase. Each row in the color plot 
+shows the normalized theta-phase aligned histogram of a neuron with significant phase-
+locking. The rows are sorted by peak theta phase of each neuron. Right Polar plots 
+quantifying the distribution of peak phases for the populations shown on left. Numbers on 
+top right indicate radius of the plot, the scale for number of neurons.
+(B) Average concentration parameter (κ) quantifying strength of phase locking (*p < 0.01, 
+**p< 0.001, rank-sum test).
+(C) Average SWR modulation in theta modulated and theta unmodulated PFC populations 
+(**p < 0.01, rank-sum test).
+See also Table S3.
+Jadhav et al. Page 23
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 24 =====
+Figure 5. Evidence for Distinct Functional PFC Populations Related to SWR-Modulation
+(A) Example occupancy normalized spatial firing rate maps of PFC cells with varying 
+degrees of spatial coverage of the environment. Numbers in the lower right of each color 
+plot indicate the firing rate corresponding to red.
+(B) Mean firing rates of SWR-excited, SWR-inhibited and SWR-unmodulated PFC 
+populations (*p < 0.01, **p< 0.001, rank-sum test).
+(C) Spatial coverage of neurons. The CA1 population is also shown for comparison, and has 
+significantly lower coverage than all the PFC populations (p< 10−4, rank-sum test; *p< 0.01, 
+***p< 10−4, rank-sum test).
+(D) Firing rate and speed correlation for a SWR-excited PFC cell (left, positively correlated) 
+and SWR-inhibited PFC cell (right, negatively correlated) ***p< 0.0001, regression test.
+(E) Distribution of firing rate-speed correlations for the PFC populations. Overlaid are 
+medians of distributions (**p< 0.01, rank-sum test).
+(F) Firing rate modulation index quantifying difference in pre-SWR periods (−500 to −100 
+ms before SWR onset) and high-speed periods (> 10 cm/sec). Index varies between −1 to 
+Jadhav et al. Page 24
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 25 =====
++1, with +1 indicating firing only in the pre-SWR window and −1 indicating firing only 
+during movement (**p< 0.01, rank-sum test).
+(G) Standardized cross-covariance during theta periods for PFC pairs belonging to different 
+SWR-modulation populations. Left average population cross-covariances. Shaded areas are 
+s.e.m. Right Average peak of the cross-covariance for the populations (**p< 0.001, ***p< 
+10−4, rank-sum test).
+See also Figure S3.
+Jadhav et al. Page 25
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 26 =====
+Figure 6. CA1-PFC Reactivation During Awake SWRs
+(A) Top, number of spikes across all SWRs of one PFC neuron against number of spikes of a 
+simultaneously recorded CA1 neuron. Spike counts were jittered for visualization only 
+(Gaussian jitter with s.d. = 0.05 for x-axis, and s.d. = 0.1 for y-axis). Bottom, standardized 
+cross-covariance of the neuronal pair during theta (r = 0.29, p = 4.5e−5***).
+(B) Same as in a, for a pair with negative SWR-correlation and low theta cross-covariance (r 
+= −0.22, p = 0.0006***).
+(C) Left SWR correlation vs. theta cross-covariance for CA1 vs. SWR-excited PFC cells (n 
+= 393 pairs; r = 0.39, p < 10−4). Right SWR correlation vs. theta cross-covariance for CA1 
+vs. SWR-inhibited PFC cells (n = 320 pairs, r = 0.39, p < 10−4).
+(D) Left A GLM obtained for an example CA1 ensemble and PFC cell, where spiking of the 
+CA1 ensemble during SWRs was used to predict spiking of the PFC cell during SWRs. 
+Edges represent GLM beta coefficients. Right The network from the left embedded within a 
+larger network that includes the other PFC cells recorded simultaneously. Red dots represent 
+SWR-excited PFC cells, blue dots represent SWR-inhibited PFC cells and cyan dots 
+represent SWR-unmodulated PFC cells.
+(E) Cross-validated prediction for SWR-associated spiking of PFC SWR-modulated cells. 
+Prediction is plotted as a function of the CA1 ensemble size. SWR-trained (striped bars) 
+prediction performance increased with the size of the CA1 ensemble (1-way ANOV A, cell 
+count group: p< 10−4). Movement-trained (white bars) prediction performance also 
+increased with the size of the CA1 ensemble (1-way ANOV A, cell count group: p< 10−7).
+See also Figure S4.
+Jadhav et al. Page 26
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 27 =====
+Figure 7. CA1-PFC Reactivation reflects Spatial Correlations
+(A) Example PFC neuron and three simultaneously recorded CA1 neurons. The purple and 
+green lines represent significant positive and negative SWR-correlations, respectively. The 
+corresponding SWR correlation coefficients are shown above their respective lines.
+(B) Normalized linear firing rate of the corresponding CA1 neurons from (A) for each of the 
+W-track spatial trajectories, overlaid on the PFC firing rate in red. The spatial correlation 
+coefficients for these CA1-PFC pairs are shown above their respective linear firing rate 
+maps.
+(C) Spatial correlation vs. SWR correlation for (Left) CA1 vs. SWR-excited PFC cells (n = 
+393 pairs, r = 0.2, p < 10−3), and (Right) CA1 vs. SWR-inhibited PFC cells (n = 320 pairs; r 
+= 0.36, p < 10−4). The SWR-inhibited population had stronger correlations than SWR-
+excited population, p < 0.01, shuffle test, n = 1000).
+See also Figures S5 and S6.
+Jadhav et al. Page 27
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 28 =====
+Figure 8. Task Related CA1-PFC Correlations are Not Present in Preceding Rest Periods
+(A) SWR response correlation in pre-rest vs. task behavior for all CA1-PFC pairs recorded 
+in both epochs for W-track behavior. (Left) CA1-PFC SWR excited pairs (n = 219, r = 0.08, 
+p = 0.2). (Right) CA1-PFC SWR inhibited pairs (n = 196, r = 0.1, p > 0.1).
+(B) SWR response correlation vs. peak theta cross-covariance during task behavior vs. 
+during pre-rest periods. (Left) CA1-PFC SWR excited pairs (n = 219, r = 0.02, p > 0.8). 
+(Right) CA1-PFC SWR inhibited pairs (n = 196, r = 0.12, p > 0.1).
+(C) Pre-rest SWR response correlation vs. spatial correlation during behavior. (Left) CA1-
+PFC SWR excited pairs (n = 219, r = −0.02, p > 0.7). (Right) CA1-PFC SWR inhibited pairs 
+(n = 196, r = 0.05, p > 0.5).
+(D) Comparison of cross-validated GLM models for prediction of SWR-associated spiking 
+of PFC cells using CA1 cell activity. Task to task: Behavior model to predict behavioral data 
+(n = 38 PFC SWR-modulated cells). Task to pre-rest: Behavior model to predict pre-rest 
+data (n = 24 cells). Prediction was significantly lower than run-to-run performance (SWR-
+trained: ranksum test, n = 38 vs. n = 24 cells, p < 10−6 ; Theta-trained: p < 10−5). Pre-rest to 
+task: Pre-sleep model to predict behavioral data (n = 22 cells). Prediction was significantly 
+lower than run-to-run performance (SWR-trained: ranksum test, n = 38 vs. n = 22 cells, p < 
+10−6 ; Theta-trained: p < 10−4). Pre-rest to pre-rest: Pre-rest model to predict pre-rest data (n 
+Jadhav et al. Page 28
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript
+
+===== PAGE 29 =====
+= 39 cells). Prediction was significantly higher than either of the two cross-epoch predictions 
+(SWR-trained: ranksum test, n = 39 vs. n = 24 cells, p < 0.01; n = 39 vs. n = 22 cells, p < 
+0.01).
+See also Figure S7.
+Jadhav et al. Page 29
+Neuron. Author manuscript; available in PMC 2017 April 06.
+Author Manuscript Author Manuscript Author Manuscript Author Manuscript

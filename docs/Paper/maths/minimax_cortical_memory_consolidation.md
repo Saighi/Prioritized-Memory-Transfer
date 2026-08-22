@@ -66,11 +66,16 @@ Under the explicit assumptions below, the proof establishes:
   gradient descent on $\mathcal{F}_{\max}$;
 - among sufficiently small synaptic changes of the same amplitude, that negative-gradient direction
   gives the greatest possible first-order decrease of the bound;
-- $\mathcal{F}_{\max}=0$ exactly when the student stores every teacher-memory direction.
+- $\mathcal{F}_{\max}=0$ exactly when the student stores every teacher-memory direction;
+- for two correlated memories whose common component is already stored, one prioritized replay of
+  the unresolved residual direction decreases $\mathcal{F}_{\max}$ locally at $2/(1-\chi)$ times the
+  rate produced by replay of either named memory, where $\chi$ is their correlation.
 
 The result is local and timescale-separated. It is not a claim of globally optimal learning time,
 global convergence for arbitrary nonlinear networks, or exact minimax behavior when inference,
-selection and plasticity occur on comparable timescales.
+selection and plasticity occur on comparable timescales. The correlation-dependent factor is an
+instantaneous rate ratio under unconstrained infinitesimal plasticity, not a ratio of complete
+transfer times.
 
 ---
 
@@ -2638,6 +2643,215 @@ for every valid teacher state. Both the adversarial interface drive and the stud
 signal vanish. Selection and learning therefore extinguish themselves when the largest settled
 network free energy reaches its minimum value of zero.
 
+This equivalence characterizes complete transfer and the signals present there. It does not by
+itself prove that the weight dynamics reach zero from arbitrary initial conditions.
+
+### Local correlation-dependent advantage over random named-memory replay
+
+The steepest-descent theorem is general: once the worst teacher-supported direction has been
+selected, the local plasticity rule gives the largest first-order decrease of
+$\mathcal F_{\max}$ among sufficiently small unconstrained weight changes of the same amplitude.
+A two-memory corollary makes the role of pattern correlation explicit without making a claim about
+the complete learning trajectory.
+
+Let $u,v$ be orthonormal and write two correlated unit memories as
+
+$$
+m_+=cu+sv,
+\qquad
+m_-=cu-sv,
+$$
+
+where
+
+$$
+c^2=\frac{1+\chi}{2},
+\qquad
+s^2=\frac{1-\chi}{2},
+\qquad
+0\le\chi<1.
+$$
+
+Their correlation is
+
+$$
+m_+^\top m_-=c^2-s^2=\chi.
+$$
+
+The direction $u$ is the component shared by the two named memories. The direction
+
+$$
+v=\frac{m_+-m_-}{\sqrt{2(1-\chi)}}
+$$
+
+is their normalized residual. Although its coefficient $s$ inside each named memory shrinks as
+$\chi$ increases, $v$ remains a valid unit direction on the two-dimensional teacher memory sphere
+for every $\chi<1$.
+
+Suppose that, at the current weights, the student already stores the common component but not the
+residual:
+
+$$
+M_Su=0,
+\qquad
+M_Sv\ne0.
+$$
+
+Also use the unconstrained, exactly settled, infinitesimal plasticity regime of the main theorem.
+Since $\ker N_S=\ker M_S$, we have $N_Su=0$. Symmetry of $N_S$ then gives
+$u^\top N_Sv=0$. On the teacher space $\operatorname{span}\{u,v\}$, the restricted novelty
+operator is therefore
+
+$$
+A_S
+=
+\begin{pmatrix}
+0&0\\
+0&v^\top N_Sv
+\end{pmatrix}.
+$$
+
+Because $v^\top N_Sv>0$, the unique maximizing line is $\{v,-v\}$. The teacher power-iteration
+dynamics derived in Section 11 therefore select the normalized residual direction.
+
+Define the settled response and recurrent error for pure residual replay by
+
+$$
+z:=x_S^*(v)=(I-N_S)v,
+\qquad
+e:=M_Sz.
+$$
+
+The common component is stored, so $x_S^*(u)=u$ and $M_Su=0$. Linearity of the settled response gives
+
+$$
+x_S^*(m_\pm)=cu\pm sz,
+\qquad
+\varepsilon_S^*(m_\pm)=\pm se.
+$$
+
+The settled map $I-N_S$ is symmetric and satisfies $(I-N_S)u=u$. Hence
+
+$$
+u^\top z
+=
+u^\top(I-N_S)v
+=
+\bigl((I-N_S)u\bigr)^\top v
+=
+u^\top v
+=
+0.
+$$
+
+For pure residual replay, the local plasticity rule produces
+
+$$
+\dot W_v
+=
+\eta\pi_S ez^\top.
+$$
+
+For either named memory it produces
+
+$$
+\boxed{
+\dot W_\pm
+=
+\eta\pi_S
+\left(
+s^2ez^\top
+\pm
+sc\,eu^\top
+\right).
+}
+$$
+
+At the simple maximizer $v$, the envelope result of Section 14 gives
+
+$$
+\nabla_{W_S}\mathcal F_{\max}
+=
+-\pi_S ez^\top.
+$$
+
+Therefore pure residual replay follows the negative gradient:
+
+$$
+\dot{\mathcal F}_{\max}^{\mathrm{priority}}
+=
+\left\langle
+\nabla_{W_S}\mathcal F_{\max},
+\dot W_v
+\right\rangle_F
+=
+-\eta
+\left\|
+\nabla_{W_S}\mathcal F_{\max}
+\right\|_F^2.
+$$
+
+The extra term in a named-memory update is first-order orthogonal to this gradient because
+
+$$
+\left\langle
+ez^\top,
+eu^\top
+\right\rangle_F
+=
+\|e\|^2 z^\top u
+=
+0.
+$$
+
+It follows for each named memory separately, without averaging over random replay, that
+
+$$
+\boxed{
+\dot{\mathcal F}_{\max}^{\mathrm{named}}
+=
+s^2
+\dot{\mathcal F}_{\max}^{\mathrm{priority}}.
+}
+$$
+
+Both derivatives are negative. Comparing their positive instantaneous reduction rates gives
+
+$$
+\boxed{
+\frac{
+-\dot{\mathcal F}_{\max}^{\mathrm{priority}}
+}{
+-\dot{\mathcal F}_{\max}^{\mathrm{named}}
+}
+=
+\frac{1}{s^2}
+=
+\frac{2}{1-\chi}.
+}
+$$
+
+Thus random probing of either named memory devotes only the fraction
+
+$$
+\frac{1-\chi}{2}
+$$
+
+of its first-order effect to the unresolved residual deficit. The local rate advantage of
+prioritized residual replay grows monotonically with correlation. As $\chi\to1$, the residual has
+vanishing amplitude inside either named memory, so a named-memory event makes vanishing first-order
+progress on that residual. At $\chi=1$ the two named memories coincide and no longer support a
+two-dimensional teacher memory space, so the corollary does not apply.
+
+This factor compares equal-duration plasticity events with the same learning rate and unit teacher
+activity. It is an instantaneous derivative ratio at the current weights. It does not order complete
+finite trajectories, prove convergence to $\mathcal F_{\max}=0$, or give a ratio of transfer times.
+The exact factor also uses unconstrained weights. With a no-autapse projection, prioritized
+plasticity remains the steepest feasible first-order update by Section 15, but projection can mix
+the two matrix components above, so the factor $2/(1-\chi)$ is not claimed exactly. If the common
+component is only approximately stored, the formula is an approximation whose accuracy can be
+tested in simulation.
+
 ---
 
 ## 19. The complete derivation in one chain
@@ -2743,7 +2957,10 @@ Then:
     envelope.
 17. A componentwise Cauchy–Schwarz argument proves that, among sufficiently small plasticity events
     of the same amplitude, this direction gives the greatest first-order decrease.
-18. Teacher recurrent correction, normalization and timescale separation implement the constraint
+18. In the two-memory residual phase of Section 18, bilinearity of the local update makes replay of
+    either correlated named memory reduce the current maximum at the fraction
+    $(1-\chi)/2$ of the prioritized residual-replay rate.
+19. Teacher recurrent correction, normalization and timescale separation implement the constraint
     and nesting approximately in the full network.
 
 The resulting architecture is
@@ -2945,6 +3162,9 @@ direction is treated as potentially important.
 12. With a zero-diagonal constraint, the projected update is the steepest feasible first-order
     descent direction.
 13. $\mathcal{F}_{\max}=0$ exactly when all teacher memory content is stored by the student.
+14. For two correlated memories whose common component is already stored, unconstrained replay of
+    the normalized residual direction gives $2/(1-\chi)$ times the instantaneous reduction of
+    $\mathcal F_{\max}$ produced by replay of either named memory.
 
 ### Assumptions or operating-regime requirements
 
@@ -2958,13 +3178,17 @@ direction is treated as potentially important.
    but that observation is not used in the theorem.
 5. A downstream functional interpretation requires an explicit shared or aligned readout with
    bounded sensitivity on the relevant states.
+6. The correlation corollary additionally assumes two unit memories in common-plus-residual form,
+   exact storage of their common component and unconstrained weights. The exact local ratio is not
+   claimed after zero-diagonal projection or when the common component is only approximately stored.
 
 ### Claims deliberately not made
 
 1. That every variable descends $F$. Student inference minimizes $F$ over $x_S$, teacher selection
    maximizes its settled value over $x_T$, and student plasticity minimizes the resulting envelope
    over $W_S$.
-2. Global minimization time among all possible learning controllers.
+2. Global minimization time or a complete-transfer speed ratio. The factor $2/(1-\chi)$ compares
+   instantaneous derivatives at one residual-learning state, not finite trajectories.
 3. Global convergence for arbitrary initial weights or nonlinear networks.
 4. Exact monotone decrease of $\mathcal{F}_{\max}$ during the fast teacher search phase.
 5. Immediate strict decrease of $\mathcal{F}_{\max}$ from one arbitrary update at an exact

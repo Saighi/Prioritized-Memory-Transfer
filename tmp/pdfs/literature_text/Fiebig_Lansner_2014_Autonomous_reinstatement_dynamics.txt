@@ -1,0 +1,1570 @@
+
+
+===== PAGE 1 =====
+ORIGINAL RESEARCH ARTICLE
+published: 01 July 2014
+doi: 10.3389/fncom.2014.00064
+Memory consolidation from seconds to weeks: a
+three-stage neural network model with autonomous
+reinstatement dynamics
+Florian Fiebig 1,2 and Anders Lansner 1,3*
+1 Department of Computational Biology, Royal Institute of Technology (KTH), Stockholm, Sweden
+2 Institute for Adaptive and Neural Computation, School of Informatics, Edinburgh University, Edinburgh, Scotland
+3 Department of Numerical Analysis and Computer Science, Stockholm University, Stockholm, Sweden
+Edited by:
+Mayank R. Mehta, University of
+California Los Angeles, USA
+Reviewed by:
+Goren Gordon, Weizmann Institute
+of Science, Israel
+Emili Balaguer-Ballester,
+Bournemouth University, UK
+*Correspondence:
+Anders Lansner, Department of
+Computational Biology, Royal
+Institute of Technology (KTH),
+Lindstedtsvägen 24,
+Stockholm 100 44, Sweden
+e-mail: ala@kth.se
+Declarative long-term memories are not created in an instant. Gradual stabilization
+and temporally shifting dependence of acquired declarative memories in different brain
+regions—called systems consolidation—can be tracked in time by lesion experiments.
+The observation of temporally graded retrograde amnesia (RA) following hippocampal
+lesions points to a gradual transfer of memory from hippocampus to neocortical long-term
+memory. Spontaneous reactivations of hippocampal memories, as observed in place cell
+reactivations during slow-wave-sleep, are supposed to drive neocortical reinstatements
+and facilitate this process. We propose a functional neural network implementation of
+these ideas and furthermore suggest an extended three-state framework that includes
+the prefrontal cortex (PFC). It bridges the temporal chasm between working memory
+percepts on the scale of seconds and consolidated long-term memory on the scale of
+weeks or months. We show that our three-stage model can autonomously produce the
+necessary stochastic reactivation dynamics for successful episodic memory consolidation.
+The resulting learning system is shown to exhibit classical memory effects seen in
+experimental studies, such as retrograde and anterograde amnesia (AA) after simulated
+hippocampal lesioning; furthermore the model reproduces peculiar biological ﬁndings
+on memory modulation, such as retrograde facilitation of memory after suppressed
+acquisition of new long-term memories—similar to the effects of benzodiazepines on
+memory.
+Keywords: memory consolidation, working memory, complementary learning systems, synaptic depression,
+neural adaptation, retrograde amnesia, anterograde amnesia, retrograde facilitation, computational model
+INTRODUCTION
+Memories for facts and events are not acquired in their def-
+inite form. Rather, some post-learning processes are known
+to take place that gradually stabilize new memories. It is
+generally accepted that neocortex provides a slow learning
+substrate for distributed long-term memories. Fast working
+memory, capable of immediate one-shot learning, has been
+localized around the PFC ( Jacobsen, 1936; Fuster, 2008 ). The
+discourse on declarative memory consolidation has, however,
+been largely centered around the hippocampus and vari-
+ous substructures of the wider medial temporal lobe (MTL),
+which store memories on an intermediate timescale, and
+thus are perfectly situated to moderate the consolidation
+process.
+Any eventual declarative long-term memory existed at its ear-
+liest stage in PFC as working memory, next in the MTL, and
+ﬁnally in the hippocampally-independent neocortical long-term
+memory, so multiple brain areas are thought to support declara-
+tive memory throughout its lifetime. As memory is transitionally
+stored in memory systems of very different capacity and plas-
+ticity, a holistic model of declarative memory must ﬁnd a way
+to interlink the involved networks functionally, using the avail-
+able biological data about phenomenology as well as anatomical
+structures and neurophysiology.
+In this paper, we will focus on mechanistic systems level
+modeling of this remarkable feature of human memory, namely
+the enormous temporal chasm (seconds to decades) bridged by
+the memory consolidation process and the neural mechanisms
+behind it.
+After a brief Introduction of the Complementary Learning
+Systems (CLS) framework and biological evidence for consolida-
+tion through reactivations/replay, we lay down four challenges,
+which we see as important to address in modeling memory
+consolidation.
+The Model and Method section introduces our three-stage
+concept, then the formal network model, followed by the full
+memory consolidation model with its different components
+and simulation cycle. W e establish our performance metric and
+present our method for simulating hippocampal lesions.
+In the Results section, we highlight some key simulation results
+including autonomous memory consolidation, lesion-induced
+amnesia effects and two memory modulation experiments, which
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 1
+COMPUTATIONAL NEUROSCIENCE
+
+===== PAGE 2 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+follow a range of different memory phenomena typical to the
+mammalian, declarative memory system.
+After attempting to validate our computational memory con-
+solidation model by contrasting it against biological evidence in
+this way, we discuss the broader implications this has for the
+CLS framework and future computational memory consolidation
+models, as well as contradictory biological evidence and possible
+augmentations of the model.
+ORIGINS OF THE CLS FRAMEWORK
+The study of memory systems consolidation has resulted in sev-
+eral computational and neural network models of increasing
+reﬁnement (McNaughton and Morris, 1987; Alvarez and Squire,
+1994; Wilson and McNaughton, 1994; McClelland et al., 1995;
+Shen and McNaughton, 1996; McClelland, 1998; Hasselmo and
+McClelland, 1999; Wittenberg et al., 2002; Norman and O’Reilly,
+2003; Walker and Russo, 2004; Roxin and Fusi, 2013 ), which
+have largely conﬁrmed the idea that a composition of multiple
+interacting learning systems is both useful and necessary for repli-
+cating many aspects of human memory including recognition
+memory data.
+The hippocampus was established to play a major role in the
+process of memory consolidation most notably by the case of
+Patient HM ( Milner, 1972) and various animal lesion studies by
+Zola-Morgan et al. ( Squire and Zola-Morgan, 1985, 1991; Zola-
+Morgan and Squire, 1990; Squire, 1992). Patients with lesions not
+only exhibit severe anterograde amnesia (AA) but also temporally
+graded retrograde amnesia (RA), primarily affecting recent—not
+yet consolidated—memories ( Zola-Morgan and Squire, 1985 ).
+Non-declarative types of memory, such as priming, motor, or
+perceptual learning are not affected by hippocampal lesion-
+ing and are thought to be reliant on other brain regions and
+mechanisms.
+Functionally, structures of the MTL memory system, in partic-
+ular the hippocampus, are believed to form an anatomical index.
+Distributed neocortical activations of an event are thereby bound
+together into a coherent memory trace or encoded in a more suit-
+able form than the neocortical activation itself, achieving strong
+pattern separation and recall performance. High plasticity in the
+hippocampus facilitates fast learning while granting the neo-
+cortex the time necessary to integrate new memories into the
+preexisting structure of older long-term memories. With pro-
+gressing systems consolidation, memories become hippocampally
+independent over time.
+It has been suggested that working memory performance may
+be aided by hippocampus/MTL, especially for relational process-
+ing ( Olson et al., 2006; Graham et al., 2010 ), but more recent
+studies reveal that working memory performance remains unaf-
+fected by hippocampal and even wider MTL lesions if the capacity
+requirements of the task do not exceed a narrowly deﬁned work-
+ing memory capacity ( Jeneson et al., 2010; Jeneson and Squire,
+2012). This evidence lends itself to two conclusions: First, work-
+ing memory itself is independent of the hippocampus. Second,
+the hippocampus may still aid working memory by extending the
+available capacity.
+Increasingly precise hypotheses ( Eichenbaum et al., 2011 )
+about functionally distinct roles of different structures
+surrounding the hippocampal area (e.g., perirhinal cortex
+and parahippocampal region) in recollection vs. familiarity and
+in encoding direct or indirect relationships between items and
+contexts, warrants the use of the wider term MTL rather than
+treating intermediate memory function as a mere hippocampal
+issue. However, the scope of analysis for this paper rests on
+associative recall and discussion of larger brain area interactions,
+so here we refrain from a detailed breakdown of MTL subareas.
+Based on the theoretical consideration of incremental learning
+in artiﬁcial neural networks (McClelland et al., 1995; McClelland,
+1998), it was concluded that the existence of at least two CLS
+appears to be necessary. Such a two-stage CLS serves an adaptive
+function and allows for processes of selective learning, memory
+strength modulation, and gradual acquisition into stable long-
+term memory without sacriﬁcing one-shot learning capability.
+Most memory models concerned with hippocampal-
+neocortical interaction (e.g., Alvarez and Squire, 1994;
+McClelland et al., 1995; Murre, 1996; Wittenberg et al., 2002 )
+account for the different time-course of memory formation in
+hippocampus and neocortex by assuming fast synaptic plasticity
+in hippocampus and much slower, gradual modiﬁcations in neo-
+cortex. Attractor states are quickly learned in the hippocampal
+network and then later used to spread components of the asso-
+ciation in the neocortex. In this view, hippocampus effectively
+acts as a teacher to neocortex and has also been described as a
+training-trial-multiplier (Norman et al., 2005).
+Sleep and its various phases have been proposed to modu-
+late network dynamics and plasticity, thus promoting this sup-
+posed two-phase memory consolidation process ( Wilson and
+McNaughton, 1994; Qin et al., 1997; Buzsáki, 1998 ), whereby
+interference between new learning (awake) and consolidation
+(asleep) is avoided. Especially with respect to sequential memo-
+ries, recurring reactivations have also been called replay.
+REACTIVATION/REPLAY
+Spontaneous reactivations (or replay) have repeatedly been
+observed in the hippocampus, but also in other brain areas, such
+as PFC ( Euston et al., 2007; Peyrache et al., 2009 ). Large ensem-
+bles ( Louie and Wilson, 2001; Lee and Wilson, 2002 )o fp l a c e
+cells in the rat hippocampus were found to reactivate during
+REM-sleep and particularly slow-wave sleep (SWS) in a con-
+sistent sequential order similar to prior wake state activations.
+Especially SWS reactivations were shown to co-occur with brief
+(30–120 ms), irregular sharp-waves/ripples (SWR) at 100–250 Hz
+in the local ﬁeld potential ( Buzsáki et al., 1983, 1992; Buzsáki,
+1986). During a SWR event, a small fraction of neurons in the
+CA3-CA1 subicular complex/entorhinal cortex discharge syn-
+chronously in powerful population bursts ( Sullivan et al., 2011 ).
+The resulting neural events might reach far away to associated cor-
+tical areas to induce L TP . The number of reactivation events have
+been repeatedly linked to memory performance in many tasks
+such as spatial learning ( Dupret et al., 2010 ), odor-reward asso-
+ciation learning, and retrieval from remote memory ( Eschenko
+et al., 2008 ). The amnesic effects of targeted replay interrup-
+tion via electrical stimulation (Girardeau et al., 2009; Ego-Stengel
+and Wilson, 2010 ) suggest that this link is causal, not merely
+correlational.
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 2
+
+===== PAGE 3 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+FOUR CHALLENGES TO MODELING
+I nt h ef o l l o w i n g ,w el a yo u tf o u rm a j o rc h a l l e n g e sw h i c hw es e e
+as critical for the advancement of a more complete model of
+memory consolidation and aim to address with our model.
+Autonomous replay
+Despite the fact that reinstatement is a critical component of
+the supposed consolidation process, surprisingly few neural net-
+work models ( Norman et al., 2005 ) concerned with memory
+consolidation consider how an artiﬁcial neural network might be
+adapted such that continuous replay activity becomes an emer-
+gent system property, and could be harnessed for autonomous
+long-term memory consolidation dynamics in hippocampal-
+neocortical interaction. The basic problem can be described like
+this:
+Attractor neural networks are commonly used to store mem-
+ories in computational models of cortical memory ( Lansner,
+2009). Such an approach is justiﬁed on the grounds of obser-
+vation of attractors in hippocampus and neocortex. For exam-
+ple, the rich collateral connectivity in the hippocampal CA3
+region can be modeled as an associative feedback matrix ( Marr,
+1970, 1971; McNaughton and Morris, 1987; T reves and Rolls,
+1994). This usually results in ﬁxed-point attractor dynamics,
+and the major issue with modeling replay under these condi-
+t i o n si st h a ta c t i v i t yi si n h e r e n t l ys t a b l eo n c ei th a sc o n v e r g e d .
+Consequently, most computational models of the consolidation
+process impose a scheme of repeated random noise bursts (Murre,
+1996; Wittenberg et al., 2002; Walker and Russo, 2004; Roxin
+and Fusi, 2013 ), predetermined activation patterns ( Alvarez and
+Squire, 1994 ), or externally regulated subcortical disinhibition
+(Bibbig, 1996 ), designed to take the system out of its current
+attractor state and thus cue the reactivation of another previ-
+ously learned attractor. Often, even papers speciﬁcally concerned
+with modeling “ spontaneous reactivatio n” do not implement an
+intrinsic neural mechanism for spontaneous reinstatement, but
+use noise.
+W e believe that computational memory models need to
+include a functional and biologically plausible intrinsic mecha-
+nism of replay that can facilitate autonomous replay and thus
+drive consolidation. Consequently the model presented in this
+paper uses an attractor network capable of autonomous replay,
+describes some of its characteristics and uses these to functionally
+drive a consolidation mechanism.
+Inclusion of working memory
+As of today, the CLS framework has no account of working
+memory and its many implementations—successful as they may
+be in other respects—have thus notoriously neglected it in the
+modeling effort. This is unfortunate, as hippocampal (or MTL,
+as the model may have it) memory trace formation is con-
+sequently assumed to be automatic, near instantaneous (i.e.,
+one-shot learning), and largely synonymous with working mem-
+ory when it comes to acquisition ( Norman, 2010 ). Even simple
+word list learning demonstrates, however, that not every ﬂeeting
+percept automatically acquires a lasting episodic memory trace
+in HIP/MTL supporting recall. Serial position effects in these
+kinds of memory tests (primacy and recency), ﬁrst described
+by Hermann Ebbinghaus at the end of the Nineteenth Century,
+reveal a time-dependent consolidation process at work in the
+formation of a lasting memory trace susceptible to attention, rel-
+evance, and conscious reﬂection. Only then can the consolidated
+hippocampal trace itself later drive long-term systems consolida-
+tion into neocortex. Each network effectively acts as a teacher
+to the next and in this sense, we aim to test the viability of a
+consolidation-chain, comparable to more theoretical multi-stage
+network models recently proposed by Roxin and Fusi (2013).W e
+believe that the inclusion of working memory into CLS, in what-
+ever fashion, is a critical step toward addressing the issue. T oward
+this goal, we implement a very fast learning network of exceed-
+ingly limited capacity (supporting recall of about ﬁve to seven
+recent items/attractors), mimicking pre-frontal working memory
+functionality.
+Temporal scope of systems consolidation
+Biological data on the time course of systems consolidation is
+abundant in RA and AA gradients following hippocampal lesion-
+ing ( Winocur, 1990; Kim and Fanselow, 1992 ) and studies on
+humans with impaired MTL ( Zola-Morgan et al., 1986; Jeneson
+et al., 2010 ). Many neural network models of memory exist,
+replicating numerous aspects of human memory, yet the full tem-
+poral scope of memory consolidation from working memory to
+long-term memory has not been addressed adequately.
+W e believe this is in large part because it is hard to model
+mechanistically. The temporal scales on which working mem-
+ory, intermediate memory, and long-term memory operate are
+separated by many orders of magnitude in time. On-line learn-
+ing rules for artiﬁcial neural networks used in memory modeling
+need to reﬂect this in their time constants. A further compli-
+cation is simulation runtime: Even without signiﬁcant scaling
+(toward biologically reasonable network size), simulations of
+systems consolidation spanning weeks or months almost imme-
+diately result in prohibitively long simulation runtimes, especially
+if neural dynamics are simulated at the resolution of a few
+milliseconds.
+W e believe the temporal scope of real memory needs to be
+addressed in computational modeling attempts. With this objec-
+tive in mind, we implement plasticity time constants ranging
+from minutes to days, which may not cover the needed span
+entirely, but allows a comparison with actual learning/amnesia
+curves in rodents (see Figure 9) and is meant as a serious step
+toward such a memory system.
+Catastrophic Forgetting
+Catastrophic Forgetting (CF) is a common problem in attrac-
+tor memory networks. Without special attention to the learning
+rule, the tendency of many kinds of neural networks is to even-
+tually forget previous information abruptly upon learning new
+information. As such, CF is a radical manifestation of the so
+called stability-plasticity dilemma. While the principled division
+of labor proposed by the CLS model improves the trade-off
+between stability and plasticity drastically, as networks can spe-
+cialize in either high stability or high plasticity, it still cannot
+fundamentally solve the problem by itself. A dedicated stable,
+long-term network with large capacity will delay the onset of CF ,
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 3
+
+===== PAGE 4 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+but at its core, the network learning rule must allow the network
+to forget as dynamically as it learns or CF will eventually become
+ap r o b l e m .
+W e believe that a functional memory system should be able
+to learn and forget indeﬁnitely and that addressing CF is critical
+in improving the biological plausibility of artiﬁcial neural net-
+works for human memory models. T oward this goal, our model
+implements a memory process that can keep learning/forgetting
+indeﬁnitely and effectively addresses the issue of CF from a
+theoretical and functional vantage point.
+MODEL AND METHODS
+THREE-STAGE MODEL
+Based on our own previous work and inspired by the CLS frame-
+work, ( McClelland et al., 1995; Norman et al., 2005; Norman,
+2010)w eb u i l tat h r e e - s t a g em e m o r ys y s t e m(Figure 1), also
+incorporating hippocampally independent and more short-lived
+working memory. The formal model will be described in the
+next section, detailed network and simulation parameters can be
+found in Ta b l e s 1 , 2. Time constants are estimations rather than
+being based on neurobiological data. In that sense, they constitute
+model predictions.
+The ﬁrst population, modeling the PFC, has the small-
+est size (50 units) but features the fastest learning with a
+time-constant τ
+L = 3 min. This design is supposed to mimic
+short-term memory and comprise the substrate for working
+memory as well: A rapid memory system, capable of learn-
+ing from single examples, but forgetting equally fast, result-
+ing in highly limited capacity. It should be noted that the
+hypothesized short-term memory mechanism is synaptic rather
+than of a more standard persistent activity type. It is based
+on fast expressing and volatile Hebbian synaptic plasticity and
+modulated intrinsic excitability ( Sandberg et al., 2003; Mongillo
+et al., 2008 ). Current biological data on fast forms of synap-
+tic plasticity as well as intrinsic excitability modulation suggest
+that such a mechanism of short-term memory is indeed a pos-
+sibility ( Fransén et al., 2006; Lee et al., 2009; Lansner et al.,
+2013). This suggests that the widely different temporal charac-
+teristics of cortical memory systems are mainly due to plasticity
+with a corresponding spectrum of time constants. This network
+uses a kind of columnar coding, which is described in the next
+section.
+The second population (250 units), modeling the
+intermediate-term hippocampal memory system (which
+might anatomically involve close-by areas of the MTL such as
+the perirhinal cortex and parahippocampal area), is ﬁve times
+larger and much slower learning with time-constant τ
+L = 3h .
+This network is modeled without hypercolumns and in this case,
+a k-winner-take-all (kWTA) mechanism is used to produce a
+sparse and distributed representation, this is further described in
+the Pattern Representation section.
+The last population (CTX) models a large (500 units) and
+slow learning (τ
+L = 6 days) neocortical long-term memory, with
+columnar structure. It is obviously hard to teach a memory
+system this slow learning anything without either massive repe-
+tition, or internal reinstatement dynamics. Note, that without the
+use of additional metaplasicity in synaptic learning ( Fusi et al.,
+2005), time constants probably need to span this wide range to
+FIGURE 1 | The three-stage memory model: from prefrontal short-term memory to long-term neocortical memory . Activity in cortical areas (PFC, CTX)
+is organized into hypercolumns, while HIP activity is sparser, pattern-separated, and lacks columnar organization.
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 4
+
+===== PAGE 5 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+T able 1 | Network parameters.
+Parameter Symbol [unit] PFC HIP CTX PFC-to-
+HIP
+HIP-to-
+CTX
+Network size N 50 250 500
+Number of hypercolumns H 5 – 50
+Activity level (sparsity) A 10% 5% 10%
+Learning time constant
+-corresponds to (scaled):
+τL [ms] 8 400 18,500 20 20
+3[ m i n ] 3[ h ] 6[ d a y s ] 9[ m i n ] 9[ m i n ]
+Association gain g L 11 1 1 1
+Adaptation time constant τA [ms] 160 400 – – –
+Adaptation gain g A –1 .2 –0.8 – – –
+Recall detection threshold * /Theta1 0.093 0.252 0.383 – –
+SIMULA TION PHASES
+Learning phase name Perception Reﬂection Sleep
+Length 3 [steps] 52 [steps] 165 [steps]
+-corresponds to (scaled): 13 [min] 3.8 [h] 12 [h]
+GENERAL P ARAMETERS
+Membrane time constant τC [ms] 1
+Intrinsic noise rate λ0 0.025
+Hypercolumn size M i [units] 10
+*Near zero recall rates of unstudied patterns 352–360 (0 Days old inFigure 7) demonstrate that the classiﬁcation thresholds on the recall distance are not too loose,
+generating barely any false positives.
+T able 2 | Projection parameters during different simulation phases.
+Perception Reﬂection Sleep Recall
+PFC g L 11 0 1
+τL [ms] 5 ∞ 5 ∞
+gA − 1. 2 − 1. 2 0 0
+τA [ms] 120 120 ∞∞
+gPFC2HIP 01 0 0
+gPFC2CTX 01 0 0
+HIP g L 10 1 1
+τL [ms] 400 400 ∞∞
+gA − 0.8 0 − 0.8 0
+τA [ms] 400 ∞ 400 ∞
+gHIP2CTX 00 1 0
+CTX g L 10 0 1
+τL [ms] 18.500 18.500 18.500 ∞
+gCTX2PFC 10 0 1
+gCTX2HIP 10 0 1
+Note that inﬁnite time constants denote no learning of this projection during that
+particular phase, e.g., no learning occurs during recall.
+even approach biologically plausible timescales between working
+memory and stable long-term memory.
+FORMAL MODEL
+W e use an auto-associative Bayesian Conﬁdence Propagation
+Neural Network (BCPNN) ( Sandberg et al., 2002, 2003 )w i t h
+adapting non-spiking units modeling cortical minicolumns
+representing a local sub-population of some 100 neurons
+(Buxhoeveden and Casanova, 2002 ). These are further bundled
+into soft-winner-take all (soft-WTA) modules referred to as
+hypercolumns ( Kanter, 1988; Favorov and Diamond, 1990 ). A
+normalizing lateral feedback inhibition within the hypercolumn
+is assumed to be mediated by inhibitory basket cells. Previous
+studies of this type of modular network have demonstrated
+their excellent functional capabilities as associative memories
+(Johansson and Lansner, 2007a,b ) including the ability to repli-
+cate primacy, recency, and serial recall effects in human imme-
+diate free recall ( Lansner et al., 2013 ). W e have further shown
+that when we replace the abstract non-spiking units in such a
+network with more biophysical ly detailed spiking model neu-
+rons, we can successfully reproduce several experimental key
+phenomena in memory recall, like nested oscillatory dynam-
+ics and spontaneous reactivation ( Lundqvist et al., 2006, 2010,
+2011). All units are connected with associative weights (stored
+in weight matrix w), using incremental Hebbian learning with
+a time constant τ
+L (Sandberg et al., 2002 ) which can be varied
+to accommodate different levels of plasticity. Cellular adapta-
+t i o na n dd e p r e s s i n gs y n a p s e sw e r em o d e l e db yu s eo fa na d d i -
+tional projection between neurons with a negative gain and its
+own learning time constant τ
+A, which was given a value of
+160 ms. This projection abstractly models both the decay rate of
+slow after-hyperpolarization in a previous biophysically detailed
+pyramidal cell model ( Fransén and Lansner, 1995; Sandberg
+and Lansner, 2002 ) and synaptic depression on the same time
+scale ( Markram et al., 1997; Lundqvist et al., 2006 ). Cellular
+adaptation and synaptic depression are prominent features of
+biological cortical pyramidal cells ( Adelman et al., 2012 )a n d
+synapses connecting pyramidal cells in cortex ( Lanting et al.,
+2013).
+The network is simulated in time steps of 10 ms. Each unit
+i belongs to a hypercolumn of size M,a n d H(i) deﬁnes the set
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 5
+
+===== PAGE 6 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+of units in the same hypercolumn. The support h of each unit
+is computed via the update Equation (1), where gL denotes the
+gain of the auto-associative projection and gA denotes the gain
+of the adaptation projection. V alues for these and other model
+parameters are found in Ta b l e 1.T h eo u t p u t , ˆπ
+j(t)o ft h e s e
+units, a measure for neural activity, is then computed in Equation
+(2), which also achieves the aforementioned hypercolumnar nor-
+malization. In Equations (3)–(4), the current activity is used to
+update rate estimates for units /Lambda1
+i and connections /Lambda1ij.T h r o u g h
+temporal ﬁltering with a learning time constant, these represent
+heuristically estimated probabilities which are consistent with
+prior information. These running average rate estimates are then
+used to compute biasβ, as well as synaptic weights w in Equations
+(5)–(6). While this paper cannot motivate the entire derivation
+of the BCPNN learning rule, it should not go unmentioned that
+these equations were originally derived from a naive Bayesian
+classiﬁer (so the weight is a joint activity rate estimate divided
+by the unit rate estimates). A minimal noise background activity
+λ
+0, impacts how strong/weak the correlation measures between
+units (as encoded by the weights) can become. It essentially guar-
+antees an upper and lower bound on the weight, avoids underﬂow
+(as we use the logarithmic weight during the update) and weight
+stability in the absence of input. The membrane time-constant
+τ
+c is set to 1. The adaptation bias γ and adaptation weights
+v are activity dependent as well and the exact same Hebbian-
+Bayesian learning rule applied to the original associative projec-
+tion is used for the adaptation projection (Equations 7–10)—with
+the important distinction that adaptation acts on a different
+timescale, so the rate estimates μ
+i and μij are computed on the
+timescale of τA.
+τC
+dhj(t)
+dt = gL
+⎡
+⎣βj(t)+
+∑
+k
+log
+⎛
+⎝
+Mk∑
+iϵH(k)
+wij(t)ˆπi(t)
+⎞
+⎠
+⎤
+⎦ (1)
++gA
+⎡
+⎣γj(t) +
+∑
+k
+log
+⎛
+⎝
+Mk∑
+iϵH(k)
+vij(t)ˆπi(t)
+⎞
+⎠
+⎤
+⎦ − hj(t)
+ˆπj(t) = ehj
+∑
+jϵH(j) ehj
+(2)
+τL
+d/Lambda1i(t)
+dt = ˆπi(t) − /Lambda1i(t)( 3 )
+τL
+d/Lambda1ij(t)
+dt = ˆπi(t)ˆπj(t) − /Lambda1ij(t)( 4 )
+βi(t) = log
+(
+/Lambda1j(t)
+)
+(5)
+wij(t) =
+(
+1 − λ2
+0
+)
+/Lambda1ij(t) + λ2
+0
+[(1 − λ0) /Lambda1i(t) + λ0]
+[
+(1 − λ0) /Lambda1j(t) + λ0
+] (6)
+τA
+dμi(t)
+dt = ˆπi(t) − μi(t)( 7 )
+τA
+dμij(t)
+dt = ˆπi(t)ˆπj(t) − μij(t)( 8 )
+γi(t) = log
+(
+μj(t)
+)
+(9)
+vij(t) =
+(
+1 − λ2
+0
+)
+μij(t) + λ2
+0
+[(1 − λ0)μi(t) + λ0]
+[
+(1− λ0) μj(t) + λ0
+] (10)
+As BCPNNs learn probability estimates of internal and external
+events, their activity ﬂow, ˆπj(t), can be interpreted as inference.
+BCPNNs exhibit unequal coding strength for learned patterns,
+depending on the overlap with other learned patterns and most
+importantly, their age. The dynamical, gradual forgetting of the
+oldest patterns allows BCPNNs to learn new patterns indeﬁnitely
+and escape the problem of CF that haunts other kinds of neu-
+ral networks and often necessitates some process of interleaved
+unlearning to keep these networks viable for memory modeling
+of this kind (Walker and Stickgold, 2004).
+An example of the intrinsic replay activity generated by this
+kind of network can be seen in Figure 2.
+PATTERN REPRESENTATIONS
+Having multiple involved brain regions entails multiple mem-
+ory traces that may coexist but serve the same episodic memory.
+The randomly drawn neocortical input patterns have one active
+unit per ten-unit hypercolumn and consequently randomly vary-
+ing degrees of overlap, a major cause of the model’s stochastic
+behavior.
+The three memory systems are inter-connected by feed-
+forward and feed-back connections. There are several possible
+ways of setting up these connections. Neurobiologically, the inter-
+nal representations of the connected structure are expected to
+differ. While sensory activations in earlier cortical processing
+stages are expected to represent speciﬁc stimulus properties, HIP
+and PFC activations likely represent abstracted, sparsiﬁed, and
+decorrelated versions of such internal representation.
+For reasons of simplicity, we assumed PFC patterns to be a sub-
+set of the CTX patterns generated through a 1-to-1 connection
+between units that leaves out some CTX units, as PFC has fewer
+units (A HIP→ PFC connection can in principle be implemented
+to derive some of the PFC activation from HIP activity as well,
+but was left out here in favor of a more transparent generation of
+training pattern activity). For the HIP representation however, the
+forward connection from CTX is implemented as a sparsiﬁcation-
+process (kWTA) that reduces the level of activity by half (to 5%)
+and achieves strong pattern separation. In the pattern generator,
+this is implemented by connecting the CTX activation to HIP
+through a connection matrix with random, constant weights and
+selecting the 5% most active units (i.e. k = 13) as the derived hip-
+pocampal encoding of that pattern. The practical implication of
+such an implementation is that if two CTX inputs are becoming
+less similar, the HIP representations of these input patterns will
+quickly become much more dissimilar, assigning distinct repre-
+sentations to each input pattern ( Figure 3), while the respective
+CTX (and PFC) representations will on average be similar (as
+measured by normalized pattern overlap) to the same degree as
+the input. This is justiﬁed qualitatively by experimental observa-
+tions of sparse activation and strong pattern separation in Dentate
+Gyrus and CA3 ( Leutgeb et al., 2007; Bakker et al., 2008 ), while
+the quantitative choice of doubling sparsity is an arbitrary choice
+that seems to work well.
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 6
+
+===== PAGE 7 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+FIGURE 2 | Example of learning (15 random patterns, sequentially
+trained over 150 ms) and subsequent autonomous replay activity in a
+small BCPNN (50 Units in 5 Hypercolumns). Note that some early patterns
+are never replayed due to forgetting, while other, stronger patterns reactivate
+multiple times. Longer reactivations are often a sign of less correlated
+patterns.
+As previous memory models emphasizing the importance of
+hippocampal pattern separation have noted, this coding scheme
+lends HIP quite different operating characteristics than CTX,
+namely a positive Y-Intercept in the ROC curve ( Norman,
+2010). While others have stressed that these ﬁndings can be
+used to explain differences in modes of recognition (recall
+vs. familiarity), we have found additional beneﬁts for our
+model: increased pattern separation makes HIP not just bet-
+ter at discriminating between studied items and related lures
+(while sacriﬁcing some capability to compute global match),
+but also improves replay performance in our model, because
+it reduces ambiguity/overlap and thus allows for strong rein-
+statements, which are—after all—key to successful systems
+consolidation.
+The real process of feed-forward input abstraction, compres-
+sion, or decorrelation presumably occurs through bi-directional
+connections between the different network modules. Regarding
+the back-projections, some consolidation models simply use a
+static 1-to-1 connection (Wittenberg et al., 2002) or random sub-
+sets of such ( Murre, 1996) to connect these structures. Instead,
+we used plastic connections in the back-projections with a fast
+learning time constant τ
+L = 9 min. This enables our model to
+learn associations between arbitrary representations, allowing for
+different coding in separate brain areas/stages.
+SIMULATION PHASES
+Our simulation evolves in three phases ( Figures 4, 5)p l u s
+one phase for recall testing afterwards, during which plastic-
+ity is turned-off. Apart from initial brief online learning (using
+clamped CTX activity) and modulation of network-dynamics
+(gains and time constants) imposed at the transition of phases,
+no external intervention in the dynamic activity was undertaken.
+Most importantly, the learning networks stayed plastic during the
+cycles of convergence and gradual depression of projected pat-
+terns, as opposed to models that selectively wait for complete
+convergence of attractors before executing any learning rules
+(Murre, 1996; Wittenberg et al., 2002).
+W e ultimately want to show the consolidation performance of
+the overall memory system. For that reason, we made the original
+online learning episodes, called perception, very brief. Each new
+training pattern is shown for only one simulation time step, forc-
+ing one-shot learning in PFC, as the other networks learn too
+slowly for recall after this short exposure. Consolidation is then
+achieved through spontaneous reactivation of learned patterns,
+which in turn causes the corresponding patterns to be projected
+in the next network and thus potentially learned or strengthened.
+As we undertake a full simulation cycle of one day and one
+night in just 330 time steps ( Figure 4)o f1 0 m se a c h ,t h em o d e l
+plasticity is scaled against reality by a factor of roughly 26.000. The
+chief motivation for this is to enable a study of systems of this kind
+at all: Without temporal scaling of this sort, simulation of weeks
+or months becomes infeasible due to runtime considerations.
+At this scaling, the chosen time constants of 3 min (Short-term
+memory), 3 h (Intermediate-term memory) and 6 days (Long-
+term memory), are mapped onto 8, 400, 18,500 ms respectively,
+thus preserving the ratio of timescales mapped out by the choice
+of time constants. Note, that this is a scaling of plasticity only
+and does not include a scaling of the neural dynamics. The exact
+values of parameters/gains, throughout the different simulation
+phases can be found in Ta b l e 2.
+PERFORMANCE METRIC
+Generally speaking, memory performance can be measured in
+many ways. Popular dual-process theories of episodic memory
+state that retrieval is contingent on two independent processes,
+familiarity (providing a sense of recognition) and recollection
+(recovering events and their context). In recent discussions of
+MTL function this has often been understood to also imply sepa-
+rate brain areas for each process. However, computational models
+have shown that both kinds of recognition judgments can, in fact,
+be simultaneously supported by the same population (Greve et al.,
+2010).
+T o limit the scope of this paper, we restrict ourselves to the
+evaluation of recall performance, which is measured by cueing the
+system with a studied pattern and measuring the distance between
+the respective activations after convergence. The distance metric
+for recall is borrowed from Greve et al. (2010) and described by
+Equation (11).
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 7
+
+===== PAGE 8 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+FIGURE 3 | Activity in HIP changes with the cortical input, as
+measured by normalized activity overlap. The hippocampus
+implements a pattern separation mechanism which yields highly
+signiﬁcant changes in activity when cortical input changes only slightly.
+Left: randomly varying the activity of 1–10 of the 50 cortical
+hypercolumns yields highly signiﬁcant changes in hippocampal encoding.
+Note that to highlight the variability of coding, error bars denote one
+STD, not SEM (
+∗∗∗We test against H 0: median difference between the
+pairs is zero. As normal distributions of overlaps are not guaranteed in
+this case, we use the non-parametric pairwise Wilcoxon signed-rank
+test, yielding p < 10− 165, when using 1000 pairs.) Right:e f f e c t i v e
+pattern separation can also be seen from the fact that hippocampal
+patterns diverge much faster than cortical input, e.g., changing the
+activity of just one cortical hypercolumn yields a 2% CTX pattern
+change (as measured by 98% overlap), but nearly 17% in HIP . When
+we change 10 hypercolumns (80% cortical overlap) then about half of
+the originally active HIP units are no longer a part of the encoded
+pattern. Note again that error bars denote STD, rather than SEM.
+FIGURE 4 | The simulation cycle with its three alternating phases,
+named perception, reﬂection, and sleep. Online learning occurs only
+during perception. All other learning is a function of memory consolidation
+during reﬂection and sleep. The gating of various projections at the
+transition between simulation phases is summarized also in T able 2.
+After a full simulation run, covering several simulated weeks,
+recall performance is evaluated for each network separately. These
+recall rates are then shown to vary against the time between
+training and testing. As recall of HIP and CTX is contingent on
+consolidation over time, these plots may also be called consolida-
+tion curves. Because patterns are random, and since both replay
+behavior and resulting memory consolidation are stochastic, 500
+simulation runs were averaged to obtain reliable recall rates.
+d
+(−→a ,−→b
+)
+= 1
+2
+⎛
+⎝ 1−
+−→a · −→b
+⏐⏐−→a
+⏐⏐
+⏐⏐
+⏐−→b
+⏐⏐
+⏐
+⎞
+⎠
+with−→a = s(t = 0),−→b = lim
+t→∞
+s(t) (11)
+Equation (11) is a recall metric adapted from Greve et al. (2010) .
+W e ﬁrst cue the system with a studied pattern a,o b s e r v et h e
+resulting activation b (attractor convergence), and measure the
+distance d between the respective activations in accordance with
+Equation (11). Studied patterns are expected to have a recall dis-
+tance near zero, while new patterns will converge to rather distant
+attractors. W e compute an optimal decision boundary for recall
+judgments (one for each of the three networks) by minimizing
+the summed type I and type II errors over all possible decision
+boundaries, similar to Greve et al. (2010) . Decision boundary
+values for each stage can be found in Ta b l e 1.
+Beyond looking at each of the three networks separately, we
+could view the model as one integrated memory system and thus
+disregard the origin of a recalled pattern in quantifying recall. In
+fact, whether a memory is still dependent on hippocampus, or
+already fully consolidated into hippocampally independent, neo-
+cortical long-term memory, makes no behavioral difference in
+recall. W e thus deﬁne an effective combined recall rate, accessing
+all three networks during the recall phase.
+SIMULATED LESIONING, MODULATION, AND SLEEP DEPRIVATION
+T o simulate progressing degrees of hippocampal damage, we dis-
+able an increasing ratio of HIP units. Disabling a unit also entails
+nullifying every synaptic connection from or to that unit. T o
+avoid bias in relation to any training pattern, the disabled units
+were randomly selected. T emporal gradients of amnesia were
+thereafter measured by comparing the resulting change in recall
+rates. Anterograde effects were measured by lesioning the system
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 8
+
+===== PAGE 9 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+FIGURE 5 | The three simulation phases 1–3 and their active
+components, as well as the conﬁguration during cued recall after
+many days of consolidation. During perception, feed-forward
+projections from neocortical input generate separate PFC and HIP
+traces, which are associated to the CTX trace via Hebbian-learning in
+the back-projections. This online learning episode is very brief and
+effectively too short to establish lasting HIP and CTX memories. During
+the reﬂection phase, replay in PFC (similar to active rehearsal)
+generated by the interplay of its auto-association and adaptation
+projections, drives HIP reinstatements, thus facilitating learning in its
+auto-associative projections. During sleep, HIP replay then drives CTX
+reinstatements which facilitate long-term learning. During cued recall,
+the external neocortical activation generates corresponding cues in PFC
+and HIP through feed-forward connections. All three networks are then
+individually or simultaneously allowed to relax/converge to attractors,
+potentially yielding successful recall of a corresponding training pattern.
+∗∗∗It should be noted, that the strongest inﬂuence of the PFC on the
+hippocampus in primates is indirect through parahippocampal cortices.
+The direct projection PFC-to-HIP is neuroanatomically non-existent
+(Otani, 2004 ). We consider this modeling issue in the discussion.
+before learning and then comparing the achieved performance
+of the damaged system against an unlesioned control simula-
+tion. Modulations of plasticity were made via a temporal up or
+down-regulation of learning time constants τ
+L, and a scenario
+of persistent sleep deprivation was implemented by reducing the
+length of the sleep phase by 50%.
+RESULTS
+CONSOLIDATION AND AMNESIA
+W e ran the entire system in the described simulation cycle
+(Figure 4) for 39 simulated days and attempted to consolidate a
+total of 351 memory patterns. The unused patterns of day 40 were
+used to validate thresholds of the recall metric by measuring false
+positives (see Equation 11).
+Before we take a look at consolidation over time, it is worth
+taking a glance at the statistics of autonomous reactivation, which
+is supposed to drive the consolidation process. W e classify a pat-
+tern as reinstated when the projected activity surpasses 90% over-
+lap with one particular training pattern. After some time, activity
+of such a pattern will depress below this threshold and eventu-
+ally new patterns will emerge. W e ﬁnd that reinstatement events
+occur with a frequency of 6.56 Hz in HIP during reﬂection and
+6.13 Hz in CTX during sleep. It is noteworthy that these events
+vary in length ( Figure 6) due to random correlations between
+patterns and varying trace strength. While PFC encoding strength
+is more uniform, yielding a unimodal distribution of HIP rein-
+statement lengths, this does not hold true for CTX reinstatements
+during sleep, where we can clearly distinguish between weakly
+(i.e., brieﬂy) reactivating patterns and strong reactivations with
+much longer durations, which presumably consolidate better.
+T urning our eye to learning, forgetting, and consolidation
+over time, the top panel of Figure 7 shows that PFC can reliably
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 9
+
+===== PAGE 10 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+FIGURE 6 | Replay drives reinstatements of earlier patterns in HIP or
+CTX, respectively .The length of these reinstatements is distributed
+around an average reinstatement length of 40.08 ms for PFC-driven HIP
+reinstatements during reﬂection and 95.43 ms for HIP-driven CTX
+reinstatements during sleep.
+store only the most recent patterns of the last day (343–351),
+while HIP can recall much older patterns. Forgetting in CTX
+is very slow: some of the retrievable patterns are more than a
+month old. However, only about a third of the patterns shown
+ever successfully consolidate into retrievable long-term memo-
+ries. Our analysis shows that consolidation failure is typically
+rooted in insufﬁcient hippocampal replay during sleep, so famil-
+iarity (which could be measured using a different metric, not
+shown here) is often still established. In conjunction with learn-
+ing repetition or plasticity modulation, full consolidation (i.e.,
+independent CTX recall) of any speciﬁc pattern can, however,
+be virtually guaranteed ( Fiebig, 2012 ), as we also show in the
+modulation experiment illustrated in Figure 10. CTX recall of
+recent patterns is usually weak, as they were not sufﬁciently con-
+solidated during sleep yet. Maximum cortical consolidation is
+reached about a week after the initial acquisition.
+Combined recall is severely affected when HIP is lesioned,
+as can be seen in Figure 7. The corresponding RA gradient in
+Figure 8 shows the ratio of lost recall rate vs. control. On the
+whole, it shows an inverse temporal gradient. Recall of remove
+patterns—that have already consolidated—remains unaffected by
+lesions. V ery recent pattern recall is supported by PFC and thus
+also unaffected by simulated hippocampal lesions. The antero-
+grade gradient shows a persistent, ﬂat deﬁcit (again with the
+exception of very recent memories) that quickly increases with
+the size of the lesion, highlighting an increasing inability to
+form new long-term memories. The onset of amnesia also shifts
+to more and more recent patterns with greater lesion size, as
+HIP loses more and more capacity. This kind of amnesia is
+markedly different from a sleep deprivation experiment shown
+in the same plot, where reduced sleep-dependent consolidation
+causes a much less severe anterograde deﬁcit. HIP stays fully
+functional in this case, so the amnesic effect is seen only much
+later, when it starts to forget after about a week. This particular
+ﬁnding is inconsistent with biological evidence, which clearly
+shows impaired hippocampal memory function on many tasks
+following sleep deprivation, rather than just impaired systems
+consolidation (Walker and Stickgold, 2006).
+FIGURE 7 | Consolidation, as measured by recall rates of training
+patterns from each stage (PFC, HIP , CTX).By averaging the recall rates for
+patterns introduced on the same day, we obtain a more direct relationship
+between the recall rate and the age of a pattern in days. Combined recall
+from all stages (solid lines) is shown with and without hippocampus (full
+lesion) to illustrate its importance for patterns of different age.
+Figure 9 shows a side-by-side comparison of our own simu-
+lation results ( Figure 9C) and two data sets from rodent experi-
+ments ( Figures 9A,B), showing temporally graded RA gradients
+following hippocampal lesioning.
+MODULATION EXPERIMENTS
+T o test the effect of plasticity modulations on consolidation, we
+ran two simulations. One had selectively up-regulated plastic-
+ity ( Figure 10) for one of the percepts shown over the course of
+a stimulation and the other had a transient down-regulation of
+plasticity (Figure 11).
+Sudden up-regulation of HIP plasticity by a factor of two dur-
+ing learning of one speciﬁc percept (modeling something like
+an emotional relevance signal or attention), can double CTX
+recall probability in out model, indicating successful consolida-
+tion ( Figure 10). The middle panel shows that increased recall
+of this percept comes at the cost of reduced consolidation odds
+mostly for patterns learned before, but also after. The nega-
+tive retrograde impact (percept no. <89) is mostly due to HIP
+overwriting; weakening some patterns to the point that they no
+longer reactivate/consolidate. However, there is also an additional
+anterograde effect, which due to the week-long consolidation
+time window affects a few patterns still in consolidation dur-
+ing the time of modulation ( ∼ 76–89) as well as many patterns
+learned after. The lower panel illustrates the extended HIP life-
+time of the boosted percept 89, which means that the negative
+anterograde effect on new patterns stretches out for some time
+after the modulation occurs (i.e., percepts 90–100 show dimin-
+ished consolidation vs. control). Note that this occurs because
+patterns of the modulated percept outcompete other patterns for
+reactivation during sleep for some time, until HIP strength of per-
+cept 89 was diluted to the point that its patterns do not activate
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 10
+
+===== PAGE 11 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+FIGURE 8 | Five different amnesia gradients. Retrograde amnesia after full hippocampal lesioning, anterograde amnesia (performance measured after using
+the lesioned system for 39 days) with different lesion size and persistent sleep deprivation, where we cut the length of the sleeping phase by half.
+preferentially anymore. V ery remote percepts are less affected, as
+their consolidation window has already closed because of hip-
+pocampal forgetting. Finally, the bottom panel shows how this
+modulation not only increases the percepts HIP life-time by 1
+or 2 days, but stronger encoding results in both faster and more
+successful neocortical consolidation. More frequent reactivations
+during sleep cause maximum neocortical consolidation of the
+modulated percept after just 3 nights.
+The temporal down-regulation of HIP plasticity ( Figure 11)
+yielded a much more peculiar memory effect, namely narrowly
+focused AA in conjunction with retrograde facilitation. Due to
+the timing of the modulation onset, the most affected patterns
+belong to a single percept, which was introduced right at the onset
+of said modulation. Later precepts were barely affected, due to the
+fast decay of the modulation. The top panel of Figure 11 shows
+CTX and HIP recall probability of the most affected percept near
+zero, indicating that the modulation effectively disrupted hip-
+pocampal encoding and subsequently diminished consolidation.
+The middle panel reveals that in addition to this AA effect, per-
+cepts/patterns learned up to 6 days before the modulation exhibit
+improved consolidation (5 days after the modulation event, all
+but one of the 20 percepts learned before the event show a positive
+change in performance vs. control) This retrograde facilitation
+effect underscores the competitive nature of consolidation dur-
+ing sleep: Because patterns of the blocked percept are encoded
+so weakly, other, older patterns can reactivate instead during
+the sleep phases following the modulation, thus improving their
+consolidation odds. Finally the bottom panel shows how this
+modulation not only decreases the HIP lifetime of the affected
+percept to a mere 2 days, but also how weaker encoding results in
+slower and much reduced neocortical consolidation.
+DISCUSSION
+ADDRESSING THE FOUR CHALLENGES
+W e tasked ourselves with four goals: T o implement autonomous
+replay, address the temporal scope of systems consolidation,
+include working memory in that scope, and defeat the common
+problem of CF . T o these ends, we have built an extended three-
+stage implementation of the CLS framework using a consolida-
+tion chain of Bayesian Conﬁdence Propagation Neural Networks,
+capable of autonomous replay. Where other models resort to
+forced activations and top-down control to generate reinstate-
+ment dynamics, we have shown that on-going internal activity
+(autonomous replay) is sufﬁcient for consolidation along a chain
+of networks with differing memory traces, sparsity, network
+structure, network size, and most importantly extreme differences
+in plasticity time-constants, spanning several orders of magni-
+tude. The model thus constitutes an interactive network of diverse
+recurrent neural networks. (e.g., CTX feeds into HIP , building
+a sparse hippocampal trace, which in turn facilitates cortical
+consolidation via back-projections during sleep reactivations).
+Our model implements a functional consolidation process
+from one-shot learning capability to stable neocortical mem-
+ory engrams due to its three-stage architecture and wide span
+of time constants. The model parameterizes the mechanism
+behind different cortical memory systems, from short-term work-
+ing memory to long-term memory in terms of different set
+points for plasticity of synaptic weights and intrinsic excitabil-
+ity. Furthermore, the model can keep learning indeﬁnitely and
+functionally solves the problem of CF by selective, competitive
+consolidation with simultaneous learning and forgetting on all
+timescales, a process which also explains why only a fraction of
+all percepts become long-term memories.
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 11
+
+===== PAGE 12 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+FIGURE 9 | (A,B) Behavioral responses of animals receiving extensive
+hippocampal system lesions (circles) or control lesions (squares) as a function
+of the numbers of days elapsing between exposure to the relevant
+experiences and the occurrence of the lesion. Bars surrounding each data
+point indicate the standard error. Panel (A) shows the percentage choice of a
+speciﬁc sample food (out of two alternatives) by rats exposed to a
+conspeciﬁc that had eaten the sample food. Panel (B) shows fear (freezing)
+behavior shown by rats when returned to an environment in which they had
+experienced paired presentations of tones and footshock. Data in Panel (A)
+are from Winocur (1990). Data in Panel (B) are from Kim and Fanselow
+(1992). The added lines are from a simple differential equations ﬁt from a
+previous modeling attempt ( McClelland et al., 1995 ). Panel (C): Combined
+retrieval rates of the normal and hippocampally lesioned simulation model.
+Rather than the standard error (which is too small to show, as we average
+500 simulations), error bars indicate a standard deviation of the underlying
+data, showing the stochasticity of the consolidation process.
+BIOLOGICAL PARALLELS, DIFFERENCES, AND IMPLICATIONS
+Beyond memory functionality, much of the modeled connectiv-
+ity can be asserted on biological grounds, yet it can be argued,
+that this does not hold for the PFC-to-HIP pathway critically
+used in the reﬂection phase of the simulation. As we pointed
+out earlier, there is no known direct pathway of this kind. The
+strongest inﬂuence of the PFC on the hippocampus in primates is
+indirect through parahippocampal cortices ( Otani, 2004 ), most
+notably the entorhinal cortex, which feeds into the hippocam-
+pus and dentate gyrus (which in turn also feeds into the central
+hippocampal ﬁelds). W e have implemented this second path-
+way in our model in a way that simulates the sparsiﬁcation and
+pattern separation observed in experimental data of the dentate
+gyrus ( Leutgeb et al., 2007; Bakker et al., 2008 ). It is conceiv-
+able that the direct PFC-to-HIP connection in our model can
+be functionally replaced by an indirect pathway through CTX
+instead. However, the biggest implementation hurdle with respect
+to this is the achieved sparsiﬁcation itself, as non-consolidated
+CTX patterns driven via the PFC will be noisy. This noise becomes
+most problematically ampliﬁed due to pattern separation in the
+forward connection to HIP , which is otherwise most beneﬁcial in
+improving HIP capacity and reactivation dynamics during sleep.
+As this example shows, models of this kind can help us identify
+architectural problems in neural systems analysis.
+Correctly scaled, the model predicts that many hundreds or
+thousands of reactivations are necessary for guaranteed consol-
+idation. This might seem like a huge number but is, in fact,
+congruent with biological data: rodent studies have shown aver-
+age SPW/R event frequencies between 0.3 and 1.2 Hz during
+SWS, which are signiﬁcantly increased in number and ampli-
+tude after learning and recall ( Eschenko et al., 2008 ). Even a
+single hour SWS yields more than 10
+3 SPW/R events associ-
+ated with hippocampal reactivations. A week-long consolidation
+period thus contains on the order of 10
+5 replay events or more, to
+be distributed over the select set of consolidating patterns.
+Spontaneously occurring HIP reactivations in our model are
+signiﬁed by sharp population activity bursts, occur with a fre-
+quency of roughly 6 Hz and last for 30–170 ms, which is similar to
+biophysically observed sharp-waves that have been closely linked
+to hippocampal reactivations (see Introduction). The fact that
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 12
+
+===== PAGE 13 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+FIGURE 10 | In this experiment, we boosted hippocampal plasticity
+during learning of percept 89 (consisting of patterns 265–267) by a factor
+of two (halﬁng τL ) and tested recall 5 days later . T op:consolidation curves
+showing the probability of successful recall 5 days after introduction of
+percept 89. Middle: the absolute change of recall probability vs. controls
+(simulation without any modulation). Bottom: the time course of
+consolidation for the modulated percept, as measured by testing HIP and
+CTX recall every day following the original learning experience.
+this is achieved with biophysically constrained parameter values,
+i.e., the adaptation time constant τA, adds to the list of interesting
+biological analogies.
+Obviously the real process behind acquisition and consoli-
+dation of episodic memory is much more complex than our
+model suggests, yet despite many simpliﬁcations, the results show
+a range of experimentally observed properties and characteris-
+tics. These include competitive consolidation, effects of primacy
+and recency in short-term consolidation (not speciﬁcally dis-
+cussed here, see Lansner et al., 2013 ), retrograde facilitation after
+impaired acquisition, as well as typical amnesia effects following
+simulated hippocampal lesions.
+With respect to the latter, we conclude that the model exhibits
+temporally graded RA similar to pathologies seen in human case
+studies, such as Patient HM ( Scoville and Milner, 2000 ): intact
+working memory, temporally graded RA, preserving remote cor-
+tical memories, as well as severe, ﬂat AA. Given that these obser-
+vations were a major reason for the development of consolidation
+theory and hippocampal memory research in the ﬁrst place; our
+computational model is a rather successful implementation of
+these concepts. The similarity between our RA curves in Figure 9,
+bottom panel and those in the top panels, showing experimental
+RA is striking, conﬁrming predictions about the shape of the
+amnesia gradient (Nadel and Moscovitch, 1997).
+However, our model also exhibits one peculiar difference
+to the above named experimental studies. It predicts strong
+recall of very recent patterns, as they are supported by
+hippocampally-independent working memory. It is necessary to
+differentiate this prediction of a retrograde gradient from the
+shown anterograde preservation of working memory capacity fol-
+lowing MTL damage encompassing the hippocampus ( Jeneson
+et al., 2010; Jeneson and Squire, 2012 ). T o the authors knowl-
+edge, a retrograde preservation of active working memory traces
+has not been shown before and constitutes a testable prediction,
+given neurophysiological deactivation of hippocampal function
+on the timescale of working memory, such as focal cooling may
+allow ( T anaka et al., 2008 ). Experimental lesion studies ( Squire
+and Cohen, 1979; Winocur, 1990; Zola-Morgan and Squire, 1990;
+Kim and Fanselow, 1992 ) simply cannot account for the ﬂeeting
+storage of new percepts in short-term memory. For example, test
+animals (rats, monkeys) are lesioned under deep anesthesia and
+require several days rest after the lesioning operation. T raining,
+lesioning and directly testing an animal within seconds (the
+timespan of working memory) is practically impossible. Rather,
+tests are run on a daily or weekly basis, which thus necessarily
+excludes short-term memory.
+ON COMPETITIVE CONSOLIDATION AND MEMORY MODULATION
+The nature of consolidation learning in our model is competi-
+tive (only one pattern can be reinstated at a time), so it is highly
+susceptible to memory modulation or learning repetition. Our
+model predicts that relevant hippocampal memories (meaning
+more strongly encoded) consolidate faster and more reliably than
+other memories: when HIP plasticity is modulated by some kind
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 13
+
+===== PAGE 14 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+FIGURE 1 1 | In this experiment, we simulated the memory impact of
+triazolam with a half-life of 2 h by reducing hippocampal plasticity
+by a factor of 10 and decaying this modulation with a 2 h half-life
+to the original level of plasticity . The modulation was triggered at the
+introduction of percept 89. To p: consolidation curves measured 5 days
+after the modulation event, showing the lasting effect on the probability
+of successful recall. Middle: the absolute change of recall probability
+vs. controls. Note that the y-axis was broken to also visualize the
+smaller impact seen in the other, unmodulated percepts. Bottom:t h e
+time course of consolidation for the modulated percept, obtained by
+testing recall from HIP and CTX every day following the original
+learning experience.
+of relevance signal, the resulting change in memory trace strength
+directly affects the probability of successful long-term consoli-
+dation into cortex, as strongly encoded patterns reactivate both
+longer and more often than other patterns during autonomous
+replay (Sandberg, 2003; Fiebig, 2012).
+Our series of modulation experiments, where we temporar-
+ily up- or down-regulated the degree of plasticity in HIP , can
+be interpreted as simulations of the consolidation impact of
+dopaminergic relevance signals (say from the amygdala), atten-
+tion, or the effect of other plasticity modulating agents like
+benzodiazepines or ethanol. For an example, studies show that
+both ethanol ( Lister et al., 1987; Givens, 1995, 1996 ) and benzo-
+diazepines like T riazolam (Hinrichs et al., 1984; File et al., 1999;
+Fillmore et al., 2001 ) induce a remarkable combination of AA
+and retrograde facilitation. The hypothesized mechanism for this
+is impaired acquisition through a suppression of L TP induction
+in brain areas required for the initial learning, i.e., PFC and HIP
+(Blitzer et al., 1990 ). Reduced new learning presumably beneﬁts
+consolidation of older memories, as the expression of L TP and
+ongoing consolidation mechanism itself is left intact.
+T riazolam has a half-life of about 2 h, and our modeling of
+a similar, temporally decaying plasticity disruption ( Figure 11)
+yields the same peculiar combination of AA and retrograde facil-
+itation. W e consider the successful replication of this effect in a
+working model based on artiﬁcial neural networks a step forward
+in the modeling of memory consolidation, improving our conﬁ-
+dence in working implementations of CLS.
+CONCLUSION
+Contradictory biological evidence regarding disassociations in
+RA between different aspects of declarative memory ( Nadel and
+Moscovitch, 1997) and evidence of very extensive and sometimes
+ﬂat RA gradients ( T ravis et al., 2010 ) clearly point out weak-
+nesses in the current consolidation model. Similarly, the CLS
+concept of low cortical involvement during initial acquisition
+has recently been called into question by experimental stud-
+ies ( T se et al., 2011 ). These and other observations underscore.
+The necessity for testing variations of the model are underscored
+by these and other observations, including reconsolidation pro-
+cesses ( Wittenberg et al., 2002; Alberini, 2005 ), schema theory
+(T se et al., 2007), multiple trace theory ( Nadel and Moscovitch,
+1997) or a kind of trace-link system ( Murre, 1996 ), some of
+which have already been shown to deal with certain known
+inconsistencies of the standard model. Since the conception of
+CLS, many further details, especially regarding functional dis-
+associations ( Eichenbaum et al., 2011 ) of different parts of the
+MTL have been explored and deserve further consideration in
+computational accounts of consolidation.
+Irrespective of this, the success of CLS in explaining temporally
+graded RA, AA, wake and sleep replay and the overall dynamics
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 14
+
+===== PAGE 15 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+of memory consolidation even in conjunction with plasticity
+modulations, underscore its continued scientiﬁc value.
+A similar network model to the one presented here, but with
+spiking model neurons is currently under development and with
+the right tuning and setup, our model can be applied to multiple
+trace theory or other consolidation mechanisms, such as synap-
+tic reentry reinforcement ( Wittenberg et al., 2002 )a n dm o d e l
+REM sleep. For example, we can enable hippocampal reconsoli-
+dation by letting HIP stay plastic during replay, such that we not
+only consolidate neocortical traces during SWS, but replayed hip-
+pocampal attractors also reinforce, degrade, or otherwise change
+themselves with each reinstatement event (Lundqvist et al., 2011).
+Cascade models of synaptic plasticity ( Fusi et al., 2005 )a sw e l l
+as further partitioning of the memory system ( Roxin and Fusi,
+2013) can presumably extend the temporal reach of this model
+even further.
+Our results should be seen as mainly qualitative. McClelland
+pointed out that the huge range of differences in the timescale of
+the consolidation phenomenon across species, age and other fac-
+tors is mostly a function of different learning rates ( McClelland
+et al., 1995 ). The values of almost all our parameters—
+including the scaled learning rates—can be questioned on bio-
+logical grounds. However, our model features a broad array
+of neurobiological details and clearly shows the viability of a
+three-stage consolidation chain, driven by autonomous replay
+that turned attractors into more useful quasi-stable attractors
+and thus expands the architectural options available to memory
+researchers looking for appropriate neural network models today.
+ACKNOWLEDGMENTS
+W e thank Karl-Magnus Petersson (Max Planck Institute for
+Psycholinguistics, Nijmegen) and Mark V an Rossum (Institute
+for Adaptive and Neural Comunication, Edinburgh) for valu-
+able comments on the draft manuscript and Simon Benjaminsson
+and Mikael Lundqvist for their support during a master thesis
+project that preceded this work. W e further acknowledge Anders
+Sandberg, whose work laid the theoretical groundwork for the
+application of Bayesian Conﬁdence Propagation Neural Networks
+in memory models.
+The current project was ﬁnancially supported jointly by
+grants from the Swedish Science Council (V etenskapsrådet,
+VR- 621-2012-3502), VINNOV A (Swedish Governmental Agency
+for Innovation Systems), the Swedish Foundation for Strategic
+Research (through the Stockholm Brain Institute), and from the
+European Union (BrainScaleS project; FP7 FET Integrated Project
+269921).
+REFERENCES
+Adelman, J. P ., Maylie, J., and Sah, P . (2012). Small-conductance Ca2+-activated
+K+ channels: form and function. Annu. Rev. Physiol. 74, 245–269. doi:
+10.1146/annurev-physiol-020911-153336
+Alberini, C. M. (2005). Mechanisms of memory stabilization: are consolidation and
+reconsolidation similar or distinct processes? Trends Neurosc i. 28, 51–56. doi:
+10.1016/j.tins.2004.11.001
+Alvarez, P ., and Squire, L. R. (1994). Memory consolidation and the medial tem-
+poral lobe: a simple network model. Proc. Natl. Acad. Sci. U.S.A. 91, 7041–7045.
+doi: 10.1073/pnas.91.15.7041
+Bakker, A., Kirwan, C. B., Miller, M., and Stark, C. E. L. (2008). Pattern separation
+in the human hippocampal CA3 and dentate gyrus. Science 319, 1640–1642. doi:
+10.1126/science.1152882
+Bibbig, A. (1996). “Hippocampal two-stage learning and memory consolida-
+tion, ” in European Meetings on Cybernetics and Systems Research (EMCSR)
+(Vienna).
+Blitzer, R. D., Gil, O., and Landau, E. M. (1990). Long-term potentiation in rat
+hippocampus is inhibited by low concentrations of ethanol. Brain Res. 537,
+203–208. doi: 10.1016/0006-8993(90)90359-J
+Buxhoeveden, D. P ., and Casanova, M. F . (2002). The minicolumn hypothesis in
+neuroscience. Brain 125, 935–951. doi: 10.1093/brain/awf110
+Buzsáki, G. (1986). Hippocampal sharp waves: their origin and signiﬁcance. Brain
+Res. 398, 242–252. doi: 10.1016/0006-8993(86)91483-6
+Buzsáki, G. (1998). Memory consolidation during sleep: a neurophysiological
+perspective. J. Sleep Res. 7, 17–23. doi: 10.1046/j.1365-2869.7.s1.3.x
+Buzsáki, G, Horváth, Z., Urioste, R., Hetke, J., and Wise, K. (1992). High-
+frequency network oscillation in the hippocampus.Science (New Y ork, N.Y.)256,
+1025–1027. doi: 10.1126/science.1589772
+Buzsáki, G., Leung, L.-W. S., and V anderwolf, C. H. (1983). Cellular bases
+of hippocampal EEG in the behaving rat. Brain Res. Rev. 6, 139–171. doi:
+10.1016/0165-0173(83)90037-1
+Dupret, D., O’Neill, J., Pleydell-Bouverie, B., and Csicsvari, J. (2010). The
+reorganization and reactivation of hippocampal maps predict spa-
+tial memory performance. Nat. Neurosci. 13, 995–1002. doi: 10.1038/
+nn.2599
+Ego-Stengel, V ., and Wilson, M. A. (2010). Disruption of ripple-associated hip-
+pocampal activity during rest impairs spatial learning in the rat. Hippocampus
+20, 1–10. doi: 10.1002/hipo.20707
+Eichenbaum, H., Sauvage, M., Fortin, N., Komorowski, R., and Lipton,
+P . (2011). T owards a functional organization of episodic memory in
+the medial temporal lobe. Neurosci. Biobehav. Rev. 36, 1597–1608. doi:
+10.1016/j.neubiorev.2011.07.006
+Eschenko, O., Ramadan, W., Mölle, M., Born, J., and Sara, S. J. (2008). Sustained
+increase in hippocampal sharp-wave ripple activity during slow-wave sleep
+after learning. Learn. Mem. (Cold Spring Harbor, N.Y.) 15, 222–228. doi:
+10.1101/lm.726008
+Euston, D. R., T atsuno, M., and McNaughton, B. L. (2007). Fast-forward play-
+back of recent memory sequences in prefrontal cortex during sleep. Science
+(New Y ork, N.Y.)318, 1147–1150. doi: 10.1126/science.1148979
+Favorov, O. V ., and Diamond, M. E. (1990). Demonstration of discrete place-
+deﬁned columns–segregates–in the cat SI. J. Comp. Neurol. 298, 97–112. doi:
+10.1002/cne.902980108
+Fiebig, F . (2012). Memory Consolidation through Reinstatement in a Connectionist
+Model of Hippocampus and Neocortex. Stockholm: Royal Institute of T echnology.
+Available online at: http://www.nada.kth.se/utbildning/grukth/exjobb/rap
+portlistor/2012/rapporter12/ﬁebig_ﬂorian_12071.pdf
+File, S. E., Fluck, E., and Joyce, E. M. (1999). Conditions under which
+lorazepam can facilitate retrieval. J. Clin. Psychopharmacol . 19, 349–353. doi:
+10.1097/00004714-199908000-00011
+Fillmore, M. T., Kelly, T. H., Rush, C. R., and Hays, L. (2001). Retrograde facilitation
+of memory by triazolam: effects on automatic processes. Psychopharmacology
+158, 314–321. doi: 10.1007/s002130100873
+Fransén, E., and Lansner, A. (1995). Low spiking rates in a population of mutu-
+ally exciting pyramidal cells. Netw. Comput. Neural Syst . 6, 271–288. doi:
+10.1088/0954-898X/6/2/008
+Fransén, E., T ahvildari, B., Egorov, A. V ., Hasselmo, M. E., and Alonso, A.
+A. (2006). Mechanism of graded persistent cellular activity of entorhinal
+cortex layer v neurons. Neuron 49, 735–746. doi: 10.1016/j.neuron.2006.
+01.036
+Fusi, S., Drew, P . J., and Abbott, L. F . (2005). Cascade models of synaptically stored
+memories. Neuron 45, 599–611. doi: 10.1016/j.neuron.2005.02.001
+Fuster, J. M. (2008). The Prefrontal Cortex . Creativity, V ol. 1. doi: 10.1016/S0896-
+6273(00)80673-X. Available online at: http://books .google.com/books?
+id=zuZlvNICdhUC&pgis=1
+Girardeau, G., Benchenane, K., Wiener, S. I., Buzsáki, G., Zugaro, M. B., and
+Buzsaki, G. (2009). Selective suppression of hippocampal ripples impairs spatial
+memory. Nat. Neurosci. 12, 1222–1223. doi: 10.1038/nn.2384
+Givens, B. (1995). Low doses of ethanol impair spatial working memory and
+reduce hippocampal theta activity. Alcohol. Clin. Exp. Res. 19, 763–767. doi:
+10.1111/j.1530-0277.1995.tb01580.x
+Givens, B. (1996). Behavioral correlates of single units in the medial septal area:
+the effect of ethanol. Neuroscience 71, 417–427. doi: 10.1016/0306-4522(95)
+00443-2
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 15
+
+===== PAGE 16 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+Graham, K. S., Barense, M. D., and Lee, A. C. H. (2010). Going beyond L TM in the
+MTL: a synthesis of neuropsychological and neuroimaging ﬁndings on the role
+of the medial temporal lobe in memory and perception. Neuropsychologia 48,
+831–853. doi: 10.1016/j.neuropsychologia.2010.01.001
+Greve, A., Donaldson, D. I., and van Rossum, M. C. W. (2010). A single-trace
+dual-process model of episodic memory: a novel computational account of
+familiarity and recollection. Hippocampus 20, 235–251. doi: 10.1002/hipo.20606
+Hasselmo, M. E., and McClelland, J. L. (1999). Neural models of memory. Curr.
+Opin. Neurobiol. 9, 184–188. doi: 10.1016/S0959-4388(99)80025-7
+Hinrichs, J. V ., Ghoneim, M. M., and Mewaldt, S. P . (1984). Diazepam
+and memory: retrograde facilitation produced by interference reduction.
+Psychopharmacology 84, 158–162. doi: 10.1007/BF00427439
+Jacobsen, C. F . (1936). Functions of frontal association area in primates. Comp.
+Psychol. Monogr. 13, 1–60. doi: 10.1001/archneurpsyc.1935.02250150108009
+Jeneson, A., Mauldin, K. N., and Squire, L. R. (2010). Intact working memory
+for relational information after medial temporal lobe damage. J. Neurosci. 30,
+13624–13629. doi: 10.1523/JNEUROSCI.2895-10.2010
+Jeneson, A., and Squire, L. R. (2012). W orking memory, long-term memory, and
+medial temporal lobe function. Learn. Mem. (Cold Spring Harbor, N.Y.) 19,
+15–25. doi: 10.1101/lm.024018.111
+Johansson, C., and Lansner, A. (2007a). Imposing biological constraints onto an
+abstract neocortical attractor network model. Neural Comput. 19, 1871–1896.
+doi: 10.1162/neco.2007.19.7.1871
+Johansson, C., and Lansner, A. (2007b). T owards cortex sized artiﬁcial neural
+systems. Neural Netw. 20, 48–61. doi: 10.1016/j.neunet.2006.05.029
+Kanter, I. (1988). Potts-glass models of neural networks. Phys. Rev. A. 37:2739. doi:
+10.1103/PhysRevA.37.2739
+Kim, J. J., and Fanselow, M. S. (1992). Modality-speciﬁc retrograde amnesia of fear.
+Science (New Y ork, N.Y.)256, 675–677. doi: 10.1126/science.1585183
+Lansner, A. (2009). Associative memory models: from the cell-assembly theory
+to biophysically detailed cortex simulations. Trends Neurosc i. 32, 178–186. doi:
+10.1016/j.tins.2008.12.002
+Lansner, A., Marklund, P ., Sikström, S., and Nilsson, L.-G. (2013). Reactivation in
+working memory: an attractor network model of free recall. Edited by Daniel
+Durstewitz. PLoS ONE 8:e73776. doi: 10.1371/journal.pone.0073776
+Lanting, C. P ., Briley, P . M., Sumner, C. J., and Krumbholz, K. (2013). Mechanisms
+of adaptation in human auditory cortex. J. Neurophysiol. 110, 973–983. doi:
+10.1152/jn.00547.2012
+Lee, A. K., and Wilson, M. A. (2002). Memory of sequential experience in the hip-
+pocampus during slow wave sleep. Neuron 36, 1183–1194. doi: 10.1016/S0896-
+6273(02)01096-6
+Lee, S.-J. R., Escobedo-Lozoya, Y ., Szatmari, E. M., and Y asuda, R. (2009).
+Activation of CaMKII in single dendritic spines during long-term potentiation.
+Nature 458, 299–304. doi: 10.1038/nature07842
+Leutgeb, J. K., Leutgeb, S., Moser, M.-B., and Moser, E. I. (2007). Pattern separation
+in the dentate gyrus and CA3 of the hippocampus. Science (New Y ork, N.Y.)315,
+961–966. doi: 10.1126/science.1135801
+Lister, R. G., Eckardt, M. J., and W eingartner, H. (1987). Ethanol intoxication
+and memory. Recent developments and new directions. Recent Dev. Alcohol. 5,
+111–126.
+Louie, K., and Wilson, M. A. (2001). T emporally structured replay of awake hip-
+pocampal ensemble activity during rapid eye movement sleep. Neuron 29,
+145–156. doi: 10.1016/S0896-6273(01)00186-6
+Lundqvist, M., Compte, A., and Lansner, A. (2010). Bistable, irregular ﬁring and
+population oscillations in a modular attractor memory network. PloS Comput.
+Biol. 6, 1–12. doi: 10.1371/journal.pcbi.1000803
+Lundqvist, M., Herman, P ., and Lansner, A. (2011). Theta and gamma
+power increases and alpha/beta power decreases with memory load in an
+attractor network model. J. Cogn. Neurosci. 23, 3008–3020. doi: 10.1162/
+jocn_a_00029
+Lundqvist, M., Rehn, M., and Lansner, A. (2006). Attractor dynamics in a modu-
+l a rn e t w o r km o d e lo ft h ec e r e b r a lc o r t e x .Neurocomputing 69, 1155–1159. doi:
+10.1016/j.neucom.2005.12.065
+Markram, H., Lübke, J., Frotscher, M., and Sakmann, B. (1997). Regulation
+of synaptic efﬁcacy by coincidence of postsynaptic Aps and EPSPs. Science
+(New Y ork, N.Y.)275, 213–215. doi: 10.1126/science.275.5297.213
+Marr, D. (1970). A theory for cerebral neocortex. Proc. R. Soc. Lond. B Biol. Sci. 176,
+161–234. doi: 10.1098/rspb.1970.0040
+Marr, D. (1971). Simple memory: a theory for archicortex. Philos. Trans. R. Soc.
+Lond. B Biol. Sci. 262, 23–81. doi: 10.1098/rstb.1971.0078
+McClelland, J. L. (1998). “Role of the hippocampus in learning and memory: a
+computational analysis, ” in Brain and Values: is a Biological Science of Values
+Possible, ed K. H. Pribram (Mahwah, NJ: Erlbaum), 535–547.
+McClelland, J. L., McNaughton, B. L., and O’Reilly, R. C. (1995). Why there are
+complementary learning systems in the hippocampus and neocortex: insights
+from the successes and failures of connectionist models of learning and memory.
+Psychol. Rev. 102, 419–457. doi: 10.1037/0033-295X.102.3.419
+McNaughton, B. L., and Morris, R. G. M. (1987). Hippocampal synaptic enhance-
+ment and information storage within a distributed memory system. Trends
+Neurosci. 10, 408–415. doi: 10.1016/0166-2236(87)90011-7
+Milner, B. (1972). Disorders of learning and memory after temporal lobe lesions in
+man. Clin. Neurosurg. 19, 421–446.
+Mongillo, G., Barak, O., and T sodyks, M. (2008). Synaptic theory of working mem-
+ory. Science (New Y ork, N.Y.)319, 1543–1546. doi: 10.1126/science.1150769
+Murre, J. M. (1996). T raceLink: a model of amnesia and consolidation of memory.
+Hippocampus 6, 675–684. doi: 10.1002/(SICI)1098-1063(1996)6:6&lt;675::AID-
+HIPO10&gt;3.0.CO;2-Y
+Nadel, L., and Moscovitch, M. (1997). Memory consolidation, retrograde amne-
+sia and the hippocampal complex. Curr. Opin. Neurobiol . 7, 217–227. doi:
+10.1016/S0959-4388(97)80010-4
+Norman, K. A. (2010). How hippocampus and cortex contribute to recognition
+memory: revisiting the complementary learning systems model. Hippocampus
+20, 1217–1227. doi: 10.1002/hipo.20855
+Norman, K. A., Newman, E. L., and Perotte, A. J. (2005). Methods for reducing
+interference in the complementary learning systems model: oscillating inhi-
+bition and autonomous memory rehearsal. Neural Netw. 18, 1212–1228. doi:
+10.1016/j.neunet.2005.08.010
+Norman, K. A., and O’Reilly, R. C. (2003). Modeling hippocampal and neo-
+cortical contributions to recognition memory: a complementary-learning-
+systems approach. Psychol. Rev. 110, 611–646. doi: 10.1037/0033-295X.
+110.4.611
+Olson, I. R., Page, K., Moore, K. S., Chatterjee, A., and V erfaellie, M. (2006).
+W orking memory for conjunctions relies on the medial temporal lobe.
+J. Neurosci. 26, 4596–4601. doi: 10.1523/JNEUROSCI.1923-05.2006
+Otani, S. (2004). Prefrontal Cortex: from Synaptic Plasticity to Cognition .S p r i n g e r .
+Available online at: http://books .google.com/books?id=nFC9V5CeGFwC&
+pgis=1
+Peyrache, A., Khamassi, M., Benchenane, K., Wiener, S. I., and Battaglia, F . P .
+(2009). Replay of rule-learning related neural patterns in the prefrontal cortex
+during sleep. Nat. Neurosci. 12, 919–926. doi: 10.1038/nn.2337
+Qin, Y . L., McNaughton, B. L., Skaggs, W. E., and Barnes, C. A. (1997).
+Memory reprocessing in corticocortical and hippocampocortical neuronal
+ensembles. Philos. Trans. R. Soc. Lond. B Biol. Sci. 352, 1525–1533. doi:
+10.1098/rstb.1997.0139
+Roxin, A., and Fusi, S. (2013). Efﬁcient partitioning of memory systems and its
+importance for memory consolidation. PLoS Comput. Biol. 9:e1003146. doi:
+10.1371/journal.pcbi.1003146
+Sandberg, A. (2003). Bayesian Attractor Neural Network – Models of Memory .
+Department of Numerical Analysis and Computer Science, Stockholm
+University.
+Sandberg, A., and Lansner, A. (2002). Synaptic depression as an intrinsic driver
+of reinstatement dynamics in an attractor network.
+Neurocomputing 44–46,
+615–622. doi: 10.1016/S0925-2312(02)00448-4
+Sandberg, A., Lansner, A., Petersson, K. M., and Ekeberg, O. (2002). A bayesian
+attractor network with incremental learning. Network 13, 179–194. doi:
+10.1088/0954-898X/13/2/302
+Sandberg, A., T egnér, J., and Lansner, A. (2003). A working memory model
+based on fast Hebbian learning. Netw. Comput. Neural Syst . 14, 789–802. doi:
+10.1088/0954-898X/14/4/309
+Scoville, W. B., and Milner, B. (2000). Loss of recent memory after bilateral hip-
+pocampal lesions. 1957. J. Neuropsychiatry Clin. Neurosci . 12, 103–113. doi:
+10.1136/jnnp.20.1.11
+Shen, B., and McNaughton, B. L. (1996). Modeling the spontaneous reac-
+tivation of experience-speciﬁc hippocampal cell assembles during sleep.
+Hippocampus 6, 685–692. doi: 10.1002/(SICI)1098-1063(1996)6:6&lt;685::AID-
+HIPO11&gt;3.0.CO;2-X
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 16
+
+===== PAGE 17 =====
+Fiebig and Lansner Memory consolidation through autonomous reinstatement
+Squire, L. R. (1992). Memory and the hippocampus: a synthesis from ﬁndings
+with rats, monkeys, and humans. Psychol. Rev. 99, 195–231. doi: 10.1037/0033-
+295X.99.3.582
+Squire, L. R., and Cohen, N. (1979). Memory and amnesia: resistance to disrup-
+tion develops for years after learning. Behav. Neural Biol. 25, 115–125. doi:
+10.1016/S0163-1047(79)90841-0
+Squire, L. R., and Zola-Morgan, S. (1985). The neuropsychology of memory: new
+links between humans and experimental animals. Ann. N.Y. Acad. Sci. 444,
+137–149. doi: 10.1111/j.1749-6632.1985.tb37585.x
+Squire, L. R., and Zola-Morgan, S. (1991). The medial temporal lobe memory
+system. Science 253, 1380–1386. doi: 10.1126/science.1896849
+Sullivan, D., Csicsvari, J., Mizuseki, K., Montgomery, S., Diba, K., and
+Buzsáki, G. (2011). Relationships between hippocampal sharp waves, rip-
+ples, and fast gamma oscillation: inﬂuence of dentate and entorhinal cor-
+tical activity. J. Neurosci. 31, 8605–8616. doi: 10.1523/JNEUROSCI.0294-
+11.2011
+T anaka, N., Fujii, M., Imoto, H., Uchiyama, J., Nakano, K., Nomura, S., et al.
+(2008). Effective suppression of hippocampal seizures in rats by direct hip-
+pocampal cooling with a Peltier chip. J. Neurosurg. 108, 791–797. doi:
+10.3171/JNS/2008/108/4/0791
+T ravis, S. G., Sparks, F . T., Arnold, T., Lehmann, H., Sutherland, R. J., and
+Whishaw, I. Q. (2010). Hippocampal damage produces retrograde but not
+anterograde amnesia for a cued location in a spontaneous exploratory task in
+rats. Hippocampus 20, 1095–1104. doi: 10.1002/hipo.20710
+T reves, A., and Rolls, E. T. (1994). Computational analysis of the role of
+the hippocampus in memory. Hippocampus 4, 374–391. doi: 10.1002/hipo.
+450040319
+T se, D., Langston, R. F ., Kakeyama, M., Bethus, I., Spooner, P . A., W ood, E. R.,
+et al. (2007). Schemas and memory consolidation. Science (New Y ork, N.Y.)316,
+76–82. doi: 10.1126/science.1135935
+T se, D., T akeuchi, T., Kakeyama, M., Kajii, Y ., Okuno, H., T ohyama, C., et al. (2011).
+Schema-dependent gene activation and memory encoding in neocortex. Science
+(New Y ork, N.Y.)333, 891–895. doi: 10.1126/science.1205274
+Walker, M. P ., and Stickgold, R. (2004). Sleep dependent learning and memory
+consolidation. Neuron 44, 121–133. doi: 10.1016/j.neuron.2004.08.031
+Walker, M. P ., and Stickgold, R. (2006). Sleep, memory, and plasticity. Annu. Rev.
+Psychol. 57, 139–166. doi: 10.1146/annurev.psych.56.091103.070307
+Walker, R., and Russo, V . (2004). Memory consolidation and forgetting dur-
+ing sleep: a neural network model. Neural Process. Lett. 19, 147–156. doi:
+10.1023/B:NEPL.0000023445.96334.eb
+Wilson, M. A., and McNaughton, B. L. (1994). Reactivation of hippocampal
+ensemble memories during sleep. Science 265, 676–679.
+Winocur, G. (1990). Anterograde and retrograde amnesia in rats with dorsal hip-
+pocampal or dorsomedial thalamic lesions. Behav. Brain Res. 38, 145–154. doi:
+10.1016/0166-4328(90)90012-4
+Wittenberg, G. M., Sullivan, M. R., and T sien, J. Z. (2002). Synaptic reentry
+reinforcement based network model for long-term memory consolidation.
+Hippocampus 12, 637–647. doi: 10.1002/hipo.10102
+Zola-Morgan, S., and Squire, L. R. (1985). Medial temporal lesions in mon-
+keys impair memory on a variety of tasks sensitive to human amnesia. Behav.
+Neurosci. 99, 22–34. doi: 10.1037/0735-7044.99.1.22
+Zola-Morgan, S., and Squire, L. R. (1990). The primate hippocampal formation:
+evidence for a time-limited role in memory storage. Science (New Y ork, N.Y.)
+250, 288–290. doi: 10.1126/science.2218534
+Zola-Morgan, S., Squire, L. R., and Amaral, D. G. (1986). Human amnesia and the
+medial temporal region: enduring memory impairment following a bilateral
+lesion limited to ﬁeld CA1 of the hippocampus. J. Neurosci. 6, 2950–2967. doi:
+10.1093/neucas/2.4.259-aw
+Conﬂict of Interest Statement: The authors declare that the research was con-
+ducted in the absence of any commercial or ﬁnancial relationships that could be
+construed as a potential conﬂict of interest.
+Received: 14 March 2014; accepted: 24 May 2014; published online: 01 July 2014.
+Citation: Fiebig F and Lansner A (2014) Memory consolidation from seconds to weeks:
+a three-stage neural network model with autonomous reinstatement dynamics. Front.
+Comput. Neurosci.
+8:64. doi: 10.3389/fncom.2014.00064
+This article was submitted to the journal Frontiers in Computational Neuroscience.
+Copyright © 2014 Fiebig and Lansner. This is an open-access article distributed under
+the terms of the Creative Commons Attribution License (CC BY). The use, distribution
+or reproduction in other forums is permitted, provided the original author(s) or licen-
+sor are credited and that the original publication in this journal is cited, in accordance
+with accepted academic practice. No use, distribution or reproduction is permitted
+which does not comply with these terms.
+Frontiers in Computational Neuroscience www.frontiersin.org July 2014 | Volume 8 | Article 64 | 17

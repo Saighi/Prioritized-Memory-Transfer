@@ -1,0 +1,2120 @@
+
+
+===== PAGE 1 =====
+Nature Neuroscience | Volume 27 | October 2024 | 1987–1998
+ 1987
+nature neuroscience
+https://doi.org/10.1038/s41593-024-01745-w
+Article
+Inhibitory plasticity supports replay 
+generalization in the hippocampus
+Zhenrui Liao    1,2,3,4,8 , Satoshi Terada1,2,8, Ivan Georgiev Raikov    5,6,8, 
+Darian Hadjiabadi    5,6,8, Miklos Szoboszlay    1,2, Ivan Soltesz    6,7  & 
+Attila Losonczy    1,2 
+Memory consolidation assimilates recent experiences into long-term 
+memory. This process requires the replay of learned sequences, although 
+the content of these sequences remains controversial. Recent work has 
+shown that the statistics of replay deviate from those of experience: stimuli 
+that are experientially salient may be either recruited or suppressed 
+from sharp-wave ripples. In this study, we found that this phenomenon 
+can be explained parsimoniously and biologically plausibly by a Hebbian 
+spike-time-dependent plasticity rule at inhibitory synapses. Using models at 
+three levels of abstraction—leaky integrate-and-fire, biophysically detailed 
+and abstract binary—we show that this rule enables efficient generalization, 
+and we make specific predictions about the consequences of intact and 
+perturbed inhibitory dynamics for network dynamics and cognition. 
+Finally, we use optogenetics to artificially implant non-generalizable 
+representations into the network in awake behaving mice, and we find that 
+these representations also accumulate inhibition during sharp-wave ripples, 
+experimentally validating a major prediction of our model. Our work 
+outlines a potential direct link between the synaptic and cognitive levels 
+of memory consolidation, with implications for both normal learning and 
+neurological disease.
+Humans and other animals have the remarkable ability to learn about 
+the world from observations containing a mix of structural features of 
+the environment and distractions that do not generalize. The ability  
+to learn arbitrary sequences and relational maps, and to deploy them 
+to guide behavior, is the defining computational function of the hippo-
+campus1– 5. A subset of hippocampal neurons, termed ‘place cells’ , 
+exhibit selective tuning to discrete locations in space: as an animal 
+explores its environment, the sequence of place cell firing reflects 
+the animalʼ s path 6. The hippocampus later reinstates previously 
+learned sequences in temporally compressed ‘replay’ epochs inside 
+high-frequency oscillatory events known as sharp-wave ripples (SWRs)7 
+during both sleep8–11  and awake rest12–15 . This replay is required for the 
+long-term consolidation of memories, although how memories are 
+selected for consolidation has been the subject of much debate16–19 .
+The strongly recurrently connected20– 23 CA3 and CA2 regions of 
+the hippocampus are thought to be the source of SWRs and the drivers 
+of replay throughout the hippocampus7,24– 26. Despite this, replay has 
+mostly been investigated within the hippocampal CA1 circuitry 7– 10,13 
+with fewer studies reporting replay in CA3/CA2 (refs. 14 ,25,27,28), 
+largely due to practical constraints. Recurrent excitatory weight 
+updates in CA3 occur by a symmetric spike-timing-dependent plasticity 
+(sSTDP) rule29, providing a plausible explanation for the mix of forward 
+Received: 15 October 2022
+Accepted: 31 July 2024
+Published online: 3 September 2024
+ Check for updates
+1Department of Neuroscience, Columbia University, New York, NY, USA. 2Mortimer B. Zuckerman Mind Brain Behavior Institute, Columbia University,  
+New York, NY, USA. 3Center for Theoretical Neuroscience, Columbia University, New York, NY, USA. 4Department of Neuroscience, University of Edinburgh, 
+Edinburgh, UK. 5Kavli Institute for Brain Science, Columbia University, New York, NY, USA. 6Department of Bioengineering, Stanford University, Stanford, 
+CA, USA. 7Department of Neurosurgery, Stanford University, Stanford, CA, USA. 8These authors contributed equally: Zhenrui Liao, Satoshi Terada,  
+Ivan Georgiev Raikov, Darian Hadjiabadi.  e-mail: zl2359@columbia.edu; isoltesz@stanford.edu; al2856@columbia.edu
+
+===== PAGE 2 =====
+Nature Neuroscience | Volume 27 | October 2024 | 1987–1998 1988
+Article https://doi.org/10.1038/s41593-024-01745-w
+the same way, with all distractor cells sharing a distractor tuning curve 
+and the distractor appearing stochastically at a randomized location in 
+each lap (Fig. 1f, top, yellow arrows). Like excitatory neurons, inhibitory 
+neurons in our network may be tuned to place, cue, both or neither, as 
+experimentally reported60,61. During this exploration phase, the weights 
+of this network were trained using sSTDP (Fig. 1d,f ). Example slices 
+from the trained weight matrices are shown in Fig. 1e. A diagonal band 
+of strong weight emerges in the place cell subnetwork (smoothed and 
+sorted by tuning curve peak), indicating that synapses between place 
+cells with adjacent peaks develop strong connections in proportion 
+to the distance between their tuning peaks. Meanwhile, the distractor 
+cell subnetwork becomes strongly recurrently coupled under the same 
+sSTDP rule (Fig. 1e, right), as the distractor cells are simultaneously 
+activated by the same stimulus.
+T o simulate the offline state (Fig. 1f, green highlight and inset), PCs 
+were driven with random Poisson spiking input irrespective of their 
+distractor, place or untuned status, simulating unstructured input from 
+mossy fibers (MFs) (Fig. 1c). We found that place sequences encoun-
+tered during learning are spontaneously replayed in the forward and 
+backward directions offline in our network (Fig. 1f). Furthermore, we 
+found that the distractor-tuned neurons, despite being generally active 
+in the offline period, are selectively suppressed during spontaneous 
+ripples (Fig. 1g). This is true of both exclusive distractor cells and cells 
+tuned to both distractors and place, consistent with experimental 
+findings (Supplementary Fig. 1). Spontaneous replay in the network 
+was robust to variations in the exact I → E plasticity rule used, so long 
+as the plasticity rule was a Hebbian L TP rule operating on a timescale 
+of roughly 3 ms (Supplementary Figs. 2 and 3).
+In summary, we show that replay spontaneously emerges in a 
+randomly recurrently connected network trained on a simulated ran-
+dom cue-spatial (RC-S) task using sSTDP of excitatory and inhibitory 
+synapses. We further show that, even though this replay is completely 
+spontaneous and internal to the network, with no explicit externally 
+applied ‘replay signalʼ, and the learning rule is strictly local to individual 
+synapses, the network self-organizes distributed and specific suppres-
+sion of cue cells during replay epochs.
+Biophysically detailed model of CA3 replay
+We next asked whether sSTDP of recurrent E → E and I → E synapses 
+is sufficient to suppress distractor inputs during offline replay in a 
+biophysical model of the hippocampal CA3 network. We modeled CA3 
+using 260 multi-comparmental and biophysically detailed pyramidal 
+neurons62 and 30 INs with biophysically realistic electrophysiological 
+properties63,64 (Methods). During online learning, PCs and INs received 
+input structured into distinct dendritic input streams, consistent with 
+in vivo data64– 68. Due to the higher computational cost of simulating 
+three-dimensional (3D) biophysically detailed cells, we overrepre -
+sented the populations of interest (place and cue cells) to make our 
+simulations more tractable. Specifically, 80% of PCs received spatially 
+structured place and grid input via an MF and medial entorhinal cortical 
+(MEC) pathway, respectively69– 71. The remaining 20% of PCs received a 
+distractor input via a lateral entorhinal cortical (LEC) pathway71 (Fig. 2a). 
+As in Fig. 1, the PCs receiving distractor input (that is, cue cells) were 
+driven at a randomly selected location during each lap of the linear 
+virtual track. After online learning with the sSTDP rule, place cell firing 
+increased on average to physiologically relevant firing rates (0.264 Hz 
+to 1.087 Hz) and, furthermore, robustly tiled the track (Fig. 2b) with 
+little out-of-field firing (Fig. 2c).
+T o investigate the offline dynamics of cue cells and place cells, 
+we simulated a single ‘online’ lap during which the network received 
+structured input followed by an ‘offline’ state in which the network 
+received only unstructured random inputs (Fig. 2a). The ‘online’ lap 
+confirmed that the network retained place cell and cue cell selectivity  
+obtained during training. During the offline state, epochs of high 
+place cell activity spontaneously emerged (Fig. 2e). Sequences of 
+and backward (temporally reversed) replay sequences observed experi-
+mentally13,30. At the same time, modeling work has demonstrated the 
+feasibility of obtaining spontaneous replay in biologically realistic 
+spiking network models31–33 .
+Inhibition is also known to play a major role in SWR generation34,35, 
+although comparatively little is known about inhibitory dynamics in 
+CA3/CA2. Under the standard model of learning in neural circuits, 
+Hebbian plasticity remodels excitatory–excitatory synapses against 
+a relatively static inhibitory background36,37. This model does not tra-
+ditionally include plasticity at the GABAergic synapse, as a constant 
+inhibitory background is presumed to be necessary for learning; how-
+ever, this type of plasticity has been reported in vitro38,39, and a growing 
+body of experimental and theoretical work has suggested a role for 
+inhibitory plasticity in shaping network-level computations40–48 .
+As a densely connected recurrent network with writeable weights, 
+CA3/CA2 is a natural system in which to study the emergence, content 
+and function of replay from a computational perspective. In the present 
+study, we consider different perspectives on replay, including replay of 
+predictive representations and specific past experiences49– 54, through 
+the lens of generalization. We argue that, in a world where no two expe-
+riences are exactly alike, replay consolidates the features and structure 
+of the environment that are preserved across specific experiences, in 
+essence sampling from the animalʼs working model of its world. This 
+conceptual model synthesizes elements of both of these theories with 
+prior work on model-based replay to explain how replay can be useful 
+for guiding future behavior, even though representations from distal 
+past experience that are not imminently behaviorally relevant are 
+sometimes replayed 54– 56. In support of this conceptual framework, 
+we present three levels of modeling—spiking network, biophysical 
+and abstract normative—reproducing existing experimental find -
+ings and demonstrating consolidation of generalizable structure in 
+recurrently connected models of CA3. Central to all three approaches 
+is our major prediction: inhibitory synapses are also remodeled by 
+the spike-time-dependent long-term potentiation (L TP) rule, which 
+enables the statistical structure of the world to be learned dynami -
+cally from experience. We then tested this hypothesis using a novel 
+sparse optogenetic cue cell induction approach and found that cells 
+artificially entrained to statistically unpredictable stimuli accumulate 
+inhibition in SWRs. Taken together, our results in this work posit a role 
+for the L TP of inhibitory synapses in the hippocampus in a high-level 
+cognitive function.
+Results
+Network model of CA3 replay
+We first built a large, randomly recurrently connected CA3 spiking 
+network capable of internally generating spontaneous replay32,33. We 
+simulated an experiment in which the CA3 network was exposed to 
+both spatial input and random distractor stimuli in an online phase 
+during which synaptic weights were learned by sSTDP. Then, in a sub-
+sequent offline phase, learned patterns were read out from spontane-
+ous replay (Fig. 1a and ref. 57). Our network consisted of 8,000 leaky 
+integrate-and-fire (LIF) pyramidal cells (PCs) and 150 interneurons 
+(INs) in Brian 2 (ref. 58) with spike-rate adaptation32,33,59, with 50% of the 
+cells assigned to receive place input and a (non-mutually exclusive) 10% 
+receiving stochastic distractor cue input57 (Fig. 1b). These neurons were 
+randomly recurrently connected, with a connection probability of 10% 
+between PCs as well as from PCs onto INs and a connection probability 
+of 25% between INs as well as from INs onto PCs (Methods).
+The simulated experiment consisted of 40 laps through a 3-m-long 
+environment at constant velocity. Untuned cells fired at a baseline rate 
+of 0.1 Hz (sampled from a homogeneous Poisson process) throughout 
+the belt. The spike trains of place cells were sampled from an inhomo-
+geneous Poisson process, with a position-dependent Poisson rate λ(x) 
+(maximum 20 Hz) chosen as a circular Gaussian representing the cellʼs 
+tuning curve. The spike trains of distractor-tuned cells were sampled in 
+
+===== PAGE 3 =====
+Nature Neuroscience | Volume 27 | October 2024 | 1987–1998
+ 1989
+Article https://doi.org/10.1038/s41593-024-01745-w
+place cells with adjacent tuning peaks along the linear track (Fig. 2c ) 
+were reactivated during these spontaneous chirps (Fig. 2e), consistent 
+with spontaneous memory replay. During these replay-like events, 
+cue cells were widely suppressed (Fig. 2h), and overall place and cue 
+cell firing was significantly negatively correlated (Pearson’s r = −0.19, 
+P < 5 × 10−12 , n = 1,288 time bins) over the course of 225 s of the simulated 
+offline state (Fig. 2g). Thus, using a data-driven biophysical model of 
+hippocampal CA3 trained with E  → E and I → E sSTDP, we found that, 
+consistent with experimental data, memory replay reinstates repre -
+sentations of the structure of the world while suppressing distractor 
+representations.
+Perturbations and predictions from the biophysical network 
+model
+Our central synaptic-level prediction is the existence of a Hebbian L TP 
+rule of GABAergic synapses in the hippocampus that is required for 
+the network-level phenomenon of replay and memory consolidation 
+from noisy observations. Here, we performed a series of perturbation 
+simulations to test the hypothesis that inhibitory plasticity is necessary 
+for cue cell suppression and, more generally, world structure learning. 
+Furthermore, the simulations performed here broaden the main find-
+ings and generate additional experimentally verifiable predictions that 
+give insight on neural communication across multiple spatial scales.
+We first observed that the median inhibitory weight onto cue 
+cells was 38.9% greater than onto place cells (median wI→ cue: 0.0063 uS; 
+median wI→ place: 0.0046 uS; P = 2.5 × 10−187 , one-sided Mann–Whitney 
+U-test) (Fig. 3a). Therefore, we performed simulated dual patch-clamp 
+recording of IN–PC pairs to measure inhibitory post-synaptic cur -
+rents (IPSCs) onto PCs and identify the cellular mechanism that 
+enables cue cells to be suppressed during SWRs. PCs were held in 
+voltage-clamp mode with holding voltages ranging from −65 mV to 
+−45 mV in +5-mV increments. We observed that IPSCs onto cue cells 
+(n = 960 measured pairs) were significantly greater (one-sided Mann–
+Whitney U-test, P < 0.0001 for all holding voltages) than IPSCs onto 
+place cells (n = 4,240 measured pairs) (Fig. 3b). The IPSCs onto cue and 
+place cells were smallest at holding potentials closer to the chloride 
+ca b
+0 10 20 30 40 50
+Time (s)
+0
+200
+400
+600
+800
+No. of cells
+1 2 3 4 5 6
+Time (s)
+0
+200
+400
+600
+800
+No. of cells
+f
+Time
+Position
+Distractor stimuli
+g
+0
+800No. of cells
+1 2 3 4 5 6
+Time (s)
+0
+20
+40
+No. of cue cells
+Cue
+Other
+PRE
+POST
+3210–3 –2 –1
+1.0
+0
+–0.5
+1.0
+0
+–0.5
+1.0
+0
+–0.5
+Time from SWR 
+∆F/F (z)
+Sensory 
+Stim.
+Online Oﬀline
+Reward
+Visual
+Odor
+–3 30
+Time from cue onset (s)
+–3 30–3 30
+Visual
+Reward
+Odor 3
+1
+Visual
+Reward
+Odor
+Visual
+Reward
+Odor
+Odor Visual Reward
+∆F/F (z-scored)
+0
+3
+20010 No. of ROIs 
+Position
+∆F/F0 (z-scored)
+∆F/F (z) ∆F/F (z)
+Place
+Time
+Random cues
+Interneuron
+Random input
+Place cell
+Position
+Time Position
+d
+−100 −50 0 50 100
+∆t (ms)
+0
+0.5
+1.0
+∆W
+e
+log(weight)
+Smoothed weight (a.u.)
+No. of cells No. of cells
+No. of cells
+Place cells Cue cells
+0.6 0
+10
+20
+30
+0 10 20 30
+–8.0
+–8.5
+–9.0
+–9.5
+–10.1
+–10.5
+0.4
+0.2
+4,000
+3,000
+3,000
+2,000
+2,000
+1,000
+1,000
+0
+ITI
+20–50 s 
+Random cue (RC) task
+Odor 
+Visual 
+Reward 
+Treadmill
+belts
+Spatial
+Voluntary
+treadmill 
+CA1
+CA3
+2p FOV (CA1 SR) CA1 LFP
+0.4 mV
+2p
+obj.
+rAAV2/1:
+Syn(GCaMP6f)
+Cre
+Grik4-Cre
+0
+Cue cell
+Fig. 1 | Suppression of distractor stimuli in a random network model of CA3 
+replay. a, Experimental paradigm and results. Calcium activity of CA3 Schaffer 
+collateral axons was imaged with simultaneous contralateral LFP recordings 
+to detect SWRs (upper left). RC-S task: animals ran along a circular spatial belt 
+while three distractor sensory cues (odor, visual and reward) were presented 
+at pseudo-random locations to the mouse on every lap (upper right). CA3 units 
+robustly represent both space (bottom left) and random (bottom center) cues in 
+the online period. Bottom right, before the experiment, space and cue cells are 
+indistinguishable in their peri-SWR recruitment (mean ± s.e.m.). In immobility 
+epochs during the experiment, cue cells are suppressed from SWRs while place 
+cells are recruited, an effect that persists in an immobility recording after the 
+experiment. b, Network architecture during learning. Network consists of 
+8,000 PCs (triangles) and 150 INs (circles) randomly recurrently connected. 
+PCs and INs receive random cue and place input. Dashed lines indicate plastic 
+synapses. c, Network during replay. Network now receives only random low-level 
+spiking input (green arrows). d, sSTDP kernel used for training the network: 
+weight change ΔW  as a function of temporal difference Δt between pre-synaptic 
+and post-synaptic spikes e, Learned synaptic weight matrices from 4,000 
+place cells (left, sorted by location of peak tuning and smoothed) and 50 cue 
+cells (right, arbitrarily sorted), log scale. Place cells form strong weights to 
+other place cells with peaks shortly before and after their own peak and weak 
+weights with all other cells, whereas cue cells form strong weights with each 
+other. f, Simulation of task in a (last 50 s of online learning and 10 s offline, 
+slice of 10% of the PC network). T op, simulated position and distractor inputs. 
+Bottom, raster of network activity during learning, sorted by cellsʼ tuning curve 
+peak. Cue-responsive cells are highlighted in yellow. Right inset, spontaneous 
+replay emerges in the offline period. g, Neurons tuned to stochastic distractors 
+(bottom) are active offline but suppressed during replay. ROI, region of interest. 
+Panel a adapted with permission from ref. 57, Springer Nature Limited.
+
+===== PAGE 4 =====
+Nature Neuroscience | Volume 27 | October 2024 | 1987–1998 1990
+Article https://doi.org/10.1038/s41593-024-01745-w
+reversal potential (Erev,Cl = −65 mV, place: 0.57 ± 0.32 pA; −65 mV, cue: 
+0.84 ± 0.08 pA) compared to more depolarized holding potentials 
+(−45 mV, place: 1.71 ± 0.97 pA; −45 mV, cue: 2.53 ± 0.22 pA). These simu-
+lations predict that sSTDP of GABAergic synapses generates powerful 
+feedforward inhibition onto cue cells (Fig. 3c) that may be critical for 
+suppressing cue cells during periods of high place cell activity, such as 
+SWRs. The validity of this inhibitory feedforward motif can be directly 
+tested in future experiments by measuring IPSCs onto place and cue 
+cells from different classes of INs in vivo.
+Given the observation of powerful feedforward inhibition onto 
+cue cells, we next predicted that targeted ablation of inhibitory plas-
+ticity will impair the network mechanism of adaptive stimulus 57. In 
+agreement with the prediction and further supporting the over -
+arching hypothesis that inhibitory plasticity is necessary for world 
+structure learning, models trained with only recurrent E → E plasticity 
+exhibited correlated activity across the cue cell and place cell popula-
+tions during the offline epoch (Fig. 3d–f; Pearson’s r = 0.1, P = 0.71). As 
+a control, networks trained with E  → E plasticity only but containing 
+few cue cells (<3% of total PC population) were still able to generate 
+spontaneous replay events in the forward and reverse directions 
+(Supplementary Fig. 4 and Supplementary Fig 5, top row), similar 
+to ref. 32. Additional simulations reported that restoring inhibitory 
+plasticity restores the adaptive stimulus mechanism (Supplementary 
+Fig. 5, bottom row).
+T o continue testing alternative mechanisms of cue cell suppres-
+sion, we performed a simulation of the model with E  → E  and E  → I 
+plasticity (Fig. 3g–i). Similar to the model with only E  → E plasticity 
+(Fig. 3d–f ), cue cells and place cells were significantly co-active dur -
+ing SWRs (r = 0.75, P = 6.2 × 10−234 ). The collective results of Fig. 3d–i  
+and Supplementary Fig. 5 support the hypothesis that inhibitory 
+plasticity is necessary for cue cell suppression. Additionally, from 
+this simulation experiment (Fig. 3g–i), we predict that IN firing rates 
+should stay stable during learning, which can be experimentally 
+verified through a multitude of electrophysiological and/or optical 
+methods.
+Next, we sought to determine whether place and cue cells emerge 
+in a model configuration where PCs receive different proportions 
+of MEC and LEC. We simulated a variant of model where place cells 
+received 90% of peak MEC strength and 10% of peak LEC strength, 
+relative to the baseline model, and cue cells received 10% of peak 
+MEC strength and 90% of peak LEC strength, relative to the baseline 
+model (Supplementary Fig. 7d–f). We observed similar place and 
+cue selectivity as in the baseline model during the online phase and 
+qualitatively similar suppression of cue cells during the offline phase 
+Place cellCue cell
+Time (s)
+Time (s)
+Time to SWR (s)Time (s)Time (s) No. of place cell spikes
+No. of cue cell spikes
+No. of occurrences
+Potential (mV)
+z-score Potential (mV)
+Relative track position
+Place cell
+Normalized /f.shortiring rate
+No. of cells
+0
+0
+50
+50
+–50
+–50
+260
+0
+96.5 97.096.42 97.4 2
+0
+5
+10
+0 10 20
+0
+10
+20
+30
+–1
+0
+1
+2
+3
+4
+0–1–2 1 2
+0 2.5 5.0
+–50
+50
+0
+0
+50
+100
+0.5
+1.0
+50 100 150 200
+50 100 150 200
+0
+100
+200
+0
+100
+200
+a b c
+d
+e f
+g h
+O/f_f.shortlineOnline
+SLM
+Lap 1 2 3 Time
+Interneuron
+Pyramidal
+cells
+Place cell
+Cue cell
+Excitatory synapse
+Inhibitory synapse
+SRSLSPSO
+LEC (cue)
+MEC (grid)
+MF (place)
+Fig. 2 | Distractor suppression in a biophysically detailed model of CA3 replay.  
+a, Schematic of the biophysical CA3 model. The model consists of excitatory 
+PCs and perisomatic-targeting INs wired in accordance with experimental data. 
+During online learning, the model is driven by multiple sources of structured 
+external input—MFs: place input; MEC: grid input; LEC: cue input. During offline 
+replay, the CA3 circuit is driven by random noise. SLM, stratum lacunosum 
+moleculare; SR, stratum radiatum; SL, stratum lucidum; SP, stratum pyramidale; 
+SO, stratum oriens. b, Spike raster of place cell (blue) and cue cell (orange) 
+activity during online training during which sSTDP on E → E and I → E synapses  
+is active. Left, at the start of training, the place cell ensemble poorly tiles the  
+track and exhibits significant out-of-field firing. Right, after multiple laps, place 
+cells effectively tile the linear track and exhibit little to no out-of-field firing. 
+Orange arrowheads represent instances where cue input is provided to the 
+network. c, Place cells are spatially tuned to distinct regions of the linear track 
+after online learning. d, Somatic voltage potential for two example place cells 
+showing in-field firing and ramp-like membrane potential depolarization.  
+e, T op, spike raster of place cells (blue, organized based on peak firing location 
+on linear track) and cue cells (orange, no specific organization) during a period 
+of high place cell activity shows place cells with adjacent tuning peaks firing in 
+rapid succession, consistent with a memory replay event. f, Somatic membrane 
+potential of model place cells (bottom, in blue) and cue cells (top, in orange) 
+during the period shown in e illustrates that cue cells are suppressed when place 
+cell activity increases. g, 2D histogram of the number of spikes of cue cells and 
+place cells during periods of high firing rate of place cells in the offline state, 
+showing these populations are effectively decoupled. Two-sided Pearson’s 
+r = −0.19, P = 4.36 × 10
+−12 , n = 1,288 time bins. h, Peri-event time histogram reveals 
+that cue cell activity is suppressed across multiple HSEs during the offline 
+state. The orange line represents the mean cue cell activity, and the blue line 
+represents the mean place cell activity. Shaded orange and blue areas represent, 
+respectively, 1 s.d. of cue cell and place cell activity. Two-sided Pearson’s r = −0.23, 
+P = 2.12 × 10
+−15 , n = 1,170 time bins.
+
+===== PAGE 5 =====
+Nature Neuroscience | Volume 27 | October 2024 | 1987–1998
+ 1991
+Article https://doi.org/10.1038/s41593-024-01745-w
+(Supplementary Fig. 7e,f). We further investigated whether a more 
+heterogeneous distribution of PC firing rates would affect our results 
+and simulated model configurations where random log-normally 
+distributed constant depolarizing current was injected in each PC 
+(Supplementary Fig 7a–c). The log-normal model exhibited behavior 
+very similar to that of the baseline model.
+T o summarize, we showed that inhibitory plasticity is both suffi-
+cient (Fig. 2) and necessary (Fig. 3d–i) for cue cell suppression during 
+SWRs. Additionally, we provide numerous predictions that can be 
+tested experimentally to gather evidence that such a mechanism exists 
+and plays a critical role in memory consolidation. At the cellular level, 
+inhibitory plasticity from I → E synapses should lead to powerful feed-
+forward inhibition onto cue cells, manifesting in the form of increased 
+IPSCs onto cue cells compared to place cells (Fig. 3a–c). Furthermore, 
+because models trained with E → E and E → I plasticity did not result in 
+cue cell suppression, IN firing rates should stay stable during learning 
+(Fig. 3g–i ). At the network level, ablating inhibitory plasticity (Fig. 3d–f) 
+should result in loss of cue cell suppression that reemerges by restoring 
+inhibitory plasticity (Supplementary Fig. 5). At the behavioral level, this 
+suggests that ablating inhibitory plasticity would hinder an animal’s 
+ability to perform world structure inference, leading to impairment 
+for goal-oriented behavioral tasks. Taken together, these simulations 
+highlight how synaptic-level mechanisms can cascade to affect network 
+function across multiple spatial scales.
+Simplified model and theoretical analysis
+We next sought to provide intuitions about how our model generates 
+spontaneous replay and the role that inhibitory plasticity plays in struc-
+tural learning in the presence of noise.
+Consider a maximally abstracted world consisting of a set of  
+‘schemas’ (that may correspond to physical space, conjunctive context, 
+sensory cues or abstract concepts). For simplicity, suppose that there 
+is a one-to-one correspondence between schemas in the outside world 
+and tuned ‘concept neurons’ in the brain, which we represent with 
+colored circles in Fig. 4a. Also suppose that a ‘synapse’ exists between 
+any pair of distinct neurons (Fig. 4a, weight matrix). The generalizable 
+structure to be learned is simply some sequence of schemas.
+T o learn this structure, the network modifies the synaptic weight 
+matrix, W, in response to observations drawn from a generative process 
+parameterized by the ground truth sequence.
+0.002
+T = – 26.37
+P < 1 × 10-4
+0.004
+Synaptic weight (uS)
+In /uni2192 place
+In /uni2192 cue
+Place cell
+Cue cell
+Holding voltage (mV)
+Feedforward inhibition
+of cue cells
+IPSC (pA)
+Density
+z-scorez-score
+No. of cue cell spikes
+No. of occurrencesNo. of occurrences
+No. of place cell spikesTime to HSE (s)
+0.006
+0.2
+– 1
+– 2 – 1
+20
+0
+200 40
+200 40
+0
+10
+20
+30
+0
+10
+20
+30
+40
+20
+0
+40
+0
+0
+1
+– 1
+0
+1
+1
+2
+2
+– 2 – 1 0 1 2
+–65
+****
+****
+****
+****
+****
+–60 –55 –50 – 45
+0.6
+1.0
+10
+2
+10
+3
+1.4
+1.8
+2.2
+2.6
+Excitatory
+Inhibitory Fixed
+Plastic
+a
+d e f
+g h i
+b c
+Fig. 3 | Network perturbations and predictions. a. Inhibitory weight onto 
+cue cells is higher than place cells (median wI→ cue: 0.0063 uS; median wI→ place: 
+0.0046 uS; T = −26.37, P = 2.5 × 10−187 , one-sided Mann–Whitney U-test).  
+b, Simulated IPSCs recorded from place cells and cue cells in voltage-clamp  
+mode after a single interneuron spiked. Points represent mean IPSC magnitude; 
+error bars represent 1 s.d. of IPSC magnitude. Across a range of holding  
+voltages, IPSCs were significantly higher in cue cells (n = 960 pairs) than in  
+place cells (n = 4,240 pairs). One-sided Mann–Whitney U-test, ****P < 0.0001.  
+At holding voltage −65 mV, P = 2.166008 × 10−110 ; at −60 mV, P = 2.1660152 × 10−110 ; 
+at −55 mV, P = 2.1660152 × 10−110 ; at −50 mV, P = 2.166024 × 10−110 ; at −45 mV, 
+P = 2.166036 × 10−110 . c, Feedforward inhibitory motif: cue cells are more 
+suppressed by INs than place cells. d, Ablation of inhibitory plasticity: only E → E 
+synapses are modified e, Average peri-event spike histogram of place cells (blue) 
+and cue cells (orange) during spontaneous memory replay events showing that 
+cue cell suppression is lost. Shaded orange and blue areas represent, respectively, 
+1 s.d. of cue cell and place cell activity. Two-sided Pearson’s r = 0.002, P = 0.96, 
+n = 780 time bins. f, Heatmap of place–cue cell coupling: when inhibitory 
+plasticity is ablated, the cue cell and the place cell subnetworks are coupled 
+during the offline epoch (two-sided Pearson’s r = 0.1, P = 0.71, n = 1,288 time 
+bins) in contrast to place–cue cell decoupling when inhibitory plasticity was 
+active (Fig. 2f,h). g, Schematic showing the sSTDP rule applied to E → E and E → I 
+connections. h, Average peri-event time histogram of place cells (blue) and cue 
+cells (orange) during spontaneous memory replay event showing that cue cell 
+and place cell networks are tightly coupled during HSE. Shaded orange and blue 
+areas represent, respectively, 1 s.d. of cue cell and place cell activity. Two-sided 
+Pearson’s r = 0.65, P = 5.1 × 10
+−60 , n = 494 time bins. i, Heatmap of place–cue 
+cell coupling: when E → E and E → I plasticity is active, the cue cell and place cell 
+subnetworks are tightly coupled during the offline epoch. Two-sided Pearson’s 
+r = 0.75, P = 6.25 × 10
+−234 , n = 1,288 time bins. Hence, E → I plasticity is insufficient 
+for cue cell suppression.
+
+===== PAGE 6 =====
+Nature Neuroscience | Volume 27 | October 2024 | 1987–1998 1992
+Article https://doi.org/10.1038/s41593-024-01745-w
+In an ideal world, observations consist only of repeated sequential 
+presentations of the ground truth sequence. In this case, a Hebbian L TP 
+rule on only excitatory synapses is sufficient to learn this sequence: 
+every time a transition a → b is observed, weights Wab and Wba are both 
+incremented by 1. This process potentiates weights along the diagonal 
+between cells representing adjacent elements of the sequence (Fig. 4a, 
+right; compare to Fig. 1e, left). In the offline state, the network receives 
+random input, which may by chance excite an arbitrary neuron x 1 in 
+the network. Without loss of generality, we let x 1 be a one-hot vector 
+(a vector of length N with 1 in the position corresponding to the active 
+neuron and 0 everywhere else) at the first schema in the sequence. 
+We then run the network for K  timesteps (where K  is the number of 
+schemas in the sequence), letting the network follow its internal 
+dynamics xt = σ(Wxt−1 ), where σ  is a stochastic nonlinearity that returns 
+a one-hot vector whose non-zero element represents the next active 
+neuron, with probabilities proportional to the x t−1 -th column of W 
+(Methods). Adaptation in the models of Figs. 1 and 2 gives sequences 
+‘momentum’ by preventing network reactivations from sticking in 
+place or doubling back; to model adaptation abstractly, for each event 
+we use only either the lower half-diagonal of W, corresponding to the 
+forward weight matrix W FWD, or the upper diagonal, corresponding 
+to the reverse weight matrix W REV. The output sequence is an offline 
+statistical estimator of the ground truth sequence, which we term 
+REPLAY .
+d
+e
+f
+Cue input Pre la p
+Post la p
+Net inhibi tionNet inhibi tion
+Net inhibi tionNet inhibi tion
+No. of 
+cue cells
+No. of 
+cue cells
+No. of 
+cue cells
+No. of 
+cue cells
+No. of 
+place cells
+No. of 
+place cells
+No. of 
+place cells
+No. of 
+place cells
+Lap 1 Lap 2
+Lap 3 Lap 4
+PCIN
+Cue input
+Cue not pres ented
+Time
+|Pre( t) - post(t)|)
+Time
+Cue presented
+Cue input
+Firi ng r ateTime
+Time Time
+Time
+Lap 1 Lap 2
+Lap 4Lap 3
+Cue input
+Firing rate
+sSTDP
+sSTDP
+sSTDP
++
+iSTD P
+b
+a
++
++
+++
++
++
++
++
+++
++
++
++
++
++++
+X
+Truth
+Observations
+Truth
+Noisy observations
+Cell
+200 4000Cell
+200 4000
+Time (s)
+Time (s)
+c
++
++
+++
++
++
++
++
+++
++
++
++
++
++
++++
+PC
+IN
+Cell
+200 4000
+Time (s)
+Fig. 4 | Abstract schematic of generalizable learning in the presence of 
+noise. a. Ground truth consists of an arbitrary sequence of stimuli to be 
+learned. The ‘network’ consists of ‘cells’ each tuned to exactly one stimulus. In 
+the ideal scenario, observations consist only of subsequences of the ground 
+truth sequence. sSTDP bidirectionally potentiates weights along the diagonal 
+of the sorted weight matrix between cells representing adjacent elements of 
+the sequence (right; compare to Fig. 1e, left). b, A more realistic observation 
+model contains noise: distractor stimuli may appear stochastically at different 
+locations, or sequence stimuli may be erased or appear out of order. As a result, 
+sSTDP potentiates off-diagonal weights (right; compare to Fig. 1e, right). Under 
+the realistic observation model of b, many off-diagonal synapses are potentiated. 
+Thus, stimulating the first cell in the sequence offline will set off a stochastic 
+cascade, possibly activating side paths through the network via distractor cells. 
+Because distractors appear stochastically, they have positive weight on and may 
+reactivate many other cells, poisoning structured replay. c, Active inhibition 
+of these distractor cells reduces distractor cell firing rate (orange rasters) and 
+rescues replay. As long as distractors are prevented from exciting other cells, the 
+side paths are interdicted while the true sequence undergoes unencumbered 
+reactivation, restoring structured replay. d, During each lap along the linear 
+track, a distractor input is driven at a random location (tan boxes). This excitatory 
+input directly targets PCs and INs within the local CA3 circuit, therefore 
+increasing the firing rate for both cell populations for the duration that the 
+distractor input is active. e, As a consequence of the distractor input increasing 
+firing rates of PCs and INs, it is more likely that the delay between spikes from 
+the PCs and the INs will decrease (that is, reduction in ∣pre(t) − post(t)∣). During 
+this time, the sSTDP rule will generate a larger increase in inhibitory weight 
+from INs onto PCs compared to epochs when the distractor input is turned off. 
+f, For each lap, there will be a baseline increase in net inhibition onto place cells 
+and cue cells (I
+baseline). Additionally, cue cells and place cells that were active 
+during the distractor input will receive enhanced inhibition (Ienhanced) for a net 
+inhibitory change of Ibaseline + Ienhanced. As the same population of cue cells is active 
+at the time the distractor input is presented on each lap, the cue cell population 
+will ‘accumulate’ this baseline and receive enhanced inhibition over N laps 
+(Inet,cue = NIbaseline + NIenhanced). In contrast, because the distractor input occurs at a 
+random location on each lap, the enhanced inhibition will be distributed over 
+the place cells, such that each place cell subpopulation will receive enhanced 
+inhibition once over the course of N laps (I
+net,place = NIbaseline + Ienhanced). iSTDP, 
+inhibitory spike-timing-dependent plasticity.
+
+===== PAGE 7 =====
+Nature Neuroscience | Volume 27 | October 2024 | 1987–1998
+ 1993
+Article https://doi.org/10.1038/s41593-024-01745-w
+A more realistic observation model contains noise: distractor 
+observations may appear stochastically at different locations in the 
+sequence. Using the previous Hebbian L TP rule, when distractor sche-
+mas are observed, off-diagonal weights are potentiated in the weight 
+matrix (Fig. 4b , right; compare to Fig. 1e, right); these off-diagonal 
+weights create artificial ‘side paths’ through the network that do not 
+follow the world structure path. Because the stochastic distractor can 
+appear before or after any other schema, it eventually creates poten-
+tial paths between any two observed schemas in the network as well 
+as cycles at replay time. Because REPLAY samples the weight matrix, 
+aberrant paths in the network translate into replay of disorganized, 
+out-of-order sequences (see also Supplementary Note 1).
+T o rescue replay in this network, it is sufficient to simply inhibit 
+the distractor neuron (orange) at replay time (Fig. 4c, top). If distrac-
+tor neurons are not activated, side paths through the network are 
+blocked, and the network dynamics would simply return a walk through 
+the structure of the world. How does the network select only those 
+neurons corresponding to distractors for inhibition compared to 
+neurons encoding part of the structure of the world? We predict that, 
+in the online period, the network must represent all schemas because 
+it cannot know a priori which schemas will be part of the structure of 
+the world and which will turn out to be distractors. Instead, it must 
+learn selective suppression of schemas that turn out to be distractors, 
+motivating the need for inhibitory plasticity.
+T o understand why inhibition accumulates on distractor neurons, 
+consider the population firing rate as the mouse navigates the linear 
+track. Because place cells tile the track, the average population firing 
+rate will be near uniform in the absence of any distractor input. When 
+a distractor input is received by the network, the additional excitatory 
+currents will directly drive both PC and IN populations (see Supple -
+mentary Tables 1–3 for connectivity profiles), causing a local increase 
+in the population firing rates for both cell types relative to the baseline 
+condition of only structured input. As the distractor input moves from 
+lap to lap, the network sees this local increase in firing rate among both 
+PC and IN populations at different regions of the track (Fig. 4d). This 
+local increase compresses the spike timings of PCs and INs during dis-
+tractor input, increasing the rate in change of inhibitory weight onto 
+PCs (Fig. 4e). This phenomenon potentiates the weights of inhibitory 
+afferents to both place and distractor cells; however, because, at each 
+lap, a different subset of place cells will be active during the distractor 
+input, the inhibition onto the place cell population is distributed. In 
+contrast, total inhibitory weight onto cue cells is increased in every trial 
+as the same population of cue cells will be activated (Fig. 4f).
+Simulations from our detailed biophysical model support this 
+accumulation of inhibition onto cue cells: we found that inhibitory 
+weights and IPSCs onto cue cells are significantly higher than onto 
+place cells (Fig. 3a–c ). This observation suggests that the circuit 
+self-organizes to generate powerful feedforward inhibition onto cue 
+cells, which is sufficient to suppress the effect of distractor inputs 
+during electrophysiological events, such as ripples.
+Experimental verification of model predictions
+Finally, we sought to test predictions of our model experimentally. We 
+aimed to test our major prediction that representations with unpre-
+dictable statistics accumulate inhibition and are suppressed during 
+replay as a result. Our strategy was to optogenetically implant a sparse 
+population of artificial cue cells into the network in the online phase, 
+subsequently examining whether these artificial cue cells become 
+suppressed in the offline phase. We carried out experiments with 
+direct optogenetic stimulation of sparse subsets of PCs either paired 
+with random sensory cue presentation or without cue presentation 
+(Fig. 5a–d). In agreement with our model predictions, we found that 
+cue presentation paired with PC stimulation was sufficient to induce 
+suppression of optogenetically stimulated PCs during SWRs (Fig. 5e,f 
+and Supplementary Fig. 8). Furthermore, optogenetic PC stimulation  
+unpaired with sensory stimulation was not sufficient to induce SWR  
+suppression; instead, similar to our original observation for cue-  
+responsive CA3 PCs in T erada et al.57, these cells showed increased SWR- 
+related recruitment (Fig. 5e,f and Supplementary Fig. 8). T ogether, 
+these results imply that sensory input-driven pre-synaptic inhibition 
+and excitatory post-synaptic activation are both necessary to induce 
+correlative Hebbian plasticity of inhibitory inputs onto the PCs.
+We subsequently asked whether distractor suppression through 
+inhibitory plasticity is a general phenomenon that is present outside 
+of CA3/CA2, including circuits without strong excitatory recurrent 
+connectivity, because our model predicts that the locus of plasticity 
+for distractor suppression is at the I  → E synapse. In agreement with 
+this prediction, we found that random cue presentation paired with 
+optogenetic stimulation of PCs in hippocampal area CA1 also led to sup-
+pressed recruitment of paired PCs (Fig. 5a–f) and increased recruitment 
+of unpaired PCs during SWRs (Supplementary Fig 8) in CA1, similar to 
+our previous findings in CA3/CA2 (ref. 57). These results demonstrate 
+that distractor suppression is present in hippocampal circuits with 
+different levels of excitatory connectivity.
+Lastly, these experiments also probed whether plasticity alone is 
+sufficient to produce de novo feature selectivity. Although it is known 
+that PCs receive multiple input streams, it may still be the case that 
+cells must be developmentally wired to become cue cells. However, 
+we found that stable cue responses can be entrained onto arbitrary 
+PCs via optogenetic stimulation during cue presentation (Fig. 5d). T o 
+our knowledge, this is the first time that non-spatial representations 
+have been artificially induced in hippocampal PCs. These results pro-
+vide support to the conceptual model that PCs likely receive a rich set 
+of place and sensory cue inputs, and feature selectivity is acquired 
+through rapid plasticity of a subset of these inputs.
+Discussion
+The precise content of replay, and its role in learning, remains one 
+of the main open questions in the study of the hippocampus. Replay 
+has thus far primarily been studied in highly regular and determin -
+istic experimental environments. However, repeated exposures to 
+the same environment in the real world are not the same: although 
+natural environments contain statistical regularities, these regularities 
+are obscured in imperfect or incomplete observations. A fundamen-
+tal challenge of learning in the real world is abstracting generaliz -
+able, low-dimensional representations for long-term storage amid 
+a continuous barrage of noisy sensory input 55. Here we show that a 
+spike-time-dependent L TP rule at CA3 GABAergic synapses is suffi-
+cient to enable consolidation of the statistical structure of the world 
+from noisy experience. Using a three-pronged approach of spiking 
+network, biophysical and normative modeling, we demonstrate that 
+this mechanism is biologically plausible and interpretable and repro-
+duces experimental findings. Our model makes the prediction that a 
+‘test neuron’ with an artificially induced, statistically unpredictable 
+firing field will accumulate inhibition, which we verified using a sparse 
+optogenetic induction strategy. Finally, we simplified the intuitive 
+notion of ‘statistical learning’ by the hippocampus into a statistical 
+inference problem that must be solved using biological primitives, 
+and we argue mathematically that the sSTDP-based biological algo-
+rithm that we propose correctly solves this inference problem in the 
+asymptotic limit of observations.
+We think that the model-based replay framework we propose here 
+illustrates that the specific experience and predictive/planning repre-
+sentation viewpoints of replay are complementary. According to our 
+conceptual model, replay samples from the animal’s working model of 
+the generalizable structure of its world, synthesizing elements of both 
+of these theories to explain how replay can be useful for planning53,54, 
+even though representations from distal past experience, which are 
+not imminently behaviorally relevant, are sometimes replayed 49–52 .  
+Our results resonate with the findings of a high-level normative study by  
+
+===== PAGE 8 =====
+Nature Neuroscience | Volume 27 | October 2024 | 1987–1998 1994
+Article https://doi.org/10.1038/s41593-024-01745-w
+Sun et al.72, which also highlighted generalizability as a possible princi-
+ple underlying the selection of memories for consolidation. The ability 
+to draw samples from a distribution is computationally powerful, as 
+it enables downstream circuitry to compute arbitrary queries on the 
+underlying model. For instance, these samples are sufficient for a down-
+stream brain area to implement the simplest model-based reinforce-
+ment learning strategy, random shooting73, with minimal complexity. 
+We note also that this framework is agnostic to the semantics of the 
+replayed representations and, thus, has explanatory and predictive 
+power irrespective of whether the underlying experience consists of 
+spatial, auditory, social or more general abstract sequences and rela-
+tionships. Our plasticity rule simply embeds the topology of a world 
+into the weight matrix of a randomly recurrently connected network. 
+The networks in our simulations were presented with one-dimensional 
+(1D) sequences, mirroring the sequential nature of experience in any 
+environment: for a two-dimensional (2D) or more complex environ -
+ment, the world must still be experienced incrementally, through 
+sequential trajectories through it. Recent work has shed light on the 
+spontaneous organization of ‘schemas’ in the hippocampus74– 76; our 
+optogenetic manipulations here provide the first evidence, to our 
+e f
+30
+Cue
+STIM-PCs
+Pre-REST Post-REST
+0 2–2 0 2–2
+0 2–2 0 2–2
+40
+10
+10
+Random
+STIM-PCs
+Time from SWR (s)
+3
+–3
+z-score
+d 1
+0 ∆F/F
+STIM
+CA1
+CA2/3
+Unstim
+0
+0.2
+0 ∆F/F
+6–6
+Cue
+Cue
+InductionTest
+5
+1Trial
+1
+5 Trial
+0
+LED CA1 CA2/3
+0 2–20 2–2
+3 z-score
+Time from stim (s)
+a
+Cue
+920 nm (2p)
+625 nm (LED)
+920 nm (2p)
+LED
+920 nm (2p)920 nm (2p)
+Cue
+Pre-REST
+Random stimulation without cue
+Post-REST
+Co-stimulation with cue
+b
+c
+15 sLED
+100%
+Unstimulated STIM-PCs
+RandomCue-STIM
+PRE POST PRE POST PRE POST PRE POST
+0
+0.1
+–0.1
+SWR component coeﬀicient
+RandomCue-STIM
+CA1 CA2/3
+*** *** * ***0.2
+–0.2
+0
+0.1
+–0.1
+0.2
+–0.2
+syn-GCaMP8m
+Dio-ChRmine-mScarlet
+hSyn-Cre
+Sparse expression
+Dense expression
+OR
+CA1
+CA2/3
+GCaMP8m
+ChRmine
+30 µm
+Fig. 5 | Experimental verification of model predictions. a, Viral strategy for 
+sparse Cre-recombinase-driven expression of excitatory opsin (ChRmine) and 
+dense expression of GCaMP in CA3/CA2 or in CA1. b, Example traces of stimulated 
+(red: STIM) and unstimulated (black) cells. Optogenetics stimulation (LED) 
+evokes large-amplitude GCaMP-calcium responses (ΔF/F) in a subset of PCs that 
+express ChRmine (STIM-PCs), whereas other opsin-negative (Unstimulated) 
+PCs show no response. c, Schematic of behavioral task. Optogenetic stimulation 
+was triggered at odor cue presentations for the first five trials (Cue-STIM). The 
+odor cue was randomly presented with 30–60 s intervals (the same paradigm 
+as in T erada et al.
+57). As control, optogenetic stimulations (5×) were delivered 
+randomly without odor cue presentation (Random). d, Left, optogenetic 
+co-stimulations with odor cue presentations induce cue-selective responses 
+of both CA1 and CA2/3 PCs. Right, average responses of STIM-PCs (solid lines, 
+blue: CA1; yellow: CA2/3) and unstimulated PCs (dashed lines) (mean ± s.e.m). 
+e, Left, peri-SWR fluorescence (z-scored) of STIM-PCs before (Pre-REST) and 
+after (Post-REST) optogenetic stimulation paired with odor cue presentation 
+(top, Cue-STIM) and without odor cue presentation (bottom, Random). Right, 
+averaged waveforms of peri-SWR fluorescence according to SWR component 
+coefficient. f, Comparison of SWR component coefficients between Pre-REST 
+and Post-REST in Cue and Random conditions. PRE versus POST for CA1 Cue-
+STIM, n = 33, P = 0.00098; CA1 Random, n = 41, P = 0.000014; CA2/3 Cue-STIM, 
+n = 35, P = 0.029; CA2/3 Random, n = 32, P = 0.00027 (Wilcoxon signed sum tests, 
+n = 2 mice per group). Principal components of SWR responses are identified in 
+CA1 and CA2/3 (see also Supplementary Fig. 8d). White line: median; box edges: 
+25th and 75th percentiles. Whiskers extend to the maxima and minima. Black 
+lines: individual cells.
+
+===== PAGE 9 =====
+Nature Neuroscience | Volume 27 | October 2024 | 1987–1998
+ 1995
+Article https://doi.org/10.1038/s41593-024-01745-w
+knowledgee, that non-spatial schemas can also be acquired in a similar 
+way. Once such representations are organized, the A → B relationships 
+between them can be learned incrementally even if gross sequences 
+are not repeated. Such a learning rule allows previously unobserved 
+sequences to be hypothesized and replayed in the brain. Our model 
+makes the prediction that world structures that are fundamentally 
+non-spatial, corresponding to arbitrary relational rules obeying a 
+well-defined distance metric, can also be learned and replayed by the 
+hippocampus via this mechanism.
+Work on Hebbian learning rules in the cortex has focused pri -
+marily on glutamatergic synapses onto principal cells 36,77. Plasticity 
+at the GABAergic synapse has gained greater recognition78, although 
+whether the predominant effect is potentiation38,39, depression48,79–84  
+or some combination 85 requires clarification in vivo. Compellingly 
+for our work here, D’amour and Froemke 86 showed a symmetric 
+spike-time-dependent L TP rule for the potentiation of inhibitory syn-
+apses in auditory cortex. Our results indicate that the phenomenon of 
+replay generalization is robust for a family of inhibitory L TP rules (Sup-
+plementary Figs. 2 and 3), providing further support for the biological 
+plausibility of this rule.
+A limitation of this work is that we treated INs as a uniform popu-
+lation, whereas, in reality, distinct subtypes of INs play very differ -
+ent computational roles in the hippocampus 60,87– 90. The size of the 
+IN population required to achieve this effect in a spiking network of 
+thousands of neurons is comparatively small; therefore, it is possible 
+that the inhibitory plasticity mechanism that we describe is localized 
+to a particular subtype. Our model predicts that the relevant IN popu-
+lation will respond to cues during exploration and will be recruited to 
+SWRs at rest. Dissecting the subtypes shaped by this inhibitory L TP rule 
+represents an important avenue for future experimental work. A pre-
+requisite of our model is that a subset of GABAergic INs in CA3 exhibits 
+activation by sensory stimulation but stable SWR recruitment (as the 
+locus of plasticity is at the GABAergic synapse). Indeed, in Vancura 
+et al.90, we recently identified the cholecystokinin-expressing INs as one 
+such candidate population (see Extended Data Fig. 9 in Vancura et al.90).
+Our models are inspired by the recurrent CA3 circuitry, but the 
+mechanisms described here are likely to extend to the recurrent cir -
+cuitry of area CA2 as well, where SWRs can be initiated26. Furthermore, 
+our experimental results demonstrate that distractor suppression is 
+also present in area CA1, which contains far fewer recurrent collater-
+als compared to CA3/CA2, and where most replay studies have been 
+performed to date30,53,91. These results suggest that distractor suppres-
+sion through inhibitory plasticity generalizes to other hippocampal 
+subregions. Future experiments may explore whether this represents 
+a general coding principle that extends beyond the hippocampus.
+Our experiments focused on awake replay91, but our model may 
+be extensible to replay occurring during sleep53,92. Several differences 
+have been highlighted between awake and asleep replay: awake replays 
+occur in both the forward and backward directions and more faith -
+fully recapitulate experience, whereas sleep replays are biased to the 
+forward direction and are noisier92. These differences may be driven 
+by differences in input between arousal states: in the awake animal, 
+spatially localized sensory input has been suggested as a major con -
+tributor to localized awake replay—in particular, reverse replay starting 
+from the animal’s current location14,15,93 or once the animal arrives at a 
+reward50,51,94– 96—whereas hippocampal inputs may be more stochastic 
+during sleep. It has been proposed that these differences make awake 
+replay more suited to planning and sleep replay to memory consoli -
+dation92. For simplicity, we simulate replay with random input in the 
+present study, but injecting location-specific offline input biases replay 
+starts to that location, consistent with experimental observations14,15,93, 
+suggesting that simple modifications of our model may lend them -
+selves easily to studies of replay in these distinct states.
+Abnormalities in hippocampal neural reactivation, SWRs and 
+inhibitory transmission have been demonstrated in a variety of 
+neuropsychiatric disorders, including temporal lobe epilepsy, schizo-
+phrenia and autism97–105 . In the present work, we identified a potential 
+link between abnormalities of inhibitory synaptic transmission and 
+memory deficits both in general. As our mechanism links the plasticity 
+of inhibitory synapses to the high-level learning of world structure, any 
+disruption to inhibitory plasticity may contribute to the cognitive defi-
+cits observed in this disorder and others106,107. Electroencephalography 
+(EEG) signatures of epilepsy have also been associated with the engage-
+ment of highly coupled pathological microcircuits 108– 110; a potential  
+‘pathological transformation’ is hypothesized to occur from physio-
+logical sharp-wave ripples to interictal epileptiform discharges 111.  
+We speculate that these pathological coupled ensemble events may 
+be the result of a failure of inhibition onto irrelevant representations 
+during replay.
+We provide a mechanistic narrative of how the hippocampus may 
+incrementally assemble a generalized representation of an environ -
+ment despite only ever receiving noisy observations. The concurrent 
+demands of expressiveness and flexibility provide insight into why 
+a plasticity mechanism, in particular one of inhibitory synapses, is 
+necessary for robust learning in the face of distractors—to wit, the 
+brain cannot know a priori which stimuli are important until it has 
+sufficiently sampled the world. The same stimulus that is a distractor 
+in one context may be essential to understanding the structure of the 
+world in the next. Therefore, the hippocampus must be able to robustly 
+represent all stimuli during online learning as they are received and 
+then selectively consolidate only those representations that model the 
+conserved underlying structure of the ensemble of its experience. We 
+make several novel, experimentally approachable predictions using 
+this framework that will hopefully provide insight into the low-level 
+mechanisms underlying high-level cognitive functions, such as mem-
+ory consolidation and generalization. We think that the framework we 
+present here provides a bridge between the synaptic and the cognitive 
+levels of our understanding of learning and, if experimentally validated, 
+could shed light on the fundamental question of how distributed, local 
+learning rules can structure initially random neuronal networks to 
+perform highly complex cognitive tasks.
+Online content
+Any methods, additional references, Nature Portfolio reporting sum-
+maries, source data, extended data, supplementary information, 
+acknowledgements, peer review information; details of author contri-
+butions and competing interests; and statements of data and code avail-
+ability are available at https://doi.org/10.1038/s41593-024-01745-w.
+References
+1. Kumaran, D. & Maguire, E. A. The human hippocampus: cognitive 
+maps or relational memory? J. Neurosci. 25, 7254–7259 (2005).
+2. Eichenbaum, H. The role of the hippocampus in navigation is 
+memory. J. Neurophysiol. 117, 1785–1796 (2017).
+3. Eichenbaum, H. & Cohen, N. J. Can we reconcile the declarative 
+memory and spatial navigation views on hippocampal function? 
+Neuron 83, 764–770 (2014).
+4. Whittington, J. C. R. et al. The Tolman–Eichenbaum machine: 
+unifying space and relational memory through generalization in 
+the hippocampal formation. Cell 183, 1249–1263 (2020).
+5. Behrens, T. E. J. et al. What is a cognitive map? Organizing 
+knowledge for flexible behavior. Neuron 100, 490–509 (2018).
+6. O’Keefe, J. & Dostrovsky, J. The hippocampus as a spatial map. 
+Preliminary evidence from unit activity in the freely-moving rat. 
+Brain Res. 34, 171–175 (1971).
+7. Buzsaki, G. Hippocampal sharp wave-ripple: a cognitive 
+biomarker for episodic memory and planning. Hippocampus 25, 
+1073–1088 (2015).
+8. Wilson, M. A. & McNaughton, B. L. Reactivation of hippocampal 
+ensemble memories during sleep. Science 265, 676–679 (1994).
+
+===== PAGE 10 =====
+Nature Neuroscience | Volume 27 | October 2024 | 1987–1998 1996
+Article https://doi.org/10.1038/s41593-024-01745-w
+9. Lee, A. K. & Wilson, M. A. Memory of sequential experience in 
+the hippocampus during slow wave sleep. Neuron 36, 1183–1194 
+(2002).
+10. Nadasdy, Z., Hirase, H., Czurko, A., Csicsvari, J. & Buzsaki, G. 
+Replay and time compression of recurring spike sequences in the 
+hippocampus. J. Neurosci. 19, 9497–9507 (1999).
+11. Skaggs, W. E. & McNaughton, B. L. Replay of neuronal firing 
+sequences in rat hippocampus during sleep following spatial 
+experience. Science 271, 1870–1873 (1996).
+12. Dragoi, G. & Buzsáki, G. Temporal encoding of place sequences 
+by hippocampal cell assemblies. Neuron 50, 145–157 (2006).
+13. Foster, D. J. & Wilson, M. A. Reverse replay of behavioural 
+sequences in hippocampal place cells during the awake state. 
+Nature 440, 680–683 (2006).
+14. Diba, K. & Buzsaki, G. Forward and reverse hippocampal place- 
+cell sequences during ripples. Nat. Neurosci. 10, 1241–1242 (2007).
+15. Davidson, T. J., Kloosterman, F. & Wilson, M. A. Hippocampal 
+replay of extended experience. Neuron 63, 497–507 (2009).
+16. Girardeau, G., Benchenane, K., Wiener, S. I., Buzsaki, G. &  
+Zugaro, M. B. Selective suppression of hippocampal ripples 
+impairs spatial memory. Nat. Neurosci. 12, 1222–1223 (2009).
+17. Ego-Stengel, V. & Wilson, M. A. Disruption of ripple-associated 
+hippocampal activity during rest impairs spatial learning in the 
+rat. Hippocampus 20, 1–10 (2010).
+18. Jadhav, S. P., Kemere, C., German, P. W. & Frank, L. M. Awake 
+hippocampal sharp-wave ripples support spatial memory. 
+Science 336, 1454–1458 (2012).
+19. Fernández-Ruiz, A. et al. Long-duration hippocampal sharp wave 
+ripples improve memory. Science 364, 1082–1086 (2019).
+20. Amaral, D. G. & Witter, M. P. The three-dimensional organization 
+of the hippocampal formation: a review of anatomical data. 
+Neuroscience 31, 571–591 (1989).
+21. Káli, S. & Dayan, P. The involvement of recurrent connections in 
+area CA3 in establishing the properties of place fields: a model.  
+J. Neurosci. 20, 7463–7477 (2000).
+22. Guzman, S. J., Schlögl, A., Frotscher, M. & Jonas, P. Synaptic 
+mechanisms of pattern completion in the hippocampal CA3 
+network. Science 353, 1117–1123 (2016).
+23. Rebola, N., Carta, M. & Mulle, C. Operation and plasticity of 
+hippocampal CA3 circuits: implications for memory encoding. 
+Nat. Rev. Neurosci. 18, 208–220 (2017).
+24. Davoudi, H. & Foster, D. J. Acute silencing of hippocampal CA3 
+reveals a dominant role in place field responses. Nat. Neurosci. 
+22, 337–342 (2019).
+25. Csicsvari, J., Hirase, H., Czurkó, A., Mamiya, A. & Buzsáki, G. 
+Oscillatory coupling of hippocampal pyramidal cells and 
+interneurons in the behaving rat. J. Neurosci. 19, 274–287 (1999).
+26. Oliva, A., Fernandez-Ruiz, A., Buzsaki, G. & Berenyi, A. Role of 
+hippocampal CA2 region in triggering sharp-wave ripples. Neuron 
+91, 1342–1355 (2016).
+27. O’Neill, J., Senior, T. J., Allen, K., Huxter, J. R. & Csicsvari, J. 
+Reactivation of experience-dependent cell assembly patterns in 
+the hippocampus. Nat. Neurosci 11, 209–215 (2008).
+28. Hwaun, E. & Colgin, L. L. CA3 place cells that represent a novel 
+waking experience are preferentially reactivated during sharp 
+wave-ripples in subsequent sleep. Hippocampus 29, 921–938 (2019).
+29. Mishra, R. K., Kim, S., Guzman, S. J. & Jonas, P. Symmetric spike 
+timing-dependent plasticity at CA3–CA3 synapses optimizes 
+storage and recall in autoassociative networks. Nat. Commun. 7, 
+11552 (2016).
+30. Pfeiffer, B. E. The content of hippocampal ‘replay’. Hippocampus 
+30, 6–18 (2020).
+31. Nicola, W. & Clopath, C. A diversity of interneurons and 
+Hebbian plasticity facilitate rapid compressible learning in the 
+hippocampus. Nat. Neurosci. 22, 1168–1181 (2019).
+32. Ecker, A. et al. Hippocampal sharp wave-ripples and the 
+associated sequence replay emerge from structured synaptic 
+interactions in a network model of area CA3. eLife 11, e71850 
+(2022).
+33. Milstein, A. D., Tran, S., Ng, G. & Soltesz, I. Offline memory replay 
+in recurrent neuronal networks emerges from constraints on 
+online dynamics. J. Physiol. 601, 3241–3264 (2023).
+34. English, D. F. et al. Excitation and inhibition compete to control 
+spiking during hippocampal ripples: intracellular study in 
+behaving mice. J. Neurosci. 34, 16509–17 (2014).
+35. Stark, E. et al. Pyramidal cell-interneuron interactions underlie 
+hippocampal ripple oscillations. Neuron 83, 467–480 (2014).
+36. Hebb, D. O. The Organization of Behavior: A Neuropsychological 
+Theory (Wiley, 1949).
+37. Marr, D., Willshaw, D. & McNaughton, B. in From the Retina to the 
+Neocortex: Selected Papers of David Marr (ed. Vaina, L. M.) 59–128 
+(Springer, 1991).
+38. Caillard, O., Ben-Ari, Y. & Gaiarsa, J.-L. Long-term potentiation of 
+GABAergic synaptic transmission in neonatal rat hippocampus.  
+J. Physiol. 518, 109–119 (1999).
+39. Nusser, Z., Hajos, N., Somogyi, P. & Mody, I. Increased number of 
+synaptic GABA
+A receptors underlies potentiation at hippocampal 
+inhibitory synapses. Nature 395, 172–177 (1998).
+40. Chiu, C. Q., Barberis, A. & Higley, M. J. Preserving the balance: 
+diverse forms of long-term GABAergic synaptic plasticity.  
+Nat. Rev. Neurosci. 20, 272–281 (2019).
+41. Kullmann, D. M. & Lamsa, K. P. Long-term synaptic plasticity  
+in hippocampal interneurons. Nat. Rev. Neurosci. 8, 687–699 
+(2007).
+42. Yap, E. L. et al. Bidirectional perisomatic inhibitory plasticity of a 
+Fos neuronal network. Nature 590, 115–121 (2021).
+43. Udakis, M., Pedrosa, V., Chamberlain, S. E. L., Clopath, C. & 
+Mellor, J. R. Interneuron-specific plasticity at parvalbumin and 
+somatostatin inhibitory synapses onto CA1 pyramidal neurons 
+shapes hippocampal output. Nat. Commun. 11, 4395 (2020).
+44. Schulz, A., Miehl, C., Berry II, M. J. & Gjorgjieva, J. The generation 
+of cortical novelty responses through inhibitory plasticity. eLife 
+10, e65309 (2021).
+45. Rubin, R., Abbott, L. F. & Sompolinsky, H. Balanced excitation and 
+inhibition are required for high-capacity, noise-robust neuronal 
+selectivity. Proc. Natl Acad. Sci. USA 114, E9366–E9375 (2017).
+46. Vogels, T. P. & Abbott, L. F. Gating multiple signals through 
+detailed balance of excitation and inhibition in spiking networks. 
+Nat. Neurosci. 12, 483–491 (2009).
+47. Sadeh, S. & Clopath, C. Inhibitory stabilization and cortical 
+computation. Nat. Rev. Neurosci. 22, 21–37 (2021).
+48. Loisy, M. et al. Sequential inhibitory plasticities in hippocampal 
+area CA2 and social memory formation. Neuron 110, 2854–2866 
+(2022).
+49. Gillespie, A. K. et al. Hippocampal replay reflects specific past 
+experiences rather than a plan for subsequent choice. Neuron 
+109, 3149–3163 (2021).
+50. Singer, A. C. & Frank, L. M. Rewarded outcomes enhance 
+reactivation of experience in the hippocampus. Neuron 64, 
+910–921 (2009).
+51. Ambrose, R. E., Pfeiffer, B. E. & Foster, D. J. Reverse replay of 
+hippocampal place cells is uniquely modulated by changing 
+reward. Neuron 91, 1124–1136 (2016).
+52. Karlsson, M. P. & Frank, L. M. Network dynamics underlying 
+the formation of sparse, informative representations in the 
+hippocampus. J. Neurosci. 28, 14271–14281 (2008).
+53. Ólafsdóttir, H. F., Bush, D. & Barry, C. The role of hippocampal 
+replay in memory and planning. Curr. Biol. 28, R37–R50 (2018).
+54. Foster, D. J. Replay comes of age. Annu. Rev. Neurosci. 40, 
+581–602 (2017).
+
+===== PAGE 11 =====
+Nature Neuroscience | Volume 27 | October 2024 | 1987–1998
+ 1997
+Article https://doi.org/10.1038/s41593-024-01745-w
+55. McClelland, J. L., McNaughton, B. L. & O’Reilly, R. C. Why there 
+are complementary learning systems in the hippocampus 
+and neocortex: insights from the successes and failures of 
+connectionist models of learning and memory. Psychol. Rev. 102, 
+419 (1995).
+56. Pezzulo, G., van der Meer, M. A. A., Lansink, C. S. & Pennartz, C. M. A.  
+Internally generated sequences in learning and executing 
+goal-directed behavior. Trends Cogn. Sci. 18, 647–657 (2014).
+57. Terada, S., Geiller, T., Liao, Z., O’Hare, J., Vancura, B. & Losonczy, A.  
+Adaptive stimulus selection for consolidation in the hippocampus. 
+Nature 601, 240–244 (2022).
+58. Stimberg, M., Brette, R. & Goodman, D. F. M. Brian 2, an intuitive 
+and efficient neural simulator. eLife 8, e47314 (2019).
+59. Gerstner, W., Kistler, W. M., Naud, R. & Paninski, L. Neuronal 
+Dynamics: From Single Neurons to Networks and Models of 
+Cognition (Cambridge Univ. Press, 2014).
+60. Geiller, T. et al. Large-scale 3D two-photon imaging of molecularly 
+identified CA1 interneuron dynamics in behaving mice. Neuron 
+108, 968–983 (2020).
+61. Wiebe, S. P. & Stäubli, U. V. Recognition memory correlates of 
+hippocampal theta cells. J. Neurosci. 21, 3955–3967 (2001).
+62. Yu, G., Boutellier, J.-M. & Berger, T. Topographic organization 
+of correlation along the longitudinal and transverse axes in rat 
+hippocampal CA3 due to excitatory afferents. Front. Comput. 
+Neurosci. 14, 588881 (2020).
+63. Bezaire, M. J., Raikov, I., Burk, K., Vyas, D. & Soltesz, I. 
+Interneuronal mechanisms of hippocampal theta oscillations in a 
+full-scale model of the rodent CA1 circuit. eLife 5, e18566 (2016).
+64. Bezaire, M. J. & Soltesz, I. Quantitative assessment of CA1 
+local circuits: knowledge base for interneuron-pyramidal cell 
+connectivity. Hippocampus 23, 751–785 (2013).
+65. Losonczy, A., Makara, J. K. & Magee, J. C. Compartmentalized 
+dendritic plasticity and input feature storage in neurons. Nature 
+452, 436–41 (2008).
+66. Makara, J. K. & Magee, J. C. Variable dendritic integration in 
+hippocampal CA3 pyramidal neurons. Neuron 80, 1438–1450 (2013).
+67. Druckmann, S. et al. Structured synaptic connectivity between 
+hippocampal regions. Neuron 81, 629–640 (2014).
+68. Adoff, M. D. et al. The functional organization of excitatory 
+synaptic input to place cells. Nat. Commun. 12, 3558 (2021).
+69. Knierim, J. J. The hippocampus. Curr. Biol. 25, R1116–R1121 (2015).
+70. Moser, E. I., Kropff, E. & Moser, M.-B. Place cells, grid cells, and 
+the brain’s spatial representation system. Annu. Rev. Neurosci. 31, 
+69–89 (2008).
+71. Knierim, J. J., Neunuebel, J. P. & Deshmukh, S. S. Functional 
+correlates of the lateral and medial entorhinal cortex: objects, 
+path integration and local–global reference frames. Philos. Trans. 
+R. Soc. B Biol. Sci. 369, 20130369 (2014).
+72. Sun, W., Advani, M., Spruston, N., Saxe, A. & Fitzgerald, J. E. 
+Organizing memories for generalization in complementary 
+learning systems. Nat. Neurosci. 26, 1438–1448 (2023).
+73. Richards, A. G. Robust Constrained Model Predictive Control.  
+PhD thesis, Massachusetts Institute of Technology (2005).
+74. Bittner, K. C., Milstein, A. D., Grienberger, C., Romani, S. &  
+Magee, J. C. Behavioral time scale synaptic plasticity underlies 
+CA1 place fields. Science 357, 1033–1036 (2017).
+75. Rolotti, S. V. et al. Local feedback inhibition tightly controls rapid 
+formation of hippocampal place fields. Neuron 110, 783–794 e6 
+(2022).
+76. Priestley, J. B., Bowler, J. C., Rolotti, S. V., Fusi, S. & Losonczy, A. 
+Signatures of rapid synaptic learning in the hippocampus during 
+novel experiences. Neuron 110, 1978–1992 (2022).
+77. Markram, H., Lübke, J., Frotscher, M. & Sakmann, B. Regulation of 
+synaptic efficacy by coincidence of postsynaptic APs and EPSPs. 
+Science 275, 213–215 (1997).
+78. Gaiarsa, J.-L., Caillard, O. & Ben-Ari, Y. Long-term plasticity  
+at GABAergic and glycinergic synapses: mechanisms and 
+functional significance. Trends Neurosci. 25, 564–570  
+(2002).
+79. Chevaleyre, V. & Castillo, P. E. Heterosynaptic LTD of hippocampal 
+GABAergic synapses: a novel role of endocannabinoids in 
+regulating excitability. Neuron 38, 461–472 (2003).
+80. Wang, J. H. & Stelzer, A. Shared calcium signaling pathways in 
+the induction of long-term potentiation and synaptic disinhibition 
+in CA1 pyramidal cell dendrites. J. Neurophysiol. 75, 1687–1702 
+(1996).
+81. Stelzer, A., Slater, N. T. & Ten Bruggencate, G. Activation of NMDA 
+receptors blocks GABAergic inhibition in an in vitro model of 
+epilepsy. Nature 326, 698–701 (1987).
+82. Stelzer, A., Simon, G., Kovacs, G. & Rai, R. Synaptic disinhibition 
+during maintenance of long-term potentiation in the CA1 
+hippocampal subfield. Proc. Natl Acad. Sci. USA 91, 3058–3062 
+(1994).
+83. Caillard, O., Ben-Ari, Y. & Gaíarsa, J.-L. Mechanisms of induction 
+and expression of long-term depression at GABAergic synapses  
+in the neonatal rat hippocampus. J. Neurosci. 19, 7568–7577 
+(1999).
+84. Caillard, O., Ben-Ari, Y. & Gaíarsa, Jean-Luc Activation of 
+presynaptic and postsynaptic ryanodine-sensitive calcium 
+stores is required for the induction of long-term depression 
+at GABAergic synapses in the neonatal rat hippocampus 
+amphetamine. J. Neurosci. 20, RC94 (2000).
+85. Gubellini, P., Ben-Ari, Y. & Gaíarsa, J.-L. Activity-and 
+age-dependent GABAergic synaptic plasticity in the developing 
+rat hippocampus. Eur. J. Neurosci. 14, 1937–1946 (2001).
+86. D’amour, J. A. & Froemke, R. C. Inhibitory and excitatory 
+spike-timing-dependent plasticity in the auditory cortex. Neuron 
+86, 514–528 (2015).
+87. Royer, S. et al. Control of timing, rate and bursts of hippocampal 
+place cells by dendritic and somatic inhibition. Nat. Neurosci. 15, 
+769–775 (2012).
+88. Pelkey, K. A. et al. Hippocampal GABAergic inhibitory 
+interneurons. Physiol. Rev. 97, 1619–1747 (2017).
+89. Klausberger, T. & Somogyi, P. Neuronal diversity and temporal 
+dynamics: the unity of hippocampal circuit operations. Science 
+321, 53–57 (2008).
+90. Vancura, B., Geiller, T., Grosmark, A., Zhao, V. & Losonczy, A. 
+Inhibitory control of sharp-wave ripple duration during learning 
+in hippocampal recurrent networks. Nat. Neurosci. 26, 788–797 
+(2023).
+91. Carr, M. F., Jadhav, S. P. & Frank, L. M. Hippocampal replay in the 
+awake state: a potential substrate for memory consolidation and 
+retrieval. Nat. Neurosci. 14, 147–153 (2011).
+92. Roumis, D. K. & Frank, L. M. Hippocampal sharp-wave ripples  
+in waking and sleeping states. Curr. Opin. Neurobiol. 35, 6–12 
+(2015).
+93. Theodoni, P., Rovira, B., Wang, Y. & Roxin, A. Theta-modulation 
+drives the emergence of connectivity patterns underlying 
+replay in a network model of place cells. eLife 7, e37388  
+(2018).
+94. Gomperts, S. N., Kloosterman, F. & Wilson, M. A. VTA neurons 
+coordinate with the hippocampal reactivation of spatial 
+experience. eLife 4, e05360 (2015).
+95. Shin, J. D., Tang, W. & Jadhav, S. P. Dynamics of awake 
+hippocampal-prefrontal replay for spatial learning and 
+memory-guided decision making. Neuron 104, 1110–1125  
+(2019).
+96. Grosmark, A. D., Sparks, F. T., Davis, M. J. & Losonczy, A. 
+Reactivation predicts the consolidation of unbiased long-term 
+cognitive maps. Nat. Neurosci. 24, 1574–1585 (2021).
+
+===== PAGE 12 =====
+Nature Neuroscience | Volume 27 | October 2024 | 1987–1998 1998
+Article https://doi.org/10.1038/s41593-024-01745-w
+97. Zaremba, J. D. et al. Impaired hippocampal place cell dynamics 
+in a mouse model of the 22q11.2 deletion. Nat. Neurosci. 20, 
+1612–1623 (2017).
+98. Altimus, C., Harrold, J., Jaaro-Peled, H., Sawa, A. & Foster, D. J. 
+Disordered ripples are a common feature of genetically distinct 
+mouse models relevant to schizophrenia. Mol. Neuropsychiatry 1, 
+52–59 (2015).
+99. Suh, J., Foster, D. J., Davoudi, H., Wilson, M. A. & Tonegawa, S. 
+Impaired hippocampal ripple-associated replay in a mouse model 
+of schizophrenia. Neuron 80, 484–493 (2013).
+100. Nour, M. M., Liu, Y., Arumuham, A., Kurth-Nelson, Z. & Dolan, R. J. 
+Impaired neural replay of inferred relationships in schizophrenia. 
+Cell 184, 4315–4328 (2021).
+101. Marafiga, J. R., Pasquetti, M. V. & Calcagnotto, M. E. GABAergic 
+interneurons in epilepsy: more than a simple change in inhibition. 
+Epilepsy Behav. 121, 106935 (2020).
+102. Engel, J. Excitation and inhibition in epilepsy. Can. J. Neurol. Sci. 
+23, 167–174 (1996).
+103. Scharfman, H. E. The neurobiology of epilepsy. Curr. Neurol. 
+Neurosci. Rep. 7, 348–354 (2007).
+104. Galarreta, M. & Hestrin, S. Frequency-dependent synaptic 
+depression and the balance of excitation and inhibition in the 
+neocortex. Nat. Neurosci. 1, 587–594 (1998).
+105. Tergau, F., Naumann, U., Paulus, W. & Steinhoff, B. J. 
+Low-frequency repetitive transcranial magnetic stimulation 
+improves intractable epilepsy. Lancet 353, 2209 (1999).
+106. Reid, I. C. & Stewart, C. A. Seizures, memory and synaptic 
+plasticity. Seizure 6, 351–359 (1997).
+107. Lenck-Santini, P.-P. & Scott, R. C. Mechanisms responsible for 
+cognitive impairment in epilepsy. Cold Spring Harb. Perspect. Med. 
+5, a022772 (2015).
+108. Paz, J. T. & Huguenard, J. R. Microcircuits and their interactions 
+in epilepsy: is the focus out of focus? Nat. Neurosci. 18, 351–359 
+(2015).
+109. Hadjiabadi, D. et al. Maximally selective single-cell target for 
+circuit control in epilepsy models. Neuron 109, 2556–2572  
+(2021).
+110. Sparks, F. T. et al. Hippocampal adult-born granule cells drive 
+network activity in a mouse model of chronic temporal lobe 
+epilepsy. Nat. Commun. 11, 6138 (2020).
+111. Liotta, A. et al. Partial disinhibition is required for transition of 
+stimulus-induced sharp wave–ripple complexes into recurrent 
+epileptiform discharges in rat hippocampal slices.  
+J. Neurophysiol. 105, 172–187 (2011).
+Publisher’s note Springer Nature remains neutral with regard to 
+jurisdictional claims in published maps and institutional affiliations.
+Springer Nature or its licensor (e.g. a society or other partner) holds 
+exclusive rights to this article under a publishing agreement with 
+the author(s) or other rightsholder(s); author self-archiving of the 
+accepted manuscript version of this article is solely governed by the 
+terms of such publishing agreement and applicable law.
+© The Author(s), under exclusive licence to Springer Nature America, 
+Inc. 2024
+
+===== PAGE 13 =====
+Nature Neuroscience
+Article https://doi.org/10.1038/s41593-024-01745-w
+Methods
+Experimental methods
+All experiments were conducted in accordance with National Insti-
+tutes of Health (NIH) guidelines and with the approval of the Columbia 
+University Institutional Animal Care and Use Committee. Imaging 
+experiments were performed on 2–4-month-old, heterozygous adult 
+male and female wild-type mice (C57BL/6J) from The Jackson Labora-
+tory (strain no. 000664). Mice were housed on a 12-h light/dark cycle 
+in groups of 2–5 mice (temperature, 22–23 ∘C; humidity, 40%) and indi-
+vidually after surgery for implantation. Experiments were performed 
+during the dark portion of the cycle.
+Viruses
+We used GCaMP8m (pGP-AAV-syn-jGCaMP8m-WPRE, https://www.
+addgene.org/162375/), Cre-dependent ChRmine (pAAV-Ef1α -DIO- 
+ChRmine-mScarlet-WPRE, https://www.addgene.org/130998/) and 
+Cre under hSyn promoter (pENN.AAV.hSyn.Cre.WPRE.hGH, https://
+www.addgene.org/105553/). For sparse excitatory opsin labeling, we 
+diluted Cre virus with sterilized saline (1:2,000) and co-injected the 
+virus mixtures containing equal amounts of the three individual rAAV 
+constructs above.
+Surgical procedure
+Viral delivery to hippocampal area CA1 and CA2/3 and implantation 
+of headposts and imaging cannula were described previously 57,75,90. 
+In brief, 2–4-month-old mice were anesthetized under isofluorane 
+and placed into a stereotaxic apparatus. Meloxicam and bupivacaine 
+were administered subcutaneously to minimize discomfort. Using a 
+Nanoject syringe, viruses were delivered by stereotactically injecting 
+50 nl (10-nl pulses) of rAAV at multiple injection sites in left dorsal CA1 
+(−2.1 mm AP; −1.5 mm ML; −0.9 mm, −1.05 mm and −1.2 mm DV relative 
+to bregma) or CA2/3 (−1.35 mm AP, −1.6 mm ML, −2.1 mm, −1.9 mm DV 
+and −1.6 mm AP, −1.9 mm ML, −2.2 mm, −2.0 mm DV relative to bregma). 
+The mice were allowed to recover in their home cage for 3 d before the 
+window/headpost implant. They were then surgically implanted with 
+a custom metal headpost along with an imaging cannula (diameter, 
+3.0 mm; height, 1.5 mm for CA1 and 2.0 mm for CA2/3) over the injec-
+tion locations. In brief, mice were anesthetized under isofluorane and 
+placed into a stereotaxic apparatus. The skull was exposed after subcu-
+taneous administration of meloxicam and bupivacaine. A 3-mm crani-
+otomy was done over the left dorsal hippocampus, centered between 
+the injection coordinates. Dura and cortical layers were gently removed 
+under visual guidance while flushing with ice-cold cortex buffer. The 
+imaging cannula was inserted through the surgical opening in the 
+skull. Finally, the metal headpost was affixed to the skull with dental 
+cement. The mice received a 1.0-ml subcutaneous injection of saline 
+and recovered in their home cage while heat was applied. The mice were 
+monitored for 3 d after the operation until behavioral training began.
+Histology and confocal imaging
+After the completion of imaging experiments, mice were transcar-
+dially perfused with 20 ml of ice-cold PBS (Thermo Fisher Scientific),  
+followed by 20 ml of ice-cold 4% paraformaldehyde (Electron Micro-
+scopy Sciences). Brains were post-fixed in 4% paraformaldehyde over-
+night, washed with PBS three times for 10 min each and coronally 
+sectioned at a thickness of 100 μm using a vibratome (Leica, VT1200S). 
+Sections were blocked with 10% donkey serum and 0.3% Triton X-100 in 
+PBS for 60 min and incubated with a rabbit primary antibody against 
+PCP4 (1:500, HPA005792, Sigma-Aldrich) in the blocking solution for 16 h 
+at 4 ∘C. Sections were washed three times for 10 min with PBS and incu-
+bated with Alexa Fluor 647 donkey secondary antibody against rabbit  
+IgG (1:500, 711-605-152, Jackson ImmunoResearch) in the blocking 
+solution for 6 h at room temperature. After being washed three times 
+for 10 min each in PBS, the sections were incubated with 1 μg ml−1  DAPI 
+in PBS including 0.3% Triton X-100 for 10 min at room temperature. 
+The sections were then washed three times for 5 min each in PBS at 
+room temperature. Finally, sections were mounted on glass slides in 
+Fluoromount-G aqueous mounting medium (Thermo Fisher Scientific) 
+and coverslipped. A Nikon A1 confocal microscope was used to acquire 
+multichannel fluorescence images of the immunolabeled tissue sec-
+tions; 405-nm, 488-nm, 561-nm and 640-nm laser lines were used for 
+excitation. Each channel was acquired sequentially with a ×10/0.45-NA 
+Plan Apo objective (Nikon) at ×1.0 zoom; 2,048 × 2,048 pixel images 
+were acquired every 3 μm through the entire depth of the tissue sec-
+tions. The resulting four-channel z-stacks were viewed in ImageJ (NIH).
+Behavioral paradigm with closed-loop optogenetic 
+stimulation
+Mice were head fixed above a low-friction, lightweight running  
+wheel76 in a behavioral context constructed similarly to the random cue 
+without tactile cue condition (RC-NS) in T erada et al.57. An odor cue was 
+presented pseudo-randomly for 10 trials. Each presentation lasted 1 s, 
+and presentations were separated by a pseudo-random inter-stimulus 
+interval of 40–60 s. The odorant R-(−)carvone (Sigma-Aldrich) dis -
+solved in mineral oil was passed through tubing in front of the mouse’s 
+snout through a mineral oil-infused stream of compressed air that was 
+evacuated by vacuum at the same speed it was delivered to avoid pro-
+longed exposure. For the first five trials, optogenetic photostimulation 
+was triggered by onset of odor presentation and sustained until odor 
+removal. For the next five trials, odor presentation was conducted 
+without photostimulation to test the induced cue response of the 
+stimulated cells. In the control session, photostimulation alone was 
+delivered at random 40–60-s intervals for five trials. The pre and post 
+15-min imaging sessions were conducted to monitor SWR-related 
+dynamics of the stimulated cells before and after the stimulation ses-
+sions. Animal locomotion behavior (active running versus passive rest) 
+was monitored via velocity.
+Identification of optogenetic-evoked response, induced cue 
+selectivity and SWRs
+Stimulated cell detection.  A trial-averaged fluorescence peri-  
+stimulation time histogram (PSTH) was computed for each cell for 
+odor presentations paired with photostimulation and without photo-
+stimulation. The principal components were extracted from the PSTHs 
+of all imaged cells. We confirmed each first principal component  
+represented cell activation in response to cue presentation (whether 
+optogenetically evoked or induced selectivity). We carried out k-means 
+clustering in the space of P C1stim versus P C1unstim to classify the PCs 
+based on ‘stimulated versus unstimulated’ and ‘odor responding versus 
+non-responding’ factors (Supplementary Fig. 8b).
+Detection and comparison of SWR-associated dynamics.  We 
+smoothed and averaged (five-bin window, Gaussian filter) the ΔF /F0 
+values of unstimulated cells to identify candidate highly synchro -
+nous events (HSEs) associated with SWRs in CA1 and CA2/3. Frames 
+associated with locomotion were removed, and HSEs were defined as 
+transients on the population average that exceeded the mean by at least 
+3 s.d. Then, peri-SWR-HSE PSTHs of the stimulated cells were calculated 
+from the pre-rest and post-rest sessions, concatenated to extract princi
+-
+pal components in each condition (Cue-STIM and Random) and subarea 
+(CA1 and CA2/3). We confirmed that the first principal components 
+of all groups represented SWR-associated transients as previously 
+reported57. Finally, we compared these SWR component coefficients 
+between pre-rest and post-rest sessions within the stimulated cells.
+Spiking network model
+We first built a random network model of a CA3 subnetwork capable of 
+generating spontaneous replay, similar to previous work32 (see refer-
+ence for detailed equations and constants). All network simulations 
+were run in Brian 2 (ref. 58).
+
+===== PAGE 14 =====
+Nature Neuroscience
+Article https://doi.org/10.1038/s41593-024-01745-w
+Neurons. We initialized the network with 8,000 PCs and 150 INs. Each 
+neuron was modeled by a variant LIF model with cellular adaptation32,59.
+Cm
+dV
+dt =− gL(V− Vrest)+ gLΔT exp {V − Vthr
+ΔT } − I(t)−w (1)
+τw
+dw
+dt = a(V− Vrest)−w (2)
+where Cm is membrane capacitance; gL is the leak conductance; Vrest is 
+the resting potential; Vthr is the spiking threshold; ΔT is a shape para-
+meter; w is the adaptation current; and I is the input (synaptic) current. 
+When V reaches the threshold Vthr, a spike is recorded, and V is reset to 
+a hyperpolarized reset potential, Vreset, where it is held for a refractory 
+period, tref. Adaptation strength is given by a.
+Synapses. Synapses were modeled as double-exponential time-varying 
+conductances
+g(t)= ωA(exp(−t/τd)−exp(−t/τr)) (3)
+where ω is the weight of the synapse, and τ r, τ d are rise and decay time 
+constants. The post-synaptic current was modeled with excitatory and 
+inhibitory components as in ref. 32 as
+I(t)= gAMPA(t)(V(t)−Eexc)+ gGABA(t)(V(t)−Einh) (4)
+where Eexc = 0, Einh = −70 mV and gAMPA and gGABA refer to conductance 
+through postsynaptic AMPA and GABA channels, respectively.
+Network topology. Let ℐ be the set of inhibitory neurons and ℰ be the 
+set of pyramidal neurons in the network. A random network topology 
+was selected by sampling a directed Erdös–Rényi graph G(8000, 0.1)112: 
+that is, a synapse between each (ordered) pair of pyramidal neurons 
+(i,j)∈ℰ×ℰ  exists with probability 0.1 (drawn i.i.d.). The I → E topology 
+was determined using a similar process: each ordered pair (i,j)∈ℐ×ℰ  
+exists as a synapse in the network with probability 0.25.
+Training phase. In the online phase, the network receives a series of 
+observations and modifies its synaptic weights accordingly to estimate 
+the ‘world structure’ sequence that gave rise to those observations. The 
+simulated behavior trace was generated as a simulated animal moving 
+at constant velocity through a circular 1D track.
+Simulated spike trains were sampled from a Poisson process with 
+a baseline firing rate of λ = 0.1 Hz.
+A random 50% of PCs were selected as place cells and received spa-
+tially tuned input in a pre-allocated place field covering 10% of the track, 
+tuned such that the mean firing rate in the center of its place field was 
+20 Hz. The firing rate λ i(x) of cell i at each spatial position x is given by
+λi(x)= λmax exp (−(x− μi)
+2
+2σ2 ) (5)
+where μ i is the peak of cell i’s tuning curve and σ parameterized.
+A random 15% of neurons were chosen to be ‘cue cells’ , consistent 
+with findings by T erada et al.57. A cue input was presented at a random 
+location at each lap. The firing rate λ(x) of all cue cells at each spatial 
+position x on lap k
+λ(x)= λmax exp (−(x− xk)
+2
+2σ2 ) (6)
+where xk corresponds to the location of cue presentation on lap k
+Spikes within a 5-ms refractory period of a previous spike were 
+rejected.
+An sSTDP rule was used to train the network as follows. For each 
+synapse i → j with weight w, for each pair of spikes
+Δw = A exp (−
+|tpost − tpre|
+τ ) (7)
+This rule was used at both excitatory and inhibitory synapses, with 
+different values of τE, τ I.
+T o explore the space of inhibitory plasticity rules, we examined the 
+family of spike-time-dependent plasticity rules of the form59
+Δw =
+⎧
+⎨
+⎩
+A+ exp {−
+Δt
+τ+
+} , if Δt > 0.
+A− exp {−
+Δt
+τ−
+} , if Δt ≤ 0.
+(8)
+where Δw + is applied to the synapse if tpre < tpost (causal spiking), and 
+Δ w−  is applied to the synapse if tpre > tpost (anti-causal spiking). We varied 
+the parameters A+, A− , τ + and τ− . When A+ = A−  > 0, we obtain the standard 
+sSTDP rule. When A−  = −A+, we obtain the classic (asymmetric) sSTDP 
+rule. Varying τ+, τ −  independently while holding A+ = A−  > 0 gave a variety 
+of L TP rules. Throughout this exploration, we held the E → E plasticity 
+rule fixed as the experimentally demonstrated rule (ref. 29).
+Offline (replay) phase. In the offline state, excitatory cells received 
+random low-level (0.1 Hz) Poisson spiking input. Replay emerged spon-
+taneously in the network.
+Biophysical model
+The biophysical model of hippocampal CA3 was built from 260 CA3 
+PCs and 30 fast-spiking perisomatic-targeting INs. Each neuron was 
+represented as a multi-compartment model, where each compartment 
+mapped to various physical locations, including soma, basal dendrites 
+and apical dendrites. Additionally, each neuron contained biophysical 
+ion channel models with realistic conductances, thereby allowing the  
+user to track the continuous intracellular voltage trace within each 
+compartment. PCs and INs received external input from multiple  
+afferent sources modeled as Poisson spike generators, including the 
+MEC, the LEC and the dentate gyrus (DG) via MFs.
+The neurons were placed into a virtual CA3 volume divided into 
+stratum lacunosum moleculare (SLM), statrum radiatum (SR), stratum 
+lucidum (SL), stratum pyramidale (SP) and stratum oriens (SO). The 
+soma position of PCs and INs as well as specific connectivity patterns 
+among PCs, INs and external inputs (convergence and specific site of 
+contact) were allocated according to known experimental data. For fur-
+ther details on biophysical parameters, see Supplementary Tables 1–3.
+Training and replay. Similar to the spiking network model, a virtual 
+circular track was generated and simulations were performed with the 
+mouse moving at a constant velocity. All simulations were run in the 
+NEURON environment113 with dt = 0.1 ms.
+For training, 80% of CA3 PCs were selected as place cells and 
+received pre-allocated and spatially tuned input from external MEC 
+and MF sources. Specifically, MFs carried place inputs, whereas MEC 
+afferents carried grid inputs. The diameter of place fields was selected 
+to cover 10% of the track, tuned such that the mean firing rate at the 
+center of the place field was 20 Hz (see spiking network model for 
+equations). Grid inputs were instantiated with similar parameters 
+but were additionally allowed to cover the virtual track in a periodic 
+manner with a grid spacing equal to 10% of the track. The remaining 
+20% of CA3 PCs were selected as cue cells and received pre-allocated 
+distractor input from external LEC. The distractor input was activated 
+at a random location once per lap.
+During the offline epoch, we removed spatially structured and dis-
+tractor input from all external sources. Instead, CA3 neurons received 
+random Poisson spiking input, and spontaneous replay was observed.
+
+===== PAGE 15 =====
+Nature Neuroscience
+Article https://doi.org/10.1038/s41593-024-01745-w
+Quantitative analysis
+Offline cue–place aggregate analysis.  The full offline epoch was 
+divided into non-overlapping bins equating to 100 ms of simulation 
+time. The number of spikes for cue cells and place cells in any given 
+bin was extracted and plotted on a 2D histogram. Pearson’s correlation 
+coefficients and P values were computed, and a two-tailed t -test was 
+used to determine if the cue and place cell subnetworks were function-
+ally connected (P < 0.05) or not (P > 0.05).
+Peri-event time histograms were computed according to the 
+z-scores of the bin spike counts computed for the 2D histograms. 
+Time bins with a place cell z-score of 1 or greater were considered to 
+be occurrences of HSEs. Pearson’s correlation coefficients and P values 
+were computed to test for correlation between z-scores of place cell and 
+cue cell activity over time periods starting at 2 s before and ending 2 s 
+after the occurrence of each HSE. Cue cell suppression was quantified 
+as negative correlation with P < 0.05.
+Abstract model
+Let 𝒳𝒳 be a finite set of schemas. Define a ‘sequence’ of length K  as a 
+string X = (x1, x2, x3, . . . , x K) with each xi ∈𝒳𝒳 and xi ≠ xj, i ≠ j. Let ‘world 
+structure’ consist of a ground truth sequence Y =( y1, y2, y3,…, yK)∈𝒳𝒳K. 
+For simplicity, we consider only forward replay; the analysis for back-
+ward replay is identical.
+Real observations consist of a mix of fixed elements of the world 
+and experience-specific stimuli. Therefore, we draw observations X i.i.d. 
+according to the following generative process: for each (1 ≤ i ≤ K − 1), 
+let xi = yi (ground truth) with probability 1 − p  and xi = z (distractor) 
+with probability p.
+xi = {
+yi with probability 1 − p
+z with probability p
+(9)
+Assume each character x ∈𝒳𝒳 is represented by a single ‘neuron’ , 
+and let W = |𝒳𝒳| × |𝒳𝒳| be a matrix initialized with zeros representing 
+synaptic weights between these neurons. Assume for the sake of sim-
+plicity that the network is fully connected (equivalently, let each model 
+neuron represent the equivalence class of neurons coding for each 
+stimulus).
+Let WI be another |𝒳𝒳| × |𝒳𝒳| matrix representing feedforward inhibi-
+tory weights from the subset of inhibitory neurons tuned to inputs 
+onto x.
+Now we introduce the plasticity rule. Under the simplest model 
+of inhibitory plasticity, symmetric L TP of inhibitory synapses occurs 
+via sSTDP. For each transition xi → xi+1 in an observation, increment Wxi xi+1 
+by 1. Increment the inhibitory weight W I
+xi xi
+ by 1 and the weights 
+W I
+xi+1 xi
+, W I
+xi xi+1
+ by β  < 1, which parameterizes the inhibitory plasticity 
+kernel decay rate.
+Replay phase. In the offline phase, the network reads out its running 
+estimate of the ‘world structure’ sequence.
+Let ̂yt  be a one-hot vector representing the neuron active at  
+time t in a replay sequence. Then, W ̂y  denotes the (unnormalized) 
+distribution of neurons active at time t + 1.
+We add the inhibitory term −αWI ̂y, where α  is a parameter control-
+ling the relative strength of inhibition and excitation. As inhibi -
+tion predominates during replay, we pick α  > 1: for instance, α  = 1.5. 
+Finally, to model stochasticity in sequence activation, we intro -
+duce a stochastic nonlinearity. For a non-negative vector w , let the 
+random variable σ (w) denote the random one-hot vector obtained 
+by drawing a sample from the categorical distribution with probabili-
+ties proportional to w (if any values of w are negative, we replace them 
+with 0).
+Hence, we can write the dynamics of the network during replay as:
+̂yt+1 = σ((W − αW I) ̂yt)
+The REPLAY estimator. Without loss of generality, let ̂y0 = y0   
+(that is, the first element in the ground truth sequence). Run this net-
+work for K timesteps. We define the REPLAY estimator 
+̂Y  to be
+̂Y = ( ̂y0, ̂y1,…, ̂yK)
+Statistics and reproducibility
+Statistical details of comparisons are specified in either the main text or 
+the figure legends. No statistical methods were used to predetermine 
+sample sizes, but our sample sizes are similar to those reported in previ-
+ous publications57. Mice showing poor imaging windows (low-quality 
+viral expression or scarring), animals that did not display clear SWRs in 
+their local field potential (LFP) signals and those that did not progress 
+along the behavioral paradigms described above were excluded before 
+commencing experiments. The investigators were not blinded to allo-
+cation during experiments and outcome assessment. Unless otherwise 
+noted, box plots represent median and interquartile range, and whisk-
+ers extend to cover the distribution without outliers (defined as points 
+above 1.5× the interquartile range below or above the box edges). For 
+comparisons between two populations, a paired sample or unpaired 
+t-test was applied if the data points followed a normal distribution. In 
+the instances where parametric tests were used, distributions were 
+assumed to be normal, but this was not formally tested. T o analyze 
+data that were not normally distributed, a Mann–Whitney U-test was 
+used. All tests were two-sided unless otherwise indicated in the figure 
+legends; *P < 0.05; **P < 0.01; ***P < 0.001. Data analysis was performed 
+and figures were generated using custom-made software in Python 3.8.
+Reporting summary
+Further information on research design is available in the Nature 
+Portfolio Reporting Summary linked to this article.
+Data availability
+Data from this study are available on Dryad at https://doi.org/10.5061/
+dryad.v15dv424t. Source data are provided with this paper.
+Further information and requests for resources and reagents should 
+be directed to the corresponding author, A.L. (al2856@columbia.edu). 
+All unique resources generated in this study are available from the  
+corresponding author with a completed materials transfer agreement.
+Code availability
+The software used to perform simulations analysis and generate fig -
+ures for this manuscript is available on GitHub at https://github.com/
+losonczylab/CA3_replay and https://github.com/soltesz-lab/ca3_bio-
+physical (biophysical model) and is archived in Zenodo at https://doi.
+org/10.5281/zenodo.11529919 (ref. 114) and https://doi.org/10.5281/
+zenodo.11505605 (ref. 115).
+References
+112. Erdős, P. & Rényi, A. On random graphs I. Publicationes 
+Mathematicae Debrece 6, 290–297 (1959).
+113. Hines, M. L. & Carnevale, N. T. Neuron: a tool for neuroscientists. 
+Neuroscientist 7, 123–135 (2001).
+114. Liao, Z. Code associated with manuscript ‘Inhibitory plasticity 
+supports replay generalization in the hippocampus’. Zenodo 
+https://doi.org/10.5281/zenodo.11529919 (2024).
+115. Hadjiabadi, D. & Raikov, I. Biophysical CA3 microcircuit model 
+code. Zenodo https://doi.org/10.5281/zenodo.11505605 (2024).
+Acknowledgements
+Z.L. was supported by National Institute of Neurological Disorders 
+and Stroke (NINDS) F31NS120783 and National Institute of General 
+Medical Sciences (NIGMS) T32GM007367. D.H. was supported by 
+an American Epilepsy Society Predoctoral Research Fellowship and 
+NINDS 1U19NS104590. A.L. was supported by National Institute of 
+
+===== PAGE 16 =====
+Nature Neuroscience
+Article https://doi.org/10.1038/s41593-024-01745-w
+Mental Health (NIMH) R01MH124047 and R01MH124867; National 
+Institute on Aging (NIA) 1RF1AG080818; NINDS U01NS115530; 
+and the Kavli Foundation. I.S. and A.L. were supported by NINDS 
+R01NS121106, NINDS 1R01NS131728, NINDS R01NS133381 and NINDS 
+U19NS104590. Computational modeling was supported by National 
+Science Foundation supercomputing allocation BIR20001 on TACC 
+Frontera awarded to I.S. We thank L. Abbott, S. Fusi and C. Schevon for 
+their comments on previous versions of the manuscript. We thank the 
+BRIAN developers for the excellent Brian 2 package and supporting 
+documentation.
+Author contributions
+All authors conceptualized the study. Z.L. I.G.R. and D.H. performed 
+computational simulations, mathematical analysis and data 
+visualization. S.T. performed experiments, with help from M.S.  
+All authors wrote the manuscript.
+Competing interests
+The authors declare no competing interests.
+Additional information
+Supplementary information The online version contains supplementary 
+material available at https://doi.org/10.1038/s41593-024-01745-w.
+Correspondence and requests for materials should be addressed to 
+Zhenrui Liao, Ivan Soltesz or Attila Losonczy.
+Peer review information Nature Neuroscience thanks Antonio 
+Fernandez-Ruiz and the other, anonymous, reviewer(s) for their 
+contribution to the peer review of this work.
+Reprints and permissions information is available at  
+www.nature.com/reprints.
+
+===== PAGE 17 =====
+1 nature portfolio  |  reporting summary April 2023 
+Corresponding author(s):
+ 
+Attila Losonczy
+Last updated by author(s): 6/9/2024
+Reporting Summary
+Nature Portfolio wishes to improve the reproducibility of the work that we publish. This form provides structure for consistency and transparency 
+in reporting. For further information on Nature Portfolio policies, see our 
+Editorial Policies and the Editorial Policy Checklist.
+Statistics
+For all statistical analyses, confirm that the following items are present in the figure legend, table legend, main text, or Methods section.
+n/a Confirmed
+The exact sample size (n) for each experimental group/condition, given as a discrete number and unit of measurement
+A statement on whether measurements were taken from distinct samples or whether the same sample was measured repeatedly
+The statistical test(s) used AND whether they are one- or two-sided 
+Only common tests should be described solely by name; describe more complex techniques in the Methods section.
+A description of all covariates tested
+A description of any assumptions or corrections, such as tests of normality and adjustment for multiple comparisons
+A full description of the statistical parameters including central tendency (e.g. means) or other basic estimates (e.g. regression coefficient) 
+AND variation (e.g. standard deviation) or associated estimates of uncertainty (e.g. confidence intervals)
+For null hypothesis testing, the test statistic (e.g. F, t, r) with confidence intervals, effect sizes, degrees of freedom and P value noted 
+Give P values as exact values whenever suitable.
+For Bayesian analysis, information on the choice of priors and Markov chain Monte Carlo settings
+For hierarchical and complex designs, identification of the appropriate level for tests and full reporting of outcomes
+Estimates of effect sizes (e.g. Cohen's d, Pearson's r), indicating how they were calculated
+Our web collection on statistics for biologists contains articles on many of the points above.
+Software and code
+Policy information about availability of computer code
+Data collection Two-photon calcium imaging was performed using a commercially available multi-photon microscopy system from Bruker (formerly Prairie 
+Technologies). Behavior data were collected using custom software implemented in Java via a microcontroller (Arduino DUE) on the treadmill. 
+LFP data were collected using Intan RHD2000 recording system.Code for simulations performed in the manuscript can be accessed at a . All 
+code will be made open access on GitHub upon publication.
+Data analysis Initial motion correction of two-photon imaging data was performed using the SIMA software package, and ROI detection was performed 
+manually. Subsequent imaging and LFP analysis was performed using custom-written code in Matlab. Code for simulations performed in the 
+manuscript can be accessed at https://drive.google.com/drive/folders/1vyTPCyHWtEEn9z_b2zyYuLbsUm56tvkc. All code will be made open 
+access on GitHub upon publication.
+For manuscripts utilizing custom algorithms or software that are central to the research but not yet described in published literature, software must be made available to editors and 
+reviewers. We strongly encourage code deposition in a community repository (e.g. GitHub). See the Nature Portfolio
+ guidelines for submitting code & software for further information.
+
+===== PAGE 18 =====
+2 nature portfolio  |  reporting summary April 2023 
+Data
+Policy information about availability of data
+All manuscripts must include a data availability statement. This statement should provide the following information, where applicable: 
+- Accession codes, unique identifiers, or web links for publicly available datasets 
+- A description of any restrictions on data availability 
+- For clinical datasets or third party data, please ensure that the statement adheres to our
+ policy 
+ 
+Data sets included in this study will be available upon publication.
+Research involving human participants, their data, or biological material
+Policy information about studies with human participants or human data. See also policy information about sex, gender (identity/presentation), 
+and sexual orientation and race, ethnicity and racism.
+Reporting on sex and gender N/A
+Reporting on race, ethnicity, or 
+other socially relevant 
+groupings
+N/A
+Population characteristics N/A
+Recruitment N/A
+Ethics oversight N/A
+Note that full information on the approval of the study protocol must also be provided in the manuscript.
+Field-specific reporting
+Please select the one below that is the best fit for your research. If you are not sure, read the appropriate sections before making your selection.
+Life sciences Behavioural & social sciences  Ecological, evolutionary & environmental sciences
+For a reference copy of the document with all sections, see nature.com/documents/nr-reporting-summary-flat.pdf
+Life sciences study design
+All studies must disclose on these points even when the disclosure is negative.
+Sample size No statistical methods were used to determine sample size a priori.
+Data exclusions Recording locations with a raw signal SNR < 10 based on shot-noise calibration were excluded.
+Replication Main effects were consistent across 8 mice.
+Randomization Randomization was not required as there is only one group.
+Blinding Blinding was not required as there is only one group.
+Reporting for specific materials, systems and methods
+We require information from authors about some types of materials, experimental systems and methods used in many studies. Here, indicate whether each material, 
+system or method listed is relevant to your study. If you are not sure if a list item applies to your research, read the appropriate section before selecting a response. 
+
+===== PAGE 19 =====
+3 nature portfolio  |  reporting summary April 2023 
+Materials & experimental systems
+n/a Involved in the study
+Antibodies
+Eukaryotic cell lines
+Palaeontology and archaeology
+Animals and other organisms
+Clinical data
+Dual use research of concern
+Plants
+Methods
+n/a Involved in the study
+ChIP-seq
+Flow cytometry
+MRI-based neuroimaging
+Animals and other research organisms
+Policy information about studies involving animals; ARRIVE guidelines recommended for reporting animal research, and Sex and Gender in 
+Research
+Laboratory animals Experiments were performed in adult (8-16 weeks) male and female wild-type C57BL/6J mice.
+Wild animals The present study did not involve wild animals.
+Reporting on sex The present study involve both male and female mice.
+Field-collected samples The present study did not involve Field-collected samples.
+Ethics oversight All experiments and procedures were conducted in accordance with the U.S. NIH Guide for the Care and Use of Laboratory Animals 
+and the Institutional Animal Care and Use Committees of Columbia University.
+Note that full information on the approval of the study protocol must also be provided in the manuscript.
+Novel plant genotypes Describe the methods by which all novel plant genotypes were produced. This includes those generated by transgenic approaches, 
+gene editing, chemical/radiation-based mutagenesis and hybridization. For transgenic lines, describe the transformation method, the 
+number of independent lines analyzed and the generation upon which experiments were performed. For gene-edited lines, describe 
+the editor used, the endogenous sequence targeted for editing, the targeting guide RNA sequence (if applicable) and how the editor 
+was applied.
+Seed stocks Report on the source of all seed stocks or other plant material used. If applicable, state the seed stock centre and catalogue number. If 
+plant specimens were collected from the field, describe the collection location, date and sampling procedures.Authentication Describe any authentication procedures for each seed stock used or novel genotype generated. Describe any experiments used to 
+assess the effect of a mutation and, where applicable, how potential secondary effects (e.g. second site T-DNA insertions, mosiacism, 
+off-target gene editing) were examined.
+Plants

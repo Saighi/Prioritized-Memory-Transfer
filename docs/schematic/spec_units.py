@@ -13,15 +13,20 @@ Sign convention (Tang et al. 2023, Fig. 1): excitatory = arrowhead, inhibitory =
 It follows from the maths, per unit i (j the other unit):
 
   eps_{T,i} = x_{T,i} - W_{T,ij} x_{T,j}      -> x_i->eps_i excitatory, x_j->eps_i inhibitory
-  dx_{T,i} propto -pi_T (eps_{T,i} - W_{T,ji} eps_{T,j}) + pi_ST eps_{TS,i}
+  dx_{T,i} propto -pi_T (eps_{T,i} - W_{T,ji} eps_{T,j}) + kappa eps_{TS,i}
                                               -> eps_i->x_i inhibitory, eps_j->x_i excitatory
+
+The crossing labels show the transpose explicitly.  Thus x_j->eps_i carries W_ij,
+whereas eps_i->x_j carries pi (W^T)_ji = pi W_ij: the recurrent factor is the
+same scalar coefficient, written in the coordinate order of the operator acting
+on each pathway, and the error drive also carries its population precision pi.
   eps_{TS,i} = x_{S,i} - x_{T,i}              -> x_S excitatory, x_T inhibitory into it
   dx_{S,i} gets -pi_TS eps_{TS,i}             -> inhibitory
-  x_T gets +pi_ST eps_{TS,i}, pi_ST signed    -> the terminal follows the phase:
-      sleep (pi_ST<0) inhibitory, wake (pi_ST>0) excitatory.
+  x_T gets +kappa eps_{TS,i}, kappa signed    -> the terminal follows the phase:
+      sleep (kappa<0) inhibitory with gain |kappa|, wake (kappa>0) excitatory.
 
-Colours keep the population-level semantics: blue = prediction / descending,
-orange = error / ascending drive (``COLORS`` is shared from ``spec.py``).
+Colours follow the paper legend: blue arrowhead = excitatory, orange dot = inhibitory
+(``COLORS`` is shared from ``spec.py``).
 """
 from __future__ import annotations
 
@@ -45,7 +50,7 @@ class Edge:
     src: str
     dst: str
     tex: str           # label ('' = unlabelled, e.g. unit-gain identity lines)
-    flow: str          # "pred" (descending, blue) | "err" (ascending/drive, orange)
+    flow: str          # "pred" (blue) | "err" (orange); names retained for template compatibility
     sign: str          # "+" excitatory (arrowhead) | "-" inhibitory (dot)
     lpos: float = 0.5  # label position along the path
     bend: float = 16.0
@@ -71,14 +76,12 @@ def build_spec(phase: str = "sleep", values: Optional[object] = None) -> Dict:
     piT = g("pi_T", r"\pi_T")
     piS = g("pi_S", r"\pi_S")
     piTS = g("pi_TS", r"\pi_{TS}")
-    piST = g("pi_ST", r"\pi_{ST}")
-
     numeric_piST = (values is not None and hasattr(values, "pi_ST")
                     and not isinstance(getattr(values, "pi_ST"), str))
     if numeric_piST:
-        drive = piST
+        drive = f"{abs(float(getattr(values, 'pi_ST'))):g}"
     else:
-        drive = piST + ("<0" if phase == "sleep" else ">0")
+        drive = r"|\kappa|" if phase == "sleep" else r"\kappa"
     drive_sign = "-" if phase == "sleep" else "+"   # the terminal IS the phase
 
     nodes: List[Node] = []
@@ -96,25 +99,25 @@ def build_spec(phase: str = "sleep", values: Optional[object] = None) -> Dict:
     for i in (1, 2):
         edges += [
             # teacher unit-i vertical pair (eps_T,i = x_T,i - ...)
-            Edge(f"xT{i}", f"eT{i}", "", "err", "+"),
-            Edge(f"eT{i}", f"xT{i}", piT, "pred", "-"),
+            Edge(f"xT{i}", f"eT{i}", "", "pred", "+"),
+            Edge(f"eT{i}", f"xT{i}", piT, "err", "-"),
             # interface column i — the one-to-one mapping, no crossing here
-            Edge(f"xT{i}", f"eTS{i}", "", "pred", "-"),          # prediction (enters -)
+            Edge(f"xT{i}", f"eTS{i}", "", "err", "-"),           # prediction (enters -)
             Edge(f"eTS{i}", f"xT{i}", drive, "err", drive_sign),  # signed drive to T
-            Edge(f"xS{i}", f"eTS{i}", "", "err", "+"),           # evidence (enters +)
-            Edge(f"eTS{i}", f"xS{i}", piTS, "pred", "-"),        # perception
+            Edge(f"xS{i}", f"eTS{i}", "", "pred", "+"),          # evidence (enters +)
+            Edge(f"eTS{i}", f"xS{i}", piTS, "err", "-"),         # perception
             # student unit-i vertical pair
-            Edge(f"xS{i}", f"eS{i}", "", "err", "+"),
-            Edge(f"eS{i}", f"xS{i}", piS, "pred", "-"),
+            Edge(f"xS{i}", f"eS{i}", "", "pred", "+"),
+            Edge(f"eS{i}", f"xS{i}", piS, "err", "-"),
         ]
     # lateral cross-communication: W has zero diagonal, so within a population the
     # units talk ONLY through these crossing reciprocal pairs (cf. Tang Fig. 1B).
     for i, j in ((1, 2), (2, 1)):
         edges += [
-            Edge(f"xT{j}", f"eT{i}", "", "err", "-", bend=10),
-            Edge(f"eT{i}", f"xT{j}", rf"W_{{T,{i}{j}}}", "pred", "+", lpos=0.18, bend=10),
-            Edge(f"xS{j}", f"eS{i}", "", "err", "-", bend=10),
-            Edge(f"eS{i}", f"xS{j}", rf"W_{{S,{i}{j}}}", "pred", "+", lpos=0.18, bend=10),
+            Edge(f"xT{j}", f"eT{i}", rf"W_{{T,{i}{j}}}", "err", "-", lpos=0.18, bend=10),
+            Edge(f"eT{i}", f"xT{j}", rf"\pi_T\left(W_T^\top\right)_{{{j}{i}}}", "pred", "+", lpos=0.18, bend=10),
+            Edge(f"xS{j}", f"eS{i}", rf"W_{{S,{i}{j}}}", "err", "-", lpos=0.18, bend=10),
+            Edge(f"eS{i}", f"xS{j}", rf"\pi_S\left(W_S^\top\right)_{{{j}{i}}}", "pred", "+", lpos=0.18, bend=10),
         ]
 
     meta = {"phase": phase,

@@ -1,0 +1,1322 @@
+
+
+===== PAGE 1 =====
+RESEARCH ARTICLE NEUROSCIENCE
+BIOPHYSICS AND COMPUTATIONAL BIOLOGY
+OPEN ACCESS
+Two-factor synaptic consolidation reconciles robustness with
+pruning and homeostatic scaling
+Georgios Iatropoulosa,1 ID , Wulfram Gerstnera, and Johanni Breaa ID
+Edited by Donald Pfaﬀ, Rockefeller University, New York, NY; received November 4, 2024; accepted October 2, 2025
+Memory consolidation refers to a process of engram reorganization and stabilization
+that is thought to occur primarily during sleep through a combination of neural
+replay, homeostatic plasticity, synaptic maturation, and pruning. From a computational
+perspective, however, this process remains puzzling, as it is unclear how to incorporate
+the underlying mechanisms into a common mathematical model of learning and
+memory. Here, we propose a solution by deriving a self-supervised consolidation model
+that uses replay and two-factor synapses to encode memories in neural networks in
+a way that maximizes the robustness of cued recall with respect to intrinsic synaptic
+noise. We show that the dynamics of this optimization make the connectivity sparse and
+offer a uniﬁed account of several experimentally observed signs of consolidation, such
+as multiplicative homeostatic scaling, task-driven synaptic pruning, increased neural
+stimulus selectivity, and preferential strengthening of weak memories. The model also
+reproduces developmental trends in connectivity and stimulus selectivity better than
+previous models. Finally, it predicts that intrinsic synaptic noise ﬂuctuations should
+scale sublinearly with synaptic strength; we ﬁnd support for this in a meta-analysis of
+published synaptic imaging datasets.
+memory consolidation| structural synaptic plasticity| attractor neural networks| sleep|
+synaptic volatility
+The ability to store and retrieve remote memory is thought to rely on a distributed
+network of neurons located primarily in the cortical areas of the brain (1–4). This view
+is supported by anatomical studies, showing that cortical circuits are highly recurrent
+and, thus, particularly conducive to information storage (5–7). In an effort to unify these
+ﬁndings, models of long-term memory are today often based on the concept of attractor
+networks (8). The basic idea of this approach is to represent local cortical circuits with
+a recurrent neural network, in which each memory corresponds to a distinct pattern of
+activity that acts as an attractor of the network’s dynamics (9, 10).
+In this context, memory encoding is modeled by conﬁguring the connections of the
+network to imprint activity patterns as stable attractors. When this is done optimally,
+memory storage is saturated and the network reaches critical capacity (11, 12). This state
+is particularly signiﬁcant. In a series of recent studies, attractor networks operating close
+to critical capacity have been shown to mimic several dynamical and structural motifs
+observed in cortical circuits, thereby suggesting that optimal storage is an organizing
+principle of cortical connectivity (13–16). However, it is unclear how such optimality
+can emerge in biology, and the precise role of synaptic plasticity in this process remains
+unknown.
+In the experimental literature, the process whereby memories are stabilized and
+reshaped for long-term storage is generally referred to as consolidation. This takes
+place mainly during sleep (17) and is believed to be effected by a combination of
+neurophysiological mechanisms: Shortly after an initial episode of learning, cortical
+circuits undergo early tagging (18) and an immature engram is formed (19). This is
+accompanied by a rapid growth of new dendritic spines (20, 21). During sleep, the
+cortical engram is stabilized by replaying past neural activity (22–24) while task-irrelevant
+connections are pruned (21, 25, 26). At the same time, surviving synaptic connections
+are collectively scaled down (27–29) in order to maintain ﬁring rate homeostasis (30).
+Notably, this regulation is multiplicative and, thus, preserves the relative differences
+between synapses (31).
+Many of these aspects are neglected in standard attractor network models. Although
+phenomenological models have demonstrated that isolated aspects of consolidation, such
+as replay (32, 33), pruning (34), and homeostasis (35, 36), are beneﬁcial for memory and
+learning, a principled account of the consolidation process within a common theoretical
+framework is lacking.
+Signiﬁcance
+While most experiences are
+forgotten after only a few days,
+some memories can last an entire
+lifetime. The neurophysiological
+mechanisms that enable such
+memory preservation are poorly
+understood but are believed to
+be active during sleep, when
+neurons replay past events,
+prune their synapses, and
+regulate their firing. We provide a
+unified mathematical explanation
+for these processes in the form of
+an algorithm that stores
+memories in neural networks
+with maximal noise robustness.
+By representing each synapse as
+a product of two factors, our
+model automatically removes and
+tunes appropriate connections,
+while homeostatically scaling
+each neuron’s input. Our model
+reproduces experimental signs of
+activity-dependent rewiring and
+long-term memory formation in
+synaptic, cortical, and
+psychological data, and oﬀers
+testable predictions.
+Author aﬀiliations: aSchool of Life Sciences and School
+of Computer and Communication Sciences, École
+Polytechnique Fédérale de Lausanne, Lausanne 1015,
+Switzerland
+Author contributions: G.I., W.G., and J.B. designed
+research; G.I. performed research; G.I. contributed new
+reagents/analytic tools; G.I. analyzed data; and G.I., W.G.,
+and J.B. wrote the paper.
+The authors declare no competing interest.
+This article is a PNAS Direct Submission.
+Copyright © 2025 the Author(s). Published by PNAS.
+This open access article is distributed under Creative
+Commons Attribution License 4.0 (CC BY).
+1To whom correspondence may be addressed. Email:
+georgios.iatropoulos@gmail.com.
+This article contains supporting information online
+at https://www.pnas.org/lookup/suppl/doi:10.1073/pnas.
+2422602122/-/DCSupplemental.
+Published October 31, 2025.
+PNAS 2025 Vol. 122 No. 44 e2422602122 https://doi.org/10.1073/pnas.2422602122 1 of 10
+Downloaded from https://www.pnas.org by EPFL SISB BIBLIOTEQUE on November 7, 2025 from IP address 128.178.116.106.
+
+
+===== PAGE 2 =====
+Here, we derive a normative synaptic plasticity model that
+reconciles the various biological mechanisms of consolidation
+with the notion of critical capacity in attractor networks.
+Our derivation is fundamentally based on a reformulation of
+the problem of critical capacity in two ways: First, instead
+of considering optimality to be a maximization of storage
+capacity (13–16), we deﬁne it as a maximization of memory
+robustness. Second, we assume that synapses are products of
+multiple subsynaptic components which form the expression
+sites for synaptic plasticity (36–39). The result is a self-supervised
+plasticity model that uses a combination of replay, homeostatic
+scaling, and Hebbian plasticity to prune connections and shape
+the network to perform noise-tolerant memory recall. The
+model offers a simple explanation for a wide range of putative
+consolidation effects observed in synaptic, neural, and behavioral
+data.
+Results
+We construct our consolidation model in three steps: First, we
+introduce a speciﬁc parameterization of synaptic strength. Then,
+we deﬁne memory robustness. Finally, we combine these two
+parts to derive a learning rule that dictates how synapses should
+be modiﬁed to maximize memory robustness, that is, consolidate
+memory.
+The Circuit and Synapse Model. We model a local circuit of
+cortical pyramidal cells using a recurrent network ofN excitatory
+binary neurons (Fig. 1 A). At every discrete time step t, each
+neuron i = 1, . . . , N is characterized by an output state si(t),
+which represents a brief period of elevated (si = 1) or suppressed
+ﬁring ( si = 0), similar to “up” and “down” states (40). The
+elevated state ( si = 1) occurs only if the neuron’s total input
+current Ii(t) exceeds zero. The input current evolves in time
+according to
+Ii(t + 1) =
+N∑
+j=1
+wijsj(t)− Iinh,i(t), [1]
+where the ﬁrst term corresponds to the excitatory synaptic input
+from all neighboring neurons andwij≥ 0 denotes the connection
+strength from neuron j to i (SI Appendix , Circuit Model ). The
+second term is a scalar that represents the summed effect of
+all inhibitory inputs, as inhibitory neurons are not explicitly
+included in the model of the circuit.
+In our mathematical analysis of the storage properties of the
+network, we focus on the connection strengths wij. We begin
+by noting that the functional strength of a biological synapse
+(measured, for instance, as the amplitude of the postsynaptic
+potential) is an aggregate quantity that is determined by the
+interaction of several protein complexes that combine to form
+the internal synaptic structure (41). When long-term plasticity is
+induced, structural and chemical changes cascade throughout this
+molecular interaction network, causing the concentration and
+conﬁguration of each component to be altered over the course of
+seconds to hours (42). This ultimately increases or decreases the
+synapse’s functional strength.
+We model this internal synaptic structure by expressing each
+weight wij as the product of z subsynaptic components (factors)
+uijk, where k = 1, . . ., z, so that
+wij =
+z∏
+k=1
+uijk . [2]
+1 2 3 4
+Synaptic components (z)
+0
+1
+2Noise scaling (q)
+Consolidation
+model
+Synaptic
+noise
+Neural noise
+Input current
+Signal
+Noise
+Threshold
+CUE
+RESET
+Robust 
+inactivation
+Robust 
+activation
+Time
+Output
+A
+C D
+B
+Fig. 1. General model schematics. ( A) Diagram of the circuit model. We
+consider a recurrent network of binary excitatory neurons with plastic
+nonnegative connection weights (gray). Note that inhibitory neurons are not
+explicitly modeled. Instead, inhibition is represented by a neuron-specific
+scalar input current Iinh,i (blue) that also undergoes plasticity. (B) Diagram of
+the synapse model. The total connection weight wij is a product of z factors
+uij1, . . ., uijz that represent the eﬀicacy of subsynaptic components, e.g.,
+release probability (blue), receptor density (green), and scaﬀolding protein
+content (brown, orange). ( C) Illustration of input current dynamics during
+idleness (white background) and recall (pink background) in a single neuron.
+The SNR during recall of a pattern is determined by the deflection of the
+mean input current from threshold, relative to the fluctuations caused by
+noisy aﬀerent neurons or synapses. ( D) The noise scaling exponent q as a
+function of z for neural and synaptic noise. Consolidation withz components
+maximizes robustness with respect to noise of type q = 2/z, which is
+equivalent to neural noise when z = 1, and synaptic noise when z = 2.
+Each variable uijk can be seen as the relative concentration of one
+or more subcellular building-blocks that are necessary to form a
+functional connection, for instance, the average concentration
+of released neurotransmitters or the density of postsynaptic
+receptors and scaffold proteins (Fig. 1 B; see also SI Appendix ,
+Synapse Model and ref. 36). We speciﬁcally consider one of the
+synaptic components ( uij1) to be a ﬂexible plasticity tag that is
+more volatile and sensitive to noise, while the remaining z− 1
+components represent more stable molecular processes that are
+active only during consolidation, consistent with tagging-and-
+capture dynamics (43, 44) (SI Appendix, Extended Synaptic Noise
+Analysis).
+Consolidation with Homeostatic Scaling, Synaptic Pruning, and
+Replay. We deﬁne consolidation as the process of optimally
+storing a set of M memories, where each memory corresponds to
+a pattern of stationary network activity in which a speciﬁc group
+of neurons is active, while the rest is silent. The desired output of
+neuron i in pattern  = 1, . . ., M is deﬁned by 
+i , which is one
+with probability f ≤ 0.5 and zero otherwise. We parameterize
+the storage load using the ratio = M /N (where c denotes the
+highest possible load).
+Prior to consolidation, the network is assumed to have
+undergone an initial episode of learning that has imprinted all
+patterns as stable attractors, albeit with suboptimal robustness. At
+this stage, patterns can only be recalled if the network operates
+2 of 10 https://doi.org/10.1073/pnas.2422602122 pnas.org
+Downloaded from https://www.pnas.org by EPFL SISB BIBLIOTEQUE on November 7, 2025 from IP address 128.178.116.106.
+
+
+===== PAGE 3 =====
+A
+G H I J
+B
+C F
+D E
+Fig. 2. Simulated consolidation in networks with multifactor synapses. ( A) Diagram of one replay cycle of the consolidation model, implemented in discrete
+time. ( B) The gating function gi. This determines the amplitude and sign of plasticity induction after replay of a single pattern ( SI Appendix , Consolidation
+Algorithm). (C) The learning rate Gi. This determines the amount of plasticity expression after a full replay cycle and depends on the accumulated signal∑
+|gi|.
+(D) SNR (mean over 103 neurons) for diﬀerent combinations of noise scaling q and components z, at /c = 0.08. Weights are normalized to ∑
+j wq
+ij = 1, and
+the maximal SNR, for a given q, is scaled to one. ( E) Connection density. Circles represent simulations (mean over 103 neurons) while dashed lines represent
+theoretical solutions (SI Appendix, Theoretical Solutions). The light gray area marks the connection probability (mean± SEM) among cortical pyramidal cells in a
+meta-analysis of 124 experimental datasets from mice, rats, cats, and ferrets (16) (SI Appendix, Data Analysis). (F) Left: distribution of nonpruned weights [mean
+normalized to 0.1, colors as in (E)]. For distributions of all weights, see SI Appendix, Fig. S1. Right: the second synaptic components (uij2) plotted as a function of
+the first (uij1) in a simulated neuron with z = 2, at /c = 0.33. (G) Illustration of neural noise. Each row of boxes represents binary input patterns at discrete
+time steps (gray = noise-free; red = distorted). (H) Left: SNR with respect to neural noise ( q = 2; the noise level is parameterized by fnoise; SI Appendix, Noise
+Scaling). Right: highest level of tolerated neural noise in tests of pattern recall ( SI Appendix, Numerical Optimization and Evaluation ). (I) Illustration of synaptic
+noise, which directly perturbs synaptic strengths. ( J) Left: SNR with respect to synaptic noise ( q = 2− 2/z; the noise level is parameterized by noise). Right:
+highest level of tolerated synaptic noise in tests of pattern recall. All results in this figure are produced with f = 0.5, but there is no qualitative change with
+low-activity patterns (SI Appendix, Fig. S2).
+with very low levels of noise. The purpose of consolidation is
+now to tune all connections so as to maximize robustness and
+allow patterns to be successfully recalled under much noisier
+conditions.
+We deﬁne robustness as the largest amount of noise that can
+be tolerated by the neural population before an error occurs
+during recall (Fig. 1 C). This is determined by the signal-to-
+noise ratio (SNR) of the weakest pattern. We can maximize
+this by having each neuron independently maximize a neuron-
+speciﬁc SNR where the signal is the amplitude of the input
+current deﬂection at the time the weakest pattern is recalled, i.e.
+min|I 
+i| = min|∑N
+j wij
+j − Iinh,i| (SI Appendix , Memory
+Robustness). Through iterative weight changes, the weakest
+pattern of neuroni will become more robust, and another pattern
+will then become the weakest and used to maximize the SNR.
+This process continues, until the lowest SNR across all patterns
+converges to a maximum.
+The noise of the SNR is determined by the magnitude of
+random ﬂuctuations in the input current. This varies depending
+on the source of noise that causes the ﬂuctuations. Here, we
+expand on a previous analysis (45) and distinguish between two
+types of noise: neural noise and synaptic noise. Neural noise
+refers to perturbations of the neural states (thes-variables) caused
+either by the encounter of distorted stimuli or by faulty neural
+output activity (i.e., ﬁring below the threshold or failing to ﬁre
+above the threshold). Synaptic noise, on the other hand, refers to
+perturbations in the connectivity that, for example, are produced
+by spontaneous chemical reactions, conformational changes, or
+protein degradation and turnover (46, 47). We model these
+perturbations as white noise added to the volatile component
+uij1 in each connection (SI Appendix, Noise Scaling).
+Input ﬂuctuations caused by neural noise are proportional to√∑
+j w2
+ij and are therefore dependent on synaptic weight but
+not on the synaptic structural parameter z. The magnitude of
+synaptic noise, however, depends both on synaptic weight and
+structure, by scaling as
+√∑
+j w2−2/z
+ij (SI Appendix, Noise Scaling).
+We can therefore write a general expression for the SNR as
+SNR∝ min|I 
+i|√∑
+j wq
+ij
+, [3]
+where the scaling exponent q is 2 for neural noise and 2− 2/z
+for synaptic noise (Fig. 1 D). The SNR can, in principle, be
+optimized (up to an arbitrary scaling factor) by any consolidation
+process that a) maximizes the signal and b) maintains a constant
+synaptic “mass”∑
+j wq
+ij. The second property, however, requires
+a homeostatic weight regulation that is inhomogeneous across
+weights and, as such, directly at odds with the multiplicative
+homeostatic plasticity that has been observed experimentally (31)
+(SI Appendix , Geometric Interpretation ). We resolve this issue
+by optimizing the SNR in terms of each neuron’s subsynaptic
+components uijk, instead of directly treating the whole weightwij.
+PNAS 2025 Vol. 122 No. 44 e2422602122 https://doi.org/10.1073/pnas.2422602122 3 of 10
+Downloaded from https://www.pnas.org by EPFL SISB BIBLIOTEQUE on November 7, 2025 from IP address 128.178.116.106.
+
+
+===== PAGE 4 =====
+This results in the following three-step process (Fig. 2 A; see
+Materials and Methods and SI Appendix, Consolidation Algorithm
+for more details):
+1. Plasticity induction: All patterns are replayed. For each pattern
+, the network receives a cue and is updated (Eq. 1) so
+that recall occurs. This triggers a plasticity signal u
+ijk =
+gi(I 
+i )sj
+wij
+uijk
+, which is accumulated in each neuron i. The
+function gi(I 
+i ) = ±e−i|I 
+i| (where i > 0 is a sharpness
+parameter) is a neuron-speciﬁc, input-dependent plasticity
+gate that determines the sign and amplitude of induced
+plasticity (Fig. 2B).
+2. Plasticity expression: After the replay cycle, the accumulated
+plasticity signal is expressed by updating each component
+uijk with the increment Δuijk = Gi
+∑
+ u
+ijk, where Gi is a
+neuron-speciﬁc learning rate that is regulated so that the total
+amount of expression is the same in each cycle (Fig. 2 C).
+The plasticity signal is also used to adjust the inhibitory input
+Iinh,i.
+3. Homeostatic scaling: All uijk are scaled by a normalization
+factor, and the process starts over.
+This consolidation model possesses a number of noteworthy
+mathematical properties: First, it is self-supervised, and requires
+no explicit error or target signal, as the target is provided by the re-
+sponse of the neurons themselves. Second, it maximizes the SNR
+for noise of typeq = 2/z (Figs. 1D and 2D). In other words, our
+consolidation model withz-component weights leads to the same
+solution as conventional single-component weights optimized
+with L2/z regularization (SI Appendix, Consolidation Algorithm).
+Our model, however, ﬁnds the solution with multiplicative
+homeostatic scaling, whereas a conventional implementation
+of L2/z would require inhomogeneous homeostatic changes
+(SI Appendix , Geometric Interpretation ). As a result, networks
+that undergo consolidation with more subsynaptic components
+(higher z) end up with a larger fraction of zero-valued weights,
+also referred to as pruned weights (Fig. 2 E and F and SI
+Appendix, Fig. S1). Crucially, only networks with more than one
+component (z≥ 2) reach a connection probability low enough
+to be comparable to that in cortex, while the lowest connectivity
+produced using single-component weights is 50% (Fig. 2 E; see
+also SI Appendix, Theoretical Solutions). Finally, the consolidation
+process also ensures that components within the same synapse
+align with each other, so that uij1 = uij2 = . . . = uijz (Fig. 2F).
+This means that all components end up highly correlated with
+the total connection strength wij, consistent with experimental
+ﬁndings (48, 49).
+Networks with two-factor synapses ( z = 2) constitute a
+particularly important case. While consolidation with z = 1
+maximizes memory robustness with respect to neural noise (Fig. 2
+G and H), consolidation with z = 2 maximizes robustness with
+respect to synaptic noise (Fig. 2 I and J). In practice, this means
+that two-factor consolidation generates networks that are highly
+pruned yet, at the same time, at least as robust to synaptic noise
+as the densest networks (Fig. 2 J). For z = 2, the dynamics
+of the weights close to convergence can be described with the
+differential equation
+dwij
+dt ∝
+[
+h
+(∑
+j wij
+)
+  
+homeostatic scaling
++ Gi(t)∑
+ gi
+(
+I 
+i
+)
+
+j
+  
+replay-induced LTP/LTD
+]
+· wij, [4]
+where h(x) is a general homeostatic function that is negative
+when x exceeds a baseline, and positive otherwise. Importantly,
+all weight changes are now multiplicative, i.e., proportional to the
+momentary value of wij. The homeostatic part, more speciﬁcally,
+performs a multiplicative L1-regularization that both prunes a
+large fraction of the connections and scales the remaining ones to
+maintain a constant average strength. This, by extension, keeps
+the average input current constant as well (assuming a stable
+level of output activity in the network). The formulation in
+Eq. 4 is directly compatible with, and generalizes, previously
+proposed models of homeostatic plasticity (35, 36) (SI Appendix,
+The Homeostatic Function).
+Note that our consolidation model is entirely derived from
+normative assumptions. This is equally true for the synapse model
+in Eq. 2, which originates from a parameterization technique that
+implicitly biases an optimizer to ﬁnd sparse solutions (50, 51).
+Ablating either the subsynaptic structure or the homeostatic
+scaling causes the model to fail (SI Appendix, Fig. S4).
+Consolidation Signs in Synaptic, Neural, and Behavioral Data.
+In order to demonstrate how the consolidation algorithm can
+be incorporated into a single, self-supervised model of memory
+formation and stabilization, we simulate a network with two-
+factor synapses that optimally stores patterns across two phases
+of learning.
+In the ﬁrst phase, representing wakefulness, the network starts
+fully connected and sequentially encounters external stimulus
+patterns that are imprinted as attractors using few-shot learning
+(SI Appendix, Simulating Wakefulness and Sleep ). This leaves the
+network densely connected and sensitive to noise (Fig. 3A). In the
+second phase, the network undergoes consolidation, rendering
+the connectivity sparse and robust (Fig. 3 B; see SI Appendix ,
+Fig. S5 for details). This process represents the cumulative effect
+of multiple sleep sessions taking place over an extended period of
+time.
+The simulation qualitatively reproduces a wide range of
+experimental observations linked to long-term plasticity (Fig. 3
+C–I; note, however, that simulated effects generally are more
+ampliﬁed, as we model a long stretch of biological time with
+a single bout of optimal consolidation). On the synaptic level,
+simulated wakefulness produces relatively small weight pertur-
+bations, while sleep entails more extensive rewiring in which
+a majority of existing weights are pruned. The distribution of
+presleep weights therefore closely overlaps with the distribution of
+pruned weights (Fig. 3C, Left), while surviving weights generally
+are stronger. We ﬁnd analogous results in experimental data (52)
+(Fig. 3 C, Right). The distribution of dendritic spine volume
+for young spines (age ≤ 4 d) is statistically indistinguishable
+from that of pruned spines, while old spines (age > 4 d) are
+signiﬁcantly larger (Kolmogorov–Smirnov tests, Ppruned = 0.61,
+Pold = 8.6× 10−190, nyoung = 2,268, npruned = 2,300,
+nold = 5,011). Simulated networks with single-component
+weights, however, do not undergo enough pruning to replicate
+this effect (SI Appendix, Fig. S7A).
+An analysis of individual weight trajectories reveals that the
+probability of pruning decreases as a function of strength, mean-
+ing that connections that are potentiated prior to consolidation
+have higher chances of surviving (Fig. 3 D, Left). This trend
+is, again, present and highly signiﬁcant in the experimental data
+(52) (logistic regression with two-tailedt-test, P = 1.5×10−195,
+n = 7,311; Fig. 3 D, Right).
+Next, we analyze how weights are conﬁgured depending on
+neural response similarities. Using the total excitatory input
+current∑
+j wijsj as an indicator of graded output activity, we ﬁnd
+that neurons are more likely to stay connected after consolidation
+4 of 10 https://doi.org/10.1073/pnas.2422602122 pnas.org
+Downloaded from https://www.pnas.org by EPFL SISB BIBLIOTEQUE on November 7, 2025 from IP address 128.178.116.106.
+
+
+===== PAGE 5 =====
+0 1 2
+SNRbefore (z-scored recall rate)
+−0.6
+0.0
+0.6
+1.2
+SNRafter − SNRbefore
+ (z-scored recall rate)
+12h Sleep
+r =− 0.17
+P=5×10−4
+n =439
+12h Wake
+r =− 0.21
+P=7×10−6
+n =437
+***
+Experimental data          F & H (2012)
+F & H (2015)
+A & C (2021)
+0 0.1 0.2 0.3
+SNRbefore (norm.)
+0
+1
+2SNRafter − SNRbefore (norm.)
+2 
+6 
+15 
+105 cycles
+Simulation
+0 0.2 0.4 0.6
+SNRbefore (norm.)
+1.5
+2.0
+2.5
+3.0
+3.5SNRafter − SNRbefore (norm.)
+high load
+low load
+Prediction
+101 102
+Spine volume (a.u.)
+0.0
+0.5
+1.0
+1.5
+n.s. ***
+Loewenstein et al. (2011)
+young
+pruned
+old
+10−1 100
+Weight
+0
+1
+2Probability density
+Simulation
+before
+pruned
+after
+0 50 100 150 200
+Time step
+0
+40
+Ii (t) after consolidation
+0 50 100 150 200
+Time step
+0
+40
+Ii (t) before consolidation
+1 10 100
+Stimulus rank
+0
+2
+4
+6Firing rate (z-score)
+*****
+Woloszyn & Sheinberg (2012)
+1 10 100
+Stimulus rank
+0
+2
+4Input current (z-score)
+Simulation
+Familiar
+Novel
+Novel      Familiar     
+0.2
+0.4
+0.6Sparseness (over stim.)
+**
+exc.
+input
+soft
+output
+hard
+output
+exp.
+data
+ 
+0.0 0.2 0.4
+Response correlation
+.05
+.1
+.5
+Connection strength
+ 
+Weight
+EPSP
+0.0 0.2 0.4
+Response correlation
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0Connection probability
+P=2×10−7
+ 
+Simulation
+Cossell et al.
+(2015)
+−2 0 2
+Log-normalized weight
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0Pruning probability
+100 500
+10
+5 c
+yc
+les
+Simulation
+min
+max
+0 40
+Neuron j
+0
+40Neuron i
+ wij
+0 40
+Neuron j
+0
+40Neuron i
+wij
+−3 0 3
+Log-norm. spine vol.
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+Loewenstein et al. (2011)
+Binning
+Logit regr.
+A
+C
+E
+H I
+F G
+D
+B
+=0.45
+P= 9×10−5
+n =72
+ρ
+Fig. 3. Signs of consolidation across three spatial scales. ( A) Weight matrix ( Left) and input current ( Right) of 40 neurons during pattern recall, before
+consolidation (f = 0.05,  = 0.44). The network receives a cue every 10 steps and is then simulated for 10 steps. Synaptic noise starts after 50 steps (red line;
+noise/⟨u⟩obs = 0.3). ( B) Same as ( A), but after consolidation. ( C) Distribution of weights ( Left) and dendritic spine sizes on pyramidal cells in rodent cortex
+(52) (Right). (D) Pruning probability as a function of weight in simulated data ( Left) and as a function of spine size in experimental data ( Right). (E) Connection
+probability (Left) and connection strength (Right) as a function of binned response correlation among simulated neurons (black) and pyramidal cells in rodent
+visual cortex (53) (blue; error bars represent mean ± SEM). Dashed curves are grand averages. Connection strengths are normalized to have a maximum of
+one. (F) Tuning curves with respect to familiar and novel (previously unseen) stimuli, for simulated neurons ( Left; mean over 103 neurons) and for pyramidal
+cells in macaque inferior temporal cortex (54) ( Right; mean± SEM). (G) Tuning sparseness in simulations (circles; mean over 103 neurons) and experimental
+data (squares; mean± SEM). The hard and soft output is obtained by using sigmoidal activation functions with varying smoothness. (H) Left panel shows change
+in pattern SNR after simulated consolidation (circles are patterns) while Right panel shows change in human memory trace SNR after sleep (pink markers) and
+after wake (blue markers) (55–57). Behavioral data have been slightly jittered for clarity. (I) Change in pattern SNR after simulated consolidation with diﬀerent
+loads. Stars indicate significance levels∗∗P < 0.01 and∗∗∗P < 0.001.
+if their responses during recall are correlated (Fig. 3E, Left). Sim-
+ilar synaptic selectivity is seen in experimental measurements of
+visual cortical neurons in mice during static image presentations
+(53) (two-sided Cochran–Armitage trend test, P = 1.7× 10−7,
+n = 520). The average connection strength also increases with
+response correlation, both in simulated and experimental data
+(Spearman’s  = 0.45, P = 8.7× 10−5, n = 72; Fig. 3 E,
+Right). Networks with single-factor synapses, however, fail to
+match experimental statistics (SI Appendix, Fig. S7B).
+Another direct consequence of our consolidation model is an
+increased neural stimulus selectivity. Each neuron’s response to
+the stored patterns is enhanced by moving the input current
+further away from the threshold. This sharpens the tuning curve
+for familiar (consolidated) patterns relative to novel ones (Fig. 3F,
+Left; SI Appendix, Stimulus Tuning). The same phenomenon can
+be observed in the activity of inferotemporal cortical pyramidal
+cells of Macaques, measured during the presentation of familiar
+and novel images (54) (Welch’st-test,∗∗P < 0.01,∗∗∗P = 1.5×
+10−5, n = 73; Fig. 3F, Right). The sharpness of the tuning curve
+is quantiﬁed by the sparseness, a metric that is near zero when all
+stimulus responses are similar, and near one when responses are
+selective to very few stimuli (SI Appendix, Stimulus Tuning). The
+sparseness increases signiﬁcantly during stimulus familiarization
+(Welch’s t-test, P = 2.9× 10−3, n = 73; Fig. 3G).
+On the behavioral level, sleep has been shown to enhance the
+ability to recall recently formed declarative memory (58), in a
+way that suggests larger improvements for items with weaker
+initial encoding (59). Our model demonstrates this effect when
+the change in SNR for each pattern is evaluated over the course
+of simulated consolidation (Fig. 3 H, Left). Patterns that start
+off weak consistently beneﬁt more than those starting strong
+(negative correlation), while a longer period of replay produces
+PNAS 2025 Vol. 122 No. 44 e2422602122 https://doi.org/10.1073/pnas.2422602122 5 of 10
+Downloaded from https://www.pnas.org by EPFL SISB BIBLIOTEQUE on November 7, 2025 from IP address 128.178.116.106.
+
+
+===== PAGE 6 =====
+0.1 0.5 0.9
+Storage load
+(age)
+0.0
+0.4
+0.8Sparseness
+z =2
+Control
+Simulation
+29-3044-45 83-92129-151
+Age (postnatal days)
+0.4
+0.6
+0.8Sparseness
+ρ = − 0.7
+P< . 005
+Berkes et al. (2009)
+Low High
+Storage load
+(env. richness)
+0.0
+0.5
+1.0Connection density
+Control
+model
+Our
+model
+z =1
+z=2
+Simulation
+Low High
+Env. richness
+.01
+.02
+.03
+.04Spine density (μm−1)
+**
+*
+Jung & Herms (2014)
+L2/3 basal
+L5 apical
+A
+B
+Fig. 4. Signs of consolidation across development. ( A) Left: Connection
+density as a function of storage load (indirect indicator of environmental
+richness) after consolidation with our model ( z = 1, 2; same as Fig. 2)
+and with a control model that maximizes storage load instead of SNR ( SI
+Appendix, Control Model ). Right: Density of stable dendritic spines (age > 3
+wk) in somatosensory cortex of rodents kept in environments of low and
+high stimulus richness since infancy (60). Stars indicate significance levels
+∗P < 0.05 and∗∗P < 0.01. ( B) Left: Sparseness across stimuli (red, black)
+and across neurons (pink, gray; SI Appendix , Stimulus Tuning ) as a function
+of storage load (indirect indicator of age) after consolidating low-activity
+patterns ( f = 0.05) with our model ( z = 2) and the control model. Right:
+Sparseness across time (red) and across neurons (pink) for neurons in visual
+cortex of ferrets at diﬀerent stages of development (61). Circles represent
+mean over 103 simulated neurons while squares represent experimental
+data (mean± SEM).
+a stronger average encoding (curve shifts upward). The slope
+is caused by a ceiling effect: As the SNR of each pattern is
+pushed to a maximum, weak patterns inevitably exhibit a larger
+improvement than strong ones.
+For a qualitative comparison with experimental evidence, we
+pool and reanalyze three large, published datasets on sleep-based
+consolidation of declarative memory (55–57). In each study,
+humans memorize 40 word pairs and recall is tested before and
+after 12 h of wakefulness or sleep. We estimate the memory SNR
+in each subject as the z-scored recall rate, and then compute the
+change between the two test sessions. The result (Fig. 3H, Right)
+conﬁrms that gains in SNR are higher for subjects with weaker
+initial encoding, both after wakefulness (Pearson’s r =−0.21,
+P = 6.7× 10−6, n = 437) and sleep ( r =−0.17, P = 4.6×
+10−4, n = 439). There is no signiﬁcant difference in the slopes
+(t-test, P = 0.49, n = 876), but sleep-gains are systematically
+higher across all initial performance levels (t-test, P = 3.9×10−4,
+n = 876). Our model suggests a conceptual explanation to these
+ﬁndings, where the slope is caused by a ceiling in memory strength
+while the vertical shift results from a difference in consolidation
+duration or efﬁcacy between sleep and wake. The model predicts
+that a similar systematic shift also should be observed when
+changing the length of the word list (Fig. 3I).
+Implications for Lifelong Learning. To model the effects of
+consolidation over developmental timescales (typically months or
+years), we start from the assumption that memory load increases
+with age as a response to lifelong learning (see also refs. 14 and 15).
+Accordingly, we liken cortical circuits at different stages in life
+to networks that have consolidated varying amounts of memory.
+We also use this model to represent cortical development under
+conditions of low or high environmental richness.
+According to our model, circuits that optimally store larger
+number of memories require a higher density of connections
+(Fig. 4 A, Left). This is a direct consequence of maximizing
+SNR under sparseness constraints (see Fig. 2 E, z≥ 2). This
+is consistent with the elevation in dendritic spine density
+that has been observed in animals raised in stimulus-enriched
+environments (60) (Student’s t-test, P = 5.7× 10−3, nlow = 5,
+nhigh = 6 for layer 5; P = 0.035, nlow = 4, nhigh = 4 for
+layer 2/3; Fig. 4 A, Right). The experimental ﬁnding cannot
+be reproduced if we alter the consolidation model to maximize
+storage capacity instead of SNR, as has been suggested in past
+theoretical work (14–16, 62) (Fig. 4A, black;SI Appendix, Control
+Model). The effect is also occluded when using single-factor
+synapses (Fig. 4A, gray).
+Networks that optimally store more memories also exhibit
+ﬂatter tuning proﬁles and, thus, decreased sparseness (Fig. 4
+B, Left). This is a fundamental property of our consolidation
+algorithm, caused by the decrease in the maximum attainable
+SNR with load (Fig. 2 H and J). The effect is analogous
+to the decline in sparseness that has been measured in visual
+cortical neurons of ferrets at different stages of development,
+from eye-opening to adulthood (61) (Spearman’s  =−0.69,
+P = 2.9× 10−3, n = 16 for sparseness across time; =−0.67,
+P = 4.5× 10−3, n = 16 for sparseness across neurons; Fig. 4
+B, Right). This trend cannot be reproduced with a network that
+maximizes storage capacity instead of SNR (Fig. 4B, black).
+Scaling of Intrinsic Synaptic Noise. Our consolidation model
+crucially relies on the parameterization of each synaptic weight
+wij as a product of multiple components uijk. Is it possible to
+detect signatures of such synaptic ultrastructure in available
+experimental data? To answer this, we ﬁrst note that a key
+prediction of our model can be found in the synaptic noise
+scaling. When the volatile componentuij1 is subjected to random
+perturbations, the weight of the synapse, as a whole, ﬂuctuates
+with an amplitude Δw∝ w1−1/z. For two-factor synapses, this
+reduces to
+Δw∝√w . [5]
+Stated more generally, our model predicts that synapses with
+more than one component display intrinsic noise that scales
+sublinearly with weight, both for potentiation and depression.
+Sublinear scaling also holds true when all componentsuijk are sub-
+ject to noise perturbations (SI Appendix, Extended Synaptic Noise
+Analysis). It is only in the limit of inﬁnitely many components
+(z→∞ ) that the noise magnitude becomes proportional to
+the weight. Conversely, only single-component synapses produce
+noise that is additive and uncorrelated to weight.
+To validate this prediction with an artiﬁcial synaptic dataset,
+we model the internal structure of a synapse as a stochastic
+dynamical system, and use this to simulate the evolution of 1,000
+independent synapses through time ( SI Appendix , Simulating
+Synaptic Intrinsic Noise ).
+The data are analyzed by plotting the absolute weight change
+|Δw(t)| =|w(t + Δt)− w(t)| as a function of the initial weight
+w(t) and then applying a moving average to detect underlying
+trends in the scattered data (Fig. 5A; see SI Appendix, Fig. S8A for
+more examples). Consistent with our theory, the average noise
+amplitude⟨|Δw|⟩ increases linearly in a log–log plot, both for
+6 of 10 https://doi.org/10.1073/pnas.2422602122 pnas.org
+Downloaded from https://www.pnas.org by EPFL SISB BIBLIOTEQUE on November 7, 2025 from IP address 128.178.116.106.
+
+
+===== PAGE 7 =====
+A
+B
+C
+Fig. 5. Scaling of synaptic fluctuations. ( A) Absolute weight change as a function of initial weight in simulated data with z = 2, for potentiation (orange) and
+depression (blue); see also SI Appendix, Figs. S8A and S9A. Solid lines are the results of moving averages, and dashed lines are linear fits to the solid lines (slope
+value shown in Upper Left corner). The identity line (gray) has slope 1 and is included for comparison. (B) The same type of plot as in (A) but for experimentally
+measured dendritic spine sizes in rodent cortical neurons (63, 64) (SI Appendix, Figs. S8B and S9B). (C) The scaling exponent of synaptic fluctuations in simulated
+(circles) and experimental data (squares; mean± SE). This is the slope of the average fluctuation size in logarithmic space, obtained with bootstrapped linear
+regression (see SI Appendix , Fig. S10 for additional regression results). Labels on the abscissa contain a publication reference and a brief methodological
+descriptor; complete details are provided in SI Appendix, Tables S5–S7.
+depression (Δw < 0) and potentiation (Δw > 0). This indicates
+a power-law relation in the original data, i.e.⟨|Δw|⟩∝ wx, where
+the exponent x is equivalent to the slope of the line in logarithmic
+space. We estimate this slope by applying bootstrapped linear
+regression to the trend line (SI Appendix, Synaptic Noise Scaling )
+and ﬁnd that it agrees with theoretical predictions (Fig. 5 C).
+Applying linear regression to the root mean square deviation
+or directly on the raw data yields virtually the same results ( SI
+Appendix, Figs. S9A and S10).
+To test our prediction on experimental data, we compile 20
+published synaptic datasets from 9 separate studies (29, 52, 63–
+69). These publications span more than a decade of research and
+employ ﬂuorescence microscopy and superresolution nanoscopy
+in both cultured neurons and live animals, under various
+environmental conditions (see SI Appendix , Tables S5–S7 for
+details). Common to all studies, however, is that they measure
+an indirect indicator of synaptic strength (denoted ˆw) in a large
+population of synapses that have been individually tracked over
+extended periods of time (ranging from 24 h to almost 30 d).
+We reanalyze each dataset according to the procedure de-
+scribed above. In the two largest datasets, shown as examples
+in Fig. 5 B, the average noise magnitude exhibits a clear linear
+dependence on the synaptic strength in logarithmic space, again
+indicating an underlying power-law like that found in simulations
+(similar results are reported in refs. 67 and 70; see SI Appendix,
+Figs. S8 B and S9 B for more examples). The estimated noise
+scaling exponent for each dataset is presented in Fig. 5 C and SI
+Appendix, Fig. S10.
+For large datasets with high sampling frequencies (i.e., short
+sampling intervals Δt ≤ 1h; Fig. 5 C, ﬁrst group of data),
+synaptic ﬂuctuations consistently have a sublinear scaling, with
+an exponent of 0.56± 0.02 for potentiation and 0.69± 0.02 for
+depression (99% weighted CI). These estimates are remarkably
+reliable and close to the range predicted by our synaptic noise
+model with z = 2 and 3. Note, however, that our model only
+describes intrinsic noise, which is best measured in conditions
+when activity-dependent synaptic plasticity is either negligible
+or entirely blocked. Theoretical predictions are therefore only
+PNAS 2025 Vol. 122 No. 44 e2422602122 https://doi.org/10.1073/pnas.2422602122 7 of 10
+Downloaded from https://www.pnas.org by EPFL SISB BIBLIOTEQUE on November 7, 2025 from IP address 128.178.116.106.
+
+
+===== PAGE 8 =====
+approximately applicable to the experiments, which, in almost
+all cases, contain extrinsic synaptic noise. The data by Hazan
+and Ziv (64) is a notable exception, as this was acquired while
+glutamatergic transmission was pharmacologically blocked. In
+this case, the noise scaling almost exactly matches the theoretical
+lines for z = 2 and 3, as we obtain 0.51± 0.01 for potentiation
+and 0.64± 0.01 for depression (mean± SE, bootstrap of 100
+samples; Fig. 5 B, Left).
+In datasets with smaller sample sizes (Fig. 5 C, second group)
+and longer sampling intervals (Fig. 5C, third group), the scaling
+exponent generally increases for depression and decreases for
+potentiation (Fig. 5 C, second and third CIs; SI Appendix ,
+Extended Synaptic Noise Analysis ).
+Signs of Homeostatic Scaling in Synaptic Noise. Our plasticity
+model does not only govern the trajectory of individual synapses,
+but it also shapes the distribution of synaptic populations. Recall
+that our model includes homeostatic scaling that, close to optimal
+storage, maintains a constant synaptic “mass” ∑w2/z. The
+implication is that the weight distribution, in the absence of
+activity-dependent plasticity, exhibits a constant 2
+z -th moment.
+To conﬁrm this numerically, we return to the simulated synaptic
+data and estimate the stability of different moments of the weight
+distribution by calculating the coefﬁcient of variation (CV) of the
+norm (∑wq)1/q across time (Fig. 6 A and B). Consistent with
+theory, we ﬁnd that the weight norm that varies least over time
+(i.e., has lowest CV rank) roughly follows the relationqmin = 2/z
+(Fig. 6 C and D).
+We test this prediction using the experimental data by
+Kaufman et al. (63), composed of 1 ,087 dendritic spines
+measured every 30 min over a total of 24 h. At each measurement,
+we calculate the norm of spine sizes, followed by the CV of
+the norm across time. The result, plotted as a function of q,
+A
+C D
+B
+Fig. 6. Signs of homeostatic scaling in synaptic noise. ( A) Diagram of
+dendritic spines observed at three time points t1, t2, and t3. The spine sizes
+(denoted with vector w) fluctuate as some spines grow (black) and others
+shrink (light gray). ( B) The norm of spine sizes ( ∥w∥q) is calculated at each
+time point (column) using diﬀerentq-values (rows). The fluctuation of a norm
+is then quantified by the CV over all time points. (C) The CV of norms, ranked
+from zero to one, as a function of q, using simulated data (black, gray) and
+dendritic spine sizes (pink) from pyramidal cells in rodent cortex (63) (mean±
+SE, bootstrap of 1,000 samples; see alsoSI Appendix, Fig. S12). (D) The q-value
+at which the CV is minimized (denoted qmin).
+displays a U-shaped curve that is best matched by the two-
+factor model ( R2 = 0.67 for z = 2, compared to second best
+R2 = 0.64 for z = 3; Fig. 6C, pink curve). The CV is lowest at
+qmin = 1.09± 0.43, close to the theoretical prediction forz = 2
+(Fig. 6D, pink line; see also SI Appendix , Fig. S12). The same
+analysis of Hazan and Ziv’s data (64) yields noisier results, but the
+z = 2 model is, again, the closest match (SI Appendix, Fig. S13).
+Discussion
+We have derived a general mathematical model of synaptic
+consolidation that optimizes for noise-robust recall of attractor
+memories in recurrent neural networks with factorized multi-
+component synapses. The contribution of our work is two-fold:
+First, it demonstrates that the various mechanisms underlying
+consolidation can be derived from ﬁrst principles, within a single
+model of optimal memory storage. Second, by linking optimality
+to synaptic plasticity and the concept of critical capacity, it
+offers an explanation of how the structured connectivity of
+optimal attractor networks (14–16) might emerge in cortical
+circuits.
+In the special case of two-factor synapses, our plasticity model
+has a particularly simple form, in which all updates are multi-
+plicative, both in terms of subsynaptic factors u and the whole
+synaptic weight w. Despite this, a large fraction of connections
+are pruned while the average strength of surviving synapses is
+homeostatically regulated. This resolves a contradiction in past
+synaptic plasticity studies: Sparse connectivity, like that measured
+in neocortex (6), has been difﬁcult to reconcile with multiplicative
+homeostatic scaling (31), given that Hebbian plasticity with
+multiplicative constraints tends to produce dense solutions (71).
+Sparse solutions for single-component weights typically require
+constraints that are either additive (16, 34, 71, 72) or that impose
+hard thresholds (34). This generally requires hyperparameter-
+tuning prior to learning (SI Appendix, Geometric Interpretation).
+The introduction of multicomponent synapses, however, recon-
+ciles the need for sparsiﬁcation with multiplicative homeostatic
+plasticity. Two-factor synapses, in particular, also maximize the
+ability of a network to recall patterns under intrinsic synaptic
+noise while exhibiting noise scaling characteristics that match
+experimental data better than the conventional unitary synapse
+model. These ﬁndings are compatible with the wider neuroscien-
+tiﬁc literature, where average synaptic strength often is computed
+as a product of two or three factors, such as the vesicle release
+probability, number of release sites, and the quantized vesicle
+size (49).
+Our results suggest that synaptic structural complexity serves
+a computational and metabolic purpose by implicitly biasing
+connectivity to be sparse, thereby lowering energy consumption
+and freeing unneeded synaptic resources for future learning. As
+such, our work is complementary to recent studies analyzing the
+effects of the synaptic ultrastructure on memory stability (73, 74),
+consolidation (43, 75), and energy consumption (76) (see also
+ref. 44).
+We interpret our consolidation model as a general theory of
+sleep by situating it in the following scenario: During wakeful-
+ness, the network undergoes intense sensory-driven stimulation
+which imprints neural activity patterns as attractors. These are
+initially labile and, thus, represent immature engrams that are
+difﬁcult to recall and are easily erased by spurious plasticity.
+During sleep, external inputs are silenced and patterns can
+be replayed. The process of consolidation now serves to tune
+connectivity in a way that enlarges all basins of attraction and
+8 of 10 https://doi.org/10.1073/pnas.2422602122 pnas.org
+Downloaded from https://www.pnas.org by EPFL SISB BIBLIOTEQUE on November 7, 2025 from IP address 128.178.116.106.
+
+
+===== PAGE 9 =====
+pushes the network to critical capacity. This stabilizes the engrams
+and makes them resilient to structural and sensory perturbations.
+Our model relies on a self-supervised replay mechanism that
+ﬁrst reinstates memories sequentially, and thereafter modiﬁes the
+synapses. This implies that memories must be recallable prior to
+sleep and that replay must be signiﬁcantly faster than plasticity
+expression. Both requirements are supported by experimental
+observations (59, 77).
+Our account of sleep-based consolidation offers an alternative
+to an earlier theory of sleep (78, 79), where replay is used to
+unlearn spurious attractors with anti-Hebbian plasticity in order
+to indirectly increase the robustness of desired memories. By
+contrast, our model is Hebbian and accomplishes the same goal
+by replaying only information that already is familiar, without
+having to identify spurious patterns.
+The plasticity rule that forms the core of our consolidation
+model can be tested in synaptic, neural, and behavioral data.
+On the synaptic level, the model predicts that the internal
+structure of a synapse manifests itself as a sublinear scaling
+of intrinsic noise ﬂuctuations. For two-factor synapses, this
+speciﬁcally means that noise scales as O(√w). We emphasize,
+however, that an accurate analysis of synaptic noise requires
+a high sampling frequency and silencing of neural activity.
+Estimates of noise scaling are uninformative if the time between
+measurements is too long, as this only provides a temporal
+average that obscures the dynamics of instantaneous ﬂuctuations,
+which are nonlinear and state-dependent. Similarly, the analysis
+of homeostatic scaling effects in synaptic norms should ideally
+be performed on measurements from synapses that are affected
+by the same homeostatic mechanism and are under blocked
+signaling.
+On the neural level, our plasticity model requires a gating
+function that predicts that patterns linked to novel, immature,
+or otherwise weak memories induce higher levels of plasticity,
+compared to patterns representing highly familiar memories.
+Finally, on the behavioral level, we predict that memories
+that are weakly encoded prior to sleep generally display a larger
+improvement in SNR (and in the rate of recall) after sleep. While
+we partly conﬁrm this with three large, published datasets, these
+cover only a part of the range of initial encoding. Moreover,
+our model predicts that the average recall performance should
+shift downward when subjects are required to memorize more
+information, and vice versa.
+We anticipate that our normative account of synaptic consol-
+idation will contribute to a better understanding of long-term
+memory by inspiring neurobiologists to test the model in future
+experiments.
+Materials and Methods
+We consider N binary neurons indexed i = 1, . . ., N with output si∈{ 0, 1}
+and update dynamics si(t + 1) = Θ(∑N
+j=1 wijsj(t)− Iinh,i), where Θ is the
+Heaviside function,wij≥ 0 are synaptic strengths, andIinh,i is a neuron-speciﬁc
+inhibitory input current. During wakefulness,M activity patterns
+i ∈{ 0, 1} are
+stored such that
+i = Θ(∑N
+j=1 wij
+j−Iinh,i) holds for all = 1, . . ., M. For
+sufﬁciently small load M/N, this can be achieved with a simple autoassociative
+“Hopﬁeld-like” rule (10) with nonnegative weights ( SI Appendix , Simulating
+Wakefulness and Sleep). Although all patterns are stable ﬁxed points, they are
+not particularly noise robust, in the sense that small perturbations of the weights
+or neural activities may prevent recovery of the stored patterns. We assume that
+the goal of consolidation is to make the attractors more noise robust.
+Naive robustiﬁcation can be achieved by maximizing the margin
+min (2
+i−1)(wi·−Iinh,i)
+∥wi∥2
+, i.e. the L2-distance between the threshold and
+the closest pattern (support vector), where we use vector notation wi =
+(wi1, . . ., wiN),  = ( 
+i , . . . , 
+N ), and∥wi∥2 =
+√∑
+j w2
+ij is the L2-
+norm. This is equivalent to maximizing SNR (q = 2)∝ min|wi·−Iinh,i|
+∥wi∥2
+, i.e.
+the signal-to-noise ratio of the weakest pattern. The batch-perceptron algorithm
+(80) can be used to solve this optimization problem iteratively, by determining
+in each iteration the support vector, incrementally changing the weights to
+make it more robust, and rescaling the weights to maintain constant L2 weight
+norm. The method has, however, two features that are difﬁcult to defend from a
+biological perspective: i) the resulting connectivity is dense, and ii) the weakest
+pattern needs to be tagged in each iteration.
+The ﬁrst issue can be addressed by modifying the batch-perceptron algorithm
+to maximize the L1-margin, i.e. maximize SNR (q = 1). Naive weight
+regularization to maintain constant L1-norm, however, results in a homeostatic
+process that is incompatible with multiplicative scaling (SI Appendix, Geometric
+Interpretation). Based on insights from the optimization literature (50), we repa-
+rameterize each weight as a product of two factors, i.e.wij = uij1uij2, and apply
+the standard batch-perceptron algorithm to the individual factors. This enables
+the maximization of SNR(q = 1) with multiplicative homeostatic scaling.
+The second issue is addressed by approximating the artiﬁcial tagging of the
+weakest pattern in each iteration of the batch-perceptron algorithm with an
+online version. This is achieved with the gating functiongi and the learning rate
+Gi. When combined, these act as a soft argmin function since Gi· gi(I
+i )∝
+exp(−i|I
+i∥)∑
+ exp(−i|I
+i|) , whereI
+i = wi·−Iinh,i (SI Appendix,The Gating Function).
+Although our consolidation model is presented as a method for robustly
+storing attractors in recurrent neural networks, all learning procedures and
+reasoning steps generalize to feedforward architectures. In this case, any binary
+input–output relationy
+i = Θ(∑N
+j=1 wij
+j − Iinh,i) that is initially stored
+with low noise tolerance can, through the same weight consolidation, be made
+more robust. In SI Appendix, Fig. S6, we show an example where a sequence of
+patterns is learned in this way.
+Data, Materials, and Software Availability. Code data have been deposited
+in GitHub (https://github.com/geoiat/2f-syn-con). All other data are included in
+the manuscript and/or SI Appendix. Previously published data were used for
+this work (16, 29, 52–57, 60, 61, 63–69).
+ACKNOWLEDGMENTS. We would like to thank Profs. Haruo Kasai, Noam
+Ziv, David Sheinberg, József Fiser, Maria Florencia Iacaruso, Kimberly Fenn,
+Armen Stepanyants, and Dr. Rohan Gala for sharing their experimental data.
+This study was supported by the Swiss NSF with grants 200020_184615
+and 200021_236436 (W.G. and J.B.), and by funding to the Blue Brain
+Project, a research center of the École Polytechnique Fédérale de Lausanne,
+from the Swiss government’s ETH Board of the Swiss Federal Institutes of
+Technology (G.I.).
+1. P. W. Frankland, B. Bontempi, The organization of recent and remote memories. Nat. Rev. Neurosci.
+6, 119–130 (2005).
+2. A. L. Wheeler et al., Identiﬁcation of a functional connectome for long-term fear memory in mice.
+PLoS Comput. Biol. 9, e1002853 (2013).
+3. S. Tonegawa, M. D. Morrissey, T. Kitamura, The role of engram cells in the systems consolidation of
+memory. Nat. Rev. Neurosci. 19, 485–498 (2018).
+4. D. S. Roy et al., Brain-wide mapping reveals that engrams for a single memory are distributed
+across multiple brain regions. Nat. Commun. 13, 1799 (2022).
+5. N. Kalisman, G. Silberberg, H. Markram, The neocortical microcircuit as a tabula rasa. Proc. Natl.
+Acad. Sci. U.S.A. 102, 880–885 (2005).
+6. A. Thomson, C. Lamy, Functional maps of neocortical local circuitry. Front. Neurosci. 1, 19–42
+(2007).
+7. R. Perin, T. K. Berger, H. Markram, A synaptic organizing principle for cortical neuronal groups.
+Proc. Natl. Acad. Sci. U.S.A. 108, 5419–5424 (2011).
+8. M. Khona, I. R. Fiete, Attractor and integrator networks in the brain. Nat. Rev. Neurosci. 23,
+744–766 (2022).
+PNAS 2025 Vol. 122 No. 44 e2422602122 https://doi.org/10.1073/pnas.2422602122 9 of 10
+Downloaded from https://www.pnas.org by EPFL SISB BIBLIOTEQUE on November 7, 2025 from IP address 128.178.116.106.
+
+
+===== PAGE 10 =====
+9. W. A. Little, The existence of persistent states in the brain. Math. Biosci. 19, 101–120 (1974).
+10. J. J. Hopﬁeld, Neural networks and physical systems with emergent collective computational
+abilities. Proc. Natl. Acad. Sci. U.S.A. 79, 2554–2558 (1982).
+11. E. Gardner, The space of interactions in neural network models. J. Phys. A Math. Gen. 21, 257–270
+(1988).
+12. H. M. Köhler, D. Widmaier, Sign-constrained linear learning and diluting in neural networks.
+J. Phys. A Math. Gen. 24, L495–L502 (1991).
+13. N. Brunel, V. Hakim, P. Isope, J. P. Nadal, B. Barbour, Optimal information storage and the
+distribution of synaptic weights: Perceptron versus Purkinje cell. Neuron 43, 745–757 (2004).
+14. J. Chapeton, T. Fares, D. LaSota, A. Stepanyants, Efﬁcient associative memory storage in cortical
+circuits of inhibitory and excitatory neurons. Proc. Natl. Acad. Sci. U.S.A. 109, E3614–E3622 (2012).
+15. N. Brunel, Is cortical connectivity optimized for storing information? Nat. Neurosci. 19, 749–755
+(2016).
+16. D. Zhang, C. Zhang, A. Stepanyants, Robust associative learning is sufﬁcient to explain the structural
+and dynamical properties of local cortical circuits. J. Neurosci. 39, 6888–6904 (2019).
+17. B. Rasch, J. Born, About sleep’s role in memory. Physiol. Rev. 93, 681–766 (2013).
+18. E. Lesburguères et al., Early tagging of cortical networks is required for the formation of enduring
+associative memory. Science 331, 924–928 (2011).
+19. T. Kitamura et al., Engrams and circuits crucial for systems consolidation of a memory. Science 356,
+73–78 (2017).
+20. T. Xu et al., Rapid formation and selective stabilization of synapses for enduring motor memories.
+Nature 462, 915–919 (2009).
+21. S. X. Chen, A. N. Kim, A. J. Peters, T. Komiyama, Subtype-speciﬁc plasticity of inhibitory circuits in
+motor cortex during motor learning. Nat. Neurosci. 18, 1109–1115 (2015).
+22. D. Ji, M. A. Wilson, Coordinated memory replay in the visual cortex and hippocampus during sleep.
+Nat. Neurosci. 10, 100–107 (2007).
+23. L. Deuker et al., Memory consolidation by replay of stimulus-speciﬁc neural activity. J. Neurosci. 33,
+19373–19383 (2013).
+24. B. C. Clawson et al., Causal role for sleep-dependent reactivation of learning-activated sensory
+ensembles for fear memory consolidation. Nat. Commun. 12, 1200 (2021).
+25. W. Li, L. Ma, G. Yang, W. B. Gan, REM sleep selectively prunes and maintains new synapses in
+development and learning. Nat. Neurosci. 20, 427–437 (2017).
+26. Y. Zhou et al., REM sleep promotes experience-dependent dendritic spine elimination in the mouse
+cortex. Nat. Commun. 11, 4819 (2020).
+27. V. V. Vyazovskiy, C. Cirelli, M. Pﬁster-Genskow, U. Faraguna, G. Tononi, Molecular and
+electrophysiological evidence for net synaptic potentiation in wake and depression in sleep.
+Nat. Neurosci. 11, 200–208 (2008).
+28. L. de Vivo et al., Ultrastructural evidence for synaptic scaling across the wake/sleep cycle. Science
+355, 507–510 (2017).
+29. D. Miyamoto, W. Marshall, G. Tononi, C. Cirelli, Net decrease in spine-surface GluA1-containing
+AMPA receptors after post-learning sleep in the adult mouse cortex. Nat. Commun. 12, 2881
+(2021).
+30. A. T. Pacheco, J. Bottorff, Y. Gao, G. G. Turrigiano, Sleep promotes downward ﬁring rate
+homeostasis. Neuron 109, 1–15 (2020).
+31. G. G. Turrigiano, K. R. Leslie, N. S. Desai, L. C. Rutherford, S. B. Nelson, Activity-dependent scaling of
+quantal amplitude in neocortical neurons. Nature 391, 892–896 (1998).
+32. S. Káli, P. Dayan, Off-line replay maintains declarative memories in a model of hippocampal-
+neocortical interactions. Nat. Neurosci. 7, 286–294 (2004).
+33. T. Tadros, G. P. Krishnan, R. Ramyaa, M. Bazhenov, Sleep-like unsupervised replay reduces
+catastrophic forgetting in artiﬁcial neural networks. Nat. Commun. 13, 7742 (2022).
+34. G. Chechik, I. Meilijson, E. Ruppin, Synaptic pruning in development: A computational account.
+Neural Comput. 10, 1759–1777 (1998).
+35. A. Renart, P. Song, X. J. Wang, Robust spatial working memory through homeostatic synaptic
+scaling in heterogeneous cortical networks. Neuron 38, 473–485 (2003).
+36. T. Toyoizumi, M. Kaneko, M. Stryker, K. Miller, Modeling the dynamic interaction of Hebbian and
+homeostatic plasticity. Neuron 84, 497–510 (2014).
+37. P. J. Sjöström, G. G. Turrigiano, S. B. Nelson, Multiple forms of long-term plasticity at unitary
+neocortical layer 5 synapses. Neuropharmacology 52, 176–184 (2007).
+38. A. Loebel, J. V. L. Bé, M. J. E. Richardson, H. Markram, A. V. M. Herz, Matched pre- and post-synaptic
+changes underlie synaptic plasticity over long time scales. J. Neurosci. 33, 6257–6266 (2013).
+39. J. Lisman, Glutamatergic synapses are structurally and biochemically complex because of multiple
+plasticity processes: Long-term potentiation, long-term depression, short-term potentiation and
+scaling. Philos. Trans. R. Soc. B 372, 20160260 (2017).
+40. R. Cossart, D. Aronov, R. Yuste, Attractor dynamics of network UP states in the neocortex. Nature
+423, 283–288 (2003).
+41. J. Nishiyama, R. Yasuda, Biochemical computation for spine structural plasticity. Neuron 87, 63–75
+(2015).
+42. M. Bosch et al., Structural and molecular remodeling of dendritic spine substructures during
+long-term potentiation. Neuron 82, 444–459 (2014).
+43. C. Clopath, L. Ziegler, E. Vasilaki, L. Büsing, W. Gerstner, Tag-trigger-consolidation: A model of early
+and late long-term-potentiation and depression. PLoS Comput. Biol. 4, e1000248 (2008).
+44. R. L. Redondo, R. G. M. Morris, Making memories last: The synaptic tagging and capture
+hypothesis. Nat. Rev. Neurosci. 12, 17–30 (2011).
+45. R. Rubin, L. F. Abbott, H. Sompolinsky, Balanced excitation and inhibition are required for high-
+capacity, noise-robust neuronal selectivity. Proc. Natl. Acad. Sci. U.S.A. 114, E9366–E9375 (2017).
+46. G. Mongillo, S. Rumpel, Y. Loewenstein, Intrinsic volatility of synaptic connections - a challenge to
+the synaptic trace theory of memory. Curr. Opin. Neurobiol. 46, 7–13 (2017).
+47. N. E. Ziv, N. Brenner, Synaptic tenacity or lack thereof: Spontaneous remodeling of synapses. Trends
+Neurosci. 41, 89–99 (2018).
+48. J. I. Arellano, R. Benavides-Piccione, J. DeFelipe, R. Yuste, Ultrastructure of dendritic spines:
+Correlation between synaptic and spine morphologies. Front. Neurosci. 1, 131–143 (2007).
+49. S. Holler, G. Köstinger, K. A. C. Martin, G. F. P. Schuhknecht, K. J. Stratford, Structure and function
+of a neocortical synapse. Nature 591, 111–116 (2021).
+50. P. D. Hoff, Lasso, fractional norm and structured sparse estimation using a Hadamard product
+parametrization. Comput. Stat. Data An. 115, 186–198 (2017).
+51. E. Amid, M. K. Warmuth, “Winnowing with gradient descent” in Proceedings of the 33rd Conference
+on Learning Theory, Proceedings of Machine Learning Research, J. Abernethy, S. Agarwal, Eds.
+(PMLR, 2020), vol. 125, pp. 163–182.
+52. Y. Loewenstein, A. Kuras, S. Rumpel, Multiplicative dynamics underlie the emergence of the
+log-normal distribution of spine sizes in the neocortex in vivo. J. Neurosci. 31, 9481–9488 (2011).
+53. L. Cossell et al., Functional organization of excitatory synaptic strength in primary visual cortex.
+Nature 518, 399–403 (2015).
+54. L. Woloszyn, D. L. Sheinberg, Effects of long-term visual experience on responses of distinct classes
+of single units in inferior temporal cortex. Neuron 74, 193–205 (2012).
+55. K. M. Fenn, D. Z. Hambrick, Individual differences in working memory capacity predict sleep-
+dependent memory consolidation. J. Exp. Psychol. Gen. 141, 404 (2012).
+56. K. M. Fenn, D. Z. Hambrick, General intelligence predicts memory change across sleep. Psychon.
+Bull. Rev. 22, 791–799 (2015).
+57. J. E. Ashton, S. A. Cairney, Future-relevant memories are not selectively strengthened during sleep.
+PLoS One 16, e0258110 (2021).
+58. N. Dumay, Sleep not just protects memories against forgetting, it also makes them more accessible.
+Cortex 74, 289–296 (2016).
+59. D. Denis et al., The roles of item exposure and visualization success in the consolidation of
+memories across wake and sleep. Learn. Mem. 27, 451–456 (2020).
+60. C. K. E. Jung, J. Herms, Structural dynamics of dendritic spines are inﬂuenced by an environmental
+enrichment: An in vivo imaging study. Cereb. Cortex 24, 377–384 (2014).
+61. P. Berkes, B. White, J. Fiser, “No evidence for active sparsiﬁcation in the visual cortex” in Advances
+in Neural Information Processing Systems 22, Y. Bengio, D. Schuurmans, J. Lafferty, C. Williams, A.
+Culotta, Eds, (Curran Associates, Inc., 2009).
+62. A. Alemi, C. Baldassi, N. Brunel, R. Zecchina, A three-threshold learning rule approaches the
+maximal capacity of recurrent neural networks. PLoS Comput. Biol. 11, e1004439 (2015).
+63. M. Kaufman, M. A. Corner, N. E. Ziv, Long-term relationships between cholinergic tone,
+synchronous bursting and synaptic remodeling. PLoS One 7, e40980 (2012).
+64. L. Hazan, N. E. Ziv, Activity dependent and independent determinants of synaptic size diversity.
+J. Neurosci. 40, 2828–2848 (2020).
+65. A. Fisher-Lavie, N. E. Ziv, Matching dynamics of presynaptic and postsynaptic scaffolds. J. Neurosci.
+33, 13094–13100 (2013).
+66. R. Gala et al., Computer assisted detection of axonal bouton structural plasticity in in vivo time-
+lapse images. eLife 6, e29315 (2017).
+67. K. Ishii et al., In vivo volume dynamics of dendritic spines in the neocortex of wild-type and Fmr1
+KO mice. eNeuro 5, e0282–18 (2018).
+68. H. Steffens et al., Stable but not rigid: Chronic in vivo STED nanoscopy reveals extensive
+remodeling of spines, indicating multiple drivers of plasticity. Sci. Adv. 7, eabf2806 (2021).
+69. W. Wegner, H. Steffens, C. Gregor, F. Wolf, K. I. Willig, Environmental enrichment enhances
+patterning and remodeling of synaptic nanoarchitecture as revealed by STED nanoscopy. eLife 11,
+e73603 (2022).
+70. A. Morrison, A. Aertsen, M. Diesmann, Spike-timing-dependent plasticity in balanced random
+networks. Neural Comput. 19, 1437–1467 (2007).
+71. K. D. Miller, D. J. C. MacKay, The role of constraints in Hebbian learning. Neural Comput. 6,
+100–126 (1994).
+72. J. Sacramento, A. Wichert, M. C. W. van Rossum, Energy efﬁcient sparse connectivity from
+imbalanced synaptic plasticity rules. PLoS Comput. Biol. 11, e1004265 (2015).
+73. H. Z. Shouval, Clusters of interacting receptors can stabilize synaptic efﬁcacies. Proc. Natl. Acad. Sci.
+U.S.A. 102, 14440–14445 (2005).
+74. J. Triesch, A. D. Vo, A. S. Hafner, Competition for synaptic building blocks shapes synaptic plasticity.
+eLife 7, e37836 (2018).
+75. M. K. Benna, S. Fusi, Computational principles of synaptic memory consolidation. Nat. Neurosci.
+19, 1697–1706 (2016).
+76. H. L. Li, M. C. W. van Rossum, Energy efﬁcient synaptic plasticity. eLife 9, e50804 (2020).
+77. D. R. Euston, M. Tatsuno, B. L. McNaughton, Fast-forward playback of recent memory sequences in
+prefrontal cortex during sleep. Science 318, 1147–1150 (2007).
+78. F. Crick, G. Mitchison, The function of dream sleep. Nature 304, 111–114 (1983).
+79. J. J. Hopﬁeld, D. I. Feinstein, R. G. Palmer, ‘Unlearning’ has a stabilizing effect in collective
+memories. Nature 304, 158–159 (1983).
+80. W. Krauth, M. Mezard, Learning algorithms with optimal stability in neural networks. J. Phys. A
+Math. Gen. 20, L745–L752 (1987).
+10 of 10 https://doi.org/10.1073/pnas.2422602122 pnas.org
+Downloaded from https://www.pnas.org by EPFL SISB BIBLIOTEQUE on November 7, 2025 from IP address 128.178.116.106.
