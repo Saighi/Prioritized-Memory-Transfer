@@ -4,7 +4,7 @@ Companion to ``spec.py`` (the population-level figure). Same idea — pure Pytho
 torch, declares the *figure* — but at the granularity where the wiring becomes visible:
 
   - the **one-to-one interface**: each interface error unit connects exactly
-    ``x_{T,i} <-> eps_{TS,i} <-> x_{S,i}`` (no crossing at the interface),
+    ``x_{S,i} <-> eps_{TS,i} <-> x_{T,i}`` (no crossing at the interface),
   - the **lateral cross-communication inside each population**: the recurrent weights
     have zero diagonal, so within T (and S) unit i talks to unit j only through the
     crossing pairs ``eps_i <-> x_j`` carrying ``W_{12}`` / ``W_{21}``.
@@ -16,14 +16,13 @@ It follows from the maths, per unit i (j the other unit):
   dx_{T,i} propto -pi_T (eps_{T,i} - W_{T,ji} eps_{T,j}) + kappa eps_{TS,i}
                                               -> eps_i->x_i inhibitory, eps_j->x_i excitatory
 
-The crossing labels show the transpose explicitly.  Thus x_j->eps_i carries W_ij,
-whereas eps_i->x_j carries pi (W^T)_ji = pi W_ij: the recurrent factor is the
-same scalar coefficient, written in the coordinate order of the operator acting
-on each pathway, and the error drive also carries its population precision pi.
-  eps_{TS,i} = x_{S,i} - x_{T,i}              -> x_S excitatory, x_T inhibitory into it
-  dx_{S,i} gets -pi_TS eps_{TS,i}             -> inhibitory
-  x_T gets +kappa eps_{TS,i}, kappa signed    -> the terminal follows the phase:
-      sleep (kappa<0) inhibitory with gain |kappa|, wake (kappa>0) excitatory.
+The two arrows in a recurrent pair share the base weight W_ij without writing a
+transpose on the individual return edge. The return path includes the population
+precision, so its full coefficient is pi W_ij.
+  eps_{TS,i} = x_{T,i} - x_{S,i}              -> x_T excitatory, x_S inhibitory into it
+  dx_{S,i} gets +pi_TS eps_{TS,i}             -> excitatory
+  x_T gets kappa eps_{TS,i}                   -> the terminal follows the phase:
+      sleep excitatory, wake inhibitory; the label remains kappa in both cases.
 
 Colours follow the paper legend: blue arrowhead = excitatory, orange dot = inhibitory
 (``COLORS`` is shared from ``spec.py``).
@@ -35,7 +34,7 @@ from typing import Dict, List, Optional
 
 
 # ---- geometry: screen convention, +x right, +y DOWN, grid units (render flips y) ----
-# Five rows, top to bottom: eps_T / x_T / eps_TS / x_S / eps_S; one column per unit.
+# Five rows, top to bottom: eps_S / x_S / eps_TS / x_T / eps_T; one column per unit.
 @dataclass
 class Node:
     id: str
@@ -57,7 +56,7 @@ class Edge:
 
 
 XCOL = {1: 0.0, 2: 2.6}                       # unit columns
-YROW = {"eT": 0.0, "xT": 1.5, "eTS": 3.0, "xS": 4.5, "eS": 6.0}
+YROW = {"eS": 0.0, "xS": 1.5, "eTS": 3.0, "xT": 4.5, "eT": 6.0}
 
 
 def build_spec(phase: str = "sleep", values: Optional[object] = None) -> Dict:
@@ -76,52 +75,52 @@ def build_spec(phase: str = "sleep", values: Optional[object] = None) -> Dict:
     piT = g("pi_T", r"\pi_T")
     piS = g("pi_S", r"\pi_S")
     piTS = g("pi_TS", r"\pi_{TS}")
-    numeric_piST = (values is not None and hasattr(values, "pi_ST")
-                    and not isinstance(getattr(values, "pi_ST"), str))
-    if numeric_piST:
-        drive = f"{abs(float(getattr(values, 'pi_ST'))):g}"
+    numeric_kappa = (values is not None and hasattr(values, "kappa")
+                     and not isinstance(getattr(values, "kappa"), str))
+    if numeric_kappa:
+        drive = f"{abs(float(getattr(values, 'kappa'))):g}"
     else:
-        drive = r"|\kappa|" if phase == "sleep" else r"\kappa"
-    drive_sign = "-" if phase == "sleep" else "+"   # the terminal IS the phase
+        drive = r"\kappa"
+    drive_sign = "+" if phase == "sleep" else "-"   # the terminal IS the phase
 
     nodes: List[Node] = []
     for i in (1, 2):
         x = XCOL[i]
         nodes += [
-            Node(f"eT{i}",  x, YROW["eT"],  "error", rf"\varepsilon_{{T,{i}}}"),
-            Node(f"xT{i}",  x, YROW["xT"],  "value", rf"x_{{T,{i}}}"),
-            Node(f"eTS{i}", x, YROW["eTS"], "error", rf"\varepsilon_{{TS,{i}}}"),
-            Node(f"xS{i}",  x, YROW["xS"],  "value", rf"x_{{S,{i}}}"),
             Node(f"eS{i}",  x, YROW["eS"],  "error", rf"\varepsilon_{{S,{i}}}"),
+            Node(f"xS{i}",  x, YROW["xS"],  "value", rf"x_{{S,{i}}}"),
+            Node(f"eTS{i}", x, YROW["eTS"], "error", rf"\varepsilon_{{TS,{i}}}"),
+            Node(f"xT{i}",  x, YROW["xT"],  "value", rf"x_{{T,{i}}}"),
+            Node(f"eT{i}",  x, YROW["eT"],  "error", rf"\varepsilon_{{T,{i}}}"),
         ]
 
     edges: List[Edge] = []
     for i in (1, 2):
         edges += [
-            # teacher unit-i vertical pair (eps_T,i = x_T,i - ...)
-            Edge(f"xT{i}", f"eT{i}", "", "pred", "+"),
-            Edge(f"eT{i}", f"xT{i}", piT, "err", "-"),
-            # interface column i — the one-to-one mapping, no crossing here
-            Edge(f"xT{i}", f"eTS{i}", "", "err", "-"),           # prediction (enters -)
-            Edge(f"eTS{i}", f"xT{i}", drive, "err", drive_sign),  # signed drive to T
-            Edge(f"xS{i}", f"eTS{i}", "", "pred", "+"),          # evidence (enters +)
-            Edge(f"eTS{i}", f"xS{i}", piTS, "err", "-"),         # perception
             # student unit-i vertical pair
             Edge(f"xS{i}", f"eS{i}", "", "pred", "+"),
             Edge(f"eS{i}", f"xS{i}", piS, "err", "-"),
+            # interface column i — the one-to-one mapping, no crossing here
+            Edge(f"xS{i}", f"eTS{i}", "", "err", "-"),          # prediction (enters -)
+            Edge(f"eTS{i}", f"xS{i}", piTS, "pred", "+"),        # student correction
+            Edge(f"xT{i}", f"eTS{i}", "", "pred", "+"),         # source state (enters +)
+            Edge(f"eTS{i}", f"xT{i}", drive, "pred", drive_sign), # teacher search drive
+            # teacher unit-i vertical pair (eps_T,i = x_T,i - ...)
+            Edge(f"xT{i}", f"eT{i}", "", "pred", "+"),
+            Edge(f"eT{i}", f"xT{i}", piT, "err", "-"),
         ]
     # lateral cross-communication: W has zero diagonal, so within a population the
     # units talk ONLY through these crossing reciprocal pairs (cf. Tang Fig. 1B).
     for i, j in ((1, 2), (2, 1)):
         edges += [
             Edge(f"xT{j}", f"eT{i}", rf"W_{{T,{i}{j}}}", "err", "-", lpos=0.18, bend=10),
-            Edge(f"eT{i}", f"xT{j}", rf"\pi_T\left(W_T^\top\right)_{{{j}{i}}}", "pred", "+", lpos=0.18, bend=10),
+            Edge(f"eT{i}", f"xT{j}", rf"\pi_T W_{{T,{i}{j}}}", "pred", "+", lpos=0.18, bend=10),
             Edge(f"xS{j}", f"eS{i}", rf"W_{{S,{i}{j}}}", "err", "-", lpos=0.18, bend=10),
-            Edge(f"eS{i}", f"xS{j}", rf"\pi_S\left(W_S^\top\right)_{{{j}{i}}}", "pred", "+", lpos=0.18, bend=10),
+            Edge(f"eS{i}", f"xS{j}", rf"\pi_S W_{{S,{i}{j}}}", "pred", "+", lpos=0.18, bend=10),
         ]
 
     meta = {"phase": phase,
-            "note_tex": r"\varepsilon_{TS,i}=x_{S,i}-x_{T,i}"}
+            "note_tex": r"\varepsilon_{TS,i}=x_{T,i}-x_{S,i}"}
     return {"nodes": nodes, "edges": edges, "meta": meta}
 
 

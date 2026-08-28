@@ -21,7 +21,7 @@
 
 "At complete transfer, all discrepancy eigenvalues may coincide at zero; this degeneracy is harmless because the maximal deficit and plasticity signal already vanish."
 
-"Then summarize negative coupling, prioritization, self-extinction, random-versus-oracle efficiency, and rectification."
+"Then summarize the positive replay gain, prioritization, self-extinction, random-versus-oracle efficiency, and rectification."
 
 "Existing theories commonly prescribe replay priority, generate replay through autonomous memory dynamics, or explain how replay trains a recipient network. Here, these functions arise within a single closed-loop mechanism: recipient reconstruction deficits reshape source dynamics, preferentially exposing unconsolidated content, while learning progressively removes the signal that caused its reactivation."
 

@@ -14,7 +14,7 @@
 
 ## Current paper in one sentence
 
-A worst-case consolidation objective makes the recipient memory system bias source reactivation toward its largest remaining deficit, derives a negative source-directed coupling, and makes reactivation extinguish itself as the recipient learns.
+A worst-case consolidation objective makes the recipient memory system bias source reactivation toward its largest remaining deficit, fixes a positive teacher-side replay gain with an effective suppressive recipient contribution, and makes reactivation extinguish itself as the recipient learns.
 
 ## Structural template
 
@@ -27,8 +27,8 @@ The present paper may use slightly more mathematics than Tang because the normat
 - [x] **D1: Two-network scope only.** Three-system continual learning, interleaved union and the buffer-synthesis-storage architecture are moved to a separate project. Continual learning receives at most one future-application paragraph in Discussion.
 - [x] **D2: Biology-first framing.** Abstract and Introduction begin from reactivation and systems consolidation, not catastrophic forgetting or a list of model results.
 - [x] **D3: Worst-case objective is central.** The paper is organized around $\min_{W_S}\max_{x_T\in\mathbb S_T}\min_{x_S}F_S$ and the maximal settled recipient deficit $\mathcal D_{\max}$.
-- [x] **D4: Remove the saddle construction.** No exact zero-sum proposition, no $\Phi=F_T-F_S$ narrative, no saddle figure, and no special emphasis on $\kappa=-\pi_{TS}$.
-- [x] **D5: Derive the negative coupling.** With $\varepsilon_{TS}=x_S-x_T$ and $\nabla_{x_T}q=-\pi_{TS}\varepsilon_{TS}^*$, ascent requires $\kappa=-\mu_T\pi_{TS}<0$. $\kappa$ is a coupling gain, never a negative precision.
+- [x] **D4: Remove the saddle construction.** No exact zero-sum proposition, no $\Phi=F_T-F_S$ narrative, no saddle figure, and no special emphasis on $\kappa=\pi_{TS}$.
+- [x] **D5: Derive the replay gain.** With $\varepsilon_{TS}=x_T-x_S$ and $\nabla_{x_T}q=\pi_{TS}\varepsilon_{TS}^*$, ascent requires $\kappa=\mu_T\pi_{TS}>0$. $\kappa$ is a coupling gain, not a precision.
 - [x] **D6: Short derivation in the main paper.** The envelope identity and sign comparison remain visible in the core text. Scalar-mode algebra, Rayleigh-Ritz, projected power iteration and weight-envelope details move to S1 Appendix.
 - [x] **D7: Three named formal results at most.** Proposition 1 gives the settled deficit and spectral certificate; Theorem 1 gives the local implementation of worst-case consolidation; Corollary 1 gives completion and self-extinction.
 - [x] **D8: Recipient-relative priority.** “Familiar content is replayed less” means content already represented by the recipient is deprioritized. It does not mean hippocampal source strength or reliability is irrelevant.
@@ -73,7 +73,7 @@ Status: `[ ]` not started, `[-]` drafting, `[x]` structurally ready, `[L]` prose
 - [ ] **Models prose.** Define the memory sphere, state-based comparison, recipient energy, constraints, timescales, rectified extension and discrete consolidation protocol.
 - [x] **Analytical Results skeleton.** New proposition, theorem and corollary placeholders are present; old saddle material is commented out.
 - [ ] **Proposition 1 final statement.** Verify notation and assumptions against the mathematical source of record.
-- [ ] **Theorem 1 final statement.** Keep negative coupling, projected source search and local worst-case descent distinct. State the simple-leading-eigenvalue and timescale assumptions.
+- [ ] **Theorem 1 final statement.** Keep positive replay gain, projected source search and local worst-case descent distinct. State the simple-leading-eigenvalue and timescale assumptions.
 - [ ] **Corollary 1 final statement.** Verify the zero-deficit equivalence and vanishing signals.
 - [ ] **Results 3-memory demonstration.** Needs simulation outputs and caption-first design.
 - [ ] **Results prioritization and self-extinction.** Needs direction-by-bout heat map, deficit spectrum and reactivation occupancy.
@@ -108,7 +108,7 @@ Must establish in the linear hard-constrained model:
 Must separate three claims and their assumptions:
 
 1. recipient state descent implements $\min_{x_S}$ after settling;
-2. projected source dynamics implement ascent on $q$ and require $\kappa=-\mu_T\pi_{TS}<0$ under the chosen error convention;
+2. projected source dynamics implement ascent on $q$ and require $\kappa=\mu_T\pi_{TS}>0$;
 3. with the selected maximizing state, a simple leading discrepancy eigenvalue and separated timescales, recipient plasticity implements gradient descent on $\mathcal D_{\max}$ and is the locally steepest feasible first-order decrease for fixed small update norm.
 
 ### Corollary 1: completion and self-extinction

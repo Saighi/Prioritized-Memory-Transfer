@@ -60,8 +60,7 @@ Under the explicit assumptions below, the proof establishes:
 - $\mathcal{F}_{\max}$ is a uniform certificate on cortical reconstruction error and cortical
   self-inconsistency for every valid teacher state;
 - any Lipschitz downstream readout inherits a uniform functional-error bound;
-- teacher ascent on the settled network free energy requires a negative teacher-side interface
-  coupling;
+- teacher ascent on the settled network free energy fixes a positive teacher-side interface gain;
 - once a generic worst-case direction has been selected, the local plasticity rule is exact
   gradient descent on $\mathcal{F}_{\max}$;
 - among sufficiently small synaptic changes of the same amplitude, that negative-gradient direction
@@ -101,7 +100,7 @@ $$
 \qquad
 \varepsilon_S=M_Sx_S,
 \qquad
-\varepsilon_{TS}=x_S-x_T.
+\varepsilon_{TS}=x_T-x_S.
 $$
 
 With positive precisions $\pi_T,\pi_{TS},\pi_S$, define the teacher, recipient-side and complete
@@ -327,7 +326,7 @@ F(x_T,x_S;W_T,W_S)
 =
 \frac{\pi_T}{2}\|M_Tx_T\|^2
 +
-\frac{\pi_{TS}}2\|x_S-x_T\|^2
+\frac{\pi_{TS}}2\|x_T-x_S\|^2
 +
 \frac{\pi_S}2\|M_Sx_S\|^2,
 }
@@ -341,7 +340,7 @@ F(x_T,x_S;W_T,W_S)
 =
 F_S(x_S,x_T;W_S)
 =
-\frac{\pi_{TS}}2\|x_S-x_T\|^2
+\frac{\pi_{TS}}2\|x_T-x_S\|^2
 +
 \frac{\pi_S}2\|M_Sx_S\|^2.
 $$
@@ -382,7 +381,7 @@ All terms of $F$ are nonnegative. Therefore $q\ge0$.
 If the student stores $x_T$, choose $x_S=x_T$. Then
 
 $$
-x_S-x_T=0,
+x_T-x_S=0,
 \qquad
 M_Sx_S=M_Sx_T=0,
 $$
@@ -475,9 +474,9 @@ The numbers $c_k$ and $s_k$ are simply the teacher and student coordinates along
 Orthonormality gives
 
 $$
-\|x_S-x_T\|^2
+\|x_T-x_S\|^2
 =
-\sum_k(s_k-c_k)^2.
+\sum_k(c_k-s_k)^2.
 $$
 
 For the recurrent term,
@@ -501,7 +500,7 @@ F_S(x_S,x_T;W_S)
 =
 \sum_k
 \left[
-\frac{\pi_{TS}}2(s_k-c_k)^2
+\frac{\pi_{TS}}2(c_k-s_k)^2
 +
 \frac{\pi_S\mu_k}{2}s_k^2
 \right].
@@ -513,7 +512,7 @@ Define the scalar cost carried by direction $k$ as
 $$
 f_k(s_k;c_k)
 :=
-\frac{\pi_{TS}}2(s_k-c_k)^2
+\frac{\pi_{TS}}2(c_k-s_k)^2
 +
 \frac{\pi_S\mu_k}{2}s_k^2.
 $$
@@ -529,7 +528,7 @@ Differentiate the scalar cost with respect to its scalar student coordinate:
 $$
 \frac{df_k}{ds_k}
 =
-\pi_{TS}(s_k-c_k)
+-\pi_{TS}(c_k-s_k)
 +
 \pi_S\mu_ks_k.
 $$
@@ -641,10 +640,10 @@ $$
 s_k^*=(1-n_k)c_k,
 $$
 
-and the teacher--student mismatch in that mode is
+and the interface error in that mode is
 
 $$
-s_k^*-c_k=-n_kc_k.
+c_k-s_k^*=n_kc_k.
 $$
 
 The meaning is direct: along direction $u_k$, the student copies the fraction $1-n_k$ of the
@@ -712,15 +711,15 @@ U(I-D_n)U^\top x_T
 }
 $$
 
-Similarly, reassembling $s_k^*-c_k=-n_kc_k$ gives
+Similarly, reassembling $c_k-s_k^*=n_kc_k$ gives
 
 $$
 \boxed{
 \varepsilon_{TS}^*
 =
-x_S^*-x_T
+x_T-x_S^*
 =
--N_Sx_T.
+N_Sx_T.
 }
 $$
 
@@ -745,7 +744,7 @@ On the teacher memory sphere, $F_T=0$ and $F=F_S$. We can therefore substitute $
 two remaining terms of the complete network free energy. Orthogonality gives
 
 $$
-\|x_S^*-x_T\|^2
+\|x_T-x_S^*\|^2
 =
 \sum_k n_k^2c_k^2.
 $$
@@ -1509,11 +1508,11 @@ $$
 =
 \pi_{TS}(x_T-x_S^*)
 =
--\pi_{TS}\varepsilon_{TS}^*.
++\pi_{TS}\varepsilon_{TS}^*.
 }
 $$
 
-Using $\varepsilon_{TS}^*=-N_Sx_T$, the same result can be written as
+Using $\varepsilon_{TS}^*=N_Sx_T$, the same result can be written as
 
 $$
 \frac{\partial q}{\partial x_T}=\pi_{TS}N_Sx_T.
@@ -1523,8 +1522,8 @@ This agrees with differentiating the closed form
 $q=(\pi_{TS}/2)x_T^\top N_Sx_T$, because $N_S$ is symmetric. The identity is important
 computationally: the teacher does not need to represent $N_S$, form $A_S$, or differentiate through
 the student's settling trajectory. Once the student has settled, the locally available mismatch
-$\varepsilon_{TS}^*$ points exactly opposite to the derivative direction that increases the settled
-network free energy.
+$\varepsilon_{TS}^*$ is the derivative direction that increases the settled network free energy,
+up to the positive factor $\pi_{TS}$.
 
 ### Why the derivative direction must be projected
 
@@ -1718,14 +1717,12 @@ claim requires a nonzero initial projection onto the top eigenspace. Noise can s
 component in a simulation, but that is an additional implementation feature rather than part of
 the deterministic theorem.
 
-### Why the teacher coupling must be negative
+### Why the teacher-side replay gain must be positive
 
-Let $\kappa$ denote the signed teacher-side interface coupling. This is called `pi_ST` in the
-current code, but it is better interpreted as a coupling gain rather than a probabilistic
-precision. With the convention
+Let $\kappa$ denote the signed teacher-side interface gain. With the convention
 
 $$
-\varepsilon_{TS}=x_S-x_T,
+\varepsilon_{TS}=x_T-x_S,
 $$
 
 write the raw interface contribution to the teacher dynamics as
@@ -1739,41 +1736,39 @@ $$
 At the settled student state,
 
 $$
-\frac{\partial q}{\partial x_T}=-\pi_{TS}\varepsilon_{TS}^*.
+\frac{\partial q}{\partial x_T}=\pi_{TS}\varepsilon_{TS}^*.
 $$
 
-Thus $\varepsilon_{TS}^*$ itself points toward decreasing settled network free energy, whereas
-$-\varepsilon_{TS}^*$ points toward increasing it. To make the interface drive equal to the
-desired unprojected ascent drive $\mu_T\,\partial q/\partial x_T$, we require
+Thus $\varepsilon_{TS}^*$ points toward increasing settled network free energy. To make the
+interface drive equal to the desired unprojected ascent drive
+$\mu_T\,\partial q/\partial x_T$, we require
 
 $$
 \kappa\varepsilon_{TS}^*
 =
--\mu_T\pi_{TS}\varepsilon_{TS}^*.
+\mu_T\pi_{TS}\varepsilon_{TS}^*.
 $$
 
 For nonzero mismatch this gives
 
 $$
 \boxed{
-\kappa=-\mu_T\pi_{TS}<0.
+\kappa=\mu_T\pi_{TS}>0.
 }
 $$
 
-The negative sign is therefore determined by the fact that the teacher maximizes the complete
-network's settled free energy on its memory manifold. A positive coupling would move the teacher
-toward the settled student response and would descend, rather than ascend, the mismatch
-contribution.
+The positive sign is determined by the fact that the teacher maximizes the complete network's
+settled free energy on its memory manifold. A negative gain would move the teacher toward the
+settled student response and would descend, rather than ascend, the mismatch contribution.
 
 The raw interface term supplies the ascent direction. Teacher recurrence must keep the activity
 within $\mathcal U_T$, and normalization or radial projection must remove the component that changes
 its norm. Together, these constraint mechanisms turn the raw drive into the projected ascent
 $P_{T,x}\,\partial q/\partial x_T$ analyzed above.
 
-The magnitude $|\kappa|$ sets a search gain and is not fixed by the sign argument. It remains
-limited by stability and timescale-separation requirements. The special numerical equality
-$\kappa=-\pi_{TS}$ corresponds to choosing $\mu_T=1$; it is not required by the worst-case
-objective.
+The magnitude $\kappa$ sets the search rate through the mobility $\mu_T$. It remains limited by
+stability and timescale-separation requirements. The special numerical equality
+$\kappa=\pi_{TS}$ corresponds to choosing $\mu_T=1$; it is not required by the worst-case objective.
 
 ### What this section establishes
 
@@ -1785,8 +1780,8 @@ the analysis establishes that:
 2. projected teacher dynamics keep the state valid and increase $q$ monotonically;
 3. with a nonzero initial top-eigenspace component, the dynamics approach the maximizer set
    identified in Section 7;
-4. the teacher-side interface coupling must be negative under the convention
-   $\varepsilon_{TS}=x_S-x_T$.
+4. the teacher-side replay gain must be positive under the convention
+   $\varepsilon_{TS}=x_T-x_S$.
 
 ### What this section does not establish
 
@@ -1821,7 +1816,7 @@ with respect to coordinate $(x_S)_i$ gives
 $$
 \frac{\partial F}{\partial (x_S)_i}
 =
-\pi_{TS}(\varepsilon_{TS})_i
+-\pi_{TS}(\varepsilon_{TS})_i
 +
 \pi_S\bigl[M_S^\top\varepsilon_S\bigr]_i.
 $$
@@ -1831,7 +1826,7 @@ Substitution gives
 $$
 \tau_S\dot{(x_S)_i}
 =
--\pi_{TS}(\varepsilon_{TS})_i
++\pi_{TS}(\varepsilon_{TS})_i
 -
 \pi_S\bigl[M_S^\top\varepsilon_S\bigr]_i.
 $$
@@ -1842,7 +1837,7 @@ $$
 \boxed{
 \tau_S\dot x_S
 =
--\pi_{TS}\varepsilon_{TS}
++\pi_{TS}\varepsilon_{TS}
 -
 \pi_SM_S^\top\varepsilon_S.
 }
@@ -2526,7 +2521,7 @@ $$
 +
 \kappa\varepsilon_{TS},
 \qquad
-\kappa<0,
+\kappa>0,
 }
 $$
 
@@ -2537,7 +2532,7 @@ At the settled student state,
 $$
 \kappa\varepsilon_{TS}^*
 =
-|\kappa|N_Sx_T.
+\kappa N_Sx_T.
 $$
 
 Inside $\ker M_T$, this term searches for the teacher-supported state with the largest settled
@@ -2551,7 +2546,7 @@ The roles are distinct:
 
 - teacher recurrence says **which states count as valid source memories**;
 - normalization says **compare them at equal activity energy**;
-- negative coupling says **move toward the valid state with largest settled network free energy**.
+- positive replay gain says **move toward the valid state with largest settled network free energy**.
 
 ---
 
@@ -2866,7 +2861,7 @@ $$
 \left[
 \frac{\pi_T}{2}\|M_Tx_T\|^2
 +
-\frac{\pi_{TS}}2\|x_S-x_T\|^2
+\frac{\pi_{TS}}2\|x_T-x_S\|^2
 +
 \frac{\pi_S}{2}\|M_Sx_S\|^2
 \right].
@@ -2910,13 +2905,13 @@ Then:
 10. The teacher envelope derivative is
 
    $$
-   \frac{\partial q}{\partial x_T}=-\pi_{TS}\varepsilon_{TS}^*.
+   \frac{\partial q}{\partial x_T}=\pi_{TS}\varepsilon_{TS}^*.
    $$
 
 11. Teacher maximization therefore requires
 
     $$
-    \kappa<0.
+    \kappa>0.
     $$
 
 12. Student state descent gives
@@ -2924,7 +2919,7 @@ Then:
     $$
     \tau_S\dot x_S
     =
-    -\pi_{TS}\varepsilon_{TS}
+    +\pi_{TS}\varepsilon_{TS}
     -\pi_SM_S^\top\varepsilon_S.
     $$
 
@@ -2973,7 +2968,7 @@ $$
 +
 \kappa\varepsilon_{TS},
 \qquad
-\kappa<0,
+\kappa>0,
 }
 $$
 
@@ -2981,7 +2976,7 @@ $$
 \boxed{
 \tau_S\dot x_S
 =
--\pi_{TS}\varepsilon_{TS}
++\pi_{TS}\varepsilon_{TS}
 -
 \pi_SM_S^\top\varepsilon_S,
 }
@@ -3092,7 +3087,7 @@ In the model:
 
 1. the student reconstruction cancels teacher activity that is already shared;
 2. poorly reconstructed teacher-supported activity leaves a larger interface residual;
-3. negative feedback converts that residual into ascent within the teacher memory set;
+3. the positive replay gain converts that residual into ascent within the teacher memory set;
 4. recurrent competition and normalization make the largest unresolved direction dominate;
 5. cortical plasticity reduces the exposed settled free energy;
 6. as that direction becomes supported, its residual disappears and another direction can dominate.
@@ -3151,8 +3146,8 @@ direction is treated as potentially important.
 5. $\mathcal{F}_{\max}$ uniformly bounds settled cortical reconstruction error and recurrent
    self-inconsistency.
 6. An $L$-Lipschitz readout inherits the corresponding uniform functional-error bound.
-7. Teacher ascent on the settled network free energy requires a negative interface coupling
-   $\kappa<0$.
+7. Teacher ascent on the settled network free energy requires a positive replay gain
+   $\kappa>0$.
 8. Student state dynamics implement the inner free-energy minimization.
 9. Student plasticity descends the selected settled free energy.
 10. At a simple top discrepancy eigenvalue, student plasticity is exact gradient descent on
@@ -3204,7 +3199,7 @@ The central result can be summarized as follows:
 
 > Consolidation minimizes the largest settled free energy of the complete network over everything
 > represented on the teacher's zero-free-energy memory manifold. Fast cortical inference minimizes
-> network free energy for each candidate state, negative cortical-to-hippocampal coupling drives the
+> network free energy for each candidate state, positive teacher-side replay gain drives the
 > teacher toward the manifold state where that settled free energy is largest, and cortical
 > plasticity follows the locally steepest feasible direction for reducing the resulting envelope.
 > Because the teacher contribution vanishes on the manifold, the same quantity uniformly controls

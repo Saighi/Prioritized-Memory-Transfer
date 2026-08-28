@@ -52,10 +52,10 @@
 \draw[down, inhib] (pfc) to[out=-122, in=122, looseness=1.12] node[glab, pos=0.5, anchor=east, xshift=-2pt]{ {\tiny suppression} } (hpc);
 \draw[corr] (pfc) to[out=0, in=180] (xs);
 \draw[corr] (hpc) to[out=0, in=180] (xt);
-\draw[down, excit] (xs) to[bend left=22] node[glab, pos=0.5, anchor=west, xshift=1pt]{ $x_S$ } (ets);
+\draw[down, inhib] (xs) to[bend left=22] node[glab, pos=0.5, anchor=west, xshift=1pt]{ $x_S$ } (ets);
 \draw[up, excit] (ets) to[bend left=22] node[glab, pos=0.5, anchor=east, xshift=-1pt]{ $\pi_{TS}$ } (xs);
 \draw[up, excit] (xt) to[bend left=22] node[glab, pos=0.5, anchor=east, xshift=-1pt]{ $x_T$ } (ets);
-\draw[down, inhib] (ets) to[bend left=22] node[glab, pos=0.5, anchor=west, xshift=1pt]{ $\pi_{ST}<0$ } (xt);
+\draw[down, excit] (ets) to[bend left=22] node[glab, pos=0.5, anchor=west, xshift=1pt]{ $\kappa>0$ } (xt);
 
 % ---- panel rules ----
 \draw[rulecol, line width=0.6pt] (4.75,1.45) -- (4.75,-5.25);
@@ -63,7 +63,7 @@
 % ---- captions ----
 \node[panel, anchor=center] at (0.00,1.20) { CIRCUIT };
 \node[panel, anchor=center] at (8.40,1.20) { INTERFACE };
-\node[note, anchor=center] at (4.20,-6.15) { the receiver's reconstruction is returned to the source with a reversed sign:\\[1pt]shared content cancels, the residual survives and is replayed };
+\node[note, anchor=center] at (4.20,-6.15) { the receiver's reconstruction enters the interface negatively:\\[1pt]shared content cancels, the residual survives and is replayed };
 
 % ---- legend: arrowhead = excitatory, dot = inhibitory ----
 \draw[local, excit, line width=1.1pt] (1.00,-5.35) -- ++(0.55,0);

@@ -29,7 +29,7 @@ Biology (see ``tikz_bio/README.md`` for the citations)
 Ascending CA1 -> PFC is direct and excitatory. Descending PFC -> CA1 is not: it is
 (i) a monosynaptic long-range GABAergic projection and (ii) a disynaptic relay through
 nucleus reuniens that recruits local feedforward inhibition. Both end as suppression
-of CA1 principal cells, which is what the model's negative interface drive expresses.
+of CA1 principal cells, which is what the model's receiver-to-source suppression expresses.
 """
 from __future__ import annotations
 
@@ -161,8 +161,8 @@ def _variant_a() -> Scene:
     ]
     s.texts = [Text(0.0, 6.35,
                     r"the receiver suppresses the source it also learns from:"
-                    r"\\[1pt]in the model, an interface drive of reversed sign"
-                    r" ($\pi_{ST}<0$)")]
+                    r"\\[1pt]in the model, the teacher ascends the interface"
+                    r" discrepancy ($\kappa>0$)")]
     s.legend = _terminal_legend(-2.35, 5.55)
     s.meta = {"name": "minimal"}
     return s
@@ -205,7 +205,7 @@ def _variant_b() -> Scene:
         Text(0.0, 8.05,
              r"two descending routes, one net effect: suppression of CA1 principal"
              r" cells.\\[1pt]the ascending route is direct and excitatory."
-             r" the model writes this asymmetry as $\pi_{ST}<0$."),
+             r" the model writes the teacher's search gain as $\kappa>0$."),
     ]
     s.legend = _terminal_legend(-2.3, 7.35)
     s.meta = {"name": "pathways"}
@@ -240,8 +240,8 @@ def _variant_c() -> Scene:
     s.texts = [
         Text(0.0, -1.35, r"COORDINATED CA1--PFC RIPPLES", "panel"),
         Text(dx, -1.35, r"INDEPENDENT PFC RIPPLES", "panel"),
-        Text(0.0, 4.35, r"{\small$\pi_{ST}>0$}\\[2pt]reconstruct (transfer)"),
-        Text(dx, 4.35, r"{\small$\pi_{ST}<0$}\\[2pt]cancel (prioritise)"),
+        Text(0.0, 4.35, r"{\small$\kappa<0$}\\[2pt]reconstruct (transfer)"),
+        Text(dx, 4.35, r"{\small$\kappa>0$}\\[2pt]cancel (prioritise)"),
         Text(2.9, 6.55, r"one interface, one sign: the regime is the sign of the drive"),
     ]
     s.legend = _terminal_legend(0.55, 5.85)
@@ -274,13 +274,13 @@ def _variant_d() -> Scene:
         Link("pfc", "xs", "corr", "", "out=0, in=180"),
         Link("hpc", "xt", "corr", "", "out=0, in=180"),
         # model interface
-        Link("xs", "ets", "down", "excit", "bend left=22", label=r"$x_S$",
+        Link("xs", "ets", "down", "inhib", "bend left=22", label=r"$x_S$",
              lopt="anchor=west, xshift=1pt"),
         Link("ets", "xs", "up", "excit", "bend left=22", label=r"$\pi_{TS}$",
              lopt="anchor=east, xshift=-1pt"),
         Link("xt", "ets", "up", "excit", "bend left=22", label=r"$x_T$",
              lopt="anchor=east, xshift=-1pt"),
-        Link("ets", "xt", "down", "inhib", "bend left=22", label=r"$\pi_{ST}<0$",
+        Link("ets", "xt", "down", "excit", "bend left=22", label=r"$\kappa>0$",
              lopt="anchor=west, xshift=1pt"),
     ]
     s.rules = [Rule(4.75, -1.45, 4.75, 5.25)]
@@ -288,8 +288,8 @@ def _variant_d() -> Scene:
         Text(0.0, -1.2, "CIRCUIT", "panel"),
         Text(mx, -1.2, "INTERFACE", "panel"),
         Text(4.2, 6.15,
-             r"the receiver's reconstruction is returned to the source with a"
-             r" reversed sign:\\[1pt]shared content cancels, the residual survives"
+             r"the receiver's reconstruction enters the interface negatively:"
+             r"\\[1pt]shared content cancels, the residual survives"
              r" and is replayed"),
     ]
     s.legend = _terminal_legend(1.0, 5.35)

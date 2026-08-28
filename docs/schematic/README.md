@@ -1,10 +1,10 @@
 # Network schematic (TikZ)
 
 A "paper-minimal" wiring diagram of the two-population predictive-coding network
-(teacher **T** above student **S**; value neurons, the three error populations, the
+(student **S** above teacher **T**; value neurons, the three error populations, the
 recurrent weights, and the labelled prediction/drive couplings).
 
-Blue = top-down prediction, orange = bottom-up / drive. `ε_TS = x_S − x_T`.
+Blue = descending, orange = ascending. `ε_TS = x_T − x_S`.
 
 Three figures, same pipeline:
 
@@ -14,13 +14,16 @@ Three figures, same pipeline:
   descending pathways, `c` the sign flip across ripple regimes, `d` circuit ↔ interface).
   See [`tikz_bio/README.md`](tikz_bio/README.md).
 - **`tikz_units/`** — unit level, **2 units per population** (Tang et al. 2023 Fig. 1 style):
-  shows the strictly **one-to-one interface** (`x_T,i ↔ ε_TS,i ↔ x_S,i`, no crossing) and
+  shows the strictly **one-to-one interface** (`x_S,i ↔ ε_TS,i ↔ x_T,i`, no crossing) and
   the **lateral cross-communication inside each population** (zero-diagonal recurrent
   weights ⇒ units talk only through crossing reciprocal pairs).  Each pair is labelled
-  in both directions: `W_{ij}` for `x_j -> epsilon_i` and
-  `pi (W^T)_{ji} = pi W_{ij}` for `epsilon_i -> x_j`.
-  Adds Tang's sign convention: arrowhead = excitatory, dot = inhibitory — so the signed
-  interface drive is visible: sleep `π_ST<0` terminates in a dot, wake `π_ST>0` in an arrow.
+  in both directions: the reciprocal paths `x_j -> epsilon_i` and `epsilon_i -> x_j`
+  share the scalar label `W_{ij}`. The equations assemble the return currents as
+  `W^T epsilon`; the transpose and population precision are omitted from individual
+  crossed labels.
+  Adds Tang's sign convention: arrowhead = excitatory, dot = inhibitory. The student enters
+  `ε_TS` through an inhibitory terminal, while the teacher enters it through an excitatory
+  terminal; the replay drive `κ>0` ends in an arrow and the wake drive `κ<0` in a dot.
 
 ## Render
 
@@ -60,13 +63,13 @@ PDF→SVG step.
 
 Everything is driven from `spec.py`:
 
-- **Phase / drive sign.** The teacher's interface drive is the **signed** precision `π_ST`.
-  `build_spec(phase="sleep")` shows it as a *reversed* (negative) precision `π_ST<0`
-  (drive-to-disagree); `phase="wake"` shows the ordinary `π_ST>0` (recall). The sign *is*
-  the phase — no separate gate.
-- **Numeric gains.** Pass a `ModelConfig`-like object as `values=` to fold values into the
-  labels (e.g. `π_ST=-0.21`); the paper-minimal default keeps them symbolic. A resolved
-  `π_ST` comes from `model.build_system(cfg)`, which turns `"auto"` into a number.
+- **Phase / drive sign.** The teacher's signed interface gain is `κ`. During replay,
+  `build_spec(phase="sleep")` shows `κ>0`, so the teacher ascends the settled recipient deficit.
+  During wake, `phase="wake"` shows `κ<0`, so the teacher descends the interface discrepancy.
+  The sign is the phase; there is no separate gate.
+- **Numeric gains.** Pass an object with numeric `kappa`, `pi_T`, `pi_S`, and `pi_TS`
+  attributes as `values=` to fold values into the labels. The paper-minimal default keeps
+  them symbolic.
 - **Colours** live in `spec.COLORS` (bare HTML hex) and are injected into the template's
   `\definecolor` lines, so there's one place to change them.
 - **Geometry.** Node coordinates are in `spec.py` in grid units (+y is *down*);

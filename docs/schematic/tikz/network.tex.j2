@@ -24,15 +24,15 @@
 {% endfor %}
 % ---- recurrent self-loops ----
 {% for n in nodes if n.loop -%}
-\draw[selfloop] ({{ n.id }}) edge[loop {{ 'above' if n.pop=='T' else 'below' }}] node[glab]{${{ n.loop }}$} ({{ n.id }});
+\draw[selfloop] ({{ n.id }}) edge[loop {{ 'above' if n.pop=='S' else 'below' }}] node[glab]{${{ n.loop }}$} ({{ n.id }});
 {% endfor %}
 % ---- couplings (each pair separates naturally under a uniform bend) ----
 {% for e in edges -%}
-\draw[{{ e.flow }}] ({{ e.src }}) to[bend left={{ bend }}] node[glab,midway]{${{ e.tex }}$} ({{ e.dst }});
+\draw[{{ e.flow }}] ({{ e.src }}) to[bend left={{ bend }}] node[glab,pos={{ "%.2f"|format(e.label_pos) }}]{${{ e.tex }}$} ({{ e.dst }});
 {% endfor %}
 % ---- population captions + interface note ----
-\node[font=\footnotesize\bfseries, gray, anchor=west] at ({{ "%.2f"|format(-0.2*sx) }},{{ "%.2f"|format(0.0*sy+0.95) }}) {TEACHER\,T};
-\node[font=\footnotesize\bfseries, gray, anchor=west] at ({{ "%.2f"|format(-0.2*sx) }},{{ "%.2f"|format(-4.0*sy-0.95) }}) {STUDENT\,S};
+\node[font=\footnotesize\bfseries, gray, anchor=west] at ({{ "%.2f"|format(-0.2*sx) }},{{ "%.2f"|format(0.0*sy+0.95) }}) {STUDENT\,S};
+\node[font=\footnotesize\bfseries, gray, anchor=west] at ({{ "%.2f"|format(-0.2*sx) }},{{ "%.2f"|format(-4.0*sy-0.95) }}) {TEACHER\,T};
 \node[font=\scriptsize, gray, anchor=east] at ({{ "%.2f"|format(6.9*sx) }},{{ "%.2f"|format(-2.0*sy) }}) {${{ note_tex }}$};
 \end{tikzpicture}
 \end{document}

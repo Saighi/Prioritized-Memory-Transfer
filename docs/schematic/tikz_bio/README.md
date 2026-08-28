@@ -10,7 +10,7 @@ the analogy, not an anatomy plate.
 |---|---|---|---|
 | **a** | `pfc_hpc_a_minimal` | Two regions, one arrow each way. Ascending excitatory, descending inhibitory. | An inset next to the model figure; the discussion opener. |
 | **b** | `pfc_hpc_b_pathways` | The same, with the **two descending routes** drawn: direct long-range GABAergic, and the thalamic relay that recruits local feedforward inhibition. | Wherever the reader may object "there is no inhibitory projection from PFC to CA1". |
-| **c** | `pfc_hpc_c_regimes` | Coordinated CA1–PFC ripples vs independent PFC ripples: the same circuit with the terminal flipped, `π_ST>0` vs `π_ST<0`. | The sign-reversal claim. Pairs with the sleep/wake panels of the results. |
+| **c** | `pfc_hpc_c_regimes` | Coordinated CA1–PFC ripples vs independent PFC ripples: the same circuit with the teacher-side drive flipped, `κ<0` vs `κ>0`. | The descent-versus-ascent claim. Pairs with the sleep/wake panels of the results. |
 | **d** | `pfc_hpc_d_bridge` | Circuit on the left, model interface on the right, dotted correspondences between them. | The discussion figure that states the mapping outright. |
 
 ## Render
@@ -43,8 +43,7 @@ Runs in the `pytorch` conda env (needs only `jinja2`). Requires a LaTeX toolchai
   (hippocampus → cortex). Since the receiver is drawn on top, this coincides with the
   prediction/error colours of `../spec.py`, and `spec_bio.COLORS` imports that palette.
 - **Hierarchy**: cortex (student, `x_S`, receiver) on top, hippocampus (teacher, `x_T`,
-  source) below. Note this is the *opposite* vertical order to `../tikz/network.pdf`,
-  which draws the teacher on top; the two figures disagree on layout, not on content.
+  source) below. All model and biological diagrams use this order.
 - Geometry is in centimetres in `spec_bio.py` with **+y down**; `render.py` flips y.
   `Link.path` is a raw TikZ `to[...]` string, and `Link.dst` may be any TikZ coordinate
   expression (e.g. `hpc.north -| inn`), not just a node name.
@@ -81,9 +80,8 @@ slow-oscillation / spindle scaffold.
 
 ## Why this matters to the model
 
-The suppression lands on CA1 **principal** cells, not on error units. Classical predictive
-coding would inhibit error neurons and pull the source *toward* the prediction; here the
-receiver's reconstruction is subtracted from the source's own representation, so the
-source is pushed *away* from what is already shared. With recurrent weights in the source
-population, that negative image is what steers replay toward the memories the receiver
-cannot yet reconstruct. In the model this is one number: the interface drive `π_ST < 0`.
+The suppression lands on CA1 **principal** cells, not on error units. The interface error is
+`ε_TS = x_T - x_S`: the source enters positively and the receiver's reconstruction enters
+negatively. During replay, the positive gain `κ > 0` drives the teacher along this residual.
+With recurrent weights in the source population, that residual steers replay toward the memories
+the receiver cannot yet reconstruct.

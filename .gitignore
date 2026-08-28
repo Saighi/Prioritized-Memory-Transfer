@@ -19,6 +19,7 @@ tests/_*.log
 texput.log
 Paper/latex/*.log
 Paper/latex/*.out
+paper_figure/
 docs/schematic/tikz/*.log
 
 # archived heavy outputs

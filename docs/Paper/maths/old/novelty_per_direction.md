@@ -54,10 +54,12 @@ and the only nonnegativity fact required later.
 
 ## Step 2. The student's dynamics becomes `d` independent scalar equations
 
-The student's state equation is
+The interface error and student state equation are
 
 $$
-\tau_S\, \dot x_S = -\,\pi_{TS}\,\big(x_S - x_T\big) \;-\; \pi_S\, S_S\, x_S .
+\varepsilon_{TS}=x_T-x_S,
+\qquad
+\tau_S\, \dot x_S = +\,\pi_{TS}\,\varepsilon_{TS} \;-\; \pi_S\, S_S\, x_S .
 $$
 
 Dot it with one ruler `u_k`. On the left, the rulers are constant in time (frozen weights), so the
@@ -65,7 +67,7 @@ derivative passes through the dotting. On the right, `u_k^\top S_S = \mu_k\, u_k
 is an eigenvector of the symmetric `S_S`. Every term collapses onto that ruler's coordinate:
 
 $$
-\boxed{\ \tau_S\, \dot s_k \;=\; -\,\pi_{TS}\,\big(s_k - c_k\big) \;-\; \pi_S\, \mu_k\, s_k \ } , \qquad k = 1, \dots, d .
+\boxed{\ \tau_S\, \dot s_k \;=\; +\,\pi_{TS}\,\big(c_k - s_k\big) \;-\; \pi_S\, \mu_k\, s_k \ } , \qquad k = 1, \dots, d .
 $$
 
 The equation for `s_k` contains `s_k` and `c_k` and nothing else. The `d`-dimensional coupled system
@@ -87,7 +89,7 @@ The leak strength is exactly the raw self-error of Step 1. A learned ruler has n
 Fast student: set `ṡ_k = 0`, gather the `s_k` terms, and divide by their coefficient.
 
 $$
-\pi_{TS}\,\big(s_k - c_k\big) + \pi_S\, \mu_k\, s_k = 0
+\pi_{TS}\,\big(c_k - s_k\big) - \pi_S\, \mu_k\, s_k = 0
 \qquad\Longrightarrow\qquad
 \big(\pi_{TS} + \pi_S\, \mu_k\big)\, s_k = \pi_{TS}\, c_k .
 $$
@@ -104,7 +106,7 @@ $$
 The leftover interface error on that ruler follows by putting `c_k` over the same denominator:
 
 $$
-e_k \;=\; s_k^{*} - c_k \;=\; \frac{\pi_{TS} - \big(\pi_{TS} + \pi_S \mu_k\big)}{\pi_{TS} + \pi_S \mu_k}\, c_k \;=\; -\,n_k\, c_k .
+e_k \;=\; c_k - s_k^{*} \;=\; \frac{\big(\pi_{TS} + \pi_S \mu_k\big)-\pi_{TS}}{\pi_{TS} + \pi_S \mu_k}\, c_k \;=\; n_k\, c_k .
 $$
 
 **Reading: copied plus missing equals whole.** On each ruler the student copies the fraction
@@ -186,22 +188,20 @@ Corollary 1 and is not needed anywhere below.
 
 ## Step 5. The teacher's motion, ruler by ruler: prioritization
 
-The student's push on the teacher is `u = π_ST ε_TS` (read straight off the teacher's equation, with
-the self-pull dropped as declared in the scope). Its coordinate on ruler `k` uses Step 3's error and
-the fact that in sleep `π_ST` is negative, `π_ST = -|π_ST|`:
+The interface push on the teacher is `u = κ ε_TS`, with `κ>0` during replay. Its coordinate on ruler
+`k` uses Step 3's error:
 
 $$
-\tau_T\, \dot c_k \;=\; \pi_{ST}\, e_k \;=\; \big(-|\pi_{ST}|\big)\cdot\big(-\,n_k\, c_k\big) \;=\; |\pi_{ST}|\; n_k\; c_k .
+\tau_T\, \dot c_k \;=\; \kappa\, e_k \;=\; \kappa\; n_k\; c_k .
 $$
 
-**The two minus signs cancel.** Reversed precision multiplied by a backward-pointing error gives
-forward amplification. This single cancellation is the entire mechanism of the model, and here it is
-visible on one line of scalar algebra.
+The interface error is the unresolved teacher coordinate, so its positive replay gain amplifies
+directions in proportion to their current novelty.
 
 Each ruler now obeys the elementary growth law `ċ = λ c`, so
 
 $$
-c_k(t) \;=\; c_k(0)\; \exp\!\Big(\frac{|\pi_{ST}|\, n_k}{\tau_T}\; t\Big) .
+c_k(t) \;=\; c_k(0)\; \exp\!\Big(\frac{\kappa\, n_k}{\tau_T}\; t\Big) .
 $$
 
 Four readings, one look each:
@@ -211,7 +211,7 @@ Four readings, one look each:
 2. **Rate ordered by novelty.** Between two rulers, the one with the larger dial grows strictly
    faster, at every instant.
 3. **The most novel occupied ruler wins.** The ratio of two coordinates obeys
-   `c_k(t)/c_l(t) = (c_k(0)/c_l(0)) e^{(n_k - n_l)|π_ST| t/τ_T}`, so however small its share at the
+   `c_k(t)/c_l(t) = (c_k(0)/c_l(0)) e^{(n_k - n_l)κ t/τ_T}`, so however small its share at the
    start, the largest-dial ruler comes to dominate the teacher's heading. The word *occupied*
    matters: a coordinate that is exactly zero stays exactly zero, since the push rescales and never
    seeds. That is the job of the noise dropped in the scope.
@@ -219,7 +219,7 @@ Four readings, one look each:
    and `μ_k = ‖M_S u_k‖²`,
 
 $$
-|\pi_{ST}|\, n_k \;\le\; \frac{|\pi_{ST}|\, \pi_S}{\pi_{TS}}\; \|M_S\, u_k\|^2 ,
+\kappa\, n_k \;\le\; \frac{\kappa\, \pi_S}{\pi_{TS}}\; \|M_S\, u_k\|^2 ,
 $$
 
    so as learning shrinks the residual along a ruler, the push there dies like the *square* of that
@@ -237,7 +237,7 @@ Every vector is the sum of its coordinates times the rulers. Stack the `d` scala
 **The interface error.**
 
 $$
-\varepsilon_{TS} \;=\; \sum_k e_k\, u_k \;=\; -\sum_k n_k\, c_k\, u_k .
+\varepsilon_{TS} \;=\; \sum_k e_k\, u_k \;=\; \sum_k n_k\, c_k\, u_k .
 $$
 
 Read that sum as a product: scaling coordinate `k` by `n_k` is what a diagonal matrix does, and
@@ -245,13 +245,13 @@ recombining the rulers weighted by the result is what `U` does. With
 `U = [u_1 | ... | u_d]` and `D_n = diag(n_1, ..., n_d)`, and using `c = U^T x_T`,
 
 $$
-\varepsilon_{TS} \;=\; -\,U\, D_n\, c \;=\; -\,\big(U\, D_n\, U^\top\big)\, x_T .
+\varepsilon_{TS} \;=\; U\, D_n\, c \;=\; \big(U\, D_n\, U^\top\big)\, x_T .
 $$
 
 Give that matrix a name:
 
 $$
-\boxed{\ N_S \;:=\; U\, D_n\, U^\top , \qquad \varepsilon_{TS} \;=\; -\,N_S\, x_T \ } .
+\boxed{\ N_S \;:=\; U\, D_n\, U^\top , \qquad \varepsilon_{TS} \;=\; N_S\, x_T \ } .
 $$
 
 **The settled state**, stacked the same way from `s_k^* = (1 - n_k) c_k`:
@@ -264,7 +264,7 @@ an attenuated copy of the teacher's state, not a projection. **The teacher's law
 Step 5:
 
 $$
-\tau_T\, \dot x_T \big|_{\text{push}} \;=\; |\pi_{ST}|\; N_S\, x_T .
+\tau_T\, \dot x_T \big|_{\text{push}} \;=\; \kappa\; N_S\, x_T .
 $$
 
 ### Properties, all free by construction
@@ -324,8 +324,8 @@ tug-of-war is a division by a positive number, and it shows the student copying 
 `1 − n_k` of the teacher's coordinate and leaving the fraction `n_k = π_S μ_k / (π_TS + π_S μ_k)`
 behind as error. That dial is the raw error renormalized onto `[0, 1)`, same axes, squashed numbers,
 proportional for small errors and saturating for large ones because abandoning a hopeless axis is
-always an option. Feeding the leftover back to the teacher through the reversed precision cancels
-two minus signs and yields, per axis, `τ_T ċ_k = |π_ST| n_k c_k`: learned axes exactly frozen, novel
+always an option. Feeding the leftover back to the teacher with gain `κ>0` yields, per axis,
+`τ_T ċ_k = κ n_k c_k`: learned axes exactly frozen, novel
 axes growing in proportion to their novelty, the most novel occupied axis eventually dominating, and
 every drive extinguishing quadratically as its axis is learned. Only at the end do the `d` scalar
 statements get stacked back into vectors, and the matrix that appears in the stacking is what we

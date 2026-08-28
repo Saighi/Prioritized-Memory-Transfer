@@ -39,7 +39,7 @@ The nested operations have a direct mechanistic reading:
 
 ### One-sentence contribution
 
-The paper derives a two-network mechanism in which recipient deficits drive prioritized source reactivation, recipient learning progressively extinguishes the signal that selected each memory, and the negative source-directed coupling follows from the requirement to ascend the settled recipient deficit.
+The paper derives a two-network mechanism in which recipient deficits drive prioritized source reactivation, recipient learning progressively extinguishes the signal that selected each memory, and a positive teacher-side interface gain implements ascent while the recipient's negative contribution to the interface provides effective source suppression.
 
 ### Biological interpretation
 
@@ -55,7 +55,7 @@ The paper derives a two-network mechanism in which recipient deficits drive prio
 The paper contains the two-network transfer primitive only:
 
 - the worst-case consolidation objective;
-- the derivation of negative teacher-side coupling;
+- the derivation of the positive teacher-side replay gain;
 - recipient-deficit-driven prioritized reactivation;
 - progressive self-extinction as the recipient learns;
 - reduced prioritization of content already familiar to the recipient;
@@ -74,11 +74,11 @@ Continual learning may appear in one short Discussion paragraph as a possible ap
 
 ### Explicit removals from the old paper
 
-- Remove the exact zero-sum representation at $\kappa=-\pi_{TS}$.
+- Do not introduce a special zero-sum representation at $\kappa=\pi_{TS}$.
 - Remove the saddle interpretation and the wake/sleep saddle figure.
 - Do not derive the architecture from $\Phi=F_T-F_S$.
 - Replace the old theorem and lemma sequence with the worst-case-deficit derivation below.
-- Do not call $\kappa$ a negative precision. It is a signed effective coupling gain.
+- Call $\kappa$ a signed effective coupling gain, not a precision.
 - Do not claim that the complete coupled network minimizes a global variational free energy.
 
 ## 2. Narrative arc
@@ -90,7 +90,7 @@ $$
 \longrightarrow
 \text{worst recipient deficit}
 \longrightarrow
-\text{negative top-down coupling}
+\text{effective cortical suppression and replay ascent}
 \longrightarrow
 \text{prioritized reactivation}
 \longrightarrow
@@ -116,7 +116,7 @@ Five moves:
 1. Reactivation during sleep and quiet wake is implicated in systems consolidation.
 2. Reactivation is selective, but models commonly assign priority through recency, source strength, salience, context or reward, or leave content selection implicit.
 3. Ask whether priority can instead emerge from the interaction between source and recipient memory systems.
-4. Introduce the two-network worst-case consolidation objective and state, in one compact sentence, that its local implementation requires negative recipient-to-source coupling and drives the source toward content the recipient represents poorly.
+4. Introduce the two-network worst-case consolidation objective and state, in one compact sentence, that its local implementation uses a positive teacher-side interface gain, while the recipient enters the interface negatively, to drive the source toward content the recipient represents poorly.
 5. Close on the biological hypothesis: an inhibitory prefrontal-hippocampal control motif used for selective retrieval during wake may be redeployed during sleep to organize consolidation according to cortical competence.
 
 Keep out of the abstract unless later required by the final data:
@@ -209,7 +209,7 @@ Define
 $$
 F_S(x_S,x_T;W_S)
 =
-\frac{\pi_{TS}}2\|x_S-x_T\|^2
+\frac{\pi_{TS}}2\|x_T-x_S\|^2
 +
 \frac{\pi_S}{2}\|M_Sx_S\|^2.
 $$
@@ -304,16 +304,16 @@ $$
 
 Interpretation: the leading eigendirection of $A_S$ is the teacher-supported direction that the recipient represents least well.
 
-#### 6.2 Maximizing settled deficit derives negative source coupling
+#### 6.2 Maximizing settled deficit fixes the teacher-side interface drive
 
 The core derivation must remain in the main paper:
 
 $$
 \nabla_{x_T}q(x_T;W_S)
 =
--\pi_{TS}\varepsilon_{TS}^*,
++\pi_{TS}\varepsilon_{TS}^*,
 \qquad
-\varepsilon_{TS}=x_S-x_T.
+\varepsilon_{TS}=x_T-x_S.
 $$
 
 If the source interface contribution is
@@ -325,7 +325,7 @@ $$
 then ascent on the recipient deficit requires
 
 $$
-\boxed{\kappa=-\mu_T\pi_{TS}<0.}
+\boxed{\kappa=\mu_T\pi_{TS}>0.}
 $$
 
 This is the elegant sign result. It requires no zero-sum potential. The magnitude includes the source search mobility $\mu_T$ and remains subject to the constraints of the implementation.
@@ -449,7 +449,7 @@ Do not claim temporal or spatial sequence replay. Rectification addresses the ge
 
 Suggested Supporting Information:
 
-- **S1 Fig:** positive, zero and negative source-coupling ablation.
+- **S1 Fig:** replay-ascent, zero-drive and replay-descent ablation.
 - **S2 Fig:** rank, dimension, correlation and partial-familiarity sweeps.
 - **S3 Fig:** timescale separation, noise and source-manifold leakage.
 - **S4 Fig:** oracle implementation checks and random-baseline controls.
@@ -463,7 +463,7 @@ Suggested Supporting Information:
 Use three named results at most.
 
 1. **Proposition 1: settled deficit and spectral certificate.** State $x_S^*$, $N_S$, $q$, $A_S$ and $\mathcal D_{\max}$.
-2. **Theorem 1: local implementation of worst-case consolidation.** Under hard teacher-manifold constraint and timescale separation, recipient inference implements the inner minimum, projected teacher dynamics implement ascent on the settled deficit, negative source coupling follows, and at a simple leading discrepancy eigenvalue recipient plasticity descends $\mathcal D_{\max}$.
+2. **Theorem 1: local implementation of worst-case consolidation.** Under hard teacher-manifold constraint and timescale separation, recipient inference implements the inner minimum, projected teacher dynamics implement ascent on the settled deficit, the positive teacher-side interface gain follows, and at a simple leading discrepancy eigenvalue recipient plasticity descends $\mathcal D_{\max}$.
 3. **Corollary 1: completion and self-extinction.** State the zero-deficit equivalence and vanishing selection/plasticity signals.
 
 In the main paper, show the two-line envelope derivative and coupling-sign derivation in full. This is the conceptual heart and is short enough to deserve the space.
@@ -486,7 +486,7 @@ Move the following details out of the narrative flow:
 
 - no “saddle” terminology;
 - no exact zero-sum proposition;
-- no claim that $\kappa=-\pi_{TS}$ is uniquely required;
+- no claim that $\kappa=\pi_{TS}$ is uniquely required;
 - no global-optimal-time claim;
 - no global convergence claim for arbitrary nonlinear networks;
 - no claim that the brain explicitly computes the scalar $\mathcal D_{\max}$.

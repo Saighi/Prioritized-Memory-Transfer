@@ -1,0 +1,143 @@
+% Auto-generated from docs/schematic/spec_protocol.py via render.py — edit the template, not the .tex.
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,matrix}
+\definecolor{plasticcol}{HTML}{ {{- colors.plastic -}} }
+\definecolor{frozencol}{HTML}{ {{- colors.frozen -}} }
+\definecolor{predcol}{HTML}{ {{- colors.pred -}} }
+\definecolor{errcol}{HTML}{ {{- colors.err -}} }
+\definecolor{nodestroke}{HTML}{ {{- colors.node_stroke -}} }
+\definecolor{shadecol}{HTML}{ {{- colors.shadecol -}} }
+\definecolor{clampcol}{HTML}{ {{- colors.clamp -}} }
+\definecolor{titlecol}{HTML}{ {{- colors.title -}} }
+\definecolor{mutedcol}{HTML}{ {{- colors.muted -}} }
+% a small padlock at coordinate #1 in colour #2 — marks frozen weights
+{% raw %}\newcommand{\padlock}[2]{%
+  \begin{scope}[shift={#1}, draw=#2, line width=0.8pt, line join=round]
+    \draw (-0.06,0.05) -- (-0.06,0.11) arc (180:0:0.06) -- (0.06,0.05); % shackle
+    \fill[#2] (-0.11,-0.13) rectangle (0.11,0.05);                      % body
+    \fill[white] (0,-0.03) circle (0.023);                             % keyhole
+  \end{scope}}{% endraw %}
+\begin{document}
+\begin{tikzpicture}[
+  node/.style={circle, draw=nodestroke, line width=1.15pt, minimum size=6mm, inner sep=0pt},
+  mesh/.style={line width=0.9pt, opacity=0.6},
+  chord/.style={line width=1.35pt},
+  interface/.style={line width=2pt},
+  excit/.style={-{Stealth[length=3.4mm,width=3mm]}},
+  inhib/.style={-{Circle[length=2.8mm, width=2.8mm]}},
+  poplab/.style={font=\Large, text=titlecol},
+  wlab/.style={font=\large, text=titlecol, fill=white, inner sep=1.5pt},
+  offlab/.style={font=\large\itshape, text=mutedcol},
+  title/.style={font=\Large\bfseries, text=titlecol},
+  clab/.style={font=\large, text=clampcol, fill=white, inner sep=1.5pt},
+  lgd/.style={font=\large, text=mutedcol},
+]
+{% set R = geom.r_ring %}
+{% for p in panels %}
+% =================== PANEL {{ p.key }} : {{ p.title }} ===================
+{% set cx = p.meta.cx %}
+% ---- teacher ring (state: {{ p.t_state }}) ----
+{% set T = p.tnodes %}
+{% if p.t_state == 'off' %}\begin{scope}[opacity={{ opacity_off }}]{% endif %}
+% recurrent weights W_T: complete graph, drawn as a mesh BEHIND the nodes
+{% for a, b in p.chords %}
+\draw[mesh, {% if p.t_state == 'frozen' %}frozencol{% else %}plasticcol{% endif %}] ({{ "%.3f"|format(T[a].x*sx) }},{{ "%.3f"|format(-T[a].y*sy) }}) -- ({{ "%.3f"|format(T[b].x*sx) }},{{ "%.3f"|format(-T[b].y*sy) }});
+{% endfor %}
+{% for n in p.tnodes %}
+\node[node, fill=shadecol!{{ (n.shade*100)|round|int }}] ({{ p.key }}-T{{ n.i }}) at ({{ "%.3f"|format(n.x*sx) }},{{ "%.3f"|format(-n.y*sy) }}) {};
+{% endfor %}
+{% if p.t_state == 'off' %}\end{scope}{% endif %}
+% teacher recurrent-weight tag
+{% set tx = (cx + R + 0.55)*sx %}{% set ty = -geom.cy_t*sy %}
+{% if p.t_state == 'frozen' %}
+\padlock{ ({{ "%.3f"|format(tx+0.02) }},{{ "%.3f"|format(ty+0.30) }}) }{frozencol}
+\node[wlab, text=frozencol, anchor=west] at ({{ "%.3f"|format(tx+0.26) }},{{ "%.3f"|format(ty+0.30) }}) {$\dot W_T=0$};
+{% else %}
+\node[wlab, text=plasticcol, anchor=west] at ({{ "%.3f"|format(tx) }},{{ "%.3f"|format(ty+0.30) }}) {$\dot W_T\neq0$};
+{% endif %}
+\node[poplab, anchor=west] at ({{ "%.3f"|format(tx) }},{{ "%.3f"|format(ty-0.28) }}) {teacher $x_T$};
+
+% ---- student ring (state: {{ p.s_state }}) ----
+{% set S = p.snodes %}
+{% if p.s_state == 'off' %}\begin{scope}[opacity={{ opacity_off }}]{% endif %}
+% recurrent weights W_S: complete graph, drawn as a mesh BEHIND the nodes
+{% for a, b in p.chords %}
+\draw[mesh, {% if p.s_state == 'plastic' %}plasticcol{% else %}frozencol{% endif %}] ({{ "%.3f"|format(S[a].x*sx) }},{{ "%.3f"|format(-S[a].y*sy) }}) -- ({{ "%.3f"|format(S[b].x*sx) }},{{ "%.3f"|format(-S[b].y*sy) }});
+{% endfor %}
+{% for n in p.snodes %}
+\node[node, fill=shadecol!{{ (n.shade*100)|round|int }}] ({{ p.key }}-S{{ n.i }}) at ({{ "%.3f"|format(n.x*sx) }},{{ "%.3f"|format(-n.y*sy) }}) {};
+{% endfor %}
+{% if p.s_state == 'off' %}\end{scope}{% endif %}
+% student recurrent-weight tag
+{% set sx0 = (cx + R + 0.55)*sx %}{% set sy0 = -geom.cy_s*sy %}
+{% if p.s_state == 'off' %}
+\node[offlab, anchor=west] at ({{ "%.3f"|format(sx0) }},{{ "%.3f"|format(sy0+0.30) }}) {off};
+{% elif p.s_state == 'frozen' %}
+\padlock{ ({{ "%.3f"|format(sx0+0.02) }},{{ "%.3f"|format(sy0+0.30) }}) }{frozencol}
+\node[wlab, text=frozencol, anchor=west] at ({{ "%.3f"|format(sx0+0.26) }},{{ "%.3f"|format(sy0+0.30) }}) {$\dot W_S=0$};
+{% else %}
+\node[wlab, text=plasticcol, anchor=west] at ({{ "%.3f"|format(sx0) }},{{ "%.3f"|format(sy0+0.30) }}) {$\dot W_S\neq0$};
+{% endif %}
+\node[poplab, anchor=west] at ({{ "%.3f"|format(sx0) }},{{ "%.3f"|format(sy0-0.28) }}) {student $x_S$};
+
+% ---- teacher <-> student interface (state: {{ p.iface }}) ----
+{% set y_hi = -(geom.cy_s + R + 0.40)*sy %}{% set y_lo = -(geom.cy_t - R - 0.40)*sy %}
+{% set xl = (cx - 0.34)*sx %}{% set xr = (cx + 0.34)*sx %}
+{% if p.iface == 'off' %}\begin{scope}[opacity={{ opacity_off }}]{% endif %}
+\draw[predcol, interface, excit] ({{ "%.3f"|format(xl) }},{{ "%.3f"|format(y_lo) }}) -- ({{ "%.3f"|format(xl) }},{{ "%.3f"|format(y_hi) }});
+\draw[errcol, interface, inhib] ({{ "%.3f"|format(xr) }},{{ "%.3f"|format(y_hi) }}) -- ({{ "%.3f"|format(xr) }},{{ "%.3f"|format(y_lo) }});
+{% if p.iface == 'off' %}\end{scope}
+\node[offlab, anchor=west] at ({{ "%.3f"|format((cx+0.45)*sx) }},{{ "%.3f"|format((y_hi+y_lo)/2) }}) {interface off};
+{% else %}
+\node[wlab, anchor=west] at ({{ "%.3f"|format((cx+0.45)*sx) }},{{ "%.3f"|format((y_hi+y_lo)/2) }}) {interface on};
+{% endif %}
+
+% ---- clamp x_T <- m^(p): a roomy stack of interleaved memory patterns + a bold arrow ----
+{% if p.clamp %}
+{% set sxc = (cx - R - 2.15)*sx %}{% set by = -geom.cy_t*sy %}
+% interleaved stack, back-to-front (offset up-right); front card carries a pattern hint
+\foreach \d in {0.44,0.22,0}{
+  \draw[clampcol, line width=0.8pt, fill=white, rounded corners=1.5pt]
+     ({{ "%.3f"|format(sxc) }}+\d-0.34,{{ "%.3f"|format(by) }}+\d-0.46) rectangle ({{ "%.3f"|format(sxc) }}+\d+0.34,{{ "%.3f"|format(by) }}+\d+0.46);}
+\foreach \k in {0.26,0.09,-0.08,-0.25}{
+  \fill[clampcol!45] ({{ "%.3f"|format(sxc) }}-0.22,{{ "%.3f"|format(by) }}+\k-0.045) rectangle ({{ "%.3f"|format(sxc) }}+0.22,{{ "%.3f"|format(by) }}+\k+0.045);}
+% bold clamp arrow into the teacher-left node
+\draw[clampcol, line width=1.6pt, -{Stealth[length=4mm,width=3.4mm]}]
+   ({{ "%.3f"|format(sxc+0.52) }},{{ "%.3f"|format(by) }}) -- ({{ "%.3f"|format((cx-R)*sx-0.34) }},{{ "%.3f"|format(by) }});
+\node[font=\Large, text=clampcol, anchor=south] at ({{ "%.3f"|format((cx-R)*sx-1.15) }},{{ "%.3f"|format(by+0.78) }}) {$x_T\leftarrow m^{(p)}$};
+{% endif %}
+
+% ---- panel title ----
+\node[title, anchor=north] at ({{ "%.3f"|format(cx*sx) }},{{ "%.3f"|format(-(geom.cy_t + R + 0.35)*sy) }}) {({{ p.key }}) {{ p.title }}};
+{% endfor %}
+
+% =================== legend (matrix measures text widths and spaces entries evenly) ===================
+{% set legend_cx = (geom.panel_dx/2.0)*sx %}{% set legend_y = -(geom.cy_t + R + 1.75)*sy %}
+\matrix (legend) [
+  matrix of nodes,
+  anchor=center,
+  nodes={anchor=west, inner sep=0pt, outer sep=0pt},
+  column sep=0.18cm,
+  row sep=0.45cm
+] at ({{ "%.3f"|format(legend_cx) }},{{ "%.3f"|format(legend_y) }}) {
+  |[minimum width=1.0cm, minimum height=0.32cm]| {} &
+  |[lgd]| {plastic $\dot W\neq0$} &
+  |[minimum width=0.95cm]| {} &
+  |[minimum width=1.0cm, minimum height=0.32cm]| {} &
+  |[lgd]| {frozen $\dot W=0$} \\
+  |[minimum width=1.0cm, minimum height=0.32cm]| {} &
+  |[lgd]| {excitatory} &
+  |[minimum width=0.95cm]| {} &
+  |[minimum width=1.0cm, minimum height=0.32cm]| {} &
+  |[lgd]| {inhibitory} \\
+};
+\draw[plasticcol, chord] (legend-1-1.west) -- (legend-1-1.east);
+\draw[frozencol, chord] (legend-1-4.west) -- ($(legend-1-4.east)+(-0.36,0)$);
+\coordinate (legend-lock) at ($(legend-1-4.east)+(-0.13,0)$);
+\padlock{(legend-lock)}{frozencol}
+\draw[predcol, chord, excit] (legend-2-1.west) -- ($(legend-2-1.east)+(-0.08,0)$);
+\draw[errcol, chord, inhib] (legend-2-4.west) -- ($(legend-2-4.east)+(-0.16,0)$);
+\end{tikzpicture}
+\end{document}
