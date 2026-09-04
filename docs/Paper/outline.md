@@ -20,22 +20,31 @@ During systems consolidation, what determines which hippocampal memory content i
 
 ### Central normative answer
 
-Treat consolidation as the reduction of the largest settled recipient deficit over the memory content supported by a source system:
+Define the largest settled student free energy over the memory content supported by the teacher:
 
 $$
 \boxed{
-\min_{W_S}
+\mathcal D_{\max}(W_S;W_T)
+=
 \max_{x_T\in\mathbb S_T}
 \min_{x_S}
 F_S(x_S,x_T;W_S)
 }
 $$
 
+The formal claim concerns one plasticity event after the student and teacher states have settled:
+
+$$
+\Delta W_S
+=
+-\eta\nabla_{W_S}\mathcal D_{\max}.
+$$
+
 The nested operations have a direct mechanistic reading:
 
 1. fast recipient inference evaluates how well a candidate source state can be reconstructed;
 2. source-state dynamics search for the teacher-supported state with the largest settled recipient deficit;
-3. slow recipient plasticity reduces the exposed worst-case deficit.
+3. one slow recipient-plasticity event takes a local gradient step that reduces the exposed worst-case value to first order.
 
 ### One-sentence contribution
 
@@ -236,10 +245,12 @@ $$
 \max_{x_T\in\mathbb S_T}q(x_T;W_S),
 $$
 
-and the full nested objective
+and state the local plasticity result
 
 $$
-\min_{W_S}\max_{x_T\in\mathbb S_T}\min_{x_S}F_S(x_S,x_T;W_S).
+\Delta W_S
+=
+-\eta\nabla_{W_S}\mathcal D_{\max}.
 $$
 
 Give the normative motivations briefly:

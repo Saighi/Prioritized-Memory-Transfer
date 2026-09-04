@@ -26,7 +26,7 @@ The present paper may use slightly more mathematics than Tang because the normat
 
 - [x] **D1: Two-network scope only.** Three-system continual learning, interleaved union and the buffer-synthesis-storage architecture are moved to a separate project. Continual learning receives at most one future-application paragraph in Discussion.
 - [x] **D2: Biology-first framing.** Abstract and Introduction begin from reactivation and systems consolidation, not catastrophic forgetting or a list of model results.
-- [x] **D3: Worst-case objective is central.** The paper is organized around $\min_{W_S}\max_{x_T\in\mathbb S_T}\min_{x_S}F_S$ and the maximal settled recipient deficit $\mathcal D_{\max}$.
+- [x] **D3: Worst-case quantity is central.** The paper defines $\mathcal D_{\max}=\max_{x_T\in\mathbb S_T}\min_{x_S}F_S$ and shows that, after student and teacher settling, one local plasticity event satisfies $\Delta W_S=-\eta\nabla_{W_S}\mathcal D_{\max}$. It does not claim that the weight dynamics attain a minimum of $\mathcal D_{\max}$.
 - [x] **D4: Remove the saddle construction.** No exact zero-sum proposition, no $\Phi=F_T-F_S$ narrative, no saddle figure, and no special emphasis on $\kappa=\pi_{TS}$.
 - [x] **D5: Derive the replay gain.** With $\varepsilon_{TS}=x_T-x_S$ and $\nabla_{x_T}q=\pi_{TS}\varepsilon_{TS}^*$, ascent requires $\kappa=\mu_T\pi_{TS}>0$. $\kappa$ is a coupling gain, not a precision.
 - [x] **D6: Short derivation in the main paper.** The envelope identity and sign comparison remain visible in the core text. Scalar-mode algebra, Rayleigh-Ritz, projected power iteration and weight-envelope details move to S1 Appendix.

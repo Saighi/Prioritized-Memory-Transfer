@@ -6,7 +6,7 @@ largest settled deficit on its memory sphere. Once both states have converged, o
 plasticity event is a gradient step on that maximum. A final corollary compares this prioritized
 event with random clamping of two correlated named memories.
 
-## 1. Model and objective
+## 1. Model and maximal settled cost
 
 Let \(x_T,x_S\in\mathbb R^d\) be the teacher and student states, and let
 \(W_T,W_S\in\mathbb R^{d\times d}\) be their recurrent weights. Define
@@ -82,8 +82,9 @@ F(x_T,x_S;W_T,W_S).
 \tag{4}
 $$
 
-Consolidation seeks to reduce \(\mathcal D_{\max}\) by changing \(W_S\). The proof assumes linear
-dynamics, positive coefficients, a hard teacher-memory constraint, and the timescale separation
+The result below concerns the effect of one student-plasticity event on \(\mathcal D_{\max}\). It
+does not assert that the weight dynamics attain a minimum of this quantity. The proof assumes
+linear dynamics, positive coefficients, a hard teacher-memory constraint, and the timescale separation
 
 $$
 \tau_S\ll\tau_T\ll1/\eta.
@@ -571,7 +572,7 @@ Lemma 2 completes the second operation in Eq. (4). It identifies the maximum alg
 shows that the projected teacher dynamics reach it under the stated spectral and initialization
 conditions.
 
-## 4. Theorem 1: greedy plastic minimization
+## 4. Theorem 1: one local plasticity step on the maximum
 
 **Theorem 1.** Assume the timescale separation in Eq. (5). Let the student and teacher states
 have reached the equilibria established by Lemmas 1 and 2:
