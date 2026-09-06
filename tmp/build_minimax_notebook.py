@@ -1,5 +1,6 @@
 """Convert the percent workbench to Jupyter and execute its cached full baseline."""
 import os
+import sys
 from pathlib import Path
 
 import nbformat
@@ -32,6 +33,19 @@ for line in source.read_text(encoding="utf-8").splitlines():
     else:
         lines.append(line)
 flush()
+if "--sync-only" in sys.argv:
+    # Update source from the latest workbench without executing or replacing outputs.
+    existing = nbformat.read(target, as_version=4)
+    assert len(existing.cells) == len(cells), "Cell structure changed; inspect before syncing"
+    for previous, current in zip(existing.cells, cells):
+        assert previous.cell_type == current.cell_type
+        if current.cell_type == "code":
+            compile(current.source, str(source), "exec")
+        previous.source = current.source
+    nbformat.validate(existing)
+    nbformat.write(existing, target)
+    print(f"Synced {len(cells)} cells without execution; existing outputs preserved: {target}")
+    raise SystemExit(0)
 notebook = nbformat.v4.new_notebook(cells=cells)
 notebook.metadata.kernelspec = dict(display_name="Python 3 (ipykernel)", language="python", name="python3")
 notebook.metadata.language_info = dict(name="python")
