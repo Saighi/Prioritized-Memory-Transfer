@@ -1,0 +1,4097 @@
+[
+  {
+    "seed": 9010,
+    "stage": 0,
+    "kind": "selection",
+    "init": 0,
+    "time": 350.0,
+    "settled": true,
+    "distance": 2.817044907515072e-12,
+    "drift": 3.0445491741101263e-13,
+    "settling": 1.4583525117459894e-13,
+    "off_manifold": 2.817042271950802e-12,
+    "relative_energy_gap": 1.831867990631506e-15,
+    "ratios": [
+      -0.03778358507789228,
+      -0.037784357681228835,
+      -0.03778457836515306
+    ],
+    "gap": 5.551115123125783e-17
+  },
+  {
+    "seed": 9010,
+    "stage": 0,
+    "kind": "selection",
+    "init": 1,
+    "time": 350.0,
+    "settled": true,
+    "distance": 1.1732684557372967e-12,
+    "drift": 1.2603012694359324e-13,
+    "settling": 6.070717881729645e-14,
+    "off_manifold": 1.1732517917031833e-12,
+    "relative_energy_gap": 4.996003610813199e-16,
+    "ratios": [
+      -0.02848741516087408,
+      -0.028487997240660333,
+      -0.02848816349261487
+    ],
+    "gap": 5.551115123125783e-17
+  },
+  {
+    "seed": 9010,
+    "stage": 0,
+    "kind": "selection",
+    "init": 2,
+    "time": 350.0,
+    "settled": true,
+    "distance": 1.3523981525339534e-11,
+    "drift": 1.4418974459303256e-12,
+    "settling": 6.899124926800201e-13,
+    "off_manifold": 1.3523983759932141e-11,
+    "relative_energy_gap": 8.326672684688663e-16,
+    "ratios": [
+      -0.03236039995815112,
+      -0.0323610478148351,
+      -0.0323612328682529
+    ],
+    "gap": 5.551115123125783e-17
+  },
+  {
+    "seed": 9010,
+    "stage": 40,
+    "kind": "selection",
+    "init": 0,
+    "time": 23150.0,
+    "settled": true,
+    "distance": 0.004316574889983082,
+    "drift": 5.290963190980888e-08,
+    "settling": 2.5188643040579297e-08,
+    "off_manifold": 0.004274871821705257,
+    "relative_energy_gap": 1.7453263317685254e-08,
+    "ratios": [
+      1.0004544625374383,
+      1.0002692532676023,
+      1.0002154616566505
+    ],
+    "gap": 0.007316191368163083
+  },
+  {
+    "seed": 9010,
+    "stage": 40,
+    "kind": "selection",
+    "init": 1,
+    "time": 19150.0,
+    "settled": true,
+    "distance": 0.004329199414623886,
+    "drift": 8.87018096470174e-08,
+    "settling": 4.22282061532311e-08,
+    "off_manifold": 0.004274898903483457,
+    "relative_energy_gap": 1.9966764150392765e-08,
+    "ratios": [
+      1.000451339069742,
+      1.0002664320597323,
+      1.0002127163085226
+    ],
+    "gap": 0.007316191368163083
+  },
+  {
+    "seed": 9010,
+    "stage": 40,
+    "kind": "selection",
+    "init": 2,
+    "time": 35150.0,
+    "settled": true,
+    "distance": 0.004293588684978589,
+    "drift": 5.1137541439289306e-08,
+    "settling": 2.4345008106631823e-08,
+    "off_manifold": 0.00427479303690656,
+    "relative_energy_gap": 1.2900561350982635e-08,
+    "ratios": [
+      1.0004634074300682,
+      1.0002773329238588,
+      1.0002233241673917
+    ],
+    "gap": 0.007316191368163083
+  },
+  {
+    "seed": 9010,
+    "stage": 80,
+    "kind": "selection",
+    "init": 0,
+    "time": 7150.0,
+    "settled": true,
+    "distance": 0.004818613953370742,
+    "drift": 9.303297040869026e-09,
+    "settling": 5.178885812768725e-09,
+    "off_manifold": 0.004790254678074698,
+    "relative_energy_gap": 3.018056132000894e-08,
+    "ratios": [
+      1.0004129801760289,
+      1.0002844107263573,
+      1.0002474134931463
+    ],
+    "gap": 0.03055769681842002
+  },
+  {
+    "seed": 9010,
+    "stage": 80,
+    "kind": "selection",
+    "init": 1,
+    "time": 7150.0,
+    "settled": true,
+    "distance": 0.004819610659958581,
+    "drift": 1.5278682591200726e-08,
+    "settling": 8.381509696149963e-09,
+    "off_manifold": 0.004790265362036024,
+    "relative_energy_gap": 3.1145382906637506e-08,
+    "ratios": [
+      1.000412698990958,
+      1.0002841358629209,
+      1.000247140384321
+    ],
+    "gap": 0.03055769681842002
+  },
+  {
+    "seed": 9010,
+    "stage": 80,
+    "kind": "selection",
+    "init": 2,
+    "time": 7150.0,
+    "settled": true,
+    "distance": 0.004816005141109483,
+    "drift": 4.318040380909595e-08,
+    "settling": 2.372128157638513e-08,
+    "off_manifold": 0.004790225981272929,
+    "relative_energy_gap": 2.7549258503010122e-08,
+    "ratios": [
+      1.0004134603797348,
+      1.0002848796455677,
+      1.000247879283588
+    ],
+    "gap": 0.03055769681842002
+  },
+  {
+    "seed": 9010,
+    "stage": 160,
+    "kind": "selection",
+    "init": 0,
+    "time": 3150.0,
+    "settled": true,
+    "distance": 0.0065199905503575805,
+    "drift": 5.1366459380296395e-08,
+    "settling": 3.5715666664165767e-08,
+    "off_manifold": 0.006508520557313911,
+    "relative_energy_gap": 4.714020326866025e-08,
+    "ratios": [
+      1.0002091754486286,
+      1.0002666964674922,
+      1.0002827952322164
+    ],
+    "gap": 0.06072709862433004
+  },
+  {
+    "seed": 9010,
+    "stage": 160,
+    "kind": "selection",
+    "init": 1,
+    "time": 5150.0,
+    "settled": true,
+    "distance": 0.00651940995453326,
+    "drift": 2.523312221153498e-08,
+    "settling": 1.7218915728473153e-08,
+    "off_manifold": 0.006508506410201071,
+    "relative_energy_gap": 4.479107492363331e-08,
+    "ratios": [
+      1.0002091849715682,
+      1.0002667059785273,
+      1.0002828047390935
+    ],
+    "gap": 0.06072709862433004
+  },
+  {
+    "seed": 9010,
+    "stage": 160,
+    "kind": "selection",
+    "init": 2,
+    "time": 5150.0,
+    "settled": true,
+    "distance": 0.006519471043198119,
+    "drift": 1.434111756630716e-09,
+    "settling": 9.80091909930325e-10,
+    "off_manifold": 0.006508508294857591,
+    "relative_energy_gap": 4.499013542439322e-08,
+    "ratios": [
+      1.0002091101371071,
+      1.0002666320057216,
+      1.0002827310077538
+    ],
+    "gap": 0.06072709862433004
+  },
+  {
+    "seed": 9010,
+    "stage": 320,
+    "kind": "selection",
+    "init": 0,
+    "time": 9150.0,
+    "settled": true,
+    "distance": 0.0094058158192855,
+    "drift": 1.4379373179656408e-08,
+    "settling": 1.269597225751989e-08,
+    "off_manifold": 0.009206460772962251,
+    "relative_energy_gap": 1.2292722958398884e-06,
+    "ratios": [
+      0.9981253910201562,
+      0.9990351724439264,
+      0.9992947262735363
+    ],
+    "gap": 0.02290381881671124
+  },
+  {
+    "seed": 9010,
+    "stage": 320,
+    "kind": "selection",
+    "init": 1,
+    "time": 7150.0,
+    "settled": true,
+    "distance": 0.009405860563923773,
+    "drift": 1.4159602120336192e-08,
+    "settling": 1.2504149741460106e-08,
+    "off_manifold": 0.009206461165488462,
+    "relative_energy_gap": 1.2295004466137626e-06,
+    "ratios": [
+      0.9981253932455356,
+      0.999035174638321,
+      0.9992947284583851
+    ],
+    "gap": 0.02290381881671124
+  },
+  {
+    "seed": 9010,
+    "stage": 320,
+    "kind": "selection",
+    "init": 2,
+    "time": 11150.0,
+    "settled": true,
+    "distance": 0.009406259334186482,
+    "drift": 1.1777371324880102e-08,
+    "settling": 1.0398586549820996e-08,
+    "off_manifold": 0.009206464763002806,
+    "relative_energy_gap": 1.2315210710095523e-06,
+    "ratios": [
+      0.9981253988346266,
+      0.9990351801055088,
+      0.9992947338936238
+    ],
+    "gap": 0.02290381881671124
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 0,
+    "settled": true,
+    "distance": 0.004816221866055318,
+    "time": 7150.0,
+    "Fmax": 0.1453475019249474
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 1,
+    "settled": true,
+    "distance": 0.004824207209866863,
+    "time": 350.0,
+    "Fmax": 0.14520280894810011
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 2,
+    "settled": true,
+    "distance": 0.0048282554385073485,
+    "time": 750.0,
+    "Fmax": 0.14505808377879592
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 3,
+    "settled": true,
+    "distance": 0.004831893267217997,
+    "time": 750.0,
+    "Fmax": 0.14491332682098762
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 4,
+    "settled": true,
+    "distance": 0.004835402928831467,
+    "time": 750.0,
+    "Fmax": 0.1447685382748684
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 5,
+    "settled": true,
+    "distance": 0.004838888377603251,
+    "time": 750.0,
+    "Fmax": 0.1446237183493388
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 6,
+    "settled": true,
+    "distance": 0.004842385022741759,
+    "time": 750.0,
+    "Fmax": 0.1444788672549263
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 7,
+    "settled": true,
+    "distance": 0.004845905451654074,
+    "time": 750.0,
+    "Fmax": 0.14433398520292123
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 8,
+    "settled": true,
+    "distance": 0.0048494547086127176,
+    "time": 750.0,
+    "Fmax": 0.14418907240527418
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 9,
+    "settled": true,
+    "distance": 0.004853035607678543,
+    "time": 750.0,
+    "Fmax": 0.14404412907460512
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 10,
+    "settled": true,
+    "distance": 0.004856650066118843,
+    "time": 750.0,
+    "Fmax": 0.14389915542419426
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 11,
+    "settled": true,
+    "distance": 0.004860299474446975,
+    "time": 750.0,
+    "Fmax": 0.1437541516680032
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 12,
+    "settled": true,
+    "distance": 0.0048639854512882805,
+    "time": 750.0,
+    "Fmax": 0.14360911802070345
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 13,
+    "settled": true,
+    "distance": 0.0048677094424711695,
+    "time": 750.0,
+    "Fmax": 0.14346405469765644
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 14,
+    "settled": true,
+    "distance": 0.004871473670244167,
+    "time": 750.0,
+    "Fmax": 0.14331896191493865
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 15,
+    "settled": true,
+    "distance": 0.004875279324154007,
+    "time": 750.0,
+    "Fmax": 0.14317383988930016
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 16,
+    "settled": true,
+    "distance": 0.004879129370232369,
+    "time": 750.0,
+    "Fmax": 0.14302868883824277
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 17,
+    "settled": true,
+    "distance": 0.0048830251099077696,
+    "time": 750.0,
+    "Fmax": 0.14288350897992733
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 18,
+    "settled": true,
+    "distance": 0.004886969087988848,
+    "time": 750.0,
+    "Fmax": 0.14273830053327918
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 19,
+    "settled": true,
+    "distance": 0.0048909634353560254,
+    "time": 750.0,
+    "Fmax": 0.1425930637179319
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 20,
+    "settled": true,
+    "distance": 0.004895010748946211,
+    "time": 750.0,
+    "Fmax": 0.1424477987542594
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 21,
+    "settled": true,
+    "distance": 0.004899113701547054,
+    "time": 750.0,
+    "Fmax": 0.14230250586336884
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 22,
+    "settled": true,
+    "distance": 0.004898428803069216,
+    "time": 1550.0,
+    "Fmax": 0.1421571852671107
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 23,
+    "settled": true,
+    "distance": 0.004905243916874028,
+    "time": 750.0,
+    "Fmax": 0.14201183732465789
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 24,
+    "settled": true,
+    "distance": 0.004910749430590939,
+    "time": 750.0,
+    "Fmax": 0.14186646203721442
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 25,
+    "settled": true,
+    "distance": 0.004910524369234363,
+    "time": 1550.0,
+    "Fmax": 0.14172105968108714
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 26,
+    "settled": true,
+    "distance": 0.004917873284172627,
+    "time": 750.0,
+    "Fmax": 0.14157563064072026
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 27,
+    "settled": true,
+    "distance": 0.004923795398963314,
+    "time": 750.0,
+    "Fmax": 0.1414301749239837
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 28,
+    "settled": true,
+    "distance": 0.004923306887530527,
+    "time": 1550.0,
+    "Fmax": 0.14128469281200334
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 29,
+    "settled": true,
+    "distance": 0.004931182190299005,
+    "time": 750.0,
+    "Fmax": 0.14113918470177172
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 30,
+    "settled": true,
+    "distance": 0.004931835323107221,
+    "time": 1550.0,
+    "Fmax": 0.14099365059246977
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 31,
+    "settled": true,
+    "distance": 0.004940272484519233,
+    "time": 750.0,
+    "Fmax": 0.1408480909135114
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 32,
+    "settled": true,
+    "distance": 0.00494094514613184,
+    "time": 1550.0,
+    "Fmax": 0.14070250568681494
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 33,
+    "settled": true,
+    "distance": 0.004949852641782204,
+    "time": 750.0,
+    "Fmax": 0.14055689535174212
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 34,
+    "settled": true,
+    "distance": 0.004950431837911219,
+    "time": 1550.0,
+    "Fmax": 0.1404112599269463
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 35,
+    "settled": true,
+    "distance": 0.004959845138456111,
+    "time": 750.0,
+    "Fmax": 0.14026559986074777
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 36,
+    "settled": true,
+    "distance": 0.0049603151348096616,
+    "time": 1550.0,
+    "Fmax": 0.1401199151664108
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 37,
+    "settled": true,
+    "distance": 0.004970288816519311,
+    "time": 750.0,
+    "Fmax": 0.13997420630147137
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 38,
+    "settled": true,
+    "distance": 0.004970643905747245,
+    "time": 1550.0,
+    "Fmax": 0.13982847327339196
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 39,
+    "settled": true,
+    "distance": 0.004981242129369923,
+    "time": 750.0,
+    "Fmax": 0.13968271654929468
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 40,
+    "settled": true,
+    "distance": 0.00498147816382436,
+    "time": 1550.0,
+    "Fmax": 0.13953693613056142
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 41,
+    "settled": true,
+    "distance": 0.004985628435620154,
+    "time": 1550.0,
+    "Fmax": 0.13939113249430374
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 42,
+    "settled": true,
+    "distance": 0.004997916914231788,
+    "time": 750.0,
+    "Fmax": 0.13924530578421165
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 43,
+    "settled": true,
+    "distance": 0.004998600756773446,
+    "time": 1550.0,
+    "Fmax": 0.13909945607488788
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 44,
+    "settled": true,
+    "distance": 0.005003118596523264,
+    "time": 1550.0,
+    "Fmax": 0.13895358386295695
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 45,
+    "settled": true,
+    "distance": 0.00500883544082063,
+    "time": 1550.0,
+    "Fmax": 0.13880768929974813
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 46,
+    "settled": true,
+    "distance": 0.005015038000544463,
+    "time": 1550.0,
+    "Fmax": 0.13866177260776366
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 47,
+    "settled": true,
+    "distance": 0.005021531739753423,
+    "time": 1550.0,
+    "Fmax": 0.1385158340258246
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 48,
+    "settled": true,
+    "distance": 0.005028269979155446,
+    "time": 1550.0,
+    "Fmax": 0.13836987379748564
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 49,
+    "settled": true,
+    "distance": 0.005035251750569718,
+    "time": 1550.0,
+    "Fmax": 0.13822389216847025
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 50,
+    "settled": true,
+    "distance": 0.005042491162848111,
+    "time": 1550.0,
+    "Fmax": 0.13807788938594126
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 51,
+    "settled": true,
+    "distance": 0.005050007147585821,
+    "time": 1550.0,
+    "Fmax": 0.13793186569830038
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 52,
+    "settled": true,
+    "distance": 0.005057822529347512,
+    "time": 1550.0,
+    "Fmax": 0.13778582135524722
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 53,
+    "settled": true,
+    "distance": 0.00506596182214356,
+    "time": 1550.0,
+    "Fmax": 0.13763975660776337
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 54,
+    "settled": true,
+    "distance": 0.005074453001658154,
+    "time": 1550.0,
+    "Fmax": 0.13749367170822926
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 55,
+    "settled": true,
+    "distance": 0.005083328031636369,
+    "time": 1550.0,
+    "Fmax": 0.13734756691042907
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 56,
+    "settled": true,
+    "distance": 0.005092621531730421,
+    "time": 1550.0,
+    "Fmax": 0.13720144246955085
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 57,
+    "settled": true,
+    "distance": 0.0051023724043649035,
+    "time": 1550.0,
+    "Fmax": 0.13705529864231764
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 58,
+    "settled": true,
+    "distance": 0.005112624455150554,
+    "time": 1550.0,
+    "Fmax": 0.13690913568703228
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 59,
+    "settled": true,
+    "distance": 0.005123425442045045,
+    "time": 1550.0,
+    "Fmax": 0.13676295386363274
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 60,
+    "settled": true,
+    "distance": 0.0051348310941640085,
+    "time": 1550.0,
+    "Fmax": 0.13661675343386154
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 61,
+    "settled": true,
+    "distance": 0.005146903039680228,
+    "time": 1550.0,
+    "Fmax": 0.13647053466121767
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 62,
+    "settled": true,
+    "distance": 0.005159711073185183,
+    "time": 1550.0,
+    "Fmax": 0.1363242978111402
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 63,
+    "settled": true,
+    "distance": 0.005173334481804928,
+    "time": 1550.0,
+    "Fmax": 0.1361780431511019
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 64,
+    "settled": true,
+    "distance": 0.005187863263383911,
+    "time": 1550.0,
+    "Fmax": 0.13603177095072597
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 65,
+    "settled": true,
+    "distance": 0.005203400116719739,
+    "time": 1550.0,
+    "Fmax": 0.1358854814819246
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 66,
+    "settled": true,
+    "distance": 0.00522006250751843,
+    "time": 1550.0,
+    "Fmax": 0.1357391750190485
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 67,
+    "settled": true,
+    "distance": 0.005237985121798023,
+    "time": 1550.0,
+    "Fmax": 0.13559285183906084
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 68,
+    "settled": true,
+    "distance": 0.005229144145732282,
+    "time": 3150.0,
+    "Fmax": 0.13544651222173146
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 69,
+    "settled": true,
+    "distance": 0.005263329660285446,
+    "time": 1550.0,
+    "Fmax": 0.1353001567023072
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 70,
+    "settled": true,
+    "distance": 0.0052931065637253525,
+    "time": 1550.0,
+    "Fmax": 0.1351537851547137
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 71,
+    "settled": true,
+    "distance": 0.005287770083602197,
+    "time": 3150.0,
+    "Fmax": 0.13500739796080724
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 72,
+    "settled": true,
+    "distance": 0.005331361749826401,
+    "time": 1550.0,
+    "Fmax": 0.13486099572174132
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 73,
+    "settled": true,
+    "distance": 0.005333916077478771,
+    "time": 3150.0,
+    "Fmax": 0.13471457831508216
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 74,
+    "settled": true,
+    "distance": 0.005386614698868888,
+    "time": 1550.0,
+    "Fmax": 0.13456814641324052
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 75,
+    "settled": true,
+    "distance": 0.005391882062254624,
+    "time": 3150.0,
+    "Fmax": 0.13442169993203137
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 76,
+    "settled": true,
+    "distance": 0.005416671880114267,
+    "time": 3150.0,
+    "Fmax": 0.13427523957943882
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 77,
+    "settled": true,
+    "distance": 0.005450043980813884,
+    "time": 3150.0,
+    "Fmax": 0.1341287655152599
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 78,
+    "settled": true,
+    "distance": 0.005489109618828197,
+    "time": 3150.0,
+    "Fmax": 0.13398227802759086
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 79,
+    "settled": true,
+    "distance": 0.0055334990167312794,
+    "time": 3150.0,
+    "Fmax": 0.1338357774388086
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 80,
+    "settled": true,
+    "distance": 0.005583731445032648,
+    "time": 3150.0,
+    "Fmax": 0.133689264086942
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 81,
+    "settled": true,
+    "distance": 0.00564074915488271,
+    "time": 3150.0,
+    "Fmax": 0.1335427383220968
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 82,
+    "settled": true,
+    "distance": 0.005705823413394741,
+    "time": 3150.0,
+    "Fmax": 0.13339620050683768
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 83,
+    "settled": true,
+    "distance": 0.005780574675909784,
+    "time": 3150.0,
+    "Fmax": 0.1332496510176722
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 84,
+    "settled": true,
+    "distance": 0.005867057537862483,
+    "time": 3150.0,
+    "Fmax": 0.13310309024755615
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 85,
+    "settled": true,
+    "distance": 0.005967891649767563,
+    "time": 3150.0,
+    "Fmax": 0.13295651860908594
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 86,
+    "settled": true,
+    "distance": 0.00608644677771715,
+    "time": 3150.0,
+    "Fmax": 0.13280993653872278
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 87,
+    "settled": true,
+    "distance": 0.006140622922336719,
+    "time": 5150.0,
+    "Fmax": 0.13266334450233488
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 88,
+    "settled": true,
+    "distance": 0.006344755802739968,
+    "time": 3150.0,
+    "Fmax": 0.1325167432208693
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 89,
+    "settled": true,
+    "distance": 0.006463989420077393,
+    "time": 5150.0,
+    "Fmax": 0.13237013284585772
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 90,
+    "settled": true,
+    "distance": 0.006656217126434489,
+    "time": 5150.0,
+    "Fmax": 0.13222351429366253
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 91,
+    "settled": true,
+    "distance": 0.0069121822877346835,
+    "time": 5150.0,
+    "Fmax": 0.13207688808221335
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 92,
+    "settled": true,
+    "distance": 0.0072411670313486725,
+    "time": 5150.0,
+    "Fmax": 0.13193025493842792
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 93,
+    "settled": true,
+    "distance": 0.007664981464479823,
+    "time": 5150.0,
+    "Fmax": 0.13178361575866457
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 94,
+    "settled": true,
+    "distance": 0.008079552333479319,
+    "time": 7150.0,
+    "Fmax": 0.13163697165775512
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 95,
+    "settled": true,
+    "distance": 0.00871760270025427,
+    "time": 7150.0,
+    "Fmax": 0.13149032408148414
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 96,
+    "settled": true,
+    "distance": 0.009629500871934937,
+    "time": 7150.0,
+    "Fmax": 0.13134367475824613
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 97,
+    "settled": true,
+    "distance": 0.010768931137177072,
+    "time": 9150.0,
+    "Fmax": 0.13119702634414127
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 98,
+    "settled": true,
+    "distance": 0.012405990352817925,
+    "time": 11150.0,
+    "Fmax": 0.13105038279415349
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 99,
+    "settled": true,
+    "distance": 0.015000313784252994,
+    "time": 13150.0,
+    "Fmax": 0.13090375077767835
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 100,
+    "settled": true,
+    "distance": 0.01938103968789247,
+    "time": 17150.0,
+    "Fmax": 0.13075714398139357
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 101,
+    "settled": true,
+    "distance": 0.02810627672164493,
+    "time": 25150.0,
+    "Fmax": 0.13061059746463832
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 102,
+    "settled": true,
+    "distance": 0.05326857048039963,
+    "time": 45150.0,
+    "Fmax": 0.13046425611912027
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 103,
+    "settled": false,
+    "distance": 0.4252628446258117,
+    "time": 300000.0,
+    "Fmax": 0.1303221779836205
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 104,
+    "settled": false,
+    "distance": 0.815480201939328,
+    "time": 300000.0,
+    "Fmax": 0.13030529286225365
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 105,
+    "settled": false,
+    "distance": 0.019891716287512542,
+    "time": 300000.0,
+    "Fmax": 0.13027187606674592
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 106,
+    "settled": true,
+    "distance": 0.0808523491721903,
+    "time": 350.0,
+    "Fmax": 0.13012378226677532
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 107,
+    "settled": true,
+    "distance": 1.3670516409742297,
+    "time": 3150.0,
+    "Fmax": 0.13006501948084112
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 108,
+    "settled": false,
+    "distance": 0.17270997287920462,
+    "time": 300000.0,
+    "Fmax": 0.13006721070228114
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 109,
+    "settled": false,
+    "distance": 0.042472438583164664,
+    "time": 300000.0,
+    "Fmax": 0.1299312722750216
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 110,
+    "settled": false,
+    "distance": 1.3956860486764644,
+    "time": 300000.0,
+    "Fmax": 0.12982074479069847
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 111,
+    "settled": false,
+    "distance": 0.19459307218545746,
+    "time": 300000.0,
+    "Fmax": 0.12982290063073285
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 112,
+    "settled": false,
+    "distance": 0.18065882646458795,
+    "time": 300000.0,
+    "Fmax": 0.12969425635531684
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 113,
+    "settled": false,
+    "distance": 0.7823809657127206,
+    "time": 300000.0,
+    "Fmax": 0.12962757226739516
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 114,
+    "settled": false,
+    "distance": 0.0060145100637246885,
+    "time": 300000.0,
+    "Fmax": 0.12960164454417145
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 115,
+    "settled": true,
+    "distance": 0.04678368717294785,
+    "time": 243150.0,
+    "Fmax": 0.1294517335165085
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 116,
+    "settled": true,
+    "distance": 1.4071114134629297,
+    "time": 3150.0,
+    "Fmax": 0.12943152981213485
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 117,
+    "settled": true,
+    "distance": 1.4106566911832361,
+    "time": 3150.0,
+    "Fmax": 0.12943594376770673
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 118,
+    "settled": true,
+    "distance": 1.4117344619249,
+    "time": 3150.0,
+    "Fmax": 0.12944036172465048
+  },
+  {
+    "seed": 9010,
+    "kind": "cycle",
+    "cycle": 119,
+    "settled": true,
+    "distance": 1.4122621737902545,
+    "time": 3150.0,
+    "Fmax": 0.12944478057342496
+  },
+  {
+    "seed": 9011,
+    "stage": 0,
+    "kind": "selection",
+    "init": 0,
+    "time": 350.0,
+    "settled": true,
+    "distance": 3.764292827363068e-12,
+    "drift": 4.0699352520894694e-13,
+    "settling": 1.9496065651369162e-13,
+    "off_manifold": 3.764307009390601e-12,
+    "relative_energy_gap": 8.32667268468867e-16,
+    "ratios": [
+      -0.03642048887528667,
+      -0.03642103661860953,
+      -0.03642119308180644
+    ],
+    "gap": 2.220446049250313e-16
+  },
+  {
+    "seed": 9011,
+    "stage": 0,
+    "kind": "selection",
+    "init": 1,
+    "time": 350.0,
+    "settled": true,
+    "distance": 4.012233053729662e-12,
+    "drift": 4.287870945785543e-13,
+    "settling": 2.0520498281455162e-13,
+    "off_manifold": 4.0122199920810135e-12,
+    "relative_energy_gap": 1.665334536937734e-15,
+    "ratios": [
+      -0.041119456050056284,
+      -0.04112036710436484,
+      -0.04112062733488567
+    ],
+    "gap": 2.220446049250313e-16
+  },
+  {
+    "seed": 9011,
+    "stage": 0,
+    "kind": "selection",
+    "init": 2,
+    "time": 350.0,
+    "settled": true,
+    "distance": 8.74137168939976e-13,
+    "drift": 1.0169753535024663e-13,
+    "settling": 4.9009960166141767e-14,
+    "off_manifold": 8.741163398333224e-13,
+    "relative_energy_gap": 4.996003610813202e-16,
+    "ratios": [
+      -0.03419441826833753,
+      -0.03419495661527062,
+      -0.03419511039079765
+    ],
+    "gap": 2.220446049250313e-16
+  },
+  {
+    "seed": 9011,
+    "stage": 40,
+    "kind": "selection",
+    "init": 0,
+    "time": 35150.0,
+    "settled": true,
+    "distance": 0.0037763204825484896,
+    "drift": 6.905924981338661e-08,
+    "settling": 3.2246183183823896e-08,
+    "off_manifold": 0.0033807951451131097,
+    "relative_energy_gap": 2.1461911052091303e-07,
+    "ratios": [
+      1.000251833562495,
+      1.0000501486333284,
+      0.9999918791493925
+    ],
+    "gap": 0.003866742567554482
+  },
+  {
+    "seed": 9011,
+    "stage": 40,
+    "kind": "selection",
+    "init": 1,
+    "time": 39150.0,
+    "settled": true,
+    "distance": 0.003913601625469376,
+    "drift": 8.57587547859392e-08,
+    "settling": 4.0043762423699136e-08,
+    "off_manifold": 0.00338092648284321,
+    "relative_energy_gap": 2.2725650569529648e-07,
+    "ratios": [
+      1.0002402999782756,
+      1.0000408303698858,
+      0.9999830466810153
+    ],
+    "gap": 0.003866742567554482
+  },
+  {
+    "seed": 9011,
+    "stage": 40,
+    "kind": "selection",
+    "init": 2,
+    "time": 43150.0,
+    "settled": true,
+    "distance": 0.0039284614593330675,
+    "drift": 9.564797357211398e-08,
+    "settling": 4.466138510026282e-08,
+    "off_manifold": 0.003380934884727315,
+    "relative_energy_gap": 2.2865556337720654e-07,
+    "ratios": [
+      1.0002394963237866,
+      1.0000401809344144,
+      0.9999824310691011
+    ],
+    "gap": 0.003866742567554482
+  },
+  {
+    "seed": 9011,
+    "stage": 80,
+    "kind": "selection",
+    "init": 0,
+    "time": 17150.0,
+    "settled": true,
+    "distance": 0.004851790015941004,
+    "drift": 3.804297313462356e-08,
+    "settling": 2.0380505693734625e-08,
+    "off_manifold": 0.004480174334483755,
+    "relative_energy_gap": 1.9421505922836818e-07,
+    "ratios": [
+      1.000437955335334,
+      1.0003416892106374,
+      1.0003138930577824
+    ],
+    "gap": 0.011017173491389975
+  },
+  {
+    "seed": 9011,
+    "stage": 80,
+    "kind": "selection",
+    "init": 1,
+    "time": 19150.0,
+    "settled": true,
+    "distance": 0.004798262263502625,
+    "drift": 5.148083206808595e-08,
+    "settling": 2.7579485953534278e-08,
+    "off_manifold": 0.004479976352263279,
+    "relative_energy_gap": 1.7392488393617545e-07,
+    "ratios": [
+      1.0004366441655355,
+      1.0003404609012918,
+      1.000312686453203
+    ],
+    "gap": 0.011017173491389975
+  },
+  {
+    "seed": 9011,
+    "stage": 80,
+    "kind": "selection",
+    "init": 2,
+    "time": 15150.0,
+    "settled": true,
+    "distance": 0.004886992820714554,
+    "drift": 9.244467698827935e-08,
+    "settling": 4.952477207963466e-08,
+    "off_manifold": 0.004480294678508023,
+    "relative_energy_gap": 2.0768594047072495e-07,
+    "ratios": [
+      1.0004387189452695,
+      1.0003424046313263,
+      1.000314595854274
+    ],
+    "gap": 0.011017173491389975
+  },
+  {
+    "seed": 9011,
+    "stage": 160,
+    "kind": "selection",
+    "init": 0,
+    "time": 9150.0,
+    "settled": true,
+    "distance": 0.0055251259050098315,
+    "drift": 1.4765578982654591e-08,
+    "settling": 1.0171139444529039e-08,
+    "off_manifold": 0.005461424880879893,
+    "relative_energy_gap": 1.243092817958795e-07,
+    "ratios": [
+      0.9998995311970895,
+      1.0001277632403383,
+      1.0001925608475026
+    ],
+    "gap": 0.02640341417900907
+  },
+  {
+    "seed": 9011,
+    "stage": 160,
+    "kind": "selection",
+    "init": 1,
+    "time": 7150.0,
+    "settled": true,
+    "distance": 0.005521959234978283,
+    "drift": 5.070151717814159e-08,
+    "settling": 3.524639250419156e-08,
+    "off_manifold": 0.005461391971641359,
+    "relative_energy_gap": 1.1900759311483384e-07,
+    "ratios": [
+      0.9998992642174467,
+      1.0001275023725338,
+      1.0001923016727943
+    ],
+    "gap": 0.02640341417900907
+  },
+  {
+    "seed": 9011,
+    "stage": 160,
+    "kind": "selection",
+    "init": 2,
+    "time": 9150.0,
+    "settled": true,
+    "distance": 0.005527976943570319,
+    "drift": 1.9396054216263732e-08,
+    "settling": 1.3359201099876606e-08,
+    "off_manifold": 0.005461452780917159,
+    "relative_energy_gap": 1.2848744678162878e-07,
+    "ratios": [
+      0.9998999167227963,
+      1.0001281389251275,
+      1.0001929338106441
+    ],
+    "gap": 0.02640341417900907
+  },
+  {
+    "seed": 9011,
+    "stage": 320,
+    "kind": "selection",
+    "init": 0,
+    "time": 9150.0,
+    "settled": true,
+    "distance": 0.006974969047745945,
+    "drift": 6.686531769446925e-08,
+    "settling": 5.995784111827581e-08,
+    "off_manifold": 0.0066318688572052425,
+    "relative_energy_gap": 1.568162331631075e-06,
+    "ratios": [
+      0.998140848428691,
+      0.9991359531644889,
+      0.9994198993326456
+    ],
+    "gap": 0.019940638117947246
+  },
+  {
+    "seed": 9011,
+    "stage": 320,
+    "kind": "selection",
+    "init": 1,
+    "time": 9150.0,
+    "settled": true,
+    "distance": 0.006968082398677407,
+    "drift": 8.859307831734674e-08,
+    "settling": 7.948951855101106e-08,
+    "off_manifold": 0.006631813171629643,
+    "relative_energy_gap": 1.538870774493542e-06,
+    "ratios": [
+      0.9981404864736532,
+      0.9991355973782104,
+      0.9994195452735168
+    ],
+    "gap": 0.019940638117947246
+  },
+  {
+    "seed": 9011,
+    "stage": 320,
+    "kind": "selection",
+    "init": 2,
+    "time": 9150.0,
+    "settled": true,
+    "distance": 0.006997860537801439,
+    "drift": 4.0796365747254965e-08,
+    "settling": 3.658255677304253e-08,
+    "off_manifold": 0.006632026554075716,
+    "relative_energy_gap": 1.6544973934051526e-06,
+    "ratios": [
+      0.9981423280343088,
+      0.9991374064065586,
+      0.9994213452087274
+    ],
+    "gap": 0.019940638117947246
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 0,
+    "settled": true,
+    "distance": 0.004803945960956443,
+    "time": 29150.0,
+    "Fmax": 0.13980095499420161
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 1,
+    "settled": true,
+    "distance": 0.004796733350892275,
+    "time": 750.0,
+    "Fmax": 0.13965414935633133
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 2,
+    "settled": true,
+    "distance": 0.004822324197309397,
+    "time": 1550.0,
+    "Fmax": 0.13950731939716418
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 3,
+    "settled": true,
+    "distance": 0.004843686064673188,
+    "time": 1550.0,
+    "Fmax": 0.13936046561134002
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 4,
+    "settled": true,
+    "distance": 0.004864375508506886,
+    "time": 1550.0,
+    "Fmax": 0.13921358818777277
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 5,
+    "settled": true,
+    "distance": 0.004885510175328202,
+    "time": 1550.0,
+    "Fmax": 0.13906668735594943
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 6,
+    "settled": true,
+    "distance": 0.004907607455306798,
+    "time": 1550.0,
+    "Fmax": 0.1389197633546246
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 7,
+    "settled": true,
+    "distance": 0.0049309857105858295,
+    "time": 1550.0,
+    "Fmax": 0.1387728164265716
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 8,
+    "settled": true,
+    "distance": 0.004955892388258761,
+    "time": 1550.0,
+    "Fmax": 0.1386258468170269
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 9,
+    "settled": true,
+    "distance": 0.004982557108153534,
+    "time": 1550.0,
+    "Fmax": 0.1384788547731153
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 10,
+    "settled": true,
+    "distance": 0.00501121686898183,
+    "time": 1550.0,
+    "Fmax": 0.13833184054364067
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 11,
+    "settled": true,
+    "distance": 0.005042132056309164,
+    "time": 1550.0,
+    "Fmax": 0.13818480437906358
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 12,
+    "settled": true,
+    "distance": 0.00507559932433379,
+    "time": 1550.0,
+    "Fmax": 0.13803774653145465
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 13,
+    "settled": true,
+    "distance": 0.005111961212535794,
+    "time": 1550.0,
+    "Fmax": 0.1378906672546235
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 14,
+    "settled": true,
+    "distance": 0.005208158947062419,
+    "time": 3150.0,
+    "Fmax": 0.13774356680421315
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 15,
+    "settled": true,
+    "distance": 0.005231053146957698,
+    "time": 1550.0,
+    "Fmax": 0.13759644572569676
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 16,
+    "settled": true,
+    "distance": 0.0052670652344014674,
+    "time": 1550.0,
+    "Fmax": 0.13744930385883597
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 17,
+    "settled": true,
+    "distance": 0.00538120273416235,
+    "time": 3150.0,
+    "Fmax": 0.13730214152699619
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 18,
+    "settled": true,
+    "distance": 0.0054135258647160294,
+    "time": 1550.0,
+    "Fmax": 0.13715495935283015
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 19,
+    "settled": true,
+    "distance": 0.0055398662105963885,
+    "time": 3150.0,
+    "Fmax": 0.13700775715036384
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 20,
+    "settled": true,
+    "distance": 0.0056551475331091455,
+    "time": 3150.0,
+    "Fmax": 0.13686053561676395
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 21,
+    "settled": true,
+    "distance": 0.005698631828593115,
+    "time": 1550.0,
+    "Fmax": 0.13671329489848816
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 22,
+    "settled": true,
+    "distance": 0.005865369005646908,
+    "time": 3150.0,
+    "Fmax": 0.1365660348917422
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 23,
+    "settled": true,
+    "distance": 0.006033962708312689,
+    "time": 3150.0,
+    "Fmax": 0.1364187564024985
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 24,
+    "settled": true,
+    "distance": 0.00622030117917601,
+    "time": 3150.0,
+    "Fmax": 0.13627145961788648
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 25,
+    "settled": true,
+    "distance": 0.006435338390514285,
+    "time": 3150.0,
+    "Fmax": 0.1361241448093227
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 26,
+    "settled": true,
+    "distance": 0.006812911464836121,
+    "time": 5150.0,
+    "Fmax": 0.13597681228545186
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 27,
+    "settled": true,
+    "distance": 0.007090314710103576,
+    "time": 3150.0,
+    "Fmax": 0.1358294628893778
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 28,
+    "settled": true,
+    "distance": 0.0076041987590941,
+    "time": 5150.0,
+    "Fmax": 0.13568209631323172
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 29,
+    "settled": true,
+    "distance": 0.008210820686994256,
+    "time": 5150.0,
+    "Fmax": 0.1355347136897968
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 30,
+    "settled": true,
+    "distance": 0.00898068025101486,
+    "time": 5150.0,
+    "Fmax": 0.13538731545698493
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 31,
+    "settled": true,
+    "distance": 0.010188458783240775,
+    "time": 7150.0,
+    "Fmax": 0.13523990233817376
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 32,
+    "settled": true,
+    "distance": 0.011997489655530285,
+    "time": 9150.0,
+    "Fmax": 0.13509247637540855
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 33,
+    "settled": true,
+    "distance": 0.014632508520207404,
+    "time": 9150.0,
+    "Fmax": 0.13494504075654
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 34,
+    "settled": true,
+    "distance": 0.019688840565271475,
+    "time": 15150.0,
+    "Fmax": 0.13479760118328898
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 35,
+    "settled": true,
+    "distance": 0.030613292136298906,
+    "time": 21150.0,
+    "Fmax": 0.1346501828671451
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 36,
+    "settled": true,
+    "distance": 0.07404508614997656,
+    "time": 57150.0,
+    "Fmax": 0.13450294391011594
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 37,
+    "settled": false,
+    "distance": 1.3932598705574362,
+    "time": 300000.0,
+    "Fmax": 0.13440143692236525
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 38,
+    "settled": false,
+    "distance": 0.1162974113929159,
+    "time": 300000.0,
+    "Fmax": 0.134404318502755
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 39,
+    "settled": false,
+    "distance": 0.22540085842264604,
+    "time": 300000.0,
+    "Fmax": 0.13426220901221966
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 40,
+    "settled": false,
+    "distance": 1.0708615564592556,
+    "time": 300000.0,
+    "Fmax": 0.13420996694619905
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 41,
+    "settled": false,
+    "distance": 0.03465365348335646,
+    "time": 300000.0,
+    "Fmax": 0.1342013225569084
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 42,
+    "settled": true,
+    "distance": 0.11011401525484925,
+    "time": 99150.0,
+    "Fmax": 0.1340549199143622
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 43,
+    "settled": false,
+    "distance": 1.3882252392627759,
+    "time": 300000.0,
+    "Fmax": 0.13397721599562637
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 44,
+    "settled": false,
+    "distance": 0.11807259521267986,
+    "time": 300000.0,
+    "Fmax": 0.1339801837856458
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 45,
+    "settled": false,
+    "distance": 0.13824469883687943,
+    "time": 300000.0,
+    "Fmax": 0.13383628336115522
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 46,
+    "settled": false,
+    "distance": 1.0521867940404124,
+    "time": 300000.0,
+    "Fmax": 0.13376212313839278
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 47,
+    "settled": false,
+    "distance": 0.015511131610911374,
+    "time": 300000.0,
+    "Fmax": 0.13375452353612372
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 48,
+    "settled": true,
+    "distance": 0.07222918610183594,
+    "time": 105150.0,
+    "Fmax": 0.1336074805542937
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 49,
+    "settled": true,
+    "distance": 1.376608584247732,
+    "time": 1550.0,
+    "Fmax": 0.1335506838763317
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 50,
+    "settled": true,
+    "distance": 1.3988798106700882,
+    "time": 3150.0,
+    "Fmax": 0.13355364875813427
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 51,
+    "settled": true,
+    "distance": 1.4039242512183274,
+    "time": 3150.0,
+    "Fmax": 0.13355672090720133
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 52,
+    "settled": true,
+    "distance": 1.4060350020904824,
+    "time": 3150.0,
+    "Fmax": 0.1335598108760682
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 53,
+    "settled": true,
+    "distance": 0.008050185632871446,
+    "time": 199150.0,
+    "Fmax": 0.13356290685026445
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 54,
+    "settled": true,
+    "distance": 0.010203252686781251,
+    "time": 1550.0,
+    "Fmax": 0.1334129504930571
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 55,
+    "settled": true,
+    "distance": 0.0143377244394736,
+    "time": 1550.0,
+    "Fmax": 0.1332629929144268
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 56,
+    "settled": true,
+    "distance": 0.024384319066862396,
+    "time": 3150.0,
+    "Fmax": 0.13311305926655756
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 57,
+    "settled": true,
+    "distance": 0.07433573346939883,
+    "time": 3150.0,
+    "Fmax": 0.13296336109117
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 58,
+    "settled": false,
+    "distance": 1.2349204265454672,
+    "time": 300000.0,
+    "Fmax": 0.13288699270613677
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 59,
+    "settled": false,
+    "distance": 0.006903845260057372,
+    "time": 300000.0,
+    "Fmax": 0.13288734167132604
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 60,
+    "settled": true,
+    "distance": 0.03273965882930897,
+    "time": 135150.0,
+    "Fmax": 0.13273991179092204
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 61,
+    "settled": true,
+    "distance": 1.3890173253770361,
+    "time": 3150.0,
+    "Fmax": 0.13267178661670145
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 62,
+    "settled": true,
+    "distance": 1.403887157266915,
+    "time": 3150.0,
+    "Fmax": 0.1326748389123769
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 63,
+    "settled": true,
+    "distance": 1.4068495108480992,
+    "time": 3150.0,
+    "Fmax": 0.13267793270676786
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 64,
+    "settled": true,
+    "distance": 0.006582505356869075,
+    "time": 253150.0,
+    "Fmax": 0.1326810324532773
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 65,
+    "settled": true,
+    "distance": 0.009003745583836232,
+    "time": 1550.0,
+    "Fmax": 0.13253120473688287
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 66,
+    "settled": true,
+    "distance": 0.01577624145988453,
+    "time": 3150.0,
+    "Fmax": 0.13238138330438873
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 67,
+    "settled": true,
+    "distance": 0.05429486453338866,
+    "time": 3150.0,
+    "Fmax": 0.13223168498171173
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 68,
+    "settled": false,
+    "distance": 1.2077419621169008,
+    "time": 300000.0,
+    "Fmax": 0.13216248040747322
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 69,
+    "settled": false,
+    "distance": 0.010052012154467506,
+    "time": 300000.0,
+    "Fmax": 0.13216176322820772
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 70,
+    "settled": true,
+    "distance": 0.009187130872565194,
+    "time": 53150.0,
+    "Fmax": 0.13201395331454385
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 71,
+    "settled": true,
+    "distance": 1.4120862647295052,
+    "time": 3150.0,
+    "Fmax": 0.13194205492133815
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 72,
+    "settled": true,
+    "distance": 1.4114785308671285,
+    "time": 3150.0,
+    "Fmax": 0.13194514193852377
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 73,
+    "settled": false,
+    "distance": 0.01525787256557413,
+    "time": 300000.0,
+    "Fmax": 0.13194822887160243
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 74,
+    "settled": true,
+    "distance": 0.005447233593600293,
+    "time": 81150.0,
+    "Fmax": 0.13179873312161264
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 75,
+    "settled": true,
+    "distance": 0.007046963693770913,
+    "time": 1550.0,
+    "Fmax": 0.13164915184869871
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 76,
+    "settled": true,
+    "distance": 1.4044249431150337,
+    "time": 3150.0,
+    "Fmax": 0.13157969441757816
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 77,
+    "settled": false,
+    "distance": 0.1417200277937493,
+    "time": 300000.0,
+    "Fmax": 0.13158279222159455
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 78,
+    "settled": false,
+    "distance": 0.0454342563356372,
+    "time": 300000.0,
+    "Fmax": 0.13144269776286513
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 79,
+    "settled": true,
+    "distance": 1.3667432468221834,
+    "time": 3150.0,
+    "Fmax": 0.13134909787244273
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 80,
+    "settled": true,
+    "distance": 1.4041727619414752,
+    "time": 3150.0,
+    "Fmax": 0.13135193922825109
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 81,
+    "settled": true,
+    "distance": 1.4101349614780776,
+    "time": 5150.0,
+    "Fmax": 0.13135495190058602
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 82,
+    "settled": true,
+    "distance": 0.009467416930479778,
+    "time": 257150.0,
+    "Fmax": 0.13135798399030404
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 83,
+    "settled": true,
+    "distance": 0.010270268040802166,
+    "time": 350.0,
+    "Fmax": 0.13120893372177228
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 84,
+    "settled": true,
+    "distance": 0.012597886037428483,
+    "time": 3150.0,
+    "Fmax": 0.1310598744624639
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 85,
+    "settled": true,
+    "distance": 0.046380076274959686,
+    "time": 143150.0,
+    "Fmax": 0.13091082353831088
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 86,
+    "settled": false,
+    "distance": 1.084726429918249,
+    "time": 300000.0,
+    "Fmax": 0.13086150693828755
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 87,
+    "settled": false,
+    "distance": 0.03917243613112608,
+    "time": 300000.0,
+    "Fmax": 0.13085403970331966
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 88,
+    "settled": true,
+    "distance": 0.10332012131644543,
+    "time": 1550.0,
+    "Fmax": 0.1307054363200756
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 89,
+    "settled": true,
+    "distance": 1.3451065540770937,
+    "time": 3150.0,
+    "Fmax": 0.13063149025423557
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 90,
+    "settled": false,
+    "distance": 0.4598217457718454,
+    "time": 300000.0,
+    "Fmax": 0.1306339575197067
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 91,
+    "settled": false,
+    "distance": 0.014241251741402823,
+    "time": 300000.0,
+    "Fmax": 0.1305391120694444
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 92,
+    "settled": true,
+    "distance": 0.053922418359256305,
+    "time": 5150.0,
+    "Fmax": 0.13038965857909962
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 93,
+    "settled": true,
+    "distance": 1.4095540005018554,
+    "time": 3150.0,
+    "Fmax": 0.1303630605932622
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 94,
+    "settled": true,
+    "distance": 1.4140220186853354,
+    "time": 5150.0,
+    "Fmax": 0.13036614747748895
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 95,
+    "settled": true,
+    "distance": 0.010055242625923137,
+    "time": 277150.0,
+    "Fmax": 0.13036924217066875
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 96,
+    "settled": true,
+    "distance": 0.009947345101356019,
+    "time": 3150.0,
+    "Fmax": 0.13022121387931784
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 97,
+    "settled": true,
+    "distance": 0.009922426977037567,
+    "time": 5150.0,
+    "Fmax": 0.13007318021813644
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 98,
+    "settled": false,
+    "distance": 1.3779209979472138,
+    "time": 300000.0,
+    "Fmax": 0.12995025235820423
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 99,
+    "settled": false,
+    "distance": 0.775249302834009,
+    "time": 300000.0,
+    "Fmax": 0.12995329530234365
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 100,
+    "settled": false,
+    "distance": 0.026825325893230865,
+    "time": 300000.0,
+    "Fmax": 0.1299098187176514
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 101,
+    "settled": true,
+    "distance": 0.07830948715600512,
+    "time": 5150.0,
+    "Fmax": 0.12975977194614602
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 102,
+    "settled": true,
+    "distance": 1.3520829663492961,
+    "time": 5150.0,
+    "Fmax": 0.12968336829535004
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 103,
+    "settled": true,
+    "distance": 1.3937004710183039,
+    "time": 5150.0,
+    "Fmax": 0.12968611226406718
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 104,
+    "settled": true,
+    "distance": 1.4017652585925084,
+    "time": 5150.0,
+    "Fmax": 0.1296891479964937
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 105,
+    "settled": true,
+    "distance": 1.4051762687046137,
+    "time": 5150.0,
+    "Fmax": 0.12969222364578828
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 106,
+    "settled": true,
+    "distance": 1.407032786979239,
+    "time": 7150.0,
+    "Fmax": 0.12969531178473884
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 107,
+    "settled": true,
+    "distance": 1.408101189634005,
+    "time": 7150.0,
+    "Fmax": 0.12969840475475922
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 108,
+    "settled": true,
+    "distance": 0.011646245848127982,
+    "time": 153150.0,
+    "Fmax": 0.12970149960704386
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 109,
+    "settled": true,
+    "distance": 0.012789340374774236,
+    "time": 5150.0,
+    "Fmax": 0.1295542821120299
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 110,
+    "settled": true,
+    "distance": 0.014482378759801184,
+    "time": 5150.0,
+    "Fmax": 0.12940706642744626
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 111,
+    "settled": true,
+    "distance": 0.017137744911241034,
+    "time": 5150.0,
+    "Fmax": 0.12925985820045718
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 112,
+    "settled": true,
+    "distance": 0.022000206377152318,
+    "time": 7150.0,
+    "Fmax": 0.12911266880422598
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 113,
+    "settled": true,
+    "distance": 0.03328281490319902,
+    "time": 7150.0,
+    "Fmax": 0.12896553567487198
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 114,
+    "settled": true,
+    "distance": 0.08348442771038257,
+    "time": 9150.0,
+    "Fmax": 0.12881872013736373
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 115,
+    "settled": false,
+    "distance": 1.2738485491591265,
+    "time": 300000.0,
+    "Fmax": 0.1287292387671728
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 116,
+    "settled": false,
+    "distance": 0.207703947552677,
+    "time": 300000.0,
+    "Fmax": 0.12873081100083628
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 117,
+    "settled": false,
+    "distance": 0.05628445050221594,
+    "time": 300000.0,
+    "Fmax": 0.12859892760860653
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 118,
+    "settled": false,
+    "distance": 1.1101926415967123,
+    "time": 300000.0,
+    "Fmax": 0.1285125826808882
+  },
+  {
+    "seed": 9011,
+    "kind": "cycle",
+    "cycle": 119,
+    "settled": false,
+    "distance": 0.07239613521226783,
+    "time": 300000.0,
+    "Fmax": 0.12850891210387902
+  },
+  {
+    "seed": 9012,
+    "stage": 0,
+    "kind": "selection",
+    "init": 0,
+    "time": 350.0,
+    "settled": true,
+    "distance": 9.620933435962709e-12,
+    "drift": 1.0443618396139768e-12,
+    "settling": 5.005478147498575e-13,
+    "off_manifold": 9.620936464937603e-12,
+    "relative_energy_gap": 1.3322676295501869e-15,
+    "ratios": [
+      -0.03918627997423742,
+      -0.039186850377951214,
+      -0.03918701332294352
+    ],
+    "gap": 3.885780586188048e-16
+  },
+  {
+    "seed": 9012,
+    "stage": 0,
+    "kind": "selection",
+    "init": 1,
+    "time": 350.0,
+    "settled": true,
+    "distance": 7.501241772910415e-13,
+    "drift": 8.525211764883808e-14,
+    "settling": 4.10137321794059e-14,
+    "off_manifold": 7.501341788545476e-13,
+    "relative_energy_gap": 1.1657341758564134e-15,
+    "ratios": [
+      -0.03795094493260167,
+      -0.037951576314430996,
+      -0.03795175667452878
+    ],
+    "gap": 3.885780586188048e-16
+  },
+  {
+    "seed": 9012,
+    "stage": 0,
+    "kind": "selection",
+    "init": 2,
+    "time": 350.0,
+    "settled": true,
+    "distance": 8.938040544418315e-12,
+    "drift": 1.0080644435725594e-12,
+    "settling": 4.84498067909825e-13,
+    "off_manifold": 8.938037205073968e-12,
+    "relative_energy_gap": 6.661338147750934e-16,
+    "ratios": [
+      -0.03813947362239792,
+      -0.03814029110784407,
+      -0.038140524611533715
+    ],
+    "gap": 3.885780586188048e-16
+  },
+  {
+    "seed": 9012,
+    "stage": 40,
+    "kind": "selection",
+    "init": 0,
+    "time": 71150.0,
+    "settled": true,
+    "distance": 0.004009461313479855,
+    "drift": 9.499740815011785e-08,
+    "settling": 4.342909517623898e-08,
+    "off_manifold": 0.0032853379683381347,
+    "relative_energy_gap": 3.871653918983357e-08,
+    "ratios": [
+      1.000316244335885,
+      1.0000926903180407,
+      1.0000281426239437
+    ],
+    "gap": 0.0023016633002082565
+  },
+  {
+    "seed": 9012,
+    "stage": 40,
+    "kind": "selection",
+    "init": 1,
+    "time": 71150.0,
+    "settled": true,
+    "distance": 0.003998221579089586,
+    "drift": 9.281507035573244e-08,
+    "settling": 4.24314155436324e-08,
+    "off_manifold": 0.003285330897220788,
+    "relative_energy_gap": 3.808213028903932e-08,
+    "ratios": [
+      1.0003164198274015,
+      1.0000928059590022,
+      1.0000282479591696
+    ],
+    "gap": 0.0023016633002082565
+  },
+  {
+    "seed": 9012,
+    "stage": 40,
+    "kind": "selection",
+    "init": 2,
+    "time": 77150.0,
+    "settled": true,
+    "distance": 0.003357024632465704,
+    "drift": 8.368737057716856e-08,
+    "settling": 3.825859482830333e-08,
+    "off_manifold": 0.0032847588973868164,
+    "relative_energy_gap": 4.850067110560935e-09,
+    "ratios": [
+      1.000326213005281,
+      1.0000992477700663,
+      1.0000341128902646
+    ],
+    "gap": 0.0023016633002082565
+  },
+  {
+    "seed": 9012,
+    "stage": 80,
+    "kind": "selection",
+    "init": 0,
+    "time": 31150.0,
+    "settled": true,
+    "distance": 0.005829105462896278,
+    "drift": 6.801195129432032e-08,
+    "settling": 3.570620341758607e-08,
+    "off_manifold": 0.00439967173893272,
+    "relative_energy_gap": 3.071395121940781e-07,
+    "ratios": [
+      1.000520764273686,
+      1.0004397551576851,
+      1.0004159128006962
+    ],
+    "gap": 0.005831937854537228
+  },
+  {
+    "seed": 9012,
+    "stage": 80,
+    "kind": "selection",
+    "init": 1,
+    "time": 27150.0,
+    "settled": true,
+    "distance": 0.005810294787620597,
+    "drift": 7.610206834924461e-08,
+    "settling": 3.995350776789851e-08,
+    "off_manifold": 0.004399627514922226,
+    "relative_energy_gap": 3.026150482337133e-07,
+    "ratios": [
+      1.0005211639841525,
+      1.0004401036787165,
+      1.000416248964246
+    ],
+    "gap": 0.005831937854537228
+  },
+  {
+    "seed": 9012,
+    "stage": 80,
+    "kind": "selection",
+    "init": 2,
+    "time": 29150.0,
+    "settled": true,
+    "distance": 0.005840821592948117,
+    "drift": 6.299050709689243e-08,
+    "settling": 3.3069976910950666e-08,
+    "off_manifold": 0.004399699188112001,
+    "relative_energy_gap": 3.0996497329502564e-07,
+    "ratios": [
+      1.0005205152341599,
+      1.000439538020622,
+      1.0004157033684884
+    ],
+    "gap": 0.005831937854537228
+  },
+  {
+    "seed": 9012,
+    "stage": 160,
+    "kind": "selection",
+    "init": 0,
+    "time": 13150.0,
+    "settled": true,
+    "distance": 0.006583208183655863,
+    "drift": 2.6470830709784934e-08,
+    "settling": 1.750443072520513e-08,
+    "off_manifold": 0.006098201626207915,
+    "relative_energy_gap": 7.963752518625504e-07,
+    "ratios": [
+      0.9997592664605167,
+      0.9999747791599369,
+      1.0000358996924614
+    ],
+    "gap": 0.013755702257934738
+  },
+  {
+    "seed": 9012,
+    "stage": 160,
+    "kind": "selection",
+    "init": 1,
+    "time": 13150.0,
+    "settled": true,
+    "distance": 0.006578505025469671,
+    "drift": 3.738077207776244e-08,
+    "settling": 2.4719358556776193e-08,
+    "off_manifold": 0.00609818273437751,
+    "relative_energy_gap": 7.920298574490178e-07,
+    "ratios": [
+      0.9997590320123559,
+      0.9999745558983975,
+      1.0000356794265886
+    ],
+    "gap": 0.013755702257934738
+  },
+  {
+    "seed": 9012,
+    "stage": 160,
+    "kind": "selection",
+    "init": 2,
+    "time": 17150.0,
+    "settled": true,
+    "distance": 0.006576452992458342,
+    "drift": 4.293550171356044e-08,
+    "settling": 2.8392113009346195e-08,
+    "off_manifold": 0.006098174859409848,
+    "relative_energy_gap": 7.903315047996687e-07,
+    "ratios": [
+      0.9997589499505761,
+      0.999974478457355,
+      1.0000356032134226
+    ],
+    "gap": 0.013755702257934738
+  },
+  {
+    "seed": 9012,
+    "stage": 320,
+    "kind": "selection",
+    "init": 0,
+    "time": 43150.0,
+    "settled": true,
+    "distance": 0.012649386652412139,
+    "drift": 7.929161354317459e-08,
+    "settling": 6.943356842073173e-08,
+    "off_manifold": 0.010462778222569554,
+    "relative_energy_gap": 3.2551759016055764e-06,
+    "ratios": [
+      0.996747468544358,
+      0.9977901062752185,
+      0.9980875791588
+    ],
+    "gap": 0.0024673806849546537
+  },
+  {
+    "seed": 9012,
+    "stage": 320,
+    "kind": "selection",
+    "init": 1,
+    "time": 51150.0,
+    "settled": true,
+    "distance": 0.013298527871136974,
+    "drift": 7.824732097891845e-08,
+    "settling": 6.851906523883986e-08,
+    "off_manifold": 0.0104634679382336,
+    "relative_energy_gap": 3.8607689891622335e-06,
+    "ratios": [
+      0.9967549116605422,
+      0.9977964895825191,
+      0.9980937157775893
+    ],
+    "gap": 0.0024673806849546537
+  },
+  {
+    "seed": 9012,
+    "stage": 320,
+    "kind": "selection",
+    "init": 2,
+    "time": 25150.0,
+    "settled": true,
+    "distance": 0.013151296456514945,
+    "drift": 6.373725985211046e-08,
+    "settling": 5.6033145698574236e-08,
+    "off_manifold": 0.010463243095761705,
+    "relative_energy_gap": 3.669383821123378e-06,
+    "ratios": [
+      0.9967538163423018,
+      0.9977955433200739,
+      0.9980928044992959
+    ],
+    "gap": 0.0024673806849546537
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 0,
+    "settled": true,
+    "distance": 0.0061308203974635095,
+    "time": 33150.0,
+    "Fmax": 0.14084718758070094
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 1,
+    "settled": true,
+    "distance": 0.006291560163923842,
+    "time": 1550.0,
+    "Fmax": 0.1407021063718012
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 2,
+    "settled": true,
+    "distance": 0.006427314487759596,
+    "time": 3150.0,
+    "Fmax": 0.14055700370353408
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 3,
+    "settled": true,
+    "distance": 0.006660998468332154,
+    "time": 1550.0,
+    "Fmax": 0.1404118806067498
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 4,
+    "settled": true,
+    "distance": 0.006877375477970538,
+    "time": 3150.0,
+    "Fmax": 0.14026673689581098
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 5,
+    "settled": true,
+    "distance": 0.007197635665921809,
+    "time": 1550.0,
+    "Fmax": 0.1401215736259417
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 6,
+    "settled": true,
+    "distance": 0.007511612663885916,
+    "time": 3150.0,
+    "Fmax": 0.1399763906035191
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 7,
+    "settled": true,
+    "distance": 0.007903210969462605,
+    "time": 3150.0,
+    "Fmax": 0.13983118899745167
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 8,
+    "settled": true,
+    "distance": 0.008384528173047289,
+    "time": 3150.0,
+    "Fmax": 0.13968596903880987
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 9,
+    "settled": true,
+    "distance": 0.008977645988231673,
+    "time": 3150.0,
+    "Fmax": 0.1395407313757583
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 10,
+    "settled": true,
+    "distance": 0.00971658556348101,
+    "time": 3150.0,
+    "Fmax": 0.13939547683145195
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 11,
+    "settled": true,
+    "distance": 0.010652723598845537,
+    "time": 3150.0,
+    "Fmax": 0.1392502064661358
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 12,
+    "settled": true,
+    "distance": 0.011865384737885886,
+    "time": 3150.0,
+    "Fmax": 0.13910492172584188
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 13,
+    "settled": true,
+    "distance": 0.013482489711555254,
+    "time": 3150.0,
+    "Fmax": 0.13895962472819057
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 14,
+    "settled": true,
+    "distance": 0.015723433529611502,
+    "time": 3150.0,
+    "Fmax": 0.13881431885059378
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 15,
+    "settled": true,
+    "distance": 0.018997504722429562,
+    "time": 3150.0,
+    "Fmax": 0.13866901007548635
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 16,
+    "settled": true,
+    "distance": 0.024164161845918963,
+    "time": 3150.0,
+    "Fmax": 0.13852371054288815
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 17,
+    "settled": true,
+    "distance": 0.03319930397415951,
+    "time": 5150.0,
+    "Fmax": 0.1383784501302151
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 18,
+    "settled": true,
+    "distance": 0.053339275570074875,
+    "time": 7150.0,
+    "Fmax": 0.138233327298758
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 19,
+    "settled": true,
+    "distance": 0.13327347351897698,
+    "time": 23150.0,
+    "Fmax": 0.13808902562038358
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 20,
+    "settled": false,
+    "distance": 1.1669055823930763,
+    "time": 300000.0,
+    "Fmax": 0.13799806786302427
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 21,
+    "settled": false,
+    "distance": 0.02550140498573932,
+    "time": 300000.0,
+    "Fmax": 0.1379969579466913
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 22,
+    "settled": false,
+    "distance": 0.14301355142924177,
+    "time": 300000.0,
+    "Fmax": 0.13785504176484953
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 23,
+    "settled": false,
+    "distance": 1.3639296047846179,
+    "time": 300000.0,
+    "Fmax": 0.13780611381429847
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 24,
+    "settled": false,
+    "distance": 0.0613496789149182,
+    "time": 300000.0,
+    "Fmax": 0.1378098404564682
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 25,
+    "settled": true,
+    "distance": 0.09666427663465436,
+    "time": 225150.0,
+    "Fmax": 0.13766579381084773
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 26,
+    "settled": true,
+    "distance": 1.2939280775583313,
+    "time": 3150.0,
+    "Fmax": 0.13757524346583402
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 27,
+    "settled": true,
+    "distance": 1.3821905862979513,
+    "time": 3150.0,
+    "Fmax": 0.13757814184039144
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 28,
+    "settled": true,
+    "distance": 1.3958654561799162,
+    "time": 3150.0,
+    "Fmax": 0.1375819791032569
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 29,
+    "settled": true,
+    "distance": 1.4013544641762112,
+    "time": 3150.0,
+    "Fmax": 0.1375859239702027
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 30,
+    "settled": true,
+    "distance": 1.4042933351408207,
+    "time": 3150.0,
+    "Fmax": 0.13758990430725396
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 31,
+    "settled": true,
+    "distance": 1.4059950426090009,
+    "time": 5150.0,
+    "Fmax": 0.1375939016982799
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 32,
+    "settled": true,
+    "distance": 0.009448190138807062,
+    "time": 151150.0,
+    "Fmax": 0.13759790963703986
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 33,
+    "settled": true,
+    "distance": 0.012529087000613334,
+    "time": 750.0,
+    "Fmax": 0.13745405188227774
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 34,
+    "settled": true,
+    "distance": 0.015390244206462867,
+    "time": 13150.0,
+    "Fmax": 0.13731020363501278
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 35,
+    "settled": true,
+    "distance": 0.01951750754059622,
+    "time": 19150.0,
+    "Fmax": 0.13716638335172274
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 36,
+    "settled": true,
+    "distance": 0.027186029803632262,
+    "time": 27150.0,
+    "Fmax": 0.13702262713249916
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 37,
+    "settled": true,
+    "distance": 0.046109168139471066,
+    "time": 43150.0,
+    "Fmax": 0.1368790531294371
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 38,
+    "settled": true,
+    "distance": 0.14931397972830077,
+    "time": 121150.0,
+    "Fmax": 0.13673667371078754
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 39,
+    "settled": false,
+    "distance": 1.13570851472265,
+    "time": 300000.0,
+    "Fmax": 0.1366749972228428
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 40,
+    "settled": false,
+    "distance": 0.02095570341860593,
+    "time": 300000.0,
+    "Fmax": 0.13667152102683158
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 41,
+    "settled": false,
+    "distance": 0.1537480567493336,
+    "time": 300000.0,
+    "Fmax": 0.13652622215064347
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 42,
+    "settled": false,
+    "distance": 1.38285486546209,
+    "time": 300000.0,
+    "Fmax": 0.13646350061203805
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 43,
+    "settled": false,
+    "distance": 0.06822630286862783,
+    "time": 300000.0,
+    "Fmax": 0.13646660375092393
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 44,
+    "settled": true,
+    "distance": 0.14669605965067062,
+    "time": 161150.0,
+    "Fmax": 0.13632608703358776
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 45,
+    "settled": false,
+    "distance": 1.1670408827019598,
+    "time": 300000.0,
+    "Fmax": 0.13624188761934716
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 46,
+    "settled": false,
+    "distance": 0.03086999830056522,
+    "time": 300000.0,
+    "Fmax": 0.1362405299975996
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 47,
+    "settled": false,
+    "distance": 0.15532422701317494,
+    "time": 300000.0,
+    "Fmax": 0.1360954510362455
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 48,
+    "settled": false,
+    "distance": 1.1751446556119753,
+    "time": 300000.0,
+    "Fmax": 0.13604905941661669
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 49,
+    "settled": false,
+    "distance": 0.04372239201354156,
+    "time": 300000.0,
+    "Fmax": 0.13604796567375754
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 50,
+    "settled": true,
+    "distance": 0.09762830959204225,
+    "time": 5150.0,
+    "Fmax": 0.13590474380886405
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 51,
+    "settled": true,
+    "distance": 1.3139238471981378,
+    "time": 3150.0,
+    "Fmax": 0.13581678796642593
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 52,
+    "settled": false,
+    "distance": 0.22801164385179407,
+    "time": 300000.0,
+    "Fmax": 0.13582026377018835
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 53,
+    "settled": false,
+    "distance": 0.15960280625298992,
+    "time": 300000.0,
+    "Fmax": 0.13569477929507906
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 54,
+    "settled": false,
+    "distance": 1.0383630165333952,
+    "time": 300000.0,
+    "Fmax": 0.13560958568195103
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 55,
+    "settled": false,
+    "distance": 0.019301932725770566,
+    "time": 300000.0,
+    "Fmax": 0.13560257444868518
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 56,
+    "settled": false,
+    "distance": 0.2098561085834947,
+    "time": 300000.0,
+    "Fmax": 0.13546033331212506
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 57,
+    "settled": false,
+    "distance": 1.3202837501218174,
+    "time": 300000.0,
+    "Fmax": 0.1354168426458541
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 58,
+    "settled": false,
+    "distance": 0.05730806878042167,
+    "time": 300000.0,
+    "Fmax": 0.13541946206166597
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 59,
+    "settled": true,
+    "distance": 0.12177164720557737,
+    "time": 117150.0,
+    "Fmax": 0.13527511914525844
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 60,
+    "settled": true,
+    "distance": 1.2486999128897576,
+    "time": 9150.0,
+    "Fmax": 0.135181915022631
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 61,
+    "settled": false,
+    "distance": 0.3966716106526304,
+    "time": 300000.0,
+    "Fmax": 0.13518342661572313
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 62,
+    "settled": false,
+    "distance": 0.021550937780485065,
+    "time": 300000.0,
+    "Fmax": 0.13508617099930004
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 63,
+    "settled": true,
+    "distance": 0.9585226947359226,
+    "time": 150.0,
+    "Fmax": 0.1349476606082579
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 64,
+    "settled": false,
+    "distance": 0.9700677728725445,
+    "time": 300000.0,
+    "Fmax": 0.13494971463183297
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 65,
+    "settled": true,
+    "distance": 0.03437490900425355,
+    "time": 295150.0,
+    "Fmax": 0.13493051577758183
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 66,
+    "settled": true,
+    "distance": 0.08202107365257562,
+    "time": 15150.0,
+    "Fmax": 0.13478531058778992
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 67,
+    "settled": false,
+    "distance": 1.344722414731328,
+    "time": 300000.0,
+    "Fmax": 0.13468422065662689
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 68,
+    "settled": false,
+    "distance": 0.12892478877780822,
+    "time": 300000.0,
+    "Fmax": 0.1346874610925667
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 69,
+    "settled": false,
+    "distance": 0.22908803160120905,
+    "time": 300000.0,
+    "Fmax": 0.13455330467284737
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 70,
+    "settled": false,
+    "distance": 0.981111595084186,
+    "time": 300000.0,
+    "Fmax": 0.13449579180481427
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 71,
+    "settled": false,
+    "distance": 0.04424263225228502,
+    "time": 300000.0,
+    "Fmax": 0.13448286996225817
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 72,
+    "settled": true,
+    "distance": 0.20000598028681812,
+    "time": 185150.0,
+    "Fmax": 0.13433822874241141
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 73,
+    "settled": true,
+    "distance": 1.325510269036386,
+    "time": 7150.0,
+    "Fmax": 0.1342872539793403
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 74,
+    "settled": true,
+    "distance": 1.3776827187049951,
+    "time": 9150.0,
+    "Fmax": 0.1342898254093284
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 75,
+    "settled": false,
+    "distance": 0.02584209095633023,
+    "time": 300000.0,
+    "Fmax": 0.13429301615786457
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 76,
+    "settled": true,
+    "distance": 0.045884044894920685,
+    "time": 43150.0,
+    "Fmax": 0.13415053065648483
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 77,
+    "settled": true,
+    "distance": 0.10935101316868766,
+    "time": 35150.0,
+    "Fmax": 0.1340085757889067
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 78,
+    "settled": false,
+    "distance": 1.3108098736878315,
+    "time": 300000.0,
+    "Fmax": 0.1339109693221871
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 79,
+    "settled": false,
+    "distance": 0.1832603806623971,
+    "time": 300000.0,
+    "Fmax": 0.13391350536699467
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 80,
+    "settled": false,
+    "distance": 0.22343349005826982,
+    "time": 300000.0,
+    "Fmax": 0.13378417838294374
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 81,
+    "settled": false,
+    "distance": 0.7821953500520116,
+    "time": 300000.0,
+    "Fmax": 0.13371770959033694
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 82,
+    "settled": false,
+    "distance": 0.022883562926563072,
+    "time": 300000.0,
+    "Fmax": 0.13369280456441987
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 83,
+    "settled": true,
+    "distance": 0.19460873009515486,
+    "time": 7150.0,
+    "Fmax": 0.1335486715145621
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 84,
+    "settled": true,
+    "distance": 1.372408029064376,
+    "time": 350.0,
+    "Fmax": 0.13352568327220593
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 85,
+    "settled": false,
+    "distance": 0.05063034642961954,
+    "time": 300000.0,
+    "Fmax": 0.13353010592817055
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 86,
+    "settled": true,
+    "distance": 0.05918195152309963,
+    "time": 289150.0,
+    "Fmax": 0.13338531633254683
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 87,
+    "settled": false,
+    "distance": 1.2847160462808063,
+    "time": 300000.0,
+    "Fmax": 0.1332675203174995
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 88,
+    "settled": false,
+    "distance": 0.19734475772988727,
+    "time": 300000.0,
+    "Fmax": 0.13327075540464475
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 89,
+    "settled": false,
+    "distance": 0.2512297493511941,
+    "time": 300000.0,
+    "Fmax": 0.13314804214398543
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 90,
+    "settled": false,
+    "distance": 0.782965499272091,
+    "time": 300000.0,
+    "Fmax": 0.13308664188130467
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 91,
+    "settled": false,
+    "distance": 0.04118930033840263,
+    "time": 300000.0,
+    "Fmax": 0.13305961622783555
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 92,
+    "settled": false,
+    "distance": 0.3411033371335072,
+    "time": 300000.0,
+    "Fmax": 0.13291555614702932
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 93,
+    "settled": false,
+    "distance": 1.4099385342838524,
+    "time": 300000.0,
+    "Fmax": 0.13289433585488417
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 94,
+    "settled": false,
+    "distance": 0.06124461546087909,
+    "time": 300000.0,
+    "Fmax": 0.13289853980711736
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 95,
+    "settled": true,
+    "distance": 0.15591408612213178,
+    "time": 241150.0,
+    "Fmax": 0.13275625695554005
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 96,
+    "settled": false,
+    "distance": 1.0989981367312653,
+    "time": 300000.0,
+    "Fmax": 0.13271775138439143
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 97,
+    "settled": false,
+    "distance": 0.03268537744660054,
+    "time": 300000.0,
+    "Fmax": 0.13271120906405784
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 98,
+    "settled": false,
+    "distance": 1.355738130094835,
+    "time": 300000.0,
+    "Fmax": 0.13263528533938834
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 99,
+    "settled": false,
+    "distance": 0.07465092599494957,
+    "time": 300000.0,
+    "Fmax": 0.13263837453842958
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 100,
+    "settled": true,
+    "distance": 0.7354260969175809,
+    "time": 225150.0,
+    "Fmax": 0.13250261829931076
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 101,
+    "settled": false,
+    "distance": 0.7323279488913323,
+    "time": 300000.0,
+    "Fmax": 0.13249541128621678
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 102,
+    "settled": false,
+    "distance": 0.2476697605317382,
+    "time": 300000.0,
+    "Fmax": 0.132453409775642
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 103,
+    "settled": false,
+    "distance": 1.105646894360786,
+    "time": 300000.0,
+    "Fmax": 0.13242627227499187
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 104,
+    "settled": false,
+    "distance": 0.026175221129584335,
+    "time": 300000.0,
+    "Fmax": 0.13241921819710056
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 105,
+    "settled": true,
+    "distance": 0.17395854651873954,
+    "time": 175150.0,
+    "Fmax": 0.13227190891188337
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 106,
+    "settled": false,
+    "distance": 1.1156580553070896,
+    "time": 300000.0,
+    "Fmax": 0.13226206536051974
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 107,
+    "settled": false,
+    "distance": 0.2188264420746086,
+    "time": 300000.0,
+    "Fmax": 0.1322538825307938
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 108,
+    "settled": false,
+    "distance": 0.7963213948092849,
+    "time": 300000.0,
+    "Fmax": 0.13219403916784833
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 109,
+    "settled": false,
+    "distance": 0.07285137241138245,
+    "time": 300000.0,
+    "Fmax": 0.13216929062086621
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 110,
+    "settled": true,
+    "distance": 0.39150629415358873,
+    "time": 195150.0,
+    "Fmax": 0.13202859437902423
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 111,
+    "settled": true,
+    "distance": 1.3367892774659005,
+    "time": 350.0,
+    "Fmax": 0.13200102474366937
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 112,
+    "settled": false,
+    "distance": 0.49505141027982796,
+    "time": 300000.0,
+    "Fmax": 0.1320053061104974
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 113,
+    "settled": false,
+    "distance": 1.2422607603316294,
+    "time": 300000.0,
+    "Fmax": 0.13200794050112527
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 114,
+    "settled": true,
+    "distance": 0.04989088886306605,
+    "time": 281150.0,
+    "Fmax": 0.1320090993127021
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 115,
+    "settled": true,
+    "distance": 0.11220672213960775,
+    "time": 750.0,
+    "Fmax": 0.13186033129921482
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 116,
+    "settled": true,
+    "distance": 1.1808225939913677,
+    "time": 3150.0,
+    "Fmax": 0.13175016367898149
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 117,
+    "settled": false,
+    "distance": 1.0759559237319751,
+    "time": 300000.0,
+    "Fmax": 0.13174970552075754
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 118,
+    "settled": false,
+    "distance": 0.369139217149761,
+    "time": 300000.0,
+    "Fmax": 0.13174966020441545
+  },
+  {
+    "seed": 9012,
+    "kind": "cycle",
+    "cycle": 119,
+    "settled": false,
+    "distance": 0.17572440949127172,
+    "time": 300000.0,
+    "Fmax": 0.1316910629397133
+  }
+]

@@ -446,76 +446,222 @@ The next section presents a mathematical account of this qualitative behavior. W
 
 \clearpage
 
+% BEGIN EMPIRICAL REPLACEMENT DRAFT 2026-09-04
+% The original mathematical subsection is retained verbatim immediately below.
+% All labels in this draft use the empirical prefix to keep both versions compilable.
+\subsection{Approximating minimization of the largest settled neocortical free energy}
+\label{sec:empirical-minimax}
+
+\noindent\textit{Draft status: the analytical result below is derived from the linear model. The numerical tests and figure are proposed protocols; their outcomes have not yet been measured.}
+
+The preceding results show that the coupled dynamics can redistribute memory content from the teacher to the student. We now ask whether redistribution progressively reduces the largest settled student free energy over the teacher memory manifold. We first show that, after student relaxation, the teacher-side interface drive is proportional to the gradient of the settled student free energy with respect to teacher activity. This result motivates two hypotheses:
+\begin{enumerate}
+    \item \textbf{Activity selection:} the coupled dynamics approach a teacher state that nearly maximizes the settled student free energy over the teacher memory manifold.
+    \item \textbf{Synaptic plasticity:} a local student-plasticity event applied after activity relaxation approximates a gradient-descent step on this maximum.
+\end{enumerate}
+Figure~\ref{fig:empirical-minimax} outlines the proposed numerical tests of these hypotheses.
+
+The following analysis and proposed numerical tests consider the separation of timescales
+\begin{equation}
+\tau_S\ll\tau_T\ll\frac{1}{\eta}.
+\label{eq:empirical-timescale-separation}
+\end{equation}
+The first inequality allows student activity to relax while teacher activity changes little. This permits adiabatic elimination of the student activity, replacing it by its equilibrium for the current teacher state. The second inequality keeps synaptic weights approximately fixed during activity relaxation. The analytical derivation presented here uses the adiabatic limit, while the numerical tests assess this approximation at finite timescale separation.
+
+As defined in Eq.~\eqref{eq:student-energy}, the student free energy \(F_S\) combines the student's recurrent prediction error with the mismatch between the teacher and student states. For fixed teacher activity \(x_T\) and student weights \(W_S\), the linear student dynamics minimize \(F_S\) with respect to \(x_S\). We denote the free energy remaining after this relaxation by
+\begin{equation}
+q(x_T;W_S)=\min_{x_S}F_S(x_S,x_T;W_S).
+\label{eq:empirical-settled-cost}
+\end{equation}
+Under the adiabatic approximation, \(q\) therefore describes how the settled student free energy varies as teacher activity changes.
+
+The relevant set of teacher states is the unit sphere of its memory manifold,
+\begin{equation}
+\mathbb S_T=\left\{x_T\in\mathcal U_T:\lVert x_T\rVert=1\right\},
+\qquad \mathcal U_T=\ker M_T.
+\label{eq:empirical-teacher-sphere}
+\end{equation}
+The two parts of this constraint are implemented differently in the network. Renormalization after each integration step enforces unit norm. \textbf{Membership in \(\mathcal U_T\) is approximate: the teacher's recurrent dynamics damp activity outside its memory manifold, but the interface drive and noise can produce departures from it. We therefore use \(\mathbb S_T\) to define the optimization benchmark and measure the actual teacher's distance from this set.}
+\todo[inline]{to change when we have the data}
+
+The largest settled student free energy over \(\mathbb S_T\) is
+\begin{equation}
+\mathcal F_{\max}(W_S;W_T)
+=\max_{x_T\in\mathbb S_T}q(x_T;W_S)
+=\max_{x_T\in\mathbb S_T}\min_{x_S}F_S(x_S,x_T;W_S).
+\label{eq:empirical-maximum-settled-energy}
+\end{equation}
+By definition,
+\[
+q(x_T;W_S)\leq\mathcal F_{\max}(W_S;W_T)
+\qquad\text{for every }x_T\in\mathbb S_T.
+\]
+Thus, \(\mathcal F_{\max}\) bounds the settled student free energy over the entire teacher memory manifold. A low value means that the student settles to a low free energy for every state on this manifold, whereas a large value means that at least one state remains poorly represented.
+
+Hypothesis~\textbf{1} therefore predicts that, during intrinsic activity with fixed student weights \(W_S\), the teacher approaches a state whose settled student free energy is close to this upper bound. We test this prediction by comparing the observed teacher state with an independently calculated ideal teacher state that attains the maximum.
+% provided the observed teacher state is close to its memory manifold and the student state is close to its equilibrium for that teacher state. Hypothesis~\textbf{1} concerns the settled student free energy associated with the selected teacher state. It does not require the student state to equal the teacher state. Agreement with the maximum is assessed by the energy difference, since distinct teacher states may yield equal or nearly equal settled student free energies.
+
+This nested quantity also has an interpretation in terms of the complete teacher--student network free energy,
+\begin{equation}
+F_{\mathrm{net}}(x_T,x_S;W_T,W_S)
+=F_T^{\mathrm{rec}}(x_T;W_T)+F_S(x_S,x_T;W_S).
+\label{eq:empirical-network-energy}
+\end{equation}
+Since \(\mathcal U_T=\ker M_T\), the teacher recurrent free energy vanishes for every \(x_T\in\mathbb S_T\). Consequently,
+\begin{equation}
+\begin{aligned}
+\mathcal F_{\max}(W_S;W_T)
+&=\max_{x_T\in\mathbb S_T}\min_{x_S}
+F_{\mathrm{net}}(x_T,x_S;W_T,W_S)
+\end{aligned}
+\label{eq:empirical-network-student-equivalence}
+\end{equation}
+The largest settled student free energy is therefore also the largest settled free energy of the complete network over this manifold.
+
+We call a \emph{redistribution cycle} the relaxation of teacher and student activity at fixed weights followed by one student-plasticity event. Hypothesis~\textbf{2} predicts that, once the teacher has approached a state maximizing the settled student free energy and the student has settled in response to that state, the local update of the student weights approximates a gradient-descent step on \(\mathcal F_{\max}\):
+\begin{equation}
+\boxed{
+\Delta W_S\approx-hP_0\nabla_{W_S}\mathcal F_{\max}(W_S;W_T),
+}
+\qquad h=\eta\,\Delta t_{\mathrm{pl}},
+\label{eq:empirical-plasticity-hypothesis}
+\end{equation}
+where \(\Delta t_{\mathrm{pl}}\) is the event duration and \(P_0\) sets the diagonal entries of a matrix to zero, corresponding to the absence of self-connections in our model.
+
+This construction is close in purpose to classical predictive coding, while differing in how the states on which free energy is minimized are obtained. PC networks ordinarily minimize free energy for activity elicited by current sensory input; variation in those inputs supplies the states on which learning acts. During autonomous redistribution, no external input specifies the state to be learned. The network must therefore organize both exploration of the teacher memory manifold and local student learning. Exploration may temporarily increase the instantaneous network free energy, while successive student-plasticity events are expected to reduce the network settled free energy over the teacher memory manifold.
+
+\newpage
+
+\paragraph{The settled interface error is proportional to the gradient with respect to teacher activity.}
+The following result identifies how the student's equilibrium response determines the interface drive received by the teacher. Define
+\begin{equation}
+S_S=M_S^\top M_S,\qquad
+H_S=\pi_{TS}I+\pi_SS_S,\qquad
+N_S=I-\pi_{TS}H_S^{-1}=\pi_SS_SH_S^{-1}.
+\label{eq:empirical-novelty-operator}
+\end{equation}
+
+\begin{theorem}[Settled student response and interface-driven ascent]
+\label{thm:empirical-interface-ascent}
+For the linear student with \(\pi_S,\pi_{TS}>0\), fixed teacher activity, and fixed weights, \(F_S\) has the unique global minimizer
+\begin{equation}
+x_S^*(x_T)=\pi_{TS}H_S^{-1}x_T=(I-N_S)x_T.
+\label{eq:empirical-student-equilibrium}
+\end{equation}
+The settled student free energy and its gradient with respect to teacher activity are
+\begin{equation}
+q(x_T;W_S)=\frac{\pi_{TS}}{2}x_T^\top N_Sx_T,
+\qquad
+\nabla_{x_T}q=\pi_{TS}N_Sx_T
+=\pi_{TS}(x_T-x_S^*).
+\label{eq:empirical-interface-gradient}
+\end{equation}
+Thus, when the student is at equilibrium and \(\kappa>0\), the teacher-side interface contribution is a positive multiple of this gradient:
+\begin{equation}
+\kappa\varepsilon_{TS}^*
+=\frac{\kappa}{\pi_{TS}}\nabla_{x_T}q.
+\label{eq:empirical-interface-ascent}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+For fixed \(x_T\), the student gradient and Hessian are
+\[
+\nabla_{x_S}F_S=H_Sx_S-\pi_{TS}x_T,
+\qquad \nabla_{x_S}^2F_S=H_S\succ0.
+\]
+The positive-definite Hessian ensures that student gradient flow at fixed teacher activity converges to \(x_S^*(x_T)\).
+Solving the stationarity equation gives Eq.~\eqref{eq:empirical-student-equilibrium}. Expanding the energy and using \(H_Sx_S^*=\pi_{TS}x_T\) gives
+\[
+q=\frac{\pi_{TS}}{2}x_T^\top x_T
+-\frac{\pi_{TS}}{2}x_T^\top x_S^*
+=\frac{\pi_{TS}}{2}x_T^\top N_Sx_T.
+\]
+Since \(N_S\) is symmetric, differentiating it gives \(\nabla_{x_T}q=\pi_{TS}N_Sx_T\). Finally, \(x_T-x_S^*=N_Sx_T\), which identifies the gradient with the settled interface error.
+\end{proof}
+
+
+The theorem shows that, once the student has settled, the teacher-side coupling favors changes in teacher activity that increase the settled student free energy. Within the teacher memory manifold, this favors states that remain poorly represented by the student. This result alone does not establish that the full coupled dynamics approach a teacher state whose settled student free energy is close to the maximum over \(\mathbb S_T\). This is the prediction of Hypothesis~\textbf{1}, which we test numerically below.
+
+% The vector \(N_Sx_T=x_T-x_S^*(x_T)\) is the part of the teacher state that remains unmatched after the student has adjusted its activity. A component already reproduced by the student is cancelled from the interface error, whereas an unmatched component continues to drive the teacher. This explains how effective top-down inhibition can bias teacher reactivation toward content that remains poorly represented by the student.
+
+\paragraph{Testing Hypothesis 1: selection of teacher states with near-maximal settled student free energy.}
+For fixed teacher and student weights, an \emph{ideal teacher state} \(x_T^*\) is a unit state on the teacher memory manifold for which the student's equilibrium response leaves the largest free energy:
+\begin{equation}
+x_T^*\in\operatorname*{arg\,max}_{x_T\in\mathbb S_T}q(x_T;W_S),
+\qquad q(x_T^*;W_S)=\mathcal F_{\max}(W_S;W_T).
+\label{eq:empirical-selection-hypothesis}
+\end{equation}
+This is a reference for teacher activity; the corresponding student state is its response \(x_S^*(x_T^*)\), which generally differs from \(x_T^*\). We calculate the ideal teacher state directly from the fixed weights, independently of the simulated trajectory. The calculation is given in Materials and methods, Section~\ref{sec:methods-ideal-teacher}.
+
+In the linear model, \(x_T^*\) and \(-x_T^*\) yield the same settled student free energy. When these are the only maximizing states, we measure the distance from the observed teacher state to the closer of the two:
+\begin{equation}
+d_T=\min\left\{\|x_T-x_T^*\|,\ \|x_T+x_T^*\|\right\}.
+\label{eq:empirical-teacher-distance}
+\end{equation}
+The distance is measured in the full activity space, so departures from the teacher memory manifold contribute to it. If other states attain the same maximum, we use the distance to the nearest ideal teacher state, as described in Section~\ref{sec:methods-teacher-distance}.
+
+For each fixed teacher and student-weight configuration, we initialize teacher activity from many random unit states and student activity from zero, then let both populations relax under the full coupled dynamics. We record the teacher trajectory and its final distance from an ideal state. Figure~\ref{fig:empirical-minimax}A will show representative trajectories with the ideal states marked, together with box-and-whisker plots of final distances across initializations, independent networks, and student learning stages. Small final distances would support Hypothesis~\textbf{1}. Both populations must satisfy the settling criteria; runs that fail to settle are retained and identified. The full protocol is given in Section~\ref{sec:methods-redistribution-protocol}.
+
+\paragraph{Testing Hypothesis 2: student plasticity approximates descent on the maximum.}
+Hypothesis~\textbf{2} predicts the reduction in \(\mathcal F_{\max}\) produced by a small student-plasticity event. After teacher and student activity have relaxed at fixed weights, the observed student state \(x_S\) and its recurrent prediction error \(\varepsilon_S\) determine the local weight change,
+\begin{equation}
+\Delta W_S=h\pi_SP_0\bigl[\varepsilon_Sx_S^\top\bigr],
+\qquad \varepsilon_S=M_Sx_S.
+\label{eq:empirical-local-update}
+\end{equation}
+Here \(h=\eta\Delta t_{\mathrm{pl}}\), as defined above. If this update approximates a gradient-descent step on \(\mathcal F_{\max}\), its predicted first-order effect is
+\begin{equation}
+\boxed{
+\underbrace{
+\mathcal F_{\max}(W_S;W_T)
+-\mathcal F_{\max}(W_S+\Delta W_S;W_T)
+}_{\text{observed reduction}}
+\;\approx\;
+\underbrace{\frac{\|\Delta W_S\|_F^2}{h}}_{\text{predicted reduction}}.
+}
+\label{eq:empirical-event-prediction}
+\end{equation}
+This follows because a gradient step reduces a differentiable objective, to first order, by the step size times the squared norm of its admissible gradient. Expressing that gradient through \(\Delta W_S\) gives the right-hand side of Eq.~\eqref{eq:empirical-event-prediction}.
+
+The protocol uses the same teacher networks, frozen student-weight configurations, and activity initializations as the test of Hypothesis~\textbf{1}. For each relaxation bout, we calculate \(\mathcal F_{\max}\) before plasticity and the update from the observed student activity and error. We then apply one discrete update, keeping \(W_T\) fixed, and recompute \(\mathcal F_{\max}\) from the updated student weights using Eq.~\eqref{eq:empirical-spectral-benchmark}. This recalculation includes the student's new equilibrium response to every candidate teacher state and permits a different teacher state to attain the maximum. The test therefore measures the change in the maximum over the entire teacher memory manifold, rather than only the change in energy at the previously selected teacher state.
+
+We repeat each event with decreasing values of \(h\), always restoring the same pre-event weights and using the same relaxed activity states. Figure~\ref{fig:empirical-minimax}B will plot the observed reduction against the predicted reduction; agreement corresponds to the diagonal. For comparisons across event sizes, both axis values are divided by \(h\), so smaller updates do not produce apparent agreement merely by moving all points toward zero. The teacher's distance from an ideal state and the settling checks are retained to assess whether discrepancies persist when the activity conditions of the hypothesis are met. Runs that fail to settle remain identified in the reported ensemble.
+
+The same comparison is used for every event, including events that leave the maximum unchanged or increase it. Agreement would support the predicted effect of local gradient descent on \(\mathcal F_{\max}\); it would not uniquely establish the direction of the full weight update.
+
+\paragraph{Tracking the largest settled student free energy over redistribution cycles.}
+The third panel will test whether repeated teacher-state selection and student plasticity reduce \(\mathcal F_{\max}\) over successive redistribution cycles. We calculate \(\mathcal F_{\max}\) before and after each plasticity event, using the updated student weights. The final teacher and student states of one cycle initialize their respective activities in the next.
+
+A matched reference condition will draw a fresh teacher state uniformly from \(\mathbb S_T\), hold that teacher state fixed while the student relaxes to its equilibrium response, and apply the same local student-plasticity rule with the same effective step size. Both conditions start from identical weights and are compared by event count; relaxation times are recorded separately. This comparison tests whether autonomous teacher-state selection accelerates the reduction of the largest settled student free energy relative to learning from uniformly sampled teacher states.
+
+The algebraic characterization of complete redistribution can also be retained:
+\begin{equation}
+\mathcal F_{\max}=0
+\quad\Longleftrightarrow\quad
+\mathcal U_T\subseteq\ker M_S.
+\label{eq:empirical-completion}
+\end{equation}
+Indeed, an eigenvalue \(\mu\geq0\) of \(S_S\) gives the eigenvalue \(\pi_S\mu/(\pi_{TS}+\pi_S\mu)\) of \(N_S\), so \(\ker N_S=\ker M_S\). At this endpoint, the settled response to every teacher-manifold state satisfies \(x_S^*=x_T\), \(\varepsilon_{TS}^*=0\), and \(\varepsilon_S^*=0\). The corresponding interface drive and plasticity signal vanish. This identity characterizes the endpoint; reaching it remains an empirical question for the weight dynamics.
+
+The ensemble, settling criteria, parameter sweeps, and numerical accuracy checks for these proposed tests are specified in Materials and methods, Section~\ref{sec:methods-redistribution-protocol}.
+
+\begin{figure}[p]
+\centering
+\figplaceholder{\textbf{A. Hypothesis 1: teacher-state selection.}\\
+Representative teacher trajectories from several initial states, with the independently calculated ideal teacher states marked. Alongside, show box-and-whisker plots of final distances to the nearest ideal state, with individual observations and separate groups for student learning stages or timescale conditions. Identify runs that fail to settle. All distances use the full teacher activity vector.}
+\figplaceholder{\textbf{B. Hypothesis 2: student synaptic plasticity.}\\
+Plot the measured reduction in the largest settled student free energy against the prediction \(\|\Delta W_S\|_F^2/h\), with a diagonal marking agreement. Repeat at smaller event sizes from identical pre-event weights and activity states. For the step-size comparison, divide both axis values by \(h\) and distinguish event sizes by color. Retain events with zero or negative observed reduction.}
+\figplaceholder{\textbf{C. Do repeated cycles reduce the remaining deficits?}\\
+Largest settled student free energy versus plasticity-event count, comparing autonomous teacher-state selection with uniformly sampled teacher-manifold states under matched student plasticity. Show variation across independent memory sets and retain plateaus or increases if observed.}
+\caption{\textbf{Proposed numerical tests of a minimax interpretation of memory redistribution.} This figure is a placeholder; no simulation outcomes are represented. \textbf{A,} Hypothesis 1: teacher trajectories and final distances to an ideal teacher state that maximizes the settled student free energy. Both signs of a maximizing direction are equivalent; distances are measured to the nearest ideal state. \textbf{B,} Hypothesis 2: the reduction in the largest settled student free energy after one local student-weight update will be compared with \(\|\Delta W_S\|_F^2/h\), the prediction for a small gradient-descent step. The maximum will be recomputed after each event, and both reductions expressed per unit step when comparing event sizes. This tests the effect on the objective, rather than the full update direction. \textbf{C,} Repeated cycles will track the largest settled student free energy, with matched learning from randomly sampled teacher states as a reference. Reference-state calculations and protocols are given in Materials and methods, Sections~\ref{sec:methods-ideal-teacher}--\ref{sec:methods-redistribution-protocol}.}
+\label{fig:empirical-minimax}
+\end{figure}
+\clearpage
+
+% END EMPIRICAL REPLACEMENT DRAFT
+% BEGIN ORIGINAL MATHEMATICAL SUBSECTION (retained for comparison)
 \subsection{Minimizing the largest neocortical reconstruction error}
-
-% The preceding results show that the coupled dynamics can redistribute memory content from the teacher to the student. We now ask whether this process can be understood as the optimization of a single objective at the timescale of consolidation.
-
-% Consider first the free energy associated with the complete teacher--student system,
-
-% \begin{equation}
-% F_{\mathrm{net}}(x_T,x_S;W_T,W_S)
-% =
-% F_T^{\mathrm{rec}}(x_T;W_T)
-% +
-% F_S(x_S,x_T;W_S).
-% \label{eq:network-energy}
-% \end{equation}
-
-% During consolidation, teacher activity is restricted to the unit sphere of its memory manifold,
-
-% \begin{equation}
-% \mathbb S_T
-% =
-% \left\{
-% x_T\in\mathcal U_T:
-% \lVert x_T\rVert=1
-% \right\}.
-% \label{eq:teacher-sphere}
-% \end{equation}
-
-% Since \(\mathcal U_T=\ker M_T\), the teacher recurrent free energy vanishes for every \(x_T\in\mathbb S_T\). On the teacher memory manifold, the complete free energy therefore reduces to the student free energy \(F_S\). As defined in Eq.~\eqref{eq:student-energy}, this remaining term combines the student's recurrent prediction error with the mismatch between the teacher and student states.
-
-% For a fixed teacher state and fixed student weights, student activity minimizes \(F_S\). We denote the free energy that remains once the student has settled by
-
-% \begin{equation}
-% q(x_T;W_S)
-% =
-% \min_{x_S}
-% F_S(x_S,x_T;W_S).
-% \label{eq:settled-cost}
-% \end{equation}
-
-% The value of \(q\) quantifies how poorly the settled student represents the teacher state currently expressed. As a possible objective for memory redistribution, we consider the local reduction of the largest settled value over the teacher memory manifold,
-
-% \begin{equation}
-% \mathcal F_{\max}(W_S;W_T)
-% =
-% \max_{x_T\in\mathbb S_T}
-% q(x_T;W_S),
-% \label{eq:maximum-settled-energy}
-% \end{equation}
-
-% By definition,
-% \[
-% q(x_T;W_S)
-% \leq
-% \mathcal F_{\max}(W_S;W_T)
-% \qquad
-% \text{for every }x_T\in\mathbb S_T.
-% \]
-
-% Thus, \(\mathcal F_{\max}\) bounds the settled student free energy over the entire teacher memory manifold. A low value of \(\mathcal F_{\max}\) means that the student settles to a low free energy for every state on this manifold, whereas a large value means that the settled student free energy remains high for at least one state. 
-% In this section, we show that, under the assumptions stated below and once the teacher and student activities have converged within the coupled dynamics, a single student-plasticity event is equivalent to a gradient-descent step on \(\mathcal F_{\max}\):
-
-% \begin{equation}
-% \boxed{
-% \Delta W_S
-% =
-% -\eta\nabla_{W_S}\mathcal F_{\max}(W_S;W_T)
-% }.
-% \label{eq:local-objective-step}
-% \end{equation}
-
 
 The preceding results show that the coupled dynamics can redistribute memory content from the teacher to the student. We now ask whether this process can be understood as the local optimization of a single quantity at the timescale of consolidation.
 
@@ -968,6 +1114,69 @@ However, CA1–PFC representational coordination was weaker and less faithful to
 
 \subsection{Outcome measures}
 \textit{[Define $N_S$, $A_S$, $\mathcal D_{\max}$, errors, occupancy, cumulative weight change, threshold events, oracle gap, nearest-memory distance, and cone confinement.]}
+
+\subsection{Reference states and numerical tests of redistribution}
+\label{sec:methods-redistribution-tests}
+
+The calculations below define the ideal teacher states and free-energy values used in Figure~\ref{fig:empirical-minimax}. The accompanying simulation protocol is proposed; the measurements have not yet been performed.
+
+\subsubsection{Calculating an ideal teacher state}
+\label{sec:methods-ideal-teacher}
+
+The ideal teacher state depends on the teacher memory space and the current student weights. We calculate it while both weight matrices are fixed. Let \(U_T\in\mathbb R^{d\times r}\) have orthonormal columns spanning \(\mathcal U_T=\ker M_T\). These columns provide coordinates for the teacher memory space: every allowed teacher state can be written as \(x_T=U_Ta\), with \(\|a\|=1\). The basis will be obtained from the right singular vectors of \(M_T\) associated with zero singular values. The numerical rank tolerance will be stated, and the basis checked for orthonormality and for \(M_TU_T\) being negligible at that tolerance.
+
+The novelty matrix \(N_S\), defined in Eq.~\eqref{eq:empirical-novelty-operator}, determines the student's settled free energy for any teacher state. To compare only states within the teacher memory space, we form
+\begin{equation}
+A_S=U_T^\top N_SU_T.
+\label{eq:empirical-restricted-novelty}
+\end{equation}
+This smaller matrix describes how the student's remaining error varies among combinations of teacher memories. Equation~\eqref{eq:empirical-interface-gradient} gives
+\begin{equation}
+q(U_Ta;W_S)=\frac{\pi_{TS}}{2}a^\top A_Sa,
+\qquad
+\mathcal F_{\max}=\frac{\pi_{TS}}{2}\lambda_{\max}(A_S).
+\label{eq:empirical-spectral-benchmark}
+\end{equation}
+To see why the largest eigenvalue gives the maximum, expand the unit vector \(a\) in an orthonormal eigenbasis of the symmetric matrix \(A_S\). Its quadratic form is then a weighted average of the eigenvalues, with nonnegative weights summing to one. The largest possible value is the largest eigenvalue, attained by any unit vector in its eigenspace. Thus, for a leading unit eigenvector \(v_1\), an ideal teacher state is
+\begin{equation}
+x_T^*=U_Tv_1.
+\label{eq:methods-ideal-teacher-state}
+\end{equation}
+Its negative is equally valid. The corresponding student state is \(x_S^*(x_T^*)=(I-N_S)x_T^*\). This calculation uses only the fixed weights and precisions; the simulated trajectory is not used to choose the reference state, and the reference state does not drive the simulation.
+
+After each student-plasticity event, \(N_S\) and \(A_S\) are recalculated from the updated \(W_S\), while \(U_T\) remains fixed. Matrix inverses in the analytical expressions will be evaluated through linear solves.
+
+\subsubsection{Distance to an ideal teacher state}
+\label{sec:methods-teacher-distance}
+
+When the leading eigenvalue of \(A_S\) is simple, the ideal states are \(x_T^*\) and \(-x_T^*\), and Eq.~\eqref{eq:empirical-teacher-distance} gives the distance to the closer state. The observed teacher activity is already normalized by the network dynamics. We use this full activity vector for the distance calculation, without projecting it onto the memory manifold. The distance therefore reflects both departure from the memory manifold and a difference in direction within it.
+
+If several independent directions attain the maximum, no single reference direction is preferred. Let \(V_1\) contain an orthonormal basis of the leading eigenspace of \(A_S\). We then use the distance to the nearest ideal state,
+\begin{equation}
+d_T=\min_{\|b\|=1}\|x_T-U_TV_1b\|
+=\sqrt{2-2\|V_1^\top U_T^\top x_T\|}.
+\label{eq:methods-nearest-ideal-state}
+\end{equation}
+The equality uses \(\|x_T\|=1\) and orthonormality of \(U_TV_1\). It follows by choosing the unit reference with the largest inner product with \(x_T\). For a one-dimensional leading eigenspace, this reduces to choosing the closer sign in Eq.~\eqref{eq:empirical-teacher-distance}. Numerical equality of eigenvalues will be determined using a stated precision tolerance; distinct eigenvalues resolved at that precision will remain distinct.
+
+State distance is a stricter test than proximity to the maximum free energy. When the two largest eigenvalues are close, teacher states far from an exact maximizer may still yield almost the same settled student free energy. The leading eigenvalue gap will therefore be recorded when interpreting final distances. For the empty student, \(W_S=0\), every unit state on the teacher memory manifold is ideal. This condition is reported separately as a control for confinement, since it cannot demonstrate selection of a particular memory direction. Partially trained students provide the unequal costs needed to test directional selection.
+
+\subsubsection{Proposed simulation and reporting protocol}
+\label{sec:methods-redistribution-protocol}
+
+The baseline ensemble will use the linear model with zero-diagonal recurrent weights, \(d=48\) units per population and teacher-memory rank \(r=6\). The proposed starting design is 20 independently generated teacher memory sets, 10 activity initializations per frozen student configuration, and four weight snapshots spanning partial redistribution from separate calibration runs. Snapshot times are fixed before the selection tests, and the empty-student control is reported separately. Independent memory sets form the replication units; repeated initializations and weight snapshots within a set are treated as grouped observations. These sample counts are planning choices, not completed experiments.
+
+For each fixed pair of weight matrices, the ideal teacher states will first be calculated as above. Initial teacher states will be drawn uniformly from the full unit activity sphere by normalizing independent isotropic Gaussian vectors. Student activity will start at zero. Both populations will then evolve under Eqs.~\eqref{eq:teacher-coupled-dynamics} and~\eqref{eq:student-coupled-dynamics}, with plasticity disabled during relaxation. The teacher retains its recurrent restoring force and unit-norm normalization; no projection onto the teacher memory manifold is applied.
+
+The noiseless run will stop when the teacher's normalized deterministic drift and the student's departure from its equilibrium response both remain below prescribed tolerances throughout an observation interval. The teacher drift used here is the component of its deterministic activity derivative tangent to the unit sphere, because normalization removes the radial component. Student settling is checked by comparing the observed \(x_S\) with \(x_S^*(x_T)\) for the current teacher state. These criteria are independent of distance to an ideal state: a trajectory can settle and still select the wrong direction. A maximum run duration is imposed, and final distances from runs that fail to settle are retained with a failure indicator.
+
+For each condition, panel A will summarize the final distances with boxes showing the median and interquartile range, whiskers extending to the most extreme observations within 1.5 interquartile ranges, and individual observations shown so that failures and extreme distances remain visible. Student learning stages and timescale conditions will be displayed separately. Uncertainty estimates will group observations by independent teacher memory set. Representative trajectories will use a teacher memory space of rank two. Only the display uses memory-space coordinates; the projected trajectories are not renormalized, and all reported distances are calculated in the full activity space.
+
+The baseline coefficients will be \(\pi_T=1\), \(\pi_S=0.5\), \(\pi_{TS}=1\), \(\tau_S=1\), and \(\tau_T=10\). Teacher-side gain will be scaled as \(\kappa=0.45\pi_T\sigma_{\min}^2\), where \(\sigma_{\min}^2\) is the smallest nonzero eigenvalue of \(M_T^\top M_T\). This places the gain below the recurrent restoring scale outside the memory manifold without imposing exact confinement. The noiseless event protocol will be followed by sweeps of \(\tau_S/\tau_T\), \(\kappa/(\pi_T\sigma_{\min}^2)\), memory rank and correlation, and plasticity step size. Numerical tolerances, snapshot times, integration step, maximum relaxation duration, and sweep grids will be fixed after a pilot and documented with the final figure. A smaller integration step will be used to check that the measured discrepancies reflect the dynamics rather than discretization.
+
+For the single-event test of Hypothesis~\textbf{2}, each relaxed configuration is copied before applying updates of different sizes. The local update uses the observed student activity and recurrent error. The reference maximum is recomputed after each update using Eq.~\eqref{eq:empirical-spectral-benchmark}. The first-order prediction in Eq.~\eqref{eq:empirical-event-prediction} assumes that \(\mathcal F_{\max}\) is locally differentiable. The finite changes remain measurable without this assumption, so all configurations are retained in the same comparison. Event sizes must be small enough to test the first-order prediction while producing changes larger than the numerical uncertainty in \(\mathcal F_{\max}\). Events with negligible updates are identified separately, since agreement at zero does not test the plasticity hypothesis.
+
+Persistent-noise conditions will measure the distribution of distances to the nearest ideal teacher state over a fixed observation window rather than claim convergence to a fixed state. Separate runs with simultaneous activity and plasticity will assess whether the cycle-based interpretation remains useful for the continuous protocol used elsewhere in the paper. Results will include failures and variation across memory sets. No convergence or gradient-descent claim for these simulations is made before those measurements are available.
 
 \subsection{Structured-memory transfer comparison}
 \label{sec:methods-fast-transfer}
