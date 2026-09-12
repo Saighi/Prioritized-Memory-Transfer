@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.2)  11 SEP 2026 16:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.2)  12 SEP 2026 12:22
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -753,7 +753,7 @@ Package pdftex.def Info: ../../schematic/tikz_protocol/protocol_ab.pdf  used on 
 [9
 
 ]
-<../../../paper_figure/photoshop_figures/empirical_results_1.png, id=308, 833.7549pt x 419.8887pt>
+<../../../paper_figure/photoshop_figures/empirical_results_1.png, id=309, 833.7549pt x 419.8887pt>
 File: ../../../paper_figure/photoshop_figures/empirical_results_1.png Graphic file (type png)
 <use ../../../paper_figure/photoshop_figures/empirical_results_1.png>
 Package pdftex.def Info: ../../../paper_figure/photoshop_figures/empirical_results_1.png  used on input line 332.
@@ -762,12 +762,12 @@ Package pdftex.def Info: ../../../paper_figure/photoshop_figures/empirical_resul
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<../../../paper_figure/photoshop_figures/student reconstruction.png, id=310, 650.1891pt x 282.21436pt>
+<../../../paper_figure/photoshop_figures/student reconstruction.png, id=311, 650.1891pt x 282.21436pt>
 File: ../../../paper_figure/photoshop_figures/student reconstruction.png Graphic file (type png)
 <use ../../../paper_figure/photoshop_figures/student reconstruction.png>
 Package pdftex.def Info: ../../../paper_figure/photoshop_figures/student reconstruction.png  used on input line 340.
 (pdftex.def)             Requested size: 364.24149pt x 158.09492pt.
-<../../../paper_figure/photoshop_figures/incremental_addition.png, id=311, 307.26794pt x 313.29045pt>
+<../../../paper_figure/photoshop_figures/incremental_addition.png, id=312, 307.26794pt x 313.29045pt>
 File: ../../../paper_figure/photoshop_figures/incremental_addition.png Graphic file (type png)
 <use ../../../paper_figure/photoshop_figures/incremental_addition.png>
 Package pdftex.def Info: ../../../paper_figure/photoshop_figures/incremental_addition.png  used on input line 348.
@@ -781,80 +781,89 @@ Package pdftex.def Info: ../../../paper_figure/photoshop_figures/incremental_add
 [12 <../../../paper_figure/photoshop_figures/student reconstruction.png>]
 
 [13 <../../../paper_figure/photoshop_figures/incremental_addition.png>]
-<../../../paper_figure/photoshop_figures/fast_redistribution_main.png, id=342, 519.50085pt x 318.34935pt>
-File: ../../../paper_figure/photoshop_figures/fast_redistribution_main.png Graphic file (type png)
-<use ../../../paper_figure/photoshop_figures/fast_redistribution_main.png>
-Package pdftex.def Info: ../../../paper_figure/photoshop_figures/fast_redistribution_main.png  used on input line 390.
-(pdftex.def)             Requested size: 455.30013pt x 279.02132pt.
-<../../../paper_figure/photoshop_figures/protocol2_correlation_gap_composite.png, id=344, 1149.99637pt x 362.25337pt>
-File: ../../../paper_figure/photoshop_figures/protocol2_correlation_gap_composite.png Graphic file (type png)
-<use ../../../paper_figure/photoshop_figures/protocol2_correlation_gap_composite.png>
-Package pdftex.def Info: ../../../paper_figure/photoshop_figures/protocol2_correlation_gap_composite.png  used on input line 397.
-(pdftex.def)             Requested size: 364.24149pt x 114.73502pt.
-
 
 [14
 
 {C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+<../../../paper_figure/photoshop_figures/fast_redistribution_main.png, id=351, 519.50085pt x 318.34935pt>
+File: ../../../paper_figure/photoshop_figures/fast_redistribution_main.png Graphic file (type png)
+<use ../../../paper_figure/photoshop_figures/fast_redistribution_main.png>
+Package pdftex.def Info: ../../../paper_figure/photoshop_figures/fast_redistribution_main.png  used on input line 392.
+(pdftex.def)             Requested size: 455.30013pt x 279.02132pt.
+<../../../paper_figure/photoshop_figures/protocol2_correlation_gap_composite.png, id=353, 1149.99637pt x 362.25337pt>
+File: ../../../paper_figure/photoshop_figures/protocol2_correlation_gap_composite.png Graphic file (type png)
+<use ../../../paper_figure/photoshop_figures/protocol2_correlation_gap_composite.png>
+Package pdftex.def Info: ../../../paper_figure/photoshop_figures/protocol2_correlation_gap_composite.png  used on input line 399.
+(pdftex.def)             Requested size: 364.24149pt x 114.73502pt.
+<../../../paper_figure/photoshop_figures/fast_redistribution_continuous_adding.png, id=355, 543.34995pt x 320.27655pt>
+File: ../../../paper_figure/photoshop_figures/fast_redistribution_continuous_adding.png Graphic file (type png)
+<use ../../../paper_figure/photoshop_figures/fast_redistribution_continuous_adding.png>
+Package pdftex.def Info: ../../../paper_figure/photoshop_figures/fast_redistribution_continuous_adding.png  used on input line 406.
+(pdftex.def)             Requested size: 455.30013pt x 268.3756pt.
 
-[15 <../../../paper_figure/photoshop_figures/fast_redistribution_main.png>]
 
-[16 <../../../paper_figure/photoshop_figures/protocol2_correlation_gap_composite.png>]
+[15]
 
-LaTeX Warning: Reference `eq:student-plasticity' on page 17 undefined on input line 427.
+[16 <../../../paper_figure/photoshop_figures/fast_redistribution_main.png>]
+
+[17 <../../../paper_figure/photoshop_figures/protocol2_correlation_gap_composite.png>]
+
+[18 <../../../paper_figure/photoshop_figures/fast_redistribution_continuous_adding.png>]
+
+LaTeX Warning: Reference `eq:student-plasticity' on page 19 undefined on input line 436.
 
 
 
-[17
+[19
 
 ]
 
-LaTeX Warning: Reference `eq:student-plasticity' on page 18 undefined on input line 497.
+LaTeX Warning: Reference `eq:student-plasticity' on page 20 undefined on input line 506.
 
-
-
-[18]
-
-LaTeX Warning: Reference `eq:student-plasticity' on page 19 undefined on input line 582.
-
-
-
-[19]
-<../../../paper_figure/notebook/exports_settled_free_energy_resolved/assembled_figure.png, id=410, 2298.5875pt x 1907.125pt>
-File: ../../../paper_figure/notebook/exports_settled_free_energy_resolved/assembled_figure.png Graphic file (type png)
-<use ../../../paper_figure/notebook/exports_settled_free_energy_resolved/assembled_figure.png>
-Package pdftex.def Info: ../../../paper_figure/notebook/exports_settled_free_energy_resolved/assembled_figure.png  used on input line 605.
-(pdftex.def)             Requested size: 455.30013pt x 377.7516pt.
 
 
 [20]
 
-[21 <../../../paper_figure/notebook/exports_settled_free_energy_resolved/assembled_figure.png (PNG copy)>]
+LaTeX Warning: Reference `eq:student-plasticity' on page 21 undefined on input line 591.
 
-[22
+
+
+[21]
+<../../../paper_figure/notebook/exports_settled_free_energy_resolved/assembled_figure.png, id=423, 2298.5875pt x 1907.125pt>
+File: ../../../paper_figure/notebook/exports_settled_free_energy_resolved/assembled_figure.png Graphic file (type png)
+<use ../../../paper_figure/notebook/exports_settled_free_energy_resolved/assembled_figure.png>
+Package pdftex.def Info: ../../../paper_figure/notebook/exports_settled_free_energy_resolved/assembled_figure.png  used on input line 614.
+(pdftex.def)             Requested size: 455.30013pt x 377.7516pt.
+
+
+[22]
+
+[23 <../../../paper_figure/notebook/exports_settled_free_energy_resolved/assembled_figure.png (PNG copy)>]
+
+[24
 
 ]
 
-[23]
-
-LaTeX Warning: Reference `eq:student-plasticity' on page 24 undefined on input line 727.
-
-
-
-[24]
-
 [25]
 
-LaTeX Warning: Reference `prop:deficit' on page 26 undefined on input line 802.
+LaTeX Warning: Reference `eq:student-plasticity' on page 26 undefined on input line 736.
 
 
-LaTeX Warning: Reference `thm:minimax-transfer' on page 26 undefined on input line 802.
+
+[26]
+
+[27]
+
+LaTeX Warning: Reference `prop:deficit' on page 28 undefined on input line 811.
 
 
-LaTeX Warning: Reference `cor:correlated-local' on page 26 undefined on input line 802.
+LaTeX Warning: Reference `thm:minimax-transfer' on page 28 undefined on input line 811.
 
 
-LaTeX Warning: Reference `cor:self-extinction' on page 26 undefined on input line 802.
+LaTeX Warning: Reference `cor:correlated-local' on page 28 undefined on input line 811.
+
+
+LaTeX Warning: Reference `cor:self-extinction' on page 28 undefined on input line 811.
 
 (manuscript.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 11--15
@@ -873,7 +882,7 @@ Underfull \hbox (badness 5359) in paragraph at lines 43--48
 
 )
 
-[26] (manuscript.aux)
+[28] (manuscript.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-08-30>
@@ -889,17 +898,17 @@ Package rerunfilecheck Info: File `manuscript.out' has not changed.
 (rerunfilecheck)             Checksum: 97C7F1AE69D287A36DDD9F77A607EF83;5791.
  ) 
 Here is how much of TeX's memory you used:
- 23991 strings out of 473899
- 450804 string characters out of 5726500
- 845132 words of memory out of 5000000
- 46361 multiletter control sequences out of 15000+600000
+ 24002 strings out of 473899
+ 451486 string characters out of 5726500
+ 843940 words of memory out of 5000000
+ 46369 multiletter control sequences out of 15000+600000
  563054 words of font info for 55 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,12n,117p,2481b,864s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm7.pfb><C:/Users/pauls/AppData/Local/Programs/MiKTeX/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on manuscript.pdf (26 pages, 3497709 bytes).
+Output written on manuscript.pdf (28 pages, 3844173 bytes).
 PDF statistics:
- 569 PDF objects out of 1000 (max. 8388607)
- 123 named destinations out of 1000 (max. 500000)
- 261 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 582 PDF objects out of 1000 (max. 8388607)
+ 126 named destinations out of 1000 (max. 500000)
+ 266 words of extra memory for PDF output out of 10000 (max. 10000000)
 
